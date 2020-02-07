@@ -1,7 +1,7 @@
-# icd0009-2019s
+# icd0006-2019s
 
 
-ICD0009 Building Distributed Systems
+ICD0006 JavaScript
 
 Aleksand Ivanov      
 aleksi      
