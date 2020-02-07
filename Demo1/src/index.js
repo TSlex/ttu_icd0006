@@ -1,2 +1,2 @@
 // alert("IDI NAHOOOO))");
-console.log("Lolu");
+console.log(`${alert("\f")}`);
