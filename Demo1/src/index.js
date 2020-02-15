@@ -39,12 +39,26 @@
 
 //===============================
 
-let arr = [1, 2, 3, 4, 5, 6];
-let [a, , b] = arr;
-let [one, ...others] = arr;
+// let arr = [1, 2, 3, 4, 5, 6];
+// let [a, , b] = arr;
+// let [one, ...others] = arr;
+//
+// console.log(a);
+// console.log(b);
+// console.log(one);
+// console.log(others);
 
-console.log(a);
-console.log(b);
-console.log(one);
-console.log(others);
+//===============================
 
+hello1();
+// fun();
+
+function hello1() {
+    console.log("hello")
+}
+
+let fun = function () {
+    console.log("hello")
+};
+
+fun();
