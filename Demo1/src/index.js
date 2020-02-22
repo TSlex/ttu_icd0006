@@ -1,64 +1,50 @@
-'use strict';
+
 //
-// let x = {};
+// console.log(Object.getOwnPropertyDescriptor(Math, "PI"));
+//
+// Object.defineProperty(Math, "PI3", {value: 3});
+//
+// console.log(Object.getOwnPropertyDescriptor(Math, "PI3"));
+
+// let x = {
+// };
+//
+// x.__proto__.toString = () => {return "LOL"};
 //
 // console.log(x);
-// console.log(JSON.stringify(x));
+
+// Date.prototype.toRussian = function(){
+//     return new Date(this.setHours(this.getHours() + 1)).toTimeString()
+// };
 //
-// x.name = "сася :з";
-// x['firstName'] = "Aleksandr";
-// x['lastName'] = "Ivanov";
+// let date = new Date();
 //
-// for (let key in x){
-//     console.log(`${key}: ${x[key]}`)
+// console.log(date.toRussian());
+
+// class myCustom{
+//     constructor() {
+//         this.[[prototype]].toString =  () => {return "LOL"};
+//     }
 // }
 //
-// let codes = {
-//     372: "estonia",
-//     7: "russia",
-//     8: "russia",
-//     x: "pipos"
-// };
+// let custom = new myCustom();
 //
-// console.log(Object.keys(codes));
+// console.log(custom);
 
-//===============================
-
-// let objA = {
-//     name: 'Alex',
-//     printName: function () {
-//         console.log(this.name)
-//     },
-//     printName2: () => {
-//         console.log(this.name)
-//     },
-// };
+// class Person {
+//     constructor(firstName, lastName) {
+//         this.firstName = firstName;
+//         this.lastName = lastName;
+//     }
 //
-// objA.printName();
-// objA.printName2();
-
-//===============================
-
-// let arr = [1, 2, 3, 4, 5, 6];
-// let [a, , b] = arr;
-// let [one, ...others] = arr;
+//     getFullName(){
+//         return this.firstName + " " + this.lastName;
+//     }
+// }
 //
-// console.log(a);
-// console.log(b);
-// console.log(one);
-// console.log(others);
+// let x = new Person("Aleksandr", "Ivanov");
+// console.log(x.getFullName());
 
-//===============================
+import {sayHi} from './sayHi'
 
-hello1();
-// fun();
-
-function hello1() {
-    console.log("hello")
-}
-
-let fun = function () {
-    console.log("hello")
-};
-
-fun();
+sayHi();
