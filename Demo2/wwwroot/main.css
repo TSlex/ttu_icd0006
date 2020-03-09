@@ -1,0 +1,67 @@
+body{
+    background: bisque;
+    font-family: "Agency FB", serif;
+    font-weight: bold;
+    font-size: 2em;
+    user-select: none;
+}
+
+.cal_body{
+    display: flex;
+    flex-direction: column;
+    margin: 200px auto;
+    width: fit-content;
+    border: darkslategray 2px solid;
+    overflow: hidden;
+    border-radius: 2%;
+}
+
+.cal_butt, .cal_control, .cal_butt_c2{
+    background: lightgray;
+    border-collapse: separate;
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 2em;
+}
+
+.cal_butt, .cal_control{
+    width: 2em;
+    height: 2em;
+}
+
+.cal_butt_c2{
+    width: 4em;
+    height: 2em;
+}
+
+.cal_control{
+    background: burlywood;
+}
+
+.cal_butt:hover, .cal_butt_c2:hover{
+    background: slategrey;
+}
+
+.cal_control:hover{
+    background: peru;
+}
+
+.cal_display{
+    width: 8em;
+    height: 2em;
+    background: darkgray;
+    text-align: right;
+    line-height: 2em;
+    padding-right: 0.5em;
+    box-sizing: border-box;
+}
+
+.cal_butt_cont{
+    display: flex;
+    flex-direction: column;
+}
+
+.cal_butt_row{
+    display: flex;
+    flex-direction: row;
+}
