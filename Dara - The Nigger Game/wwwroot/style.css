@@ -7,6 +7,14 @@ body{
     font-family: "Comic Sans MS";
 }
 
+.text1{
+
+}
+
+.text2{
+
+}
+
 .sand_border{
     border: 5px solid transparent;
     border-image: url("assets/1.png") 20 20 repeat;
@@ -17,8 +25,10 @@ body{
     /*height: 100px;*/
     display: flex;
     flex-direction: column;
-    margin: 200px auto;
+    /*margin: 200px auto;*/
     width: fit-content;
+    border: black 1px solid;
+    background: wheat;
 }
 
 .game_row{
@@ -34,6 +44,13 @@ body{
     border-image: url("assets/1.png") 20 20 repeat;
 }
 
+.game_stats_bar{
+    height: 100px;
+    width: 300px;
+    border: 1px solid black;
+    background: wheat;
+}
+
 .menu_box{
     border: solid 1px black;
     width: fit-content;
@@ -41,7 +58,9 @@ body{
     position: absolute;
 }
 
-.menu_items{}
+.menu_items{
+
+}
 
 .menu_item{
     width: 300px;
@@ -54,4 +73,26 @@ body{
     color: chocolate;
     cursor: pointer;
     margin: 5px
+}
+
+.game_controls_bar{
+    /*border: solid 1px black;*/
+    /*width: fit-content;*/
+    text-align: center;
+    display: flex;
+    width: 400px;
+}
+
+.game_controls{
+    /*width: 300px;*/
+    height: 40px;
+    line-height: 40px;
+    background: sandybrown;
+    border: peru 3px solid;
+    border-radius: 5px;
+    font-weight: bold;
+    color: chocolate;
+    cursor: pointer;
+    margin: 5px;
+    flex-grow: 1;
 }
