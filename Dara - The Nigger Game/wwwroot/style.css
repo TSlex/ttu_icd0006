@@ -8,11 +8,11 @@ body{
 }
 
 .text1{
-
+    font-size: 2em;
 }
 
 .text2{
-
+    font-size: 1em;
 }
 
 .sand_border{
@@ -46,7 +46,9 @@ body{
 
 .game_stats_bar{
     height: 100px;
-    width: 300px;
+    line-height: 50px;
+    width: 500px;
+    text-align: center;
     border: 1px solid black;
     background: wheat;
 }
@@ -95,4 +97,33 @@ body{
     cursor: pointer;
     margin: 5px;
     flex-grow: 1;
+}
+
+.nut, .stick{
+    background-size: cover;
+}
+
+.nut{
+    background-image: url("assets/nut.png");
+
+}
+
+.stick{
+    background-image: url("assets/stick.png");
+}
+
+.blocked, .available, .selected{
+
+}
+
+.blocked{
+    background-color: gray;
+}
+
+.available{
+    background-color: darkseagreen;
+}
+
+.selected{
+    background-color: goldenrod;
 }
