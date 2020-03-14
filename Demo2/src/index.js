@@ -9,6 +9,7 @@ let brain = new Calculator();
 for (let button of buttons) {
     button.addEventListener('click', evt => {
         let key = button.dataset.value;
-        display.innerText = brain.handleKey(key);
+        brain.handleKey(key);
+        display.innerText = brain.getItems();
     })
 }

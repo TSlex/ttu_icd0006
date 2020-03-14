@@ -16,8 +16,6 @@ export class Calculator {
         if (this.isValidKey(key) || true) {
             this.items.push(new Item(key))
         }
-
-        return this.getItems()
     }
 
     getItems(){
