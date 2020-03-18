@@ -1,30 +1,33 @@
 'use strict';
 
 export class Calculator {
+    private items: Item[];
 
     constructor() {
         this.items = [];
     }
 
-    isValidKey(key) {
+    isValidKey(key: string) {
         return key in [
             "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
             ".", "=", "+", "-", "*", "/", "%", "+/-", "C"];
     }
 
-    handleKey(key) {
+    handleKey(key: string) {
         if (this.isValidKey(key) || true) {
             this.items.push(new Item(key))
         }
     }
 
-    getItems(){
+    getItems() {
         return this.items.join(" ")
     }
 }
 
 class Item {
-    constructor(value) {
+    public value: string;
+
+    constructor(value: string) {
         this.value = value;
     }
 }

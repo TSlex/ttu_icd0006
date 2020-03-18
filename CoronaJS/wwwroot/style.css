@@ -1,0 +1,71 @@
+body{
+    background-color: lightblue;
+    font-family: "Comic Sans MS";
+}
+Label{
+    user-select: none;
+}
+.container{
+    width: fit-content;
+    background: burlywood;
+    padding: 20px;
+    border: transparent 1px solid;
+    border-radius: 4px;
+    margin: 200px auto;
+}
+.section{
+    border: wheat dashed 3px;
+    border-radius: 4px;
+    padding: 5px;
+}
+.placeholder{
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+    height: 40px;
+}
+
+.placeholder input{
+    width: 150px;
+    padding: 1px;
+    margin: 5px;
+    height: 20px;
+    background: wheat;
+    border: wheat solid 1px;
+    border-radius: 4px;
+}
+
+.placeholder label{
+    display: inline-block;
+    line-height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.info{
+    text-align: center;
+    color: white;
+    user-select: none;
+}
+
+.buttons{
+    display: flex;
+    justify-content: center;
+}
+
+.button{
+    text-align: center;
+    text-decoration: none;
+    background: lightblue;
+    display: block;
+    width: fit-content;
+    padding: 10px;
+    color: cornflowerblue;
+    border: 2px solid cornflowerblue;
+    border-radius: 4px;
+}
+
+.button:hover{
+    background: cornflowerblue;
+    color: lightblue;
+}

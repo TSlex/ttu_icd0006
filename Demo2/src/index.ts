@@ -1,4 +1,4 @@
-import {Calculator} from "./brain.js";
+import {Calculator} from "./brain";
 
 let calculator = document.getElementsByClassName("cal_body")[0];
 let buttons = calculator.querySelectorAll(".cal_butt, .cal_butt_c2, .cal_control");
@@ -8,8 +8,9 @@ let brain = new Calculator();
 
 for (let button of buttons) {
     button.addEventListener('click', evt => {
-        let key = button.dataset.value;
+
+        let key = (button as HTMLAnchorElement).dataset.value!;
         brain.handleKey(key);
-        display.innerText = brain.getItems();
+        display!.innerHTML = brain.getItems();
     })
 }
