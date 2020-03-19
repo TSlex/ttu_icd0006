@@ -20,7 +20,7 @@ export class GameBrain {
         // this.gameStatus2 = "Player [NUTS], place your figure";
     }
 
-    startGame(){
+    startGame() {
         this.gamePhase = GamePhase.drop;
 
         this.gameField = this.initField();
@@ -32,74 +32,73 @@ export class GameBrain {
         this.nutsLeft = FLAGS_COUNT;
         this.sticksLeft = FLAGS_COUNT;
 
+        this.setAllCellState(GameCellState.available);
+
         this.gameStatus1 = "Now is the DROP PHASE";
-        this.gameStatus2 = "Player [NUTS], place your figure";
+        this.gameStatus2 = `Player ${this.isNutsMove ? "NUTS" : "STICKS"}, place your figure`;
     }
 
-    getGameStatus(){
+    getGameStatus() {
         return [this.gameStatus1, this.gameStatus2]
     }
 
     /**
      * @see https://www.samanthaming.com/tidbits/70-3-ways-to-clone-objects/
      */
-    getGameField(){
+    getGameField() {
         return JSON.parse(JSON.stringify(this.gameField))
     }
 
-    handleClick(yPos, xPos){
-        if (this.gamePhase === GamePhase.over){
+    handleClick(yPos, xPos) {
+        if (this.gamePhase === GamePhase.over) {
+        } else if (this.gamePhase === GamePhase.drop) {
+            this.placeFlag(yPos, xPos);
+        } else {
         }
 
-        else if (this.gamePhase === GamePhase.drop){
-            this.placeFlag(yPos, xPos)
-        }
-
-        else{
-
-        }
-
-        this.updateBoard();
+        this.updateStatus();
     }
 
-    placeFlag(yPos, xPos){
+    placeFlag(yPos, xPos) {
         if (this.gamePhase !== GamePhase.drop ||
-            this.gameField[yPos][xPos].value !== GameCellValue.empty)
+            this.gameField[yPos][xPos].value !== GameCellValue.empty ||
+            this.gameField[yPos][xPos].state !== GameCellState.available)
             return -1;
 
-        if (this.isNutsMove && this.nutsLeft > 0){
+        if (this.isNutsMove && this.nutsLeft > 0) {
             this.gameField[yPos][xPos].value = GameCellValue.nut;
             this.nutsLeft--;
-        }
-        else if (!this.isNutsMove && this.sticksLeft > 0){
+        } else if (!this.isNutsMove && this.sticksLeft > 0) {
             this.gameField[yPos][xPos].value = GameCellValue.stick;
             this.sticksLeft--;
         }
 
+        this.checkDropMove();
+
         this.isNutsMove = !this.isNutsMove;
 
-        if (this.nutsLeft <= 0 && this.sticksLeft <= 0){
+        if (this.nutsLeft <= 0 && this.sticksLeft <= 0) {
             this.gamePhase = GamePhase.move;
         }
 
-        if (this.isAIMode && this.isNutsFirst !== this.isNutsMove){
+        if (this.isAIMode && this.isNutsFirst !== this.isNutsMove) {
             this.ai_placeFlag();
         }
     }
 
-    ai_placeFlag(){
+    ai_placeFlag() {
         console.log("AI move");
-        while (true){
+        while (true) {
             let yPos = randomIndex(GAME_HEIGHT);
             let xPos = randomIndex(GAME_WIDTH);
 
-            if (this.placeFlag(yPos, xPos) !== -1){
+            if (this.placeFlag(yPos, xPos) !== -1) {
                 break
             }
         }
     }
 
-    initField(){
+    initField() {
         let gameField = [];
 
         for (let y = 0; y < GAME_HEIGHT; y++) {
@@ -115,45 +114,109 @@ export class GameBrain {
         return gameField;
     }
 
-    updateBoard(){
+    setAllCellState(state){
+        for (let y = 0; y < GAME_HEIGHT; y++) {
+            for (let x = 0; x < GAME_WIDTH; x++) {
+                this.gameField[y][x].state = state
+            }
+        }
     }
 
-    checkInThree(yPos, xPos){
-        let field = this.gameField;
-        let checker = this.checkThreeEquals;
+    updateStatus() {
+        if (this.gamePhase === GamePhase.over) {
+            this.gameStatus1 = "Game Over";
+            this.gameStatus2 = "[] wins";
+        } else if (this.gamePhase === GamePhase.drop) {
+            this.gameStatus1 = "Now is the DROP PHASE";
+            this.gameStatus2 = `Player ${this.isNutsMove ? "NUTS" : "STICKS"}, place your figure`;
+        } else {
+            this.gameStatus1 = "Now is the MOVE PHASE";
+            this.gameStatus2 = ``;
+        }
+    }
 
-        if (checker(field[yPos][xPos], field[yPos][xPos + 1], field[yPos][xPos + 2])){
-            return true
+    checkDropMove() {
+        for (let y = 0; y < GAME_HEIGHT; y++) {
+            for (let x = 0; x < GAME_WIDTH; x++) {
+                if (this.gameField[y][x].value !== GameCellValue.empty || this.checkInThree(y, x)) {
+                    this.gameField[y][x].state = GameCellState.blocked
+                } else {
+                    this.gameField[y][x].state = GameCellState.available
+                }
+            }
         }
-        else if (checker(field[yPos][xPos - 1], field[yPos][xPos], field[yPos][xPos + 1])){
-            return true
+    }
+
+    getCellSafe(yPos, xPos) {
+        if (yPos < 0 || yPos >= this.gameField.length ||
+            xPos < 0 || xPos >= this.gameField[0].length) {
+            return null;
         }
-        else if (checker(field[yPos][xPos - 2], field[yPos][xPos - 1], field[yPos][xPos])){
+
+
+        return this.gameField[yPos][xPos];
+    }
+
+    checkInThree(yPos, xPos) {
+        let checker = this.checkThreeStrike.bind(this);
+        let getCell = this.getCellSafe.bind(this);
+
+        if (checker(getCell(yPos, xPos), getCell(yPos, xPos + 1), getCell(yPos, xPos + 2))) {
             return true
-        }
-        else if (checker(field[yPos][xPos], field[yPos + 1][xPos], field[yPos + 2][xPos])){
+        } else if (checker(getCell(yPos, xPos - 1), getCell(yPos, xPos), getCell(yPos, xPos + 1))) {
             return true
-        }
-        else if (checker(field[yPos][xPos], field[yPos - 1][xPos], field[yPos + 1][xPos])){
+        } else if (checker(getCell(yPos, xPos - 2), getCell(yPos, xPos - 1), getCell(yPos, xPos))) {
             return true
-        }
-        else if (checker(field[yPos][xPos], field[yPos - 1][xPos], field[yPos - 2][xPos])){
+        } else if (checker(getCell(yPos, xPos), getCell(yPos + 1, xPos), getCell(yPos + 2, xPos))) {
             return true
-        }
-        else {
+        } else if (checker(getCell(yPos, xPos), getCell(yPos - 1, xPos), getCell(yPos + 1, xPos))) {
+            return true
+        } else if (checker(getCell(yPos, xPos), getCell(yPos - 1, xPos), getCell(yPos - 2, xPos))) {
+            return true
+        } else {
             return false
         }
     }
 
-    checkThreeEquals(cell1, cell2, cell3){
-        return cell1 === cell2 && cell2 === cell3;
+    checkThreeStrike(cell1, cell2, cell3) {
+        if (cell1 === null || cell2 === null || cell3 === null) {
+            return false;
+        }
+
+        let acceptedValue = this.isNutsMove ? GameCellValue.stick : GameCellValue.nut;
+
+        if (
+            cell2.value === acceptedValue &&
+            cell2.value === cell3.value &&
+            cell2.value !== cell1.value &&
+            cell1.value === GameCellValue.empty) {
+
+            return true;
+
+        } else if (
+            cell1.value === acceptedValue &&
+            cell1.value === cell3.value &&
+            cell1.value !== cell2.value &&
+            cell2.value === GameCellValue.empty) {
+
+            return true;
+
+        } else if (
+            cell2.value === acceptedValue &&
+            cell2.value === cell1.value &&
+            cell2.value !== cell3.value &&
+            cell3.value === GameCellValue.empty) {
+
+            return true;
+        }
+        return false;
     }
 }
 
-export class GameCell{
+export class GameCell {
     constructor(yPos, xPos) {
         this.value = GameCellValue.empty;
-        this.state = GameCellState.available;
+        this.state = GameCellState.empty;
         this.yPos = yPos;
         this.xPos = xPos;
     }

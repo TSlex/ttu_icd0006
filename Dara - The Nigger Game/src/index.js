@@ -90,7 +90,7 @@ function createControlsBar() {
     box.append(returnButton);
 
     restartButton.innerHTML = "Restart";
-    returnButton.addEventListener("click", drawMenu);
+    restartButton.addEventListener("click", restartGame);
 
     returnButton.innerHTML = "Back To Menu";
     returnButton.addEventListener("click", drawMenu);
