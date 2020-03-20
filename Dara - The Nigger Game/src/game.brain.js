@@ -5,19 +5,6 @@ export class GameBrain {
         this.isAIMode = isAIMode;
         this.isNutsFirst = isNutsFirst;
 
-        // this.gamePhase = GamePhase.drop;
-        //
-        // this.gameField = this.initField();
-        // this.isNutsMove = this.isNutsFirst;
-        //
-        // this.nuts = [];
-        // this.sticks = [];
-        //
-        // this.nutsLeft = FLAGS_COUNT;
-        // this.sticksLeft = FLAGS_COUNT;
-        //
-        // this.gameStatus1 = "Now is the DROP PHASE";
-        // this.gameStatus2 = "Player [NUTS], place your figure";
     }
 
     startGame() {
@@ -25,6 +12,8 @@ export class GameBrain {
 
         this.gameField = this.initField();
         this.isNutsMove = this.isNutsFirst;
+
+        this.selectedCell = null;
 
         this.nuts = [];
         this.sticks = [];
@@ -54,9 +43,38 @@ export class GameBrain {
         } else if (this.gamePhase === GamePhase.drop) {
             this.placeFlag(yPos, xPos);
         } else {
+            if (this.selectedCell === null && this.gameField[yPos][xPos].value !== GameCellValue.empty){
+                this.selectCell(yPos, xPos)
+            }
+            else if (this.selectedCell === this.gameField[yPos][xPos]){
+                this.unselectCell(yPos, xPos)
+            }
+            else{
+                // this.moveCell(yPos, xPos)
+            }
         }
 
         this.updateStatus();
+    }
+
+    removeCell(yPos, xPos){
+        this.gameField[yPos][xPos].value = GameCellValue.empty;
+    }
+
+    moveCell(yPos, xPos){
+        this.selectedCell = null
+    }
+
+    selectCell(yPos, xPos){
+        let cell = this.gameField[yPos][xPos];
+        cell.state = GameCellState.selected;
+
+        this.selectedCell = cell;
+    }
+
+    unselectCell(){
+        this.selectedCell.state = GameCellState.none;
+        this.selectedCell = null;
     }
 
     placeFlag(yPos, xPos) {
@@ -79,11 +97,18 @@ export class GameBrain {
 
         if (this.nutsLeft <= 0 && this.sticksLeft <= 0) {
             this.gamePhase = GamePhase.move;
+            // this.setAllCellState(GameCellState.none);
+            this.checkMoveMode()
         }
 
-        if (this.isAIMode && this.isNutsFirst !== this.isNutsMove) {
+        // if (this.isAIMode && this.isNutsFirst !== this.isNutsMove) {
+        //     this.ai_placeFlag();
+        // }
+
+        if (this.gamePhase === GamePhase.drop){
             this.ai_placeFlag();
         }
+
     }
 
     ai_placeFlag() {
@@ -132,6 +157,21 @@ export class GameBrain {
         } else {
             this.gameStatus1 = "Now is the MOVE PHASE";
             this.gameStatus2 = ``;
+        }
+    }
+
+    checkMoveMode(){
+        let acceptedValue = this.isNutsMove ? GameCellValue.stick : GameCellValue.nut;
+
+        for (let y = 0; y < GAME_HEIGHT; y++) {
+            for (let x = 0; x < GAME_WIDTH; x++) {
+                if (this.selectedCell === null && this.gameField[y][x].value === acceptedValue){
+                    this.gameField[y][x].state = GameCellState.available;
+                }
+                else{
+                    this.gameField[y][x].state = GameCellState.none;
+                }
+            }
         }
     }
 
