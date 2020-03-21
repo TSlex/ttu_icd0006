@@ -1,3 +1,59 @@
 <template>
-  <h1>${message}</h1>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">AU TODO</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+            aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+
+    <main role="main" class="container">
+        <h1 class="d-flex justify-content-center">${message}</h1>
+
+        <div class="padding">
+            <div class="row container d-flex justify-content-center">
+                <div class="col-lg-12">
+                    <div class="card px-3">
+                        <div class="card-body">
+                            <h4 class="card-title">${_appTitle}</h4>
+                            <form class="add-items d-flex" submit.delegate="formSubmitted($event)">
+                                <input value.bind="_input" type="text" class="form-control todo-list-input"
+                                    placeholder.bind="_placeholder">
+                                <button
+                                    class="add btn btn-primary font-weight-bold todo-list-add-btn">${_submitButtonTitle}</button>
+                            </form>
+                            <div class="list-wrapper">
+                                <ul class="d-flex flex-column todo-list">
+                                    <li repeat.for="todo of _todos" class.bind="todo.done ? 'completed' : ''">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="checkbox" type="checkbox" checked.bind="todo.done">
+                                                ${todo.description}
+                                                <i class="input-helper"></i>
+                                            </label>
+                                        </div> 
+                                        <i click.delegate="removeTodo($index)" class="remove mdi mdi-close-circle-outline"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 </template>
