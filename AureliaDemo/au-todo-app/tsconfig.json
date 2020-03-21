@@ -1,10 +1,10 @@
 {
     "compileOnSave": false,
     "compilerOptions": {
-        "strict": true,
-        "alwaysStrict": true,
-        "noImplicitAny": true,
-        "noImplicitThis": true,
+        // "strict": true,
+        // "alwaysStrict": true,
+        // "noImplicitAny": true,
+        // "noImplicitThis": true,
         "module": "esnext",
         "skipLibCheck": true,
         "typeRoots": [
