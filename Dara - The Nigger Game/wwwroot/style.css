@@ -54,10 +54,11 @@ body{
 }
 
 .menu_box{
-    border: solid 1px black;
+    border: peru 3px solid;
     width: fit-content;
     text-align: center;
     position: absolute;
+    background: wheat;
 }
 
 .menu_items{

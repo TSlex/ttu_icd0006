@@ -42,7 +42,7 @@ function createMenuOptionsBox() {
     box.innerHTML = "" +
         "<span>" +
         "<label for='IsRockFirst'>Is Nuts moves first?</label><br>" +
-        "<input type=\"checkbox\" name='IsNutsFirst'>" +
+        "<input type=\"checkbox\" name='IsNutsFirst' checked>" +
         "</span>";
 
     return box
@@ -173,14 +173,18 @@ function drawGame() {
 //=============         game functions          =============//
 
 function startGameDefault() {
-    startGame(false, true)
+    startGame(false)
 }
 
 function startGameAi() {
-    startGame(true, true)
+    startGame(true)
 }
 
-function startGame(isAIMode = false, IsNutsFirst = true) {
+function startGame(isAIMode = false) {
+
+    let checkbox = document.querySelector('[name="IsNutsFirst"]');
+    let IsNutsFirst = checkbox.checked;
+
     brain = new GameBrain(isAIMode, IsNutsFirst);
     brain.startGame();
 
