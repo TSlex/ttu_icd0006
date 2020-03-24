@@ -26,7 +26,22 @@ export class GameBrain {
     private nutsLeft: number = 0;
     private sticksLeft: number = 0;
 
-    constructor(isAIMode: boolean, isNutsFirst: boolean) {
+    constructor(isAIMode: boolean, isNutsFirst: boolean, fileContent?: GameBrain) {
+        if (fileContent){
+            this.isNutsFirst = fileContent.isNutsFirst;
+            this.isAIMode = fileContent.isAIMode;
+            this.gamePhase = fileContent.gamePhase;
+            this.gameStatus1 = fileContent.gameStatus1;
+            this.gameStatus2 = fileContent.gameStatus2;
+            this.gameField = fileContent.gameField;
+            this.isNutsMove = fileContent.isNutsMove;
+            this.selectedCell = fileContent.selectedCell;
+            this.isRemovingCell = fileContent.isRemovingCell;
+            this.nutsLeft = fileContent.nutsLeft;
+            this.sticksLeft = fileContent.sticksLeft;
+            return;
+        }
+
         this.isAIMode = isAIMode;
         this.isNutsFirst = isNutsFirst;
     }
@@ -49,7 +64,7 @@ export class GameBrain {
         this.setAllCellState(GameCellState.available);
 
         this.gameStatus1 = "Now is the DROP PHASE";
-        this.gameStatus2 = `Player ${this.isNutsMove ? "NUTS" : "STICKS"}, place your figure`;
+        this.gameStatus2 = `Player <b>${this.isNutsMove ? "NUTS" : "STICKS"}</b>, place your figure`;
     }
 
     getGameStatus() {
@@ -89,7 +104,7 @@ export class GameBrain {
         } else {
         }
 
-        console.clear();
+        // console.clear();
         console.log(`current move: ${this.isNutsMove ? "NUTS" : "STICKS"}`);
         console.log(`selected cell: ${this.selectedCell === null ? "null" : yPos + ":" + xPos}`);
         console.log(`isRemovingCell: ${this.isRemovingCell}`);
@@ -119,15 +134,58 @@ export class GameBrain {
 
     moveCell(yPos: number, xPos: number) {
         let cell = this.gameField[yPos][xPos];
+        let previous = this.selectedCell!;
+
+        let direction: "hor+" | "hor-" | "vert+" | "vert-";
+
+        let xDif = previous.xPos - cell.xPos;
+        let yDif = previous.yPos - cell.yPos;
+
+        if (xDif > 0){
+            direction = "hor+"
+        }
+        else if (xDif < 0){
+            direction = "hor-"
+        }
+        else if (yDif > 0){
+            direction = "vert+"
+        }
+        else {
+            direction = "vert-"
+        }
+
+        // console.clear();
+        // console.log(direction);
 
         cell.value = this.selectedCell!.value;
         this.selectedCell!.value = GameCellValue.empty;
 
         this.selectedCell = null;
 
-        if (this.getNStrike(yPos, xPos, true) === 3 && this.getNStrike(yPos, xPos, false) <= 3 ||
-            this.getNStrike(yPos, xPos, false) === 3 && this.getNStrike(yPos, xPos, true) <= 3
-        ) {
+        let vStrike = (this.getNStrike(yPos, xPos, true, false));
+        let hStrike = (this.getNStrike(yPos, xPos, false, false));
+
+        // if (vStrike === 3 && hStrike <= 3 ||
+        //     hStrike === 3 && vStrike <= 3
+        // ) {
+        //     this.isRemovingCell = true;
+        // } else {
+        //     this.isNutsMove = !this.isNutsMove;
+        // }
+
+        // console.log(previous);
+        // console.log(this.getNStrike(previous!.yPos, previous!.xPos, true));
+        // console.log(this.getNStrike(previous!.yPos, previous!.xPos, false));
+
+        if (vStrike === 3 || hStrike === 3) {
+            this.isRemovingCell = true;
+        } else if (direction === "vert+" && this.getNStrike(previous!.yPos, previous!.xPos, true, true, false, "+") === 4) {
+            this.isRemovingCell = true;
+        } else if (direction === "vert-" && this.getNStrike(previous!.yPos, previous!.xPos, true, true, false, "-") === 4) {
+            this.isRemovingCell = true;
+        } else if (direction === "hor+" && this.getNStrike(previous!.yPos, previous!.xPos, false, true, false, "+") === 4) {
+            this.isRemovingCell = true;
+        } else if (direction === "hor-" && this.getNStrike(previous!.yPos, previous!.xPos, false, true, false, "-") === 4) {
             this.isRemovingCell = true;
         } else {
             this.isNutsMove = !this.isNutsMove;
@@ -135,6 +193,19 @@ export class GameBrain {
 
         this.checkMovePhase();
     }
+
+    // checkNeighbours(yPos: number, xPos: number){
+    //     let vStrike = (this.getNStrike(yPos, xPos, true, false));
+    //     let hStrike = (this.getNStrike(yPos, xPos, false, false));
+    //
+    //     if (vStrike === 3 && hStrike <= 3 ||
+    //         this.getNStrike(yPos, xPos, false) === 3 && this.getNStrike(yPos, xPos, true) <= 3
+    //     ) {
+    //         this.isRemovingCell = true;
+    //     } else {
+    //         this.isNutsMove = !this.isNutsMove;
+    //     }
+    // }
 
     selectCell(yPos: number, xPos: number) {
         // let acceptedValue = this.isNutsMove ? GameCellValue.nut : GameCellValue.stick;
@@ -191,13 +262,13 @@ export class GameBrain {
             this.checkMovePhase()
         }
 
-        if (this.isAIMode && this.isNutsFirst !== this.isNutsMove) {
-            this.ai_placeFlag();
-        }
-
-        // if (this.gamePhase === GamePhase.drop) {
+        // if (this.isAIMode && this.isNutsFirst !== this.isNutsMove) {
         //     this.ai_placeFlag();
         // }
+
+        if (this.gamePhase === GamePhase.drop_phase) {
+            this.ai_placeFlag();
+        }
 
     }
 
@@ -240,13 +311,13 @@ export class GameBrain {
     updateStatus() {
         if (this.gamePhase === GamePhase.over) {
             this.gameStatus1 = "Game Over";
-            this.gameStatus2 = `Player ${this.isNutsMove ? "NUTS" : "STICKS"} wins`;
+            this.gameStatus2 = `Player <b>${this.isNutsMove ? "NUTS" : "STICKS"}</b> wins`;
         } else if (this.gamePhase === GamePhase.drop_phase) {
             this.gameStatus1 = "Now is the DROP PHASE";
-            this.gameStatus2 = `Player ${this.isNutsMove ? "NUTS" : "STICKS"}, place your figure`;
+            this.gameStatus2 = `Player <b>${this.isNutsMove ? "NUTS" : "STICKS"}</b>, place your figure`;
         } else {
             this.gameStatus1 = "Now is the MOVE PHASE";
-            this.gameStatus2 = `Player ${this.isNutsMove ? "NUTS" : "STICKS"}, make your move`;
+            this.gameStatus2 = `Player <b>${this.isNutsMove ? "NUTS" : "STICKS"}</b>, make your move`;
         }
     }
 
@@ -264,7 +335,14 @@ export class GameBrain {
                         cell.state = GameCellState.empty;
 
                     } else {
-                        cell.state = GameCellState.available;
+                        let vStrike = (this.getNStrike(y, x, true, false, true));
+                        let hStrike = (this.getNStrike(y, x, false, false, true));
+
+                        if (vStrike === 3 || hStrike == 3) {
+                            cell.state = GameCellState.blocked;
+                        } else {
+                            cell.state = GameCellState.available;
+                        }
                     }
 
 
@@ -398,11 +476,13 @@ export class GameBrain {
         return false;
     }
 
-    getNStrike(yPos: number, xPos: number, isVert: boolean, isZeroEmpty = true) {
+    getNStrike(yPos: number, xPos: number, isVert: boolean, isZeroEmpty = true, isReversed = false, direction: "both" | "+" | "-" = "both") {
         let strike = 0;
         let cell = this.getCellSafe(yPos, xPos)!;
+        let acceptedValue = !isReversed ? this.acceptedValue() : this.oppositeValue();
 
-        if (cell.value === GameCellValue.empty && !isZeroEmpty) {
+
+        if (cell.value !== acceptedValue && !isZeroEmpty) {
             return 0;
         } else {
             strike++;
@@ -411,38 +491,42 @@ export class GameBrain {
         let mX = xPos;
         let mY = yPos;
 
-        while (true) {
-            if (isVert) {
-                mY++
-            } else {
-                mX++
-            }
+        if (direction === "both" || direction === "+") {
+            while (true) {
+                if (isVert) {
+                    mY++
+                } else {
+                    mX++
+                }
 
-            let cell = this.getCellSafe(mY, mX);
+                let cell = this.getCellSafe(mY, mX);
 
-            if (cell === null || cell.value !== this.acceptedValue()) {
-                break;
-            } else {
-                strike++
+                if (cell === null || cell.value !== acceptedValue) {
+                    break;
+                } else {
+                    strike++
+                }
             }
         }
 
         mX = xPos;
         mY = yPos;
 
-        while (true) {
-            if (isVert) {
-                mY--
-            } else {
-                mX--
-            }
+        if (direction === "both" || direction === "-") {
+            while (true) {
+                if (isVert) {
+                    mY--
+                } else {
+                    mX--
+                }
 
-            let cell = this.getCellSafe(mY, mX);
+                let cell = this.getCellSafe(mY, mX);
 
-            if (cell === null || cell.value !== this.acceptedValue()) {
-                break;
-            } else {
-                strike++
+                if (cell === null || cell.value !== acceptedValue) {
+                    break;
+                } else {
+                    strike++
+                }
             }
         }
 

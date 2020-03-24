@@ -8,7 +8,8 @@ let brain: GameBrain;
 
 const menuItems = [
     {title: "Start Game (PVP)", command: startGameDefault},
-    {title: "Start Game (AI)", command: startGameAi}
+    {title: "Start Game (AI)", command: startGameAi},
+    {title: "Load Game", command: loadGame}
 ];
 
 const fieldY = ["A", "B", "C", "D", "E", "F", "G", "J"];
@@ -16,9 +17,9 @@ const fieldX = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
 window.addEventListener('load', ev => {
     // drawGame();
-    // drawMenu();
+    drawMenu();
     // openHelpMenu()
-    startGame(false)
+    // startGame(false)
 });
 
 
@@ -95,15 +96,20 @@ function createControlsBar() {
 
     let restartButton = createElement("game_controls");
     let returnButton = createElement("game_controls");
+    let saveButton = createElement("game_controls");
 
     box.append(restartButton);
     box.append(returnButton);
+    box.append(saveButton);
 
     restartButton.innerHTML = "Restart";
     restartButton.addEventListener("click", restartGame);
 
     returnButton.innerHTML = "Back To Menu";
     returnButton.addEventListener("click", drawMenu);
+
+    saveButton.innerHTML = "Save";
+    saveButton.addEventListener("click", saveGame);
 
     return box;
 }
@@ -218,7 +224,7 @@ function createHelpMenu() {
         "<li>After all 24 stones have been dropped, <b>Move Phase</b> begins!." +
         "Players will then take turns moving their pieces orthogonally into an adjacent empty cell</li>" +
         "<li>Players attempt to make a three-in-a-row with their own pieces. Four or more pieces formed in-a-row not count.</li>" +
-        "<li>If a three-in-a-row is made by a player, he or she can remove one enemy piece from the board which is not part of a three-in-a-row itself.</li>" +
+        "<li>If a three-in-a-row is made by a player, he or she can remove one enemy piece from the board <b>which is not part of a three-in-a-row itself</b>.</li>" +
         "<li>Player loses when he or she has less than 3 figures on board</li>" +
         "</ol>" +
         "<p>It is not allowed to make a three or more in-a-row during the <b>Drop phase</b></p>" +
@@ -249,6 +255,71 @@ function openHelpMenu() {
     body.append(menu);
 
     placeCentered(menu)
+}
+
+//game loading
+function loadGame() {
+    loadFile()
+}
+
+function _loadGame(fileContent: string) {
+    // console.log(fileContent);
+
+    try{
+        brain = JSON.parse(fileContent) as GameBrain;
+        brain = new GameBrain(false, false, brain);
+        drawGame();
+    }
+    catch (e) {
+        console.log("Cannot load game file")
+    }
+}
+
+function loadFile() {
+    let input = document.createElement('input');
+    let fileContent: string | ArrayBuffer | null;
+
+    input.type = 'file';
+
+    input.onchange = e => {
+        // getting a hold of the file reference
+        let file = (e.target! as any).files[0];
+
+        // setting up the reader
+        let reader = new FileReader();
+        reader.readAsText(file,'UTF-8');
+
+        // here we tell the reader what to do when it's done reading...
+        reader.onload = readerEvent => {
+            fileContent = readerEvent.target!.result; // this is the content!
+            // console.log( fileContent );
+            if (fileContent){
+                _loadGame(fileContent.toString())
+            }
+        }
+    };
+
+    input.click();
+}
+
+function saveGame(){
+    let file = new Blob([JSON.stringify(brain)]);
+    let filename = Date.now().toString();
+
+    if (window.navigator.msSaveOrOpenBlob) // IE10+
+        window.navigator.msSaveOrOpenBlob(file, filename);
+    else { // Others
+        var a = document.createElement("a"),
+            url = URL.createObjectURL(file);
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function() {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }, 0);
+    }
 }
 
 //=============         game functions          =============//
