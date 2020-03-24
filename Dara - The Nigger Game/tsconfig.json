@@ -1,13 +1,28 @@
 {
   "compilerOptions": {
+    // Enabling --strict enables --noImplicitAny, --noImplicitThis, --alwaysStrict, --strictBindCallApply,
+    // --strictNullChecks, --strictFunctionTypes and --strictPropertyInitialization.
+
     "module": "esnext",
     "target": "es2017",
+    "sourceMap": true,
+
+    "strict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
-    "sourceMap": true,
-    "strict": true,
-    "noUnusedLocals": false,
     "alwaysStrict": true,
+
+    "strictBindCallApply": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "downlevelIteration": true,
+    "importHelpers": true,
+
+    "noUnusedLocals": false,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "removeComments": true,
@@ -18,7 +33,8 @@
     ]
   },
   "include": [
-    "global.d.ts", "./src/**/*"
+    "global.d.ts",
+    "./src/**/*"
   ],
   "exclude": [
     "node_modules"

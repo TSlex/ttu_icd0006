@@ -1,9 +1,10 @@
 'use strict';
-import * as c from './constants.js';
-import {GameBrain, GameCell} from './game.brain.js';
+import * as c from "./game.constants";
+import {GameBrain} from './game.brain';
+// import {GameCell} from "./game.cell";
 
 let body = document.body;
-let brain;
+let brain: GameBrain;
 
 const menuItems = [
     {title: "Start Game (PVP)", command: startGameDefault},
@@ -63,8 +64,8 @@ function drawMenu() {
 function createStatsBar() {
     let box = createElement("game_stats_bar");
 
-    let msg1 = createElement("text1", null, "msg1");
-    let msg2 = createElement("text2", null, "msg2");
+    let msg1 = createElement("text1", undefined, "msg1");
+    let msg2 = createElement("text2", undefined, "msg2");
 
     box.append(msg1);
     box.append(msg2);
@@ -149,7 +150,7 @@ function createGameField() {
 }
 
 function drawGame() {
-    if (brain instanceof GameBrain && false){
+    if (!brain) {
         console.error("GameBrain is not initialised!");
         return;
     }
@@ -182,8 +183,8 @@ function startGameAi() {
 
 function startGame(isAIMode = false) {
 
-    let checkbox = document.querySelector('[name="IsNutsFirst"]');
-    let IsNutsFirst = checkbox.checked;
+    let checkbox: HTMLInputElement | null = document.querySelector('[name="IsNutsFirst"]');
+    let IsNutsFirst: boolean = !!checkbox?.checked;
 
     brain = new GameBrain(isAIMode, IsNutsFirst);
     brain.startGame();
@@ -197,7 +198,7 @@ function restartGame() {
     drawGame();
 }
 
-function gameClick(yPos, xPos) {
+function gameClick(yPos: number, xPos: number) {
     brain.handleClick(yPos, xPos);
     drawGame();
 }
@@ -205,7 +206,7 @@ function gameClick(yPos, xPos) {
 
 //=============         help functions          =============//
 
-function createElement(className, tagName = "div", id = null) {
+function createElement(className: string, tagName?: string, id?: string) {
     let elem = document.createElement(tagName || "div");
     elem.className = className;
 
@@ -218,26 +219,25 @@ function createElement(className, tagName = "div", id = null) {
 
 function clearBody() {
     body.innerHTML = '';
-
 }
 
-function placeCentered(element) {
+function placeCentered(element: HTMLElement) {
     // element.visibility = "hidden";
     element.style.position = "absolute";
-    element.style.left = c.windows_width / 2 - element.offsetWidth / 2 + "px";
-    element.style.top = c.windows_height / 2 - element.offsetHeight / 2 + "px";
+    element.style.left = c.windows_width() / 2 - element.offsetWidth / 2 + "px";
+    element.style.top = c.windows_height() / 2 - element.offsetHeight / 2 + "px";
     // element.visibility = "visible";
 }
 
-function placeAbove(anchorElement, targetElement) {
+function placeAbove(anchorElement: HTMLElement, targetElement: HTMLElement) {
     placeToElement(anchorElement, targetElement, "above")
 }
 
-function placeBelow(anchorElement, targetElement) {
+function placeBelow(anchorElement: HTMLElement, targetElement: HTMLElement) {
     placeToElement(anchorElement, targetElement, "below")
 }
 
-function placeToElement(anchorElement, targetElement, position) {
+function placeToElement(anchorElement: HTMLElement, targetElement: HTMLElement, position: string) {
     const spaceBetween = 10.;
 
     let anchorTop = parseFloat(anchorElement.style.top.slice(0, -2));

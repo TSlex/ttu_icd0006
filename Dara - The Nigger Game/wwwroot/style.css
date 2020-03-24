@@ -101,7 +101,10 @@ body{
 }
 
 .nut, .stick{
-    background-size: cover;
+    background-size: contain;
+    /*background-clip: content-box;*/
+    /*padding: 10px;*/
+
 }
 
 .nut{
