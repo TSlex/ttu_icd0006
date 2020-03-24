@@ -9,6 +9,9 @@ export class GameBrain {
     private readonly isNutsFirst: boolean;
     private readonly isAIMode: boolean;
 
+    private historyLen = 0;
+    private brainHistory: string[] = [];
+
     private gamePhase: GamePhase = GamePhase.not_started;
     private gameStatus1: string = "Not started";
     private gameStatus2: string = "You not supposed to see this...";
@@ -27,12 +30,17 @@ export class GameBrain {
     private sticksLeft: number = 0;
 
     constructor(isAIMode: boolean, isNutsFirst: boolean, fileContent?: GameBrain) {
-        if (fileContent){
+        if (fileContent) {
+
+            this.historyLen = fileContent.historyLen;
+
+            this.brainHistory = fileContent.brainHistory;
             this.isNutsFirst = fileContent.isNutsFirst;
             this.isAIMode = fileContent.isAIMode;
             this.gamePhase = fileContent.gamePhase;
             this.gameStatus1 = fileContent.gameStatus1;
             this.gameStatus2 = fileContent.gameStatus2;
+
             this.gameField = fileContent.gameField;
             this.isNutsMove = fileContent.isNutsMove;
             this.selectedCell = fileContent.selectedCell;
@@ -44,6 +52,14 @@ export class GameBrain {
 
         this.isAIMode = isAIMode;
         this.isNutsFirst = isNutsFirst;
+    }
+
+    getLastMove() {
+        if (this.brainHistory.length > 0) {
+            return this.brainHistory[this.brainHistory.length - 1]
+        }
+
+        return null
     }
 
     startGame() {
@@ -110,6 +126,22 @@ export class GameBrain {
         console.log(`isRemovingCell: ${this.isRemovingCell}`);
 
         this.updateStatus();
+
+        // let historyItem = JSON.stringify(this);
+        // if (this.brainHistory.length === 0) {
+        //     this.brainHistory.push(JSON.stringify(this));
+        //     this.historyLen++;
+        //
+        // } else if (this.brainHistory.length > 0 && this.brainHistory[this.brainHistory.length - 1] !== historyItem) {
+        //     this.brainHistory.push(JSON.stringify(this));
+        //     this.historyLen++;
+        // }
+        // if (this.brainHistory.length >= 0) {
+        //     this.brainHistory.push(JSON.stringify(this));
+        //     this.historyLen++;
+        // }
+
+        // console.log(this.historyLen)
     }
 
     removeCell(yPos: number, xPos: number) {
@@ -141,16 +173,13 @@ export class GameBrain {
         let xDif = previous.xPos - cell.xPos;
         let yDif = previous.yPos - cell.yPos;
 
-        if (xDif > 0){
+        if (xDif > 0) {
             direction = "hor+"
-        }
-        else if (xDif < 0){
+        } else if (xDif < 0) {
             direction = "hor-"
-        }
-        else if (yDif > 0){
+        } else if (yDif > 0) {
             direction = "vert+"
-        }
-        else {
+        } else {
             direction = "vert-"
         }
 
@@ -262,13 +291,13 @@ export class GameBrain {
             this.checkMovePhase()
         }
 
-        // if (this.isAIMode && this.isNutsFirst !== this.isNutsMove) {
-        //     this.ai_placeFlag();
-        // }
-
-        if (this.gamePhase === GamePhase.drop_phase) {
+        if (this.isAIMode && this.isNutsFirst !== this.isNutsMove) {
             this.ai_placeFlag();
         }
+
+        // if (this.gamePhase === GamePhase.drop_phase) {
+        //     this.ai_placeFlag();
+        // }
 
     }
 

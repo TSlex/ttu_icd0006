@@ -97,10 +97,12 @@ function createControlsBar() {
     let restartButton = createElement("game_controls");
     let returnButton = createElement("game_controls");
     let saveButton = createElement("game_controls");
+    let undoButton = createElement("game_controls");
 
     box.append(restartButton);
     box.append(returnButton);
     box.append(saveButton);
+    box.append(undoButton);
 
     restartButton.innerHTML = "Restart";
     restartButton.addEventListener("click", restartGame);
@@ -110,6 +112,9 @@ function createControlsBar() {
 
     saveButton.innerHTML = "Save";
     saveButton.addEventListener("click", saveGame);
+
+    undoButton.innerHTML = "Undo";
+    undoButton.addEventListener("click", undoMove);
 
     return box;
 }
@@ -319,6 +324,17 @@ function saveGame(){
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
         }, 0);
+    }
+}
+
+function undoMove() {
+    let lastMove = brain.getLastMove();
+    if (lastMove){
+        // console.log(lastMove);
+        brain = JSON.parse(lastMove) as GameBrain;
+        brain = new GameBrain(false, false, brain);
+
+        drawGame();
     }
 }
 
