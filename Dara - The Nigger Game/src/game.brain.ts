@@ -20,7 +20,7 @@ export class GameBrain {
     private selectedCell: GameCell | null = null;
     private isRemovingCell = false;
 
-    private oppositeValue = () => this.isNutsMove ? GameCellValue.nut : GameCellValue.stick;
+    private oppositeValue = () => !this.isNutsMove ? GameCellValue.nut : GameCellValue.stick;
     private acceptedValue = () => this.isNutsMove ? GameCellValue.nut : GameCellValue.stick;
 
     private nutsLeft: number = 0;

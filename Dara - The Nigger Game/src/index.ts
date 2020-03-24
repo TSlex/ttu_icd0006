@@ -11,9 +11,14 @@ const menuItems = [
     {title: "Start Game (AI)", command: startGameAi}
 ];
 
+const fieldY = ["A", "B", "C", "D", "E", "F", "G", "J"];
+const fieldX = ["1", "2", "3", "4", "5", "6", "7", "8"];
+
 window.addEventListener('load', ev => {
     // drawGame();
-    drawMenu();
+    // drawMenu();
+    // openHelpMenu()
+    startGame(false)
 });
 
 
@@ -58,6 +63,10 @@ function drawMenu() {
     box.appendChild(createMenuOptionsBox());
 
     placeCentered(box);
+
+    let help = createHelpButton();
+    body.append(help);
+    placeAtCorner(box, help, "right-up")
 }
 
 //game section
@@ -107,6 +116,14 @@ function createGameField() {
         let row = createElement("game_row");
 
         for (let x = 0; x < c.GAME_WIDTH; x++) {
+            let cellImage = createElement("cell_image");
+
+            let yLab = createElement("cell_y");
+            yLab.innerText = fieldY[y];
+
+            let xLab = createElement("cell_x");
+            xLab.innerText = fieldX[x];
+
             let cell = createElement("game_cell");
             let _cell = gameField[y][x];
 
@@ -114,6 +131,10 @@ function createGameField() {
             cell.dataset.xPos = _cell.xPos;
             cell.dataset.value = _cell.value;
             cell.dataset.state = _cell.state;
+
+            cell.append(cellImage);
+            cell.append(yLab);
+            cell.append(xLab);
 
             switch (_cell.value) {
                 case 1:
@@ -169,6 +190,65 @@ function drawGame() {
     placeAbove(gameField, statsBar);
     placeBelow(gameField, controlsBar);
 
+    let help = createHelpButton();
+    body.append(help);
+    placeAtCorner(statsBar, help, "right-up")
+}
+
+//help section
+function createHelpButton() {
+    let btn = createElement("help_button");
+    btn.innerText = "?";
+    btn.addEventListener('click', () => {openHelpMenu()});
+
+    return btn;
+}
+
+function createHelpMenu() {
+    let menu = createElement("help_menu");
+
+    let text = createElement("help_text");
+    text.innerHTML = "" +
+        "<h2>Game play and rules:</h2>" +
+        "<hr>" +
+        "<ol>" +
+        "<li>Players decide among themselves who starts first</li>" +
+        "<li>The board is empty in the beginning. Players take turn placing their figures onto the empty cells of the board</li>" +
+        "<li>This is known as <b>Drop phase</b></li>" +
+        "<li>After all 24 stones have been dropped, <b>Move Phase</b> begins!." +
+        "Players will then take turns moving their pieces orthogonally into an adjacent empty cell</li>" +
+        "<li>Players attempt to make a three-in-a-row with their own pieces. Four or more pieces formed in-a-row not count.</li>" +
+        "<li>If a three-in-a-row is made by a player, he or she can remove one enemy piece from the board which is not part of a three-in-a-row itself.</li>" +
+        "<li>Player loses when he or she has less than 3 figures on board</li>" +
+        "</ol>" +
+        "<p>It is not allowed to make a three or more in-a-row during the <b>Drop phase</b></p>" +
+        "<p>The three-in-a-row must be orthogonal and not diagonal</p>" +
+        "<p>At once only one enemy piece can be removed.</p>";
+
+
+        let controls = createElement("help_controls");
+
+    let btn = createElement("game_controls");
+    btn.innerText = "Close";
+
+    btn.addEventListener('click', () => removeElement(menu));
+
+    menu.append(text);
+    menu.append(controls);
+    controls.append(btn);
+
+    return menu;
+}
+
+function openHelpMenu() {
+    if (document.querySelector("[class='help_menu']")){
+        return
+    }
+
+    let menu = createHelpMenu();
+    body.append(menu);
+
+    placeCentered(menu)
 }
 
 //=============         game functions          =============//
@@ -221,6 +301,10 @@ function clearBody() {
     body.innerHTML = '';
 }
 
+function removeElement(element: HTMLElement) {
+    element!.parentElement?.removeChild(element)
+}
+
 function placeCentered(element: HTMLElement) {
     // element.visibility = "hidden";
     element.style.position = "absolute";
@@ -235,6 +319,11 @@ function placeAbove(anchorElement: HTMLElement, targetElement: HTMLElement) {
 
 function placeBelow(anchorElement: HTMLElement, targetElement: HTMLElement) {
     placeToElement(anchorElement, targetElement, "below")
+}
+
+function placeAtCorner(anchorElement: HTMLElement, targetElement: HTMLElement, corner: "right-up") {
+    placeToElement(anchorElement, targetElement, corner)
+
 }
 
 function placeToElement(anchorElement: HTMLElement, targetElement: HTMLElement, position: string) {
@@ -264,6 +353,11 @@ function placeToElement(anchorElement: HTMLElement, targetElement: HTMLElement, 
         case "below":
             targetElement.style.left = anchorLeft - (width - anchorWidth) / 2 + "px";
             targetElement.style.top = anchorTop + anchorHeight + spaceBetween + "px";
+            break;
+
+        case "right-up":
+            targetElement.style.left = anchorLeft + anchorWidth + "px";
+            targetElement.style.top = anchorTop - height + "px";
             break;
 
         default:

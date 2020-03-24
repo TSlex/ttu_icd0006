@@ -1,4 +1,4 @@
-body{
+body {
     background-image: url("assets/sand_textue.jpg");
     background-size: cover;
     background-attachment: scroll;
@@ -7,20 +7,20 @@ body{
     font-family: "Comic Sans MS";
 }
 
-.text1{
+.text1 {
     font-size: 2em;
 }
 
-.text2{
+.text2 {
     font-size: 1em;
 }
 
-.sand_border{
+.sand_border {
     border: 5px solid transparent;
     border-image: url("assets/1.png") 20 20 repeat;
 }
 
-.game_field{
+.game_field {
     /*width: 200px;*/
     /*height: 100px;*/
     display: flex;
@@ -31,20 +31,81 @@ body{
     background: wheat;
 }
 
-.game_row{
+.game_row {
     display: flex;
 }
 
-.game_cell{
+.game_cell {
     height: 80px;
     width: 80px;
+    box-sizing: border-box;
     background-color: rgba(244, 164, 96, 0.5);
     margin: 1px;
+    position: relative;
+    padding: 10px;
 
     border-image: url("assets/1.png") 20 20 repeat;
 }
 
-.game_stats_bar{
+.cell_image{
+    background-size: contain;
+    width: 100%;
+    height: 100%;
+}
+
+.game_cell.nut .cell_image{
+    background-image: url("assets/nut.png");
+}
+
+.game_cell.stick .cell_image{
+    background-image: url("assets/stick.png");
+}
+
+.game_cell .cell_x{
+    position: absolute;
+    right: 4px;
+    top: 2px;
+}
+
+.game_cell .cell_y{
+    position: absolute;
+    left: 4px;
+    top: 2px;
+}
+
+/*.nut, .stick {*/
+/*    background-size: contain;*/
+/*    !*background-clip: content-box;*!*/
+/*    !*padding: 10px;*!*/
+
+/*}*/
+
+/*.nut {*/
+/*    !*background-image: url("assets/nut.png");*!*/
+
+/*}*/
+
+/*.stick {*/
+/*    !*background-image: url("assets/stick.png");*!*/
+/*}*/
+
+.blocked, .available, .selected {
+
+}
+
+.blocked {
+    background-color: gray;
+}
+
+.available {
+    background-color: darkseagreen;
+}
+
+.selected {
+    background-color: goldenrod;
+}
+
+.game_stats_bar {
     height: 100px;
     line-height: 50px;
     width: 500px;
@@ -53,7 +114,7 @@ body{
     background: wheat;
 }
 
-.menu_box{
+.menu_box {
     border: peru 3px solid;
     width: fit-content;
     text-align: center;
@@ -61,11 +122,11 @@ body{
     background: wheat;
 }
 
-.menu_items{
+.menu_items {
 
 }
 
-.menu_item{
+.menu_item {
     width: 300px;
     height: 40px;
     line-height: 40px;
@@ -78,7 +139,7 @@ body{
     margin: 5px
 }
 
-.game_controls_bar{
+.game_controls_bar {
     /*border: solid 1px black;*/
     /*width: fit-content;*/
     text-align: center;
@@ -86,7 +147,7 @@ body{
     width: 400px;
 }
 
-.game_controls{
+.game_controls {
     /*width: 300px;*/
     height: 40px;
     line-height: 40px;
@@ -100,34 +161,50 @@ body{
     flex-grow: 1;
 }
 
-.nut, .stick{
-    background-size: contain;
-    /*background-clip: content-box;*/
-    /*padding: 10px;*/
-
+.help_button {
+    background: sandybrown;
+    border: peru 3px solid;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+    color: chocolate;
 }
 
-.nut{
-    background-image: url("assets/nut.png");
-
+.help_menu {
+    width: 500px;
+    background: wheat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    border: peru 3px solid;
+    border-radius: 20px;
 }
 
-.stick{
-    background-image: url("assets/stick.png");
+.help_text {
+    padding: 10px;
+    font-family: "-apple-system", monospace;
 }
 
-.blocked, .available, .selected{
-
+.help_text ol {
+    margin-block-end: 0;
 }
 
-.blocked{
-    background-color: gray;
+.help_text ol li {
+    text-align: left;
+    margin: 5px;
 }
 
-.available{
-    background-color: darkseagreen;
+.help_text hr {
+    outline: none;
+    border: none;
+    border-top: peru 1px solid;
 }
 
-.selected{
-    background-color: goldenrod;
+.help_controls {
+    padding: 0 200px 0 200px;
+    justify-items: center;
 }
+
