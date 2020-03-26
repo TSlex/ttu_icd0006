@@ -1,0 +1,33 @@
+<template>
+  <h1>Create</h1>
+
+  <h4>Post</h4>
+  <hr />
+  <div class="row">
+    <div class="col-md-4">
+      <form submit.trigger="onSubmit($event)">
+
+        <div class="form-group">
+          <label for="PostTitle" class="control-label">Title</label>
+          <input name="PostTitle" id="PostTitle" class="form-control" value.bind="_title"/>
+        </div>
+        <div class="form-group">
+          <label for="PostDescription" class="control-label">Description</label>
+          <input name="PostDescription" id="PostDescription" class="form-control" value.bind="_description"/>
+        </div>
+        <div class="form-group">
+          <label for="PostImageUrl" class="control-label">Image Url</label>
+          <input name="PostImageUrl" id="PostImageUrl" class="form-control" value.bind="_imageUrl"/>
+        </div>
+        
+        <div class="form-group">
+          <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div>
+    <a route-href="route: posts; params.bind: { }">Back to List</a>
+  </div>
+</template>
