@@ -382,7 +382,8 @@ export class GameBrain {
     }
 
     clone(): GameBrain {
-        return JSON.parse(JSON.stringify(this)) as GameBrain
+        // return JSON.parse(JSON.stringify(this)) as GameBrain
+        return new GameBrain(false, false, JSON.parse(JSON.stringify(this)) as GameBrain)
     }
 
     ai_makeMove() {
@@ -390,115 +391,130 @@ export class GameBrain {
             return
         }
 
-        console.log(this.ai_makePrediction(2, this.clone(), 0, null))
+        console.log(this.ai_makePrediction(1, this.clone(), 0, []))
     }
 
-    ai_makePrediction(level: number, brain: GameBrain, points: number, initialMove: { y: number, x: number } | null):
-        { initialMove: { y: number, x: number } | null, points: number } {
+    ai_makePrediction(level: number, brain: GameBrain, points: number, moves: { y: number, x: number }[]):
+        { moves: { y: number, x: number }[], points: number } {
 
         if (level <= 0) {
-            return {initialMove, points}
+            return {moves, points}
         }
 
-        let predictions: { initialMove: { y: number, x: number } | null, points: number }[] = [];
-
-        for (let y = 0; y < GAME_HEIGHT; y++) {
-            for (let x = 0; x < GAME_WIDTH; x++) {
-                let cell = brain.gameField[y][x];
-                let newBrain = this.clone.bind(brain)();
-
-                let move = (initialMove ? initialMove : {y, x});
-
-                if (newBrain.selectedCell === null &&
-                    cell.state === GameCellState.available &&
-                    cell.value === this.acceptedValue.bind(newBrain)()) {
-
-                    this.selectCell.bind(newBrain, y, x)();
-                    predictions.push(this.ai_makePrediction(level, newBrain, points, move))
-
-                } else if (newBrain.selectedCell === cell) {
-                    //skip
-
-                } else if (newBrain.selectedCell !== null && cell.state === GameCellState.available) {
-                    this.moveCell.bind(newBrain, y, x)();
-
-                    if (brain.isNutsFirst != brain.isNutsMove)
-                        predictions.push(this.ai_makePrediction(level - 1, newBrain, points, move));
-                    else {
-                        predictions.push(this.ai_makePrediction(level, newBrain, points, move))
-                    }
-
-                } else if (newBrain.isRemovingCell && cell.state === GameCellState.available) {
-                    this.removeCell.bind(newBrain, y, x)();
-
-                    if (brain.isNutsFirst != brain.isNutsMove)
-                        predictions.push(this.ai_makePrediction(level, newBrain, points + 1, move));
-                    else {
-                        predictions.push(this.ai_makePrediction(level, newBrain, points - 3, move))
-                    }
-                }
-
-            }
-        }
-
-        let max: { initialMove: { y: number, x: number } | null, points: number };
-
-        predictions.forEach(value => {
-            if (!max || max < value) {
-                max = value
-            }
-        });
-
-        return max!;
-    }
-
-    player_makePrediction(level: number, brain: GameBrain, points: number, initialMove: { y: number, x: number } | null):
-        { initialMove: { y: number, x: number } | null, points: number } {
-
-        if (level <= 0) {
-            return {initialMove, points}
-        }
-
-        let predictions: { initialMove: { y: number, x: number } | null, points: number }[] = [];
+        let predictions: { moves: { y: number, x: number }[], points: number }[] = [];
 
         for (let y = 0; y < GAME_HEIGHT; y++) {
             for (let x = 0; x < GAME_WIDTH; x++) {
                 let cell = brain.gameField[y][x];
                 let newBrain = brain.clone();
-                let move = (initialMove ? initialMove : {y, x});
+                let newMoves = JSON.parse(JSON.stringify(moves)) as { y: number, x: number }[];
+
+                // if (moves.length === 0){
+                //     moves.push({y, x})
+                // }
 
                 if (newBrain.selectedCell === null &&
                     cell.state === GameCellState.available &&
-                    cell.value === brain.acceptedValue()) {
+                    cell.value === newBrain.acceptedValue()) {
+
+                    console.log("selecting");
 
                     newBrain.selectCell(y, x);
-                    predictions.push(this.ai_makePrediction(level, newBrain, points, move))
+                    newMoves.push({y, x});
+                    predictions.push(this.ai_makePrediction(level, newBrain, points, newMoves))
 
                 } else if (newBrain.selectedCell === cell) {
                     //skip
 
                 } else if (newBrain.selectedCell !== null && cell.state === GameCellState.available) {
+
                     newBrain.moveCell(y, x);
-                    predictions.push(this.ai_makePrediction(level - 1, newBrain, points, move))
+                    newMoves.push({y, x});
+
+                    if (brain.isNutsFirst != brain.isNutsMove) {
+                        console.log("ai_moving");
+                        predictions.push(this.ai_makePrediction(level - 1, newBrain, points, newMoves));
+                    }
+                    else {
+                        console.log("player_moving");
+                        predictions.push(this.ai_makePrediction(level, newBrain, points, moves))
+                    }
 
                 } else if (newBrain.isRemovingCell && cell.state === GameCellState.available) {
-                    newBrain.removeCell(y, x);
-                    predictions.push(this.ai_makePrediction(level, newBrain, points - 3, move))
-                }
 
+                    newBrain.removeCell(y, x);
+                    newMoves.push({y, x});
+
+                    if (brain.isNutsFirst != brain.isNutsMove) {
+                        console.log("ai_removing");
+                        predictions.push(this.ai_makePrediction(level, newBrain, points + 1, newMoves));
+                    }
+                    else {
+                        console.log("player_removing");
+                        predictions.push(this.ai_makePrediction(level, newBrain, points - 3, moves))
+                    }
+                }
             }
         }
 
-        let max: { initialMove: { y: number, x: number } | null, points: number };
+        let max: { moves: { y: number, x: number }[], points: number };
 
         predictions.forEach(value => {
-            if (!max || max < value) {
+            if (!max || max.points < value.points) {
                 max = value
             }
         });
 
         return max!;
     }
+
+    // player_makePrediction(level: number, brain: GameBrain, points: number, initialMove: { y: number, x: number } | null):
+    //     { initialMove: { y: number, x: number } | null, points: number } {
+    //
+    //     if (level <= 0) {
+    //         return {initialMove, points}
+    //     }
+    //
+    //     let predictions: { initialMove: { y: number, x: number } | null, points: number }[] = [];
+    //
+    //     for (let y = 0; y < GAME_HEIGHT; y++) {
+    //         for (let x = 0; x < GAME_WIDTH; x++) {
+    //             let cell = brain.gameField[y][x];
+    //             let newBrain = brain.clone();
+    //             let move = (initialMove ? initialMove : {y, x});
+    //
+    //             if (newBrain.selectedCell === null &&
+    //                 cell.state === GameCellState.available &&
+    //                 cell.value === brain.acceptedValue()) {
+    //
+    //                 newBrain.selectCell(y, x);
+    //                 predictions.push(this.ai_makePrediction(level, newBrain, points, move))
+    //
+    //             } else if (newBrain.selectedCell === cell) {
+    //                 //skip
+    //
+    //             } else if (newBrain.selectedCell !== null && cell.state === GameCellState.available) {
+    //                 newBrain.moveCell(y, x);
+    //                 predictions.push(this.ai_makePrediction(level - 1, newBrain, points, move))
+    //
+    //             } else if (newBrain.isRemovingCell && cell.state === GameCellState.available) {
+    //                 newBrain.removeCell(y, x);
+    //                 predictions.push(this.ai_makePrediction(level, newBrain, points - 3, move))
+    //             }
+    //
+    //         }
+    //     }
+    //
+    //     let max: { initialMove: { y: number, x: number } | null, points: number };
+    //
+    //     predictions.forEach(value => {
+    //         if (!max || max < value) {
+    //             max = value
+    //         }
+    //     });
+    //
+    //     return max!;
+    // }
 
     ai_placeFlag() {
         console.log("AI move");
