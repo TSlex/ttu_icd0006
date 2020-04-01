@@ -1,8 +1,6 @@
-import {
-    GAME_HEIGHT, GAME_WIDTH, FLAGS_COUNT,
-    GameCellValue, GameCellState, GamePhase
-} from "./game.constants"
+import {FLAGS_COUNT, GAME_HEIGHT, GAME_WIDTH, GameCellState, GameCellValue, GamePhase} from "./game.constants"
 import {GameCell} from "./game.cell";
+import {GameMove} from "./game.move";
 
 export class GameBrain {
 
@@ -54,9 +52,63 @@ export class GameBrain {
         this.isNutsFirst = isNutsFirst;
     }
 
-    getLastMove() {
+    undoMove() {
+        let move = this.getLastMove();
+        if (move == null) return;
+
+        this.brainHistory.pop();
+        this.historyLen--;
+
+        this.gamePhase = move.gamePhase;
+        this.gameStatus1 = move.gameStatus1;
+        this.gameStatus2 = move.gameStatus2;
+        this.setGameField(move.gameField);
+        this.isNutsMove = move.isNutsMove;
+        this.selectedCell = move.selectedCell;
+        this.isRemovingCell = move.isRemovingCell;
+        this.nutsLeft = move.nutsLeft;
+        this.sticksLeft = move.sticksLeft;
+
+        if (this.selectedCell != null){
+            this.selectedCell = null;
+
+            if (this.gamePhase == GamePhase.drop_phase){
+                this.checkDropPhase()
+            }
+            else if (this.gamePhase == GamePhase.move_phase){
+                this.checkMovePhase()
+            }
+        }
+    }
+
+    setGameField(gameField: GameCell[][]){
+        for (let y = 0; y < GAME_HEIGHT; y++) {
+            for (let x = 0; x < GAME_WIDTH; x++) {
+                this.gameField[y][x] = gameField[y][x]
+            }
+        }
+    }
+
+    saveMove() {
+        let move = new GameMove(
+            this.gamePhase,
+            this.gameStatus1,
+            this.gameStatus2,
+            this.gameField,
+            this.isNutsMove,
+            this.selectedCell,
+            this.isRemovingCell,
+            this.nutsLeft,
+            this.sticksLeft
+        );
+
+        this.brainHistory.push(JSON.stringify(move, null, " "));
+        this.historyLen++
+    }
+
+    getLastMove(): null | GameMove {
         if (this.brainHistory.length > 0) {
-            return this.brainHistory[this.brainHistory.length - 1]
+            return JSON.parse(this.brainHistory[this.brainHistory.length - 1]) as GameMove;
         }
 
         return null
@@ -81,6 +133,9 @@ export class GameBrain {
 
         this.gameStatus1 = "Now is the DROP PHASE";
         this.gameStatus2 = `Player <b>${this.isNutsMove ? "NUTS" : "STICKS"}</b>, place your figure`;
+
+        // this.saveMove(); //initial state
+        console.log(this.historyLen)
     }
 
     getGameStatus() {
@@ -94,7 +149,40 @@ export class GameBrain {
         return JSON.parse(JSON.stringify(this.gameField))
     }
 
+    checkFieldEquals(one: GameCell[][], other: GameCell[][]){
+        for (let y = 0; y < GAME_HEIGHT; y++) {
+            for (let x = 0; x < GAME_WIDTH; x++) {
+                if (one[y][x].value !== other[y][x].value || one[y][x].state !== other[y][x].state){
+                    // console.log(one[y][x].value != other[y][x].value);
+                    // console.log(one[y][x].value);
+                    // console.log(other[y][x].value);
+                    // console.log(one[y][x].state != other[y][x].state);
+                    // console.log(one[y][x].state);
+                    // console.log(other[y][x].state);
+                    return false;
+                }
+            }
+        }
+
+        return true
+    }
+
     handleClick(yPos: number, xPos: number) {
+        let selectionChange = false;
+        this.saveMove();
+
+        // console.log(this.getLastMove() != null);
+        // console.log(!this.checkFieldEquals(this.getLastMove()!.gameField, this.gameField));
+
+        // if (this.getLastMove() != null && !this.checkFieldEquals(this.getLastMove()!.gameField, this.gameField)){
+        //     this.saveMove();
+        //     // console.log(this.getLastMove()?.gameField);
+        //     // console.log(this.gameField);
+        // } else if (this.getLastMove() == null){
+        //     this.saveMove();
+        // }
+
+
         let cell = this.getCellSafe(yPos, xPos);
         if (cell === null) return;
 
@@ -105,10 +193,12 @@ export class GameBrain {
             if (this.selectedCell === null &&
                 cell.state === GameCellState.available &&
                 cell.value === this.acceptedValue()) {
-                this.selectCell(yPos, xPos)
+                this.selectCell(yPos, xPos);
+                selectionChange = true;
 
             } else if (this.selectedCell === cell) {
-                this.unselectCell()
+                this.unselectCell();
+                selectionChange = true;
 
             } else if (this.selectedCell !== null && cell.state === GameCellState.available) {
                 this.moveCell(yPos, xPos)
@@ -127,21 +217,12 @@ export class GameBrain {
 
         this.updateStatus();
 
-        // let historyItem = JSON.stringify(this);
-        // if (this.brainHistory.length === 0) {
-        //     this.brainHistory.push(JSON.stringify(this));
-        //     this.historyLen++;
-        //
-        // } else if (this.brainHistory.length > 0 && this.brainHistory[this.brainHistory.length - 1] !== historyItem) {
-        //     this.brainHistory.push(JSON.stringify(this));
-        //     this.historyLen++;
-        // }
-        // if (this.brainHistory.length >= 0) {
-        //     this.brainHistory.push(JSON.stringify(this));
-        //     this.historyLen++;
-        // }
+        if (selectionChange && this.getLastMove() != null || this.checkFieldEquals(this.getLastMove()!.gameField, this.gameField)) {
+            this.brainHistory.pop();
+            this.historyLen--;
+        }
 
-        // console.log(this.historyLen)
+        console.log(this.historyLen)
     }
 
     removeCell(yPos: number, xPos: number) {
@@ -208,13 +289,13 @@ export class GameBrain {
 
         if (vStrike === 3 || hStrike === 3) {
             this.isRemovingCell = true;
-        } else if (direction === "vert+" && this.getNStrike(previous!.yPos, previous!.xPos, true, true, false, "+") === 4) {
+        } else if (this.getNStrike(previous!.yPos, previous!.xPos, true, true, false, "+") === 4) {
             this.isRemovingCell = true;
-        } else if (direction === "vert-" && this.getNStrike(previous!.yPos, previous!.xPos, true, true, false, "-") === 4) {
+        } else if (this.getNStrike(previous!.yPos, previous!.xPos, true, true, false, "-") === 4) {
             this.isRemovingCell = true;
-        } else if (direction === "hor+" && this.getNStrike(previous!.yPos, previous!.xPos, false, true, false, "+") === 4) {
+        } else if (this.getNStrike(previous!.yPos, previous!.xPos, false, true, false, "+") === 4) {
             this.isRemovingCell = true;
-        } else if (direction === "hor-" && this.getNStrike(previous!.yPos, previous!.xPos, false, true, false, "-") === 4) {
+        } else if (this.getNStrike(previous!.yPos, previous!.xPos, false, true, false, "-") === 4) {
             this.isRemovingCell = true;
         } else {
             this.isNutsMove = !this.isNutsMove;

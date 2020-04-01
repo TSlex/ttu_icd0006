@@ -308,7 +308,7 @@ function loadFile() {
 }
 
 function saveGame(){
-    let file = new Blob([JSON.stringify(brain)]);
+    let file = new Blob([JSON.stringify(brain, null, " ")]);
     let filename = Date.now().toString();
 
     if (window.navigator.msSaveOrOpenBlob) // IE10+
@@ -328,14 +328,8 @@ function saveGame(){
 }
 
 function undoMove() {
-    let lastMove = brain.getLastMove();
-    if (lastMove){
-        // console.log(lastMove);
-        brain = JSON.parse(lastMove) as GameBrain;
-        brain = new GameBrain(false, false, brain);
-
-        drawGame();
-    }
+    brain.undoMove();
+    drawGame();
 }
 
 //=============         game functions          =============//
