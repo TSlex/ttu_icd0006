@@ -328,7 +328,8 @@ function saveGame(){
 }
 
 function undoMove() {
-    brain.undoMove();
+    // brain.undoMove();
+    brain.ai_makeMove();
     drawGame();
 }
 

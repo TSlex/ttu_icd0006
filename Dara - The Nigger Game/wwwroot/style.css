@@ -64,11 +64,11 @@ body {
 }
 
 .game_cell.nut .cell_image{
-    background-image: url("assets/nut.png");
+    background-image: url("assets/valya1.1/nut.png");
 }
 
 .game_cell.stick .cell_image{
-    background-image: url("assets/stick.png");
+    background-image: url("assets/valya1.1/stick.png");
 }
 
 .game_cell .cell_x{
@@ -173,7 +173,7 @@ body {
     border: #886a53AA 3px solid;
 }
 
-.menu_item:hover, .game_controls:hover{
+.menu_item:hover, .game_controls:hover, .help_button:hover{
     background: #886a5388;
     border: #886a53 3px solid;
 }
