@@ -1,0 +1,41 @@
+<template>
+  <h1 class="text-center">Log in</h1>
+
+  <div class="row justify-content-center text-center">
+    <div class="col-md-4">
+      <section>
+        <form id="account" method="post" submit.trigger="onSubmit($event)">
+          <hr>
+          <h4 if.bind="_errorMessage != null" style="color:red;">${_errorMessage}</h4>
+          <div class="form-group">
+            <label for="Input_Email">Email</label>
+            <input class="form-control" type="email" value.bind="_email">
+
+          </div>
+          <div class="form-group">
+            <label for="Input_Password">Password</label>
+            <input class="form-control" type="password" value.bind="_password">
+          </div>
+          <div class="form-group">
+            <div class="checkbox">
+              <label for="Input_RememberMe">
+                <input type="checkbox" checked id="Input_RememberMe" name="Input.RememberMe" value="true">
+                Remember me?
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Log in</button>
+          </div>
+          <div class="form-group">
+            <p>
+              <a route-href="route: account-login">Forgot your password?</a>
+            </p>
+            <p>
+              <a route-href="route: account-register">Register as a new user</a>
+            </p>
+          </div>
+        </form>
+      </section>
+    </div>
+</template>
