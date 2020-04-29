@@ -23,7 +23,6 @@ window.addEventListener('load', ev => {
     // startGame(false)
 });
 
-
 //=============         draw functions          =============//
 
 //menu section
@@ -85,6 +84,7 @@ function createMenuOptionsBox() {
 
 function drawMenu() {
     clearBody();
+    window.onresize = drawMenu;
 
     let box = createMenuBox();
     body.appendChild(box);
@@ -210,6 +210,7 @@ function createGameField() {
 }
 
 export function drawGame() {
+    window.onresize = drawGame;
     if (!brain) {
         console.error("GameBrain is not initialised!");
         return;
