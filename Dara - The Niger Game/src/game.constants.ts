@@ -17,7 +17,8 @@ export let windows_width = () => Math.max(
 export const GAME_HEIGHT = 5;
 export const GAME_WIDTH = 6;
 export const FLAGS_COUNT = 12;
-export const AI_SLEEP = 200;
+export const AI_SLEEP = 600;
+export const AI_SELECT = 400;
 
 export enum GameCellValue {
     empty,

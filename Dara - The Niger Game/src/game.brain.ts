@@ -1,6 +1,7 @@
-import {AI_SLEEP, FLAGS_COUNT, GAME_HEIGHT, GAME_WIDTH, GameCellState, GameCellValue, GamePhase} from "./game.constants"
+import {AI_SLEEP, AI_SELECT, FLAGS_COUNT, GAME_HEIGHT, GAME_WIDTH, GameCellState, GameCellValue, GamePhase} from "./game.constants"
 import {GameCell} from "./game.cell";
 import {GameMove} from "./game.move";
+import {drawGame} from "./index";
 
 export class GameBrain {
 
@@ -173,12 +174,6 @@ export class GameBrain {
         for (let y = 0; y < GAME_HEIGHT; y++) {
             for (let x = 0; x < GAME_WIDTH; x++) {
                 if (one[y][x].value !== other[y][x].value || one[y][x].state !== other[y][x].state) {
-                    // console.log(one[y][x].value != other[y][x].value);
-                    // console.log(one[y][x].value);
-                    // console.log(other[y][x].value);
-                    // console.log(one[y][x].state != other[y][x].state);
-                    // console.log(one[y][x].state);
-                    // console.log(other[y][x].state);
                     return false;
                 }
             }
@@ -191,20 +186,8 @@ export class GameBrain {
         let selectionChange = false;
         this.saveMove();
 
-        // console.log(this.getLastMove() != null);
-        // console.log(!this.checkFieldEquals(this.getLastMove()!.gameField, this.gameField));
-
-        // if (this.getLastMove() != null && !this.checkFieldEquals(this.getLastMove()!.gameField, this.gameField)){
-        //     this.saveMove();
-        //     // console.log(this.getLastMove()?.gameField);
-        //     // console.log(this.gameField);
-        // } else if (this.getLastMove() == null){
-        //     this.saveMove();
-        // }
-
-
         let cell = this.getCellSafe(yPos, xPos);
-        if (cell === null || this.gamePhase == GamePhase.over) return;
+        if (cell === null || (this.isAIMode && this.isNutsFirst !== this.isNutsMove) || this.gamePhase == GamePhase.over) return;
 
         if (this.gamePhase === GamePhase.drop_phase) {
             this.placeFlag(yPos, xPos);
@@ -267,7 +250,7 @@ export class GameBrain {
         this.updateStatus();
 
         if (this.isAIMode && this.isNutsFirst !== this.isNutsMove) {
-            this.ai_thinkABit();
+            this.ai_makeMove();
         }
     }
 
@@ -302,13 +285,12 @@ export class GameBrain {
 
         this.checkMovePhase();
 
-        if (this.isAIMode &&  this.isNutsFirst !== this.isNutsMove) {
-            this.ai_thinkABit();
+        if (this.isAIMode && this.isNutsFirst !== this.isNutsMove) {
+            this.ai_makeMove();
         }
     }
 
     selectCell(yPos: number, xPos: number) {
-        // let acceptedValue = this.isNutsMove ? GameCellValue.nut : GameCellValue.stick;
         let cell = this.gameField[yPos][xPos];
 
         if (cell.value !== this.acceptedValue()) {
@@ -322,15 +304,6 @@ export class GameBrain {
     }
 
     unselectCell() {
-        // let predicate = this.selectedCell.value === GameCellValue.nut;
-        //
-        // if (predicate && this.isNutsMove || !predicate && !this.isNutsMove){
-        //     this.selectedCell.state = GameCellState.available;
-        // }
-        // else {
-        //     this.selectedCell.state = GameCellState.none;
-        // }
-
         this.selectedCell = null;
         this.checkMovePhase();
     }
@@ -363,12 +336,12 @@ export class GameBrain {
         }
 
         if (this.isAIMode && this.isNutsFirst !== this.isNutsMove) {
-            this.ai_placeFlag();
+            setTimeout(() => {
+                this.ai_placeFlag();
+                this.updateStatus();
+                drawGame();
+            }, AI_SLEEP);
         }
-
-        // if (this.gamePhase === GamePhase.drop_phase) {
-        //     this.ai_placeFlag();
-        // }
 
     }
 
@@ -382,10 +355,18 @@ export class GameBrain {
             return
         }
 
-        this.ai_thinkABit();
+        console.log("time to think!");
+
+        let timer = setTimeout(() => {
+            clearTimeout(timer);
+            this.ai_thinkABit();
+        }, AI_SLEEP);
+
+        console.log("time to relax!");
     }
 
     ai_thinkABit() {
+
         const distinct = (value: any, index: any, self: any) => {
             return self.indexOf(value) === index;
         };
@@ -397,6 +378,9 @@ export class GameBrain {
                 let a = this.ai_chooseRandom(best) as GameCell;
                 console.log("AI thinks that the best decision is to remove: " + a);
                 this.removeCell(a.yPos, a.xPos);
+                this.checkMovePhase();
+                this.updateStatus();
+                drawGame();
                 return;
             }
 
@@ -406,6 +390,9 @@ export class GameBrain {
                 let a = this.ai_chooseRandom(rest) as GameCell;
                 console.log("AI want to remove: " + a);
                 this.removeCell(a.yPos, a.xPos);
+                this.checkMovePhase();
+                this.updateStatus();
+                drawGame();
                 return;
             }
 
@@ -432,7 +419,16 @@ export class GameBrain {
                 console.log(`AI thinks that the best decision is to move from: ${a.from} to: ${a.to}`);
 
                 this.selectCell(a.from.yPos, a.from.xPos);
-                this.moveCell(a.to.yPos, a.to.xPos);
+                this.checkMovePhase();
+                this.updateStatus();
+                drawGame();
+
+                setTimeout(() => {
+                    this.moveCell(a.to.yPos, a.to.xPos);
+                    this.checkMovePhase();
+                    this.updateStatus();
+                    drawGame();
+                }, AI_SELECT);
                 return;
             }
 
@@ -451,7 +447,16 @@ export class GameBrain {
                 console.log(`AI thinks that not bad decision will be to move from: ${a.from} to: ${a.to}`);
 
                 this.selectCell(a.from.yPos, a.from.xPos);
-                this.moveCell(a.to.yPos, a.to.xPos);
+                this.checkMovePhase();
+                this.updateStatus();
+                drawGame();
+
+                setTimeout(() => {
+                    this.moveCell(a.to.yPos, a.to.xPos);
+                    this.checkMovePhase();
+                    this.updateStatus();
+                    drawGame();
+                }, AI_SELECT);
                 return;
             }
 
@@ -460,7 +465,16 @@ export class GameBrain {
                 console.log(`AI thinks that a good decision is to move from: ${a.from} to: ${a.to}`);
 
                 this.selectCell(a.from.yPos, a.from.xPos);
-                this.moveCell(a.to.yPos, a.to.xPos);
+                this.checkMovePhase();
+                this.updateStatus();
+                drawGame();
+
+                setTimeout(() => {
+                    this.moveCell(a.to.yPos, a.to.xPos);
+                    this.checkMovePhase();
+                    this.updateStatus();
+                    drawGame();
+                }, AI_SELECT);
                 return;
             }
 
@@ -479,7 +493,16 @@ export class GameBrain {
                 console.log(`AI thinks that decision will be to move from: ${a.from} to: ${a.to}`);
 
                 this.selectCell(a.from.yPos, a.from.xPos);
-                this.moveCell(a.to.yPos, a.to.xPos);
+                this.checkMovePhase();
+                this.updateStatus();
+                drawGame();
+
+                setTimeout(() => {
+                    this.moveCell(a.to.yPos, a.to.xPos);
+                    this.checkMovePhase();
+                    this.updateStatus();
+                    drawGame();
+                }, AI_SELECT);
                 return;
             }
 
@@ -488,7 +511,16 @@ export class GameBrain {
                 console.log(`AI thinks that decision is to move from: ${a.from} to: ${a.to}`);
 
                 this.selectCell(a.from.yPos, a.from.xPos);
-                this.moveCell(a.to.yPos, a.to.xPos);
+                this.checkMovePhase();
+                this.updateStatus();
+                drawGame();
+
+                setTimeout(() => {
+                    this.moveCell(a.to.yPos, a.to.xPos);
+                    this.checkMovePhase();
+                    this.updateStatus();
+                    drawGame();
+                }, AI_SELECT);
                 return;
             }
 
@@ -497,7 +529,16 @@ export class GameBrain {
                 console.log(`AI thinks that at least should move from: ${a.from} to: ${a.to}`);
 
                 this.selectCell(a.from.yPos, a.from.xPos);
-                this.moveCell(a.to.yPos, a.to.xPos);
+                this.checkMovePhase();
+                this.updateStatus();
+                drawGame();
+
+                setTimeout(() => {
+                    this.moveCell(a.to.yPos, a.to.xPos);
+                    this.checkMovePhase();
+                    this.updateStatus();
+                    drawGame();
+                }, AI_SELECT);
                 return;
             }
 
@@ -531,7 +572,16 @@ export class GameBrain {
                 console.log(`Ai will move randomly.... from: ${a.from} to: ${a.to}`);
 
                 this.selectCell(a.from.yPos, a.from.xPos);
-                this.moveCell(a.to.yPos, a.to.xPos);
+                this.checkMovePhase();
+                this.updateStatus();
+                drawGame();
+
+                setTimeout(() => {
+                    this.moveCell(a.to.yPos, a.to.xPos);
+                    this.checkMovePhase();
+                    this.updateStatus();
+                    drawGame();
+                }, AI_SELECT);
                 return;
             }
 

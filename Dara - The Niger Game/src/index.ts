@@ -5,7 +5,7 @@ import {GameBrain} from './game.brain';
 
 let body = document.body;
 let brain: GameBrain;
-let isNutsFirst: boolean = false;
+let isNutsFirst: boolean = true;
 
 const menuItems = [
     {title: "Start Game (PVP)", command: startGameDefault},
@@ -53,8 +53,17 @@ function createMenuOptionsBox() {
     //     "<input type=\"checkbox\" name='IsNutsFirst' checked>" +
     //     "</span>";
 
-    let nutBtn = createElement("option_nut active");
+    let nutBtn = createElement("option_nut");
     let stickBtn = createElement("option_stick");
+
+    if (isNutsFirst){
+        nutBtn.classList.add('active');
+        stickBtn.classList.remove('active');
+    }
+    else {
+        stickBtn.classList.add('active');
+        nutBtn.classList.remove('active');
+    }
 
     nutBtn.addEventListener("click", ev => {
         isNutsFirst = true;
@@ -200,7 +209,7 @@ function createGameField() {
     return box;
 }
 
-function drawGame() {
+export function drawGame() {
     if (!brain) {
         console.error("GameBrain is not initialised!");
         return;
@@ -347,8 +356,7 @@ function saveGame(){
 }
 
 function undoMove() {
-    // brain.undoMove();
-    brain.ai_makeMove();
+    brain.undoMove();
     drawGame();
 }
 
@@ -364,10 +372,10 @@ function startGameAi() {
 
 function startGame(isAIMode = false) {
 
-    let checkbox: HTMLInputElement | null = document.querySelector('[name="IsNutsFirst"]');
-    let IsNutsFirst: boolean = !!checkbox?.checked;
+    // let checkbox: HTMLInputElement | null = document.querySelector('[name="IsNutsFirst"]');
+    // let IsNutsFirst: boolean = !!checkbox?.checked;
 
-    brain = new GameBrain(isAIMode, IsNutsFirst);
+    brain = new GameBrain(isAIMode, isNutsFirst);
     brain.startGame();
 
     drawGame();
