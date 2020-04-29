@@ -139,6 +139,7 @@ body {
     position: absolute;
     /*background: wheat;*/
     border-radius: 5px;
+    overflow: hidden;
 
     color: #292929;
     background: rgba(206, 163, 128, 0.53);
@@ -176,6 +177,47 @@ body {
 .menu_item:hover, .game_controls:hover, .help_button:hover{
     background: #886a5388;
     border: #886a53 3px solid;
+}
+
+.menu_options{
+    display: flex;
+    padding: 5px;
+    justify-content: center;
+    width: 100%;
+}
+
+.option_nut, .option_stick{
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+
+    cursor: pointer;
+
+    color: #292929AA;
+    background: #886a5355;
+    border: #886a53AA 3px solid;
+    border-radius: 5px;
+
+    background-size: contain !important;
+    box-sizing: border-box;
+}
+
+.option_nut:hover, .option_stick:hover{
+    background: #886a5388;
+    border: #886a53 3px solid;
+}
+
+.option_nut.active, .option_stick.active{
+    background: #886a53BB;
+    border: #886a53 3px solid;
+}
+
+.option_nut{
+    background-image: url("assets/valya1.1/nut.png") !important;
+}
+
+.option_stick{
+    background-image: url("assets/valya1.1/stick.png") !important;
 }
 
 .game_controls {

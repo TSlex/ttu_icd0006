@@ -5,6 +5,7 @@ import {GameBrain} from './game.brain';
 
 let body = document.body;
 let brain: GameBrain;
+let isNutsFirst: boolean = false;
 
 const menuItems = [
     {title: "Start Game (PVP)", command: startGameDefault},
@@ -46,11 +47,29 @@ function createMenuItems() {
 function createMenuOptionsBox() {
     let box = createElement("menu_options");
 
-    box.innerHTML = "" +
-        "<span>" +
-        "<label for='IsRockFirst'>Is Nuts moves first?</label><br>" +
-        "<input type=\"checkbox\" name='IsNutsFirst' checked>" +
-        "</span>";
+    // box.innerHTML = "" +
+    //     "<span>" +
+    //     "<label for='IsRockFirst'>Is Nuts moves first?</label><br>" +
+    //     "<input type=\"checkbox\" name='IsNutsFirst' checked>" +
+    //     "</span>";
+
+    let nutBtn = createElement("option_nut active");
+    let stickBtn = createElement("option_stick");
+
+    nutBtn.addEventListener("click", ev => {
+        isNutsFirst = true;
+        nutBtn.classList.add('active');
+        stickBtn.classList.remove('active');
+    });
+
+    stickBtn.addEventListener("click", ev => {
+        isNutsFirst = false;
+        stickBtn.classList.add('active');
+        nutBtn.classList.remove('active');
+    });
+
+    box.append(nutBtn);
+    box.append(stickBtn);
 
     return box
 }
@@ -223,7 +242,7 @@ function createHelpMenu() {
         "<h2>Game play and rules:</h2>" +
         "<hr>" +
         "<ol>" +
-        "<li>Players decide among themselves who starts first</li>" +
+        "<li>Players decide among themselves who starts first <b>(Nuts or Sticks)</b></li>" +
         "<li>The board is empty in the beginning. Players take turn placing their figures onto the empty cells of the board</li>" +
         "<li>This is known as <b>Drop phase</b></li>" +
         "<li>After all 24 stones have been dropped, <b>Move Phase</b> begins!." +
