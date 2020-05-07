@@ -8,16 +8,24 @@ import { JwtResponseDTO } from '@/types/Response/JwtResponseDTO';
 import { ResponseDTO } from '@/types/Response/ResponseDTO';
 
 import { AccountApi } from '@/services/AccountApi';
+import { FeedApi } from '@/services/FeedApi';
 
 import JwtDecode from "jwt-decode";
+import { CountResponseDTO } from '@/types/Response/CountResponseDTO';
+import { IPostDTO } from '@/types/IPostDTO';
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   // strict: process.env.NODE_ENV !== 'production',
   state: {
-    jwt: null as string | null
+    jwt: null as string | null,
+
+    // Feed
+    feed: [] as IPostDTO[],
+    feedCount: 0 as number
   },
+
   getters: {
     isAuthenticated(context, getters): boolean {
       return getters.getJwt !== null;
@@ -40,6 +48,7 @@ export default new Vuex.Store({
       return context.jwt;
     }
   },
+
   mutations: {
     setJwt(state, jwt: string | null) {
       if (jwt) {
@@ -48,26 +57,46 @@ export default new Vuex.Store({
       } else {
         localStorage.removeItem('jwt')
       }
+    },
+
+    // Feed
+    setFeedCount(state, feedCount: number) {
+      state.feedCount = feedCount;
+    },
+    setFeed(state, feed: IPostDTO[]) {
+      state.feed = feed;
     }
   },
+
   actions: {
     clearJwt(context): void {
       context.commit('setJwt', null);
     },
 
+    // Account
     async loginUser(context, loginDTO: ILoginDTO): Promise<JwtResponseDTO> {
       const response = await AccountApi.userLogin(loginDTO);
-
       if (!(response.errors?.length > 0)) {
         context.commit('setJwt', response.token);
       }
-
       return response;
     },
 
     async registerUser(context, registerDTO: IRegisterDTO): Promise<ResponseDTO> {
       const response = await AccountApi.userRegister(registerDTO);
+      return response;
+    },
 
+    // Feed
+    async getFeedCount(context): Promise<CountResponseDTO> {
+      const response = await FeedApi.getFeedCount(context.state.jwt);
+      context.commit('setFeedCount', response.count)
+      return response;
+    },
+
+    async getFeed(context, pageNUmber: number): Promise<IPostDTO[]> {
+      const response = await FeedApi.getFeed(pageNUmber, context.state.jwt);
+      context.commit('setFeed', response)
       return response;
     }
   },

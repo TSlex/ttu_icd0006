@@ -1,8 +1,13 @@
 import Axios from 'axios';
+import store from "../store";
 
-export abstract class AccountApi {
+import { IPostDTO } from '@/types/IPostDTO';
+import { CountResponseDTO } from './../types/Response/CountResponseDTO';
+
+export abstract class FeedApi {
   private static axios = Axios.create(
     {
+      validateStatus: () => true,
       baseURL: "https://localhost:5001/api/v1/feed/",
       headers: {
         common: {
@@ -12,7 +17,44 @@ export abstract class AccountApi {
     }
   )
 
-  // static async getRecordCount(): Promise<string | null> {}
-  // static async getFeed(pageNUmber: number): Promise<string | null> {}
+  static async getFeedCount(jwt: string | null): Promise<CountResponseDTO> {
+    const url = "count";
 
+    let response;
+
+    if (jwt) {
+      response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    } else {
+      response = await this.axios.get<CountResponseDTO>(url);
+    }
+
+    switch (response.status) {
+      case 200:
+        return response.data;
+      default:
+        console.log(response.status + ":" + response.statusText)
+        return {
+          count: 0
+        };
+    }
+  }
+
+  static async getFeed(pageNUmber: number, jwt: string | null): Promise<IPostDTO[]> {
+    const url = pageNUmber.toString();
+    let response;
+
+    if (jwt) {
+      response = await this.axios.get<IPostDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    } else {
+      response = await this.axios.get<IPostDTO[]>(url);
+    }
+
+    switch (response.status) {
+      case 200:
+        return response.data;
+      default:
+        console.log(response.status + ":" + response.statusText)
+        return [];
+    }
+  }
 }

@@ -15,6 +15,14 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import '@/static/site.css'
 import '@/static/custom.css'
 
+import moment from 'moment'
+
+Vue.filter('formatDate', function (value: any) {
+  if (value) {
+    return moment(String(value)).format('MM/DD/YYYY hh:mm')
+  }
+})
+
 Vue.config.productionTip = false
 
 new Vue({
