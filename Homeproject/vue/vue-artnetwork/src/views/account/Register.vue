@@ -64,7 +64,7 @@
               data-valmsg-replace="true"
             ></span>
           </div>
-          <button type="submit" class="btn btn-primary" @click="onSubmit">Register</button>
+          <button type="button" class="btn btn-primary" @click="onSubmit">Register</button>
         </form>
       </div>
       <div class="col-md-6 col-md-offset-2">

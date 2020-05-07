@@ -37,7 +37,7 @@
               ></span>
             </div>
             <div class="form-group">
-              <button type="submit" class="btn btn-primary" @click="onSubmit">Log in</button>
+              <button type="button" class="btn btn-primary" @click="onSubmit">Log in</button>
             </div>
             <div class="form-group">
               <p>

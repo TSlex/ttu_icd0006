@@ -15,7 +15,7 @@ interface IRegisterResponse {
 export abstract class AccountApi {
   private static axios = Axios.create(
     {
-      baseURL: "https://localhost:5001/api/v1/account/",
+      baseURL: "https://localhost:5001/api/v1/identity/",
       headers: {
         common: {
           'Content-Type': 'application/json'

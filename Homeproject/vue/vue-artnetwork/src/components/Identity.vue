@@ -2,7 +2,7 @@
   <ul class="navbar-nav">
     <template v-if="isAuthenticated">
       <li class="nav-item">
-        <span class="nav-link text-dark">Hello, {{userEmail}}!</span>
+        <span class="nav-link text-dark">Hello, {{userName}}!</span>
       </li>
       <li class="nav-item">
         <a @click="logoutOnClick" class="nav-link text-dark" href>Logout</a>
@@ -31,11 +31,31 @@ export default class Identity extends Vue {
     return store.getters.isAuthenticated;
   }
 
-  get userEmail(): string {
+  get userId(): string {
+    if (store.state.jwt) {
+      const decoded = JwtDecode(store.state.jwt) as Record<string, string>;
+      return decoded[
+        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+      ];
+    }
+    return "null";
+  }
+
+  get userName(): string {
     if (store.state.jwt) {
       const decoded = JwtDecode(store.state.jwt) as Record<string, string>;
       return decoded[
         "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+      ];
+    }
+    return "null";
+  }
+
+  get userRoles(): string {
+    if (store.state.jwt) {
+      const decoded = JwtDecode(store.state.jwt) as Record<string, string>;
+      return decoded[
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
       ];
     }
     return "null";

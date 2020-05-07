@@ -17,6 +17,8 @@
           >
             <span class="navbar-toggler-icon"></span>
           </button>
+
+          <NavbarSearch />
           <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
             <Identity />
             <ul class="navbar-nav flex-grow-1"></ul>
@@ -39,10 +41,12 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import Identity from "./components/Identity.vue";
+import NavbarSearch from "./components/NavbarSearch.vue";
 
 @Component({
   components: {
-    Identity
+    Identity,
+    NavbarSearch
   }
 })
 export default class App extends Vue {}
