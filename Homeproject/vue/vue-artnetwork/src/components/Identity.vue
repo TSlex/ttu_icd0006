@@ -63,7 +63,6 @@ export default class Identity extends Vue {
 
   logoutOnClick(): void {
     store.dispatch("clearJwt");
-    router.push("/");
   }
 }
 </script>

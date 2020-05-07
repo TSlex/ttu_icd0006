@@ -1,20 +1,14 @@
-import { ILoginDTO } from './../types/ILoginDTO';
 import Axios from 'axios';
-import { IRegisterDTO } from '@/types/IRegisterDTO';
+import { ILoginDTO } from '../types/Identity/ILoginDTO';
+import { IRegisterDTO } from '@/types/Identity/IRegisterDTO';
+import { JwtResponseDTO } from '@/types/Response/JwtResponseDTO';
+import { ResponseDTO } from '@/types/Response/ResponseDTO';
 
-interface ILoginResponse {
-  token: string;
-  status: string;
-}
-
-interface IRegisterResponse {
-  token: string;
-  status: string;
-}
 
 export abstract class AccountApi {
   private static axios = Axios.create(
     {
+      validateStatus: () => true,
       baseURL: "https://localhost:5001/api/v1/identity/",
       headers: {
         common: {
@@ -24,33 +18,35 @@ export abstract class AccountApi {
     }
   )
 
-  static async userLogin(loginDTO: ILoginDTO): Promise<string | null> {
+  static async userLogin(loginDTO: ILoginDTO): Promise<JwtResponseDTO> {
     const url = "login";
-    try {
-      const response = await this.axios.post<ILoginResponse>(url, loginDTO);
-      console.log('login response', response);
-      if (response.status === 200) {
-        return response.data.token;
-      }
-      return null;
-    } catch (error) {
-      console.log('error: ', (error as Error).message);
-      return null;
+
+    const response = await this.axios.post(url, loginDTO);
+
+    switch (response.status) {
+      case 200:
+      case 404:
+        return response.data as JwtResponseDTO
+      default:
+        return {
+          errors: ["Authorisation fails"]
+        } as JwtResponseDTO
     }
   }
 
-  static async userRegister(registerDTO: IRegisterDTO): Promise<string | null> {
+  static async userRegister(registerDTO: IRegisterDTO): Promise<ResponseDTO> {
     const url = "register"
-    try {
-      const response = await this.axios.post<IRegisterResponse>(url, registerDTO)
-      console.log('registration response', response);
-      if (response.status === 200) {
-        return "Registration succed";
-      }
-      return null;
-    } catch (error) {
-      console.log('error: ', (error as Error).message);
-      return null;
+    const response = await this.axios.post(url, registerDTO);
+
+    switch (response.status) {
+      case 200:
+      case 404:
+      case 400:
+        return response.data as ResponseDTO
+      default:
+        return {
+          errors: ["Authorisation fails"]
+        } as ResponseDTO
     }
   }
 }

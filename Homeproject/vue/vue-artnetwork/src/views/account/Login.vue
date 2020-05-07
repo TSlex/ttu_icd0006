@@ -9,27 +9,17 @@
             <hr />
             <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
               <ul>
-                <li style="display:none"></li>
+                <li v-for="(error, index) in errors" :key="index">{{error}}</li>
               </ul>
             </div>
             <div class="form-group">
               <label for="Input_Email">Email</label>
-              <input
-                class="form-control"
-                type="email"
-                v-model="loginModel.email"
-              />
-              <span
-                class="text-danger field-validation-valid"
-              ></span>
+              <input class="form-control" type="email" v-model="loginModel.email" />
+              <span class="text-danger field-validation-valid"></span>
             </div>
             <div class="form-group">
               <label for="Input_Password">Password</label>
-              <input
-                class="form-control"
-                type="password"
-                v-model="loginModel.password"
-              />
+              <input class="form-control" type="password" v-model="loginModel.password" />
               <span
                 class="text-danger field-validation-valid"
                 data-valmsg-for="Input.Password"
@@ -73,34 +63,36 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import { ILoginDTO } from "@/types/ILoginDTO";
+import { Component, Vue } from "vue-property-decorator";
+import { ILoginDTO } from "@/types/Identity/ILoginDTO";
 import store from "../../store";
 import router from "../../router";
+import { JwtResponseDTO } from "@/types/Response/JwtResponseDTO";
 
 @Component
 export default class AccountLogin extends Vue {
   private loginModel: ILoginDTO = {
     email: "",
     password: ""
-  };;
+  };
 
-  private loginWasOk: boolean | null = null;
+  private errors: string[] = [];
 
   onSubmit(): void {
-    console.log(this.loginModel);
+    this.errors = [];
+
     if (
-      this.loginModel!.email.length > 0 &&
-      this.loginModel!.password.length > 0
+      this.loginModel.email.length > 0 &&
+      this.loginModel.password.length > 0
     ) {
       store
         .dispatch("loginUser", this.loginModel)
-        .then((isLoggedIn: boolean) => {
-          if (isLoggedIn) {
-            this.loginWasOk = true;
-            router.push('/');
+        .then((response: JwtResponseDTO) => {
+          if (response.errors) {
+            this.errors = response.errors;
+            console.log(response.errors);
           } else {
-            this.loginWasOk = false;
+            router.push("/");
           }
         });
     }

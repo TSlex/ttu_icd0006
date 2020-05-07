@@ -2,7 +2,7 @@
   <div id="app">
     <header>
       <nav
-        class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
+        class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 fixed-to"
       >
         <div class="container">
           <router-link class="navbar-brand" to="/">ArtNetwork</router-link>
@@ -19,6 +19,7 @@
           </button>
 
           <NavbarSearch />
+          <NavbarControls />
           <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
             <Identity />
             <ul class="navbar-nav flex-grow-1"></ul>
@@ -33,7 +34,9 @@
     </div>
 
     <footer class="border-top footer text-muted">
-      <div class="container">2020 - Artnetwork</div>
+      <div class="container d-flex justify-content-center">
+        <span>&copy; 2020 - ArtNetwork - <router-link to="/about">Privacy</router-link></span>
+    </div>
     </footer>
   </div>
 </template>
@@ -42,11 +45,13 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import Identity from "./components/Identity.vue";
 import NavbarSearch from "./components/NavbarSearch.vue";
+import NavbarControls from "./components/NavbarControls.vue";
 
 @Component({
   components: {
     Identity,
-    NavbarSearch
+    NavbarSearch,
+    NavbarControls
   }
 })
 export default class App extends Vue {}

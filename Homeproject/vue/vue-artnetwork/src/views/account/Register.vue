@@ -9,16 +9,12 @@
           <hr />
           <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
             <ul>
-              <li style="display:none"></li>
+              <li v-for="(error, index) in errors" :key="index">{{error}}</li>
             </ul>
           </div>
           <div class="form-group">
             <label for="Input_Username">Username</label>
-            <input
-              class="form-control"
-              type="text"
-              v-model="registerModel.username"
-            />
+            <input class="form-control" type="text" v-model="registerModel.username" />
             <span
               class="text-danger field-validation-valid"
               data-valmsg-for="Input.Username"
@@ -27,11 +23,7 @@
           </div>
           <div class="form-group">
             <label for="Input_Email">Email</label>
-            <input
-              class="form-control"
-              type="email"
-              v-model="registerModel.email"
-            />
+            <input class="form-control" type="email" v-model="registerModel.email" />
             <span
               class="text-danger field-validation-valid"
               data-valmsg-for="Input.Email"
@@ -40,11 +32,7 @@
           </div>
           <div class="form-group">
             <label for="Input_Password">Password</label>
-            <input
-              class="form-control"
-              type="password"
-              v-model="registerModel.password"
-            />
+            <input class="form-control" type="password" v-model="registerModel.password" />
             <span
               class="text-danger field-validation-valid"
               data-valmsg-for="Input.Password"
@@ -53,11 +41,7 @@
           </div>
           <div class="form-group">
             <label for="Input_ConfirmPassword">Confirm password</label>
-            <input
-              class="form-control"
-              type="password"
-              v-model="registerModel.passwordConfirmation"
-            />
+            <input class="form-control" type="password" v-model="passwordConfirmation" />
             <span
               class="text-danger field-validation-valid"
               data-valmsg-for="Input.ConfirmPassword"
@@ -87,40 +71,44 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import { IRegisterDTO } from "@/types/IRegisterDTO";
+import { Component, Vue } from "vue-property-decorator";
+import { IRegisterDTO } from "@/types/Identity/IRegisterDTO";
+import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import store from "../../store";
 import router from "../../router";
 
 @Component
 export default class AccountRegister extends Vue {
+  private passwordConfirmation = "";
+
   private registerModel: IRegisterDTO = {
     username: "",
     email: "",
-    password: "",
-    passwordConfirmation: ""
+    password: ""
   };
 
-  private registrationWasOk: boolean | null = null;
+  private errors: string[] = [];
 
   onSubmit(): void {
-    console.log(this.registerModel);
+    this.errors = [];
+
     if (
       this.registerModel.username.length > 0 &&
       this.registerModel.email.length > 0 &&
       this.registerModel.password.length > 0 &&
-      this.registerModel.password === this.registerModel.passwordConfirmation
+      this.registerModel.password === this.passwordConfirmation
     ) {
       store
         .dispatch("registerUser", this.registerModel)
-        .then((isRegistered: boolean) => {
-          if (isRegistered) {
-            this.registrationWasOk = true;
-            router.push('/account/register');
+        .then((response: ResponseDTO) => {
+          if (response.errors) {
+            this.errors = response.errors;
           } else {
-            this.registrationWasOk = false;
+            router.push("/account/login");
           }
         });
+    } else {
+      this.errors.push("Passwords do not match!");
     }
   }
 }
