@@ -5,7 +5,7 @@
         class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 fixed-to"
       >
         <div class="container">
-          <router-link class="navbar-brand" to="/">ArtNetwork</router-link>
+          <router-link class="navbar-brand fa fa-palette" to="/">ArtNetwork</router-link>
           <button
             class="navbar-toggler"
             type="button"

@@ -23,7 +23,8 @@ export default new Vuex.Store({
 
     // Feed
     feed: [] as IPostDTO[],
-    feedCount: 0 as number
+    feedCount: 0 as number,
+    feedLoadedCount: -1
   },
 
   getters: {
@@ -65,6 +66,10 @@ export default new Vuex.Store({
     },
     setFeed(state, feed: IPostDTO[]) {
       state.feed = feed;
+    },
+    addFeed(state, feed: IPostDTO[]) {
+      // TODO: fix not unique
+      feed.forEach(feed => state.feed.push(feed))
     }
   },
 
@@ -94,9 +99,19 @@ export default new Vuex.Store({
       return response;
     },
 
-    async getFeed(context, pageNUmber: number): Promise<IPostDTO[]> {
+    async getFeed(context, pageNumber: number): Promise<IPostDTO[]> {
+      console.log(pageNumber);
+      const response = await FeedApi.getFeed(pageNumber, context.state.jwt);
+      console.log(response);
+      context.state.feedLoadedCount = response.length;
+      context.commit('addFeed', response)
+      return response;
+    },
+
+    async setFeed(context, pageNUmber: number): Promise<IPostDTO[]> {
       const response = await FeedApi.getFeed(pageNUmber, context.state.jwt);
-      context.commit('setFeed', response)
+      context.state.feedLoadedCount = response.length;
+      context.commit('setFeed', response);
       return response;
     }
   },

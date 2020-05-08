@@ -1,5 +1,10 @@
 <template>
   <div class="home">
+    <a
+      class="float_control feed_controls far fa-caret-square-up"
+      id="toUpButton"
+      v-on:click="scrollTop"
+    ></a>
     <div class="feed text-center">
       <a v-for="post in feed" :key="post.id" href="#">
         <div class="feed_post">
@@ -8,7 +13,7 @@
           </div>
 
           <div class="post_details_meta_section">
-            <p>{{post.postTitle}} by NOUSERNAME</p>
+            <p>{{post.postTitle}} by {{post.profileUsername}}</p>
             <span>{{post.postDescription}}</span>
             <ul class="post_meta_section">
               <li class="post_meta">
@@ -40,14 +45,53 @@ import { IPostDTO } from "../types/IPostDTO";
 
 @Component
 export default class Home extends Vue {
+  private pageToLoad = 2;
+  private isFetching = false;
+
+  scrollTop() {
+    document.documentElement.scrollTop = 0;
+  }
+
+  scroll() {
+    window.onscroll = (e: Event) => {
+      let bottomOfWindow =
+        Math.max(
+          window.pageYOffset,
+          document.documentElement.scrollTop,
+          document.body.scrollTop
+        ) +
+          window.innerHeight >
+        document.documentElement.offsetHeight - 1400;
+
+      let toUpButton = document.getElementById("toUpButton")!;
+
+      if (document.documentElement.scrollTop > 100) {
+        toUpButton.style.display = "initial";
+      } else {
+        toUpButton.style.display = "none";
+      }
+
+      if (bottomOfWindow && this.canLoadMore && !this.isFetching) {
+        this.isFetching = true;
+        store.dispatch("getFeed", this.pageToLoad);
+        this.pageToLoad += 1;
+        // console.log(this.pageToLoad);
+      }
+    };
+  }
+
+  get canLoadMore(): boolean {
+    return store.state.feedLoadedCount === 10;
+  }
+
   get feed(): IPostDTO[] {
     return store.state.feed;
   }
 
   beforeCreate(): void {
     console.log("beforeCreate");
-    store.dispatch("getFeedCount");
-    store.dispatch("getFeed", 3);
+
+    store.dispatch("setFeed", 1);
   }
 
   created(): void {
@@ -60,6 +104,7 @@ export default class Home extends Vue {
 
   mounted(): void {
     console.log("mounted");
+    this.scroll();
   }
 
   beforeUpdate(): void {
@@ -68,6 +113,7 @@ export default class Home extends Vue {
 
   updated(): void {
     console.log("updated");
+    this.isFetching = false;
   }
 
   beforeDestroy(): void {

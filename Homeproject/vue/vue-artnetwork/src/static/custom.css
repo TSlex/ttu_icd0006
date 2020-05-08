@@ -52,10 +52,6 @@ a, img{
 
 }
 
-.top-profile_name {
-
-}
-
 .top-profile_image {
     background: gray;
     width: 30px;
@@ -224,6 +220,23 @@ a, img{
     border: 1px solid gray;
     border-radius: 4px;
     padding: 20px;
+}
+
+/* float controls */
+.float_control{
+    position: fixed;
+    transition: color ease-in .2s;
+}
+
+.float_control:hover{
+    position: fixed;
+    color: #005cbfaa !important;
+    text-shadow: 0 0 20px #005cbf66;
+}
+
+.float_control.feed_controls{
+    font-size: 40px;
+    display: none;
 }
 
 /*feed*/

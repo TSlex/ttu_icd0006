@@ -2,6 +2,7 @@ export interface IPostDTO {
   id: string;
   postTitle: string;
   postDescription: string;
+  profileUsername: string;
   postImageId: string;
   postImageUrl: string;
   postPublicationDateTime: Date;
