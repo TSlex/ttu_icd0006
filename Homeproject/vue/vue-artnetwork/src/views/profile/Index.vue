@@ -4,7 +4,8 @@
       <div class="col-3 d-flex justify-content-center">
         <a href="/identity/account/manage/avatar">
           <div class="profile_image" style="background-color: #0066FF !important;">
-            <img alt width="150px" height="150px" :src="profile.profileAvatarUrl" />
+            <!--<img alt width="150px" height="150px" :src="profile.profileAvatarUrl" />-->
+            <ImageComponent id="08d7efa2-42f6-440f-89ba-0d0f10be4f7a" />
           </div>
         </a>
       </div>
@@ -90,7 +91,12 @@
       </div>
     </div>
     <hr />
-    <div class="profile_gift_section"></div>
+    <div class="profile_gift_section">
+      <div class="profile_gift">
+        <ImageComponent id="08d7efa2-42f6-440f-89ba-0d0f10be4f7a"/>
+      </div>
+      <a class="fa fa-gift btn btn-primary profile_gift_controls" href="#"></a>
+    </div>
     <hr />
     <div class="post_section"></div>
   </div>
@@ -98,10 +104,16 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import ImageComponent from "../../components/Image.vue"
 import store from "@/store";
 import { IProfileDTO } from "@/types/IProfileDTO";
+import { ImagesApi } from "../../services/ImagesApi";
 
-@Component
+@Component({
+  components: {
+    ImageComponent
+  }
+})
 export default class ProfileIndex extends Vue {
   private pageToLoad = 2;
   private isFetching = false;
@@ -155,7 +167,6 @@ export default class ProfileIndex extends Vue {
 
   created(): void {
     console.log("created");
-    console.log(this.username);
     store.dispatch("getProfile", this.username);
   }
 
@@ -170,14 +181,11 @@ export default class ProfileIndex extends Vue {
 
   beforeUpdate(): void {
     console.log("beforeUpdate");
-    // if (!this.profile || this.profile.userName !== this.username) {
-    // store.dispatch("getProfile", this.username);
-    // }
   }
 
   updated(): void {
     console.log("updated");
-    console.log(this.profile);
+    // console.log(this.profile);
     // console.log(this.username);
   }
 

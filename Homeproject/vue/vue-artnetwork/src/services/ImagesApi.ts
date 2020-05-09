@@ -8,30 +8,36 @@ export abstract class ImagesApi {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
-      baseURL: "https://localhost:5001/api/v1/profiles/",
+      baseURL: "https://localhost:5001/api/v1/images/",
       headers: {
         common: {
           'Content-Type': 'image/jpeg'
         },
         Authorization: 'Bearer ' + store.getters.jwt
-      }
+      },
+      responseType: 'arraybuffer'
     }
   )
 
-  static async getImage(id: string = ''){
+  static _imageEncode(arrayBuffer: ArrayBuffer) {
+    let image = btoa(new Uint8Array(arrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), ''))
+    return `data:image/jpeg;base64,${image}`
+  }
+
+  static async getImage(id: string = ''): Promise<string> {
     const url = id;
     const response = await this.axios.get(url);
 
     switch (response.status) {
       case 200:
-        return response.data;
+        return this._imageEncode(response.data);
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return this._imageEncode(response.data);
     }
   }
 
-  static async getProfileImage(userName: string){
+  static async getProfileImage(userName: string) {
     const url = `profile/${userName}`;
     const response = await this.axios.get(url);
 
@@ -44,7 +50,7 @@ export abstract class ImagesApi {
     }
   }
 
-  static async getPostImage(postId: string){
+  static async getPostImage(postId: string) {
     const url = `post/${postId}`;
     const response = await this.axios.get(url);
 
@@ -57,7 +63,7 @@ export abstract class ImagesApi {
     }
   }
 
-  static async getGiftImage(giftId: string){
+  static async getGiftImage(giftId: string) {
     const url = `gift/${giftId}`;
     const response = await this.axios.get(url);
 

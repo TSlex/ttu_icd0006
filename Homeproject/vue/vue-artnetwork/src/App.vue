@@ -19,7 +19,7 @@
     </header>
     <div class="container">
       <main role="main">
-        <router-view></router-view>
+        <router-view v-cloak></router-view>
       </main>
     </div>
 
