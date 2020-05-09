@@ -22,6 +22,4 @@ export interface IProfileDTO {
   isUserBlocked: boolean;
   isUserFollows: boolean;
   isUserBlocks: boolean;
-
-  errors: string[];
 }

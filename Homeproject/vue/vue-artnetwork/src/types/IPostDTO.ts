@@ -9,6 +9,17 @@ export interface IPostDTO {
   postFavoritesCount: number;
   postCommentsCount: number;
   isFavorite: boolean;
+}
 
-  errors: string[];
+export interface IPostPostDTO {
+  postTitle: string;
+  postDescription: string;
+  postImageId: string;
+  postImageUrl: string;
+}
+
+export interface IPostPutDTO {
+  id: string;
+  postTitle: string;
+  postDescription: string;
 }

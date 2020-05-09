@@ -4,6 +4,4 @@ export interface IGiftDTO {
   giftImageId: string;
   giftImageUrl: string;
   price: string;
-
-  errors: string[];
 }

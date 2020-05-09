@@ -5,6 +5,9 @@ export interface IChatRoomDTO {
   chatRoomImageId: string;
   lastMessageValue: string;
   lastMessageDateTime: Date;
+}
 
-  errors: string[];
+export interface IChatRoomPutDTO {
+  id: string
+  chatRoomTitle: string;
 }

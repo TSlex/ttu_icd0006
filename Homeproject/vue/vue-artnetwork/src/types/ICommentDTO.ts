@@ -4,6 +4,14 @@ export interface ICommentDTO {
   profileAvatarUrl: string;
   commentValue: string;
   commentDateTime: Date;
+}
 
-  errors: string[];
+export interface ICommentPostDTO {
+  postId: string;
+  commentValue: string;
+}
+
+export interface ICommentPutDTO {
+  id: string;
+  commentValue: string;
 }

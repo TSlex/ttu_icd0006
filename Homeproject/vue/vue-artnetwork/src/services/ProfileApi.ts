@@ -31,13 +31,10 @@ export abstract class ProfileApi {
 
     switch (response.status) {
       case 200:
-      case 404:
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return {
-          errors: ["Server error"]
-        } as IProfileDTO;
+        return response.data;
     }
   }
 

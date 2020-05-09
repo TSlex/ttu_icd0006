@@ -3,6 +3,4 @@ export interface IChatMemberDTO {
   userName: string;
   profileAvatarUrl: string;
   chatRole: string;
-
-  errors: string[];
 }

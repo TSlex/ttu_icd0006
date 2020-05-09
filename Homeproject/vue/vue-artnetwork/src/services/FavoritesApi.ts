@@ -1,0 +1,50 @@
+import { IFavoriteDTO } from './../types/IFavoriteDTO';
+import { ResponseDTO } from './../types/Response/ResponseDTO';
+import { IProfileDTO } from './../types/IProfileDTO';
+import Axios from 'axios';
+import store from "../store";
+import { CountResponseDTO } from '@/types/Response/CountResponseDTO';
+
+
+
+export abstract class FavoritesApi {
+  private static axios = Axios.create(
+    {
+      validateStatus: () => true,
+      baseURL: "https://localhost:5001/api/v1/favorites/",
+      headers: {
+        common: {
+          'Content-Type': 'application/json'
+        }
+      }
+    }
+  )
+
+  static async getFavoritesCount(postId: string, jwt: string | null): Promise<CountResponseDTO> {
+    const url = `${postId}/count`;
+    const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+
+    switch (response.status) {
+      case 200:
+        return response.data;
+      default:
+        console.log(response.status + ":" + response.statusText)
+        return {
+          count: 0
+        };
+    }
+  }
+
+  static async getFavorites(postId: string, pageNUmber: number, jwt: string | null): Promise<IFavoriteDTO[]> {
+    const url = `${postId}/${pageNUmber}`
+    const response = await this.axios.get<IFavoriteDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+
+    switch (response.status) {
+      case 200:
+        return response.data;
+      default:
+        console.log(response.status + ":" + response.statusText)
+        return [];
+    }
+  }
+}

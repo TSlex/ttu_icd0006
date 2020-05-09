@@ -6,6 +6,4 @@ export interface IRankDTO {
   rankTextColor: string;
   maxExperience: number;
   minExperience: number;
-
-  errors: string[];
 }
