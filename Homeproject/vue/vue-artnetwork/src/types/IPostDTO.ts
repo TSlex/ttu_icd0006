@@ -9,4 +9,6 @@ export interface IPostDTO {
   postFavoritesCount: number;
   postCommentsCount: number;
   isFavorite: boolean;
+
+  errors: string[];
 }

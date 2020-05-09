@@ -19,6 +19,8 @@ module.exports = {
     'semi': 'off',
     'space-before-function-paren': 'off',
     'prefer-const': 'off',
+    'spaced-comment': 'off',
+    'comma-dangle': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',
     '@typescript-eslint/interface-name-prefix': [

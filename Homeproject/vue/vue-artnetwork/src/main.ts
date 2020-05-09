@@ -16,6 +16,7 @@ import '@/static/site.css'
 import '@/static/custom.css'
 
 import moment from 'moment'
+import JwtDecode from 'jwt-decode'
 
 Vue.filter('formatDate', function (value: any) {
   if (value) {

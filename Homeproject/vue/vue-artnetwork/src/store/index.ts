@@ -2,10 +2,10 @@ import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
 
 import { ILoginDTO } from '@/types/Identity/ILoginDTO';
-import { IRegisterDTO } from '@/types/Identity/IRegisterDTO';
-
+import { IRegisterDTO } from '@/types/Identity/IRegisterDTO'
 import { JwtResponseDTO } from '@/types/Response/JwtResponseDTO';
-import { ResponseDTO } from '@/types/Response/ResponseDTO';
+import { ResponseDTO } from './../types/Response/ResponseDTO';
+import { IProfileDTO } from './../types/IProfileDTO';
 
 import { AccountApi } from '@/services/AccountApi';
 import { FeedApi } from '@/services/FeedApi';
@@ -13,6 +13,7 @@ import { FeedApi } from '@/services/FeedApi';
 import JwtDecode from "jwt-decode";
 import { CountResponseDTO } from '@/types/Response/CountResponseDTO';
 import { IPostDTO } from '@/types/IPostDTO';
+import { ProfileApi } from '@/services/ProfileApi';
 
 Vue.use(Vuex)
 
@@ -24,7 +25,10 @@ export default new Vuex.Store({
     // Feed
     feed: [] as IPostDTO[],
     feedCount: 0 as number,
-    feedLoadedCount: -1
+    feedLoadedCount: -1,
+
+    //Profile
+    profile: null as IProfileDTO | null,
   },
 
   getters: {
@@ -70,7 +74,12 @@ export default new Vuex.Store({
     addFeed(state, feed: IPostDTO[]) {
       // TODO: fix not unique
       feed.forEach(feed => state.feed.push(feed))
-    }
+    },
+
+    //Profiel
+    setProfile(state, profile: IProfileDTO | null) {
+      state.profile = profile;
+    },
   },
 
   actions: {
@@ -100,9 +109,7 @@ export default new Vuex.Store({
     },
 
     async getFeed(context, pageNumber: number): Promise<IPostDTO[]> {
-      console.log(pageNumber);
       const response = await FeedApi.getFeed(pageNumber, context.state.jwt);
-      console.log(response);
       context.state.feedLoadedCount = response.length;
       context.commit('addFeed', response)
       return response;
@@ -113,7 +120,38 @@ export default new Vuex.Store({
       context.state.feedLoadedCount = response.length;
       context.commit('setFeed', response);
       return response;
-    }
+    },
+
+    //Profile
+    async getProfile(context, username: string): Promise<IProfileDTO> {
+      const response = await ProfileApi.getProfile(username, context.state.jwt);
+      if (!(response.errors?.length > 0)) {
+        context.commit('setProfile', response);
+      } else {
+        context.commit('setProfile', null);
+      }
+      return response;
+    },
+
+    async profileFollow(context, username: string): Promise<ResponseDTO> {
+      const response = await ProfileApi.follow(username, context.state.jwt);
+      return response;
+    },
+
+    async profileUnfollow(context, username: string): Promise<ResponseDTO> {
+      const response = await ProfileApi.unfollow(username, context.state.jwt);
+      return response;
+    },
+
+    async profileBlock(context, username: string): Promise<ResponseDTO> {
+      const response = await ProfileApi.block(username, context.state.jwt);
+      return response;
+    },
+
+    async profileUnblock(context, username: string): Promise<ResponseDTO> {
+      const response = await ProfileApi.unblock(username, context.state.jwt);
+      return response;
+    },
   },
 
   modules: {

@@ -20,21 +20,14 @@
             <div class="form-group">
               <label for="Input_Password">Password</label>
               <input class="form-control" type="password" v-model="loginModel.password" />
-              <span
-                class="text-danger field-validation-valid"
-                data-valmsg-for="Input.Password"
-                data-valmsg-replace="true"
-              ></span>
+              <span class="text-danger field-validation-valid" data-valmsg-for="Input.Password" data-valmsg-replace="true"></span>
             </div>
             <div class="form-group">
-              <button type="button" class="btn btn-primary" @click="onSubmit">Log in</button>
+              <button type="submit" class="btn btn-primary" @click="onSubmit" v-on:keyup.enter="onSubmit">Log in</button>
             </div>
             <div class="form-group">
               <p>
-                <a
-                  id="forgot-password"
-                  href="/identity/account/forgotpassword"
-                >Forgot your password?</a>
+                <a id="forgot-password" href="/identity/account/forgotpassword">Forgot your password?</a>
               </p>
               <p>
                 <a href="/identity/account/register?returnUrl=%2F">Register as a new user</a>
@@ -50,9 +43,7 @@
           <div>
             <p>
               There are no external authentication services configured. See
-              <a
-                href="https://go.microsoft.com/fwlink/?LinkID=532715"
-              >this article</a>
+              <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
               for details on setting up this ASP.NET application to support logging in via external services.
             </p>
           </div>
@@ -78,7 +69,7 @@ export default class AccountLogin extends Vue {
 
   private errors: string[] = [];
 
-  onSubmit(): void {
+  onSubmit(e: Event): void {
     this.errors = [];
 
     if (
@@ -96,6 +87,7 @@ export default class AccountLogin extends Vue {
           }
         });
     }
+    e.preventDefault();
   }
 }
 </script>

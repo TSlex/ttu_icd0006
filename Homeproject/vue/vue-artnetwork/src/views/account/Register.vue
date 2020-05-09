@@ -15,40 +15,24 @@
           <div class="form-group">
             <label for="Input_Username">Username</label>
             <input class="form-control" type="text" v-model="registerModel.username" />
-            <span
-              class="text-danger field-validation-valid"
-              data-valmsg-for="Input.Username"
-              data-valmsg-replace="true"
-            ></span>
+            <span class="text-danger field-validation-valid" data-valmsg-for="Input.Username" data-valmsg-replace="true"></span>
           </div>
           <div class="form-group">
             <label for="Input_Email">Email</label>
             <input class="form-control" type="email" v-model="registerModel.email" />
-            <span
-              class="text-danger field-validation-valid"
-              data-valmsg-for="Input.Email"
-              data-valmsg-replace="true"
-            ></span>
+            <span class="text-danger field-validation-valid" data-valmsg-for="Input.Email" data-valmsg-replace="true"></span>
           </div>
           <div class="form-group">
             <label for="Input_Password">Password</label>
             <input class="form-control" type="password" v-model="registerModel.password" />
-            <span
-              class="text-danger field-validation-valid"
-              data-valmsg-for="Input.Password"
-              data-valmsg-replace="true"
-            ></span>
+            <span class="text-danger field-validation-valid" data-valmsg-for="Input.Password" data-valmsg-replace="true"></span>
           </div>
           <div class="form-group">
             <label for="Input_ConfirmPassword">Confirm password</label>
             <input class="form-control" type="password" v-model="passwordConfirmation" />
-            <span
-              class="text-danger field-validation-valid"
-              data-valmsg-for="Input.ConfirmPassword"
-              data-valmsg-replace="true"
-            ></span>
+            <span class="text-danger field-validation-valid" data-valmsg-for="Input.ConfirmPassword" data-valmsg-replace="true"></span>
           </div>
-          <button type="button" class="btn btn-primary" @click="onSubmit">Register</button>
+          <button type="submit" class="btn btn-primary" @click="onSubmit">Register</button>
         </form>
       </div>
       <div class="col-md-6 col-md-offset-2">
@@ -58,9 +42,7 @@
           <div>
             <p>
               There are no external authentication services configured. See
-              <a
-                href="https://go.microsoft.com/fwlink/?LinkID=532715"
-              >this article</a>
+              <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
               for details on setting up this ASP.NET application to support logging in via external services.
             </p>
           </div>
@@ -89,7 +71,7 @@ export default class AccountRegister extends Vue {
 
   private errors: string[] = [];
 
-  onSubmit(): void {
+  onSubmit(e: Event): void {
     this.errors = [];
 
     if (
@@ -110,6 +92,8 @@ export default class AccountRegister extends Vue {
     } else {
       this.errors.push("Passwords do not match!");
     }
+
+    e.preventDefault();
   }
 }
 </script>
