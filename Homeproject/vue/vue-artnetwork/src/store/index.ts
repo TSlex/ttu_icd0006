@@ -1,3 +1,6 @@
+import { IChatMemberDTO } from './../types/IChatMemberDTO';
+import { IMessageDTO, IMessagePostDTO } from './../types/IMessageDTO';
+import { IChatRoomDTO } from './../types/IChatRoomDTO';
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
 
@@ -14,6 +17,9 @@ import JwtDecode from "jwt-decode";
 import { CountResponseDTO } from '@/types/Response/CountResponseDTO';
 import { IPostDTO } from '@/types/IPostDTO';
 import { ProfileApi } from '@/services/ProfileApi';
+import { ChatRoomsApi } from '@/services/ChatRoomsApi';
+import { ChatMembersApi } from '@/services/ChatMembersApi';
+import { MessagesApi } from '@/services/MessagesApi';
 
 Vue.use(Vuex)
 
@@ -29,11 +35,44 @@ export default new Vuex.Store({
 
     //Profile
     profile: null as IProfileDTO | null,
+
+    //Messages
+    chatRooms: [] as IChatRoomDTO[],
+    messages: [] as IMessageDTO[],
+    messagesLoadedCount: -1,
+    members: [] as IChatMemberDTO[],
   },
 
   getters: {
     isAuthenticated(context, getters): boolean {
       return getters.getJwt !== null;
+    },
+    getUserName(context, getters): string {
+      if (getters.isAuthenticated) {
+        const decoded = JwtDecode(context.jwt!) as Record<string, string>;
+        return decoded[
+          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+        ];
+      }
+      return "null";
+    },
+    getUserId(context, getters): string {
+      if (getters.isAuthenticated) {
+        const decoded = JwtDecode(context.jwt!) as Record<string, string>;
+        return decoded[
+          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+        ];
+      }
+      return "null";
+    },
+    getUserRoles(context, getters): string[] {
+      if (getters.isAuthenticated) {
+        const decoded = JwtDecode(context.jwt!) as Record<string, string>;
+        return decoded[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ].split(",");
+      }
+      return [];
     },
     getJwt(context, actions): string | null {
       if (!context.jwt) {
@@ -76,9 +115,20 @@ export default new Vuex.Store({
       feed.forEach(feed => state.feed.push(feed))
     },
 
-    //Profiel
+    // Profile
     setProfile(state, profile: IProfileDTO | null) {
       state.profile = profile;
+    },
+
+    // Messages
+    setChatRooms(state, chatRooms: IChatRoomDTO[]) {
+      state.chatRooms = chatRooms;
+    },
+    setMessages(state, messages: IMessageDTO[]) {
+      state.messages = messages;
+    },
+    setMembers(state, members: IChatMemberDTO[]) {
+      state.members = members;
     },
   },
 
@@ -122,14 +172,10 @@ export default new Vuex.Store({
       return response;
     },
 
-    //Profile
+    // Profile
     async getProfile(context, username: string): Promise<IProfileDTO> {
       const response = await ProfileApi.getProfile(username, context.state.jwt);
-      if (!(response.errors?.length > 0)) {
-        context.commit('setProfile', response);
-      } else {
-        context.commit('setProfile', null);
-      }
+      context.commit('setProfile', response);
       return response;
     },
 
@@ -150,6 +196,28 @@ export default new Vuex.Store({
 
     async profileUnblock(context, username: string): Promise<ResponseDTO> {
       const response = await ProfileApi.unblock(username, context.state.jwt);
+      return response;
+    },
+
+    // Messages
+    async getChatRooms(context): Promise<IChatRoomDTO[]> {
+      const response = await ChatRoomsApi.getChatRooms(context.state.jwt);
+      context.commit('setChatRooms', response)
+      return response;
+    },
+    async getMessages(context, params: { chatRoomId: string; pageNumber: number }): Promise<IMessageDTO[]> {
+      const response = await ChatRoomsApi.getMessages(params.chatRoomId, params.pageNumber, context.state.jwt);
+      context.commit('setMessages', response)
+      return response;
+    },
+    async getChatMembers(context, chatRoomId: string): Promise<IChatMemberDTO[]> {
+      const response = await ChatMembersApi.getChatMembers(chatRoomId, context.state.jwt);
+      context.commit('setMembers', response)
+      return response;
+    },
+    async sendMessage(context, message: IMessagePostDTO): Promise<ResponseDTO> {
+      const response = await MessagesApi.postMessage(message, context.state.jwt);
+      context.dispatch('getMessages', { chatRoomId: message.chatRoomId, pageNumber: 1 });
       return response;
     },
   },

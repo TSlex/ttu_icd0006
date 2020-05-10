@@ -16,7 +16,6 @@ import '@/static/site.css'
 import '@/static/custom.css'
 
 import moment from 'moment'
-import JwtDecode from 'jwt-decode'
 
 Vue.filter('formatDate', function (value: any) {
   if (value) {
@@ -24,11 +23,16 @@ Vue.filter('formatDate', function (value: any) {
   }
 })
 
-Vue.config.productionTip = false;
+Vue.filter('formatTime', function (value: any) {
+  if (value) {
+    return moment(String(value)).format('hh:mm')
+  }
+})
 
+Vue.config.productionTip = false;
 
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#app')

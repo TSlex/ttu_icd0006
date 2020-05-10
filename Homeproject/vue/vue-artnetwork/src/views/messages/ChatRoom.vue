@@ -1,28 +1,42 @@
 <template>
-  <div class="preferences_section">
+  <div class="chat_section mt-5">
     <div class="row">
       <div class="col-md-4">
-        <ul class="nav nav-pills flex-column">
-          <li class="nav-item">
-            <a class="nav-link" href="#">No title</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Chat with admin</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">string</a>
+        <ul class="nav nav-pills flex-column chat_rooms">
+          <li v-for="chatRoom in chatRooms" :key="chatRoom.id" class="nav-item">
+            <a class="nav-link text-primary" @click="selectChatRoom(chatRoom.id)">{{chatRoom.chatRoomTitle}}</a>
           </li>
         </ul>
       </div>
-      <div class="col-md-8">Here will be JS-rendered messages</div>
+      <div class="col-md-8">
+        <div class="chat_wall">
+          <div class="messages">
+            <div
+              v-for="(message, index) in messages"
+              :key="index"
+              :class="'message ' + (message.userName === userName ? 'active' : '')"
+            >
+              <span class="message_username">{{message.userName}}</span>
+              <span class="message_value">{{message.messageValue}}</span>
+              <span class="message_time">{{message.messageDateTime | formatTime}}</span>
+            </div>
+          </div>
+          <form class="chat_input">
+            <textarea rows="2" type="text" id="messageValue" v-model="messageModel.messageValue" />
+            <button type="submit" class="far fa-paper-plane" @click="sendMessage"></button>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import $ from "jquery";
 import { Component, Prop, Vue } from "vue-property-decorator";
 import ImageComponent from "../../components/Image.vue";
 import store from "@/store";
+import { IMessagePostDTO } from "../../types/IMessageDTO";
 
 @Component({
   components: {
@@ -33,8 +47,63 @@ export default class ChatRoom extends Vue {
   private pageToLoad = 2;
   private isFetching = false;
 
-  scrollTop() {
-    document.documentElement.scrollTop = 0;
+  private messageModel: IMessagePostDTO = {
+    chatRoomId: "",
+    messageValue: ""
+  };
+
+  get chatRooms() {
+    return store.state.chatRooms;
+  }
+
+  get messages() {
+    return store.state.messages;
+  }
+
+  get members() {
+    return store.state.members;
+  }
+
+  get userName() {
+    return store.getters.getUserName;
+  }
+
+  sendMessage(e: Event) {
+    if (this.messageModel.messageValue === "") {
+      return;
+    }
+
+    store.dispatch("sendMessage", this.messageModel).then(() => {
+      this.messageModel.messageValue = "";
+    });
+
+    e.preventDefault();
+  }
+
+  selectChatRoom(chatRoomId: string) {
+    store.dispatch("getMessages", {
+      chatRoomId: chatRoomId,
+      pageNumber: 1
+    });
+
+    this.messageModel.chatRoomId = chatRoomId;
+
+    store.dispatch("getChatMembers", chatRoomId);
+  }
+
+  loadData() {
+    store.dispatch("getChatRooms").then(() => {
+      if (this.chatRooms.length > 0) {
+        store.dispatch("getMessages", {
+          chatRoomId: this.chatRooms[0].id,
+          pageNumber: 1
+        });
+
+        this.messageModel.chatRoomId = this.chatRooms[0].id;
+
+        store.dispatch("getChatMembers", this.chatRooms[0].id);
+      }
+    });
   }
 
   scroll() {
@@ -75,6 +144,7 @@ export default class ChatRoom extends Vue {
 
   created(): void {
     console.log("created");
+    this.loadData();
   }
 
   beforeMount(): void {

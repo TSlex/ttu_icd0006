@@ -1,8 +1,9 @@
-﻿html{
+﻿html {
     user-select: none !important;
 }
 
 /*shared*/
+
 .alert {
     margin-bottom: 0 !important;
 }
@@ -11,7 +12,7 @@ body {
     padding-top: 80px !important;
 }
 
-header{
+header {
     z-index: 100;
     position: fixed;
     top: 0;
@@ -19,21 +20,21 @@ header{
     width: 100%;
 }
 
-a, img{
+a, img {
     -webkit-user-drag: none;
 }
-
 
 .fa, .fas, .far {
     line-height: inherit !important;
 }
 
-.col-centered{
+.col-centered {
     margin: 0 auto;
     float: none;
 }
 
 /*navbar*/
+
 .navbar {
     padding: 0.5em !important;
     /*background-color: #9fcdff !important;*/
@@ -45,11 +46,11 @@ a, img{
 }
 
 /*navbar-link*/
+
 .top-nav-link {
     display: flex;
     align-items: baseline;
     line-height: inherit;
-
 }
 
 .top-profile_image {
@@ -59,11 +60,11 @@ a, img{
     border-radius: 50%;
     border: 0 solid transparent;
     outline: none;
-
     display: inline-block;
 }
 
 /*profile*/
+
 .profile_section, .posts_section {
     display: flex;
     padding: 10px;
@@ -112,22 +113,24 @@ a, img{
     font-size: 20px;
 }
 
-.profile_controls{
+.profile_controls {
     font-size: 20px;
     margin-left: 5px;
 }
+
 /*profile gift*/
-.gift_gallery{
+
+.gift_gallery {
     display: flex;
     width: 100%;
     justify-content: center;
 }
 
-.gift_gallery .profile_gift{
+.gift_gallery .profile_gift {
     margin-right: 10px;
 }
 
-.profile_gift_section{
+.profile_gift_section {
     padding: 10px;
     display: flex;
     justify-content: space-evenly;
@@ -135,13 +138,13 @@ a, img{
     position: relative;
 }
 
-.profile_gift{
+.profile_gift {
     /*border: 1px solid gray !important;*/
     border-radius: 10px;
     overflow: hidden;
 }
 
-.profile_gift img{
+.profile_gift img {
     width: 150px;
     height: 150px;
     border: none !important;
@@ -149,7 +152,7 @@ a, img{
     margin: 0 !important;
 }
 
-.profile_gift_controls{
+.profile_gift_controls {
     height: 40px;
     text-align: center;
     line-height: 40px;
@@ -158,7 +161,8 @@ a, img{
 }
 
 /*profile rank*/
-.profile_rank{
+
+.profile_rank {
     position: relative;
     height: 30px;
     width: 400px;
@@ -168,7 +172,7 @@ a, img{
     box-sizing: content-box;
 }
 
-.profile_rank *{
+.profile_rank * {
     height: 30px !important;
     line-height: 30px;
 }
@@ -181,7 +185,7 @@ a, img{
     font-family: Consolas, serif;
 }
 
-.profile_rank .rank_score{
+.profile_rank .rank_score {
     position: absolute;
     width: 50%;
     left: 25%;
@@ -189,7 +193,7 @@ a, img{
     font-weight: bold;
 }
 
-.profile_rank .rank_bar{
+.profile_rank .rank_bar {
     position: absolute;
     background: #e4606d;
     min-width: 2%;
@@ -199,20 +203,21 @@ a, img{
     outline: gold 5px double;
 }
 
-.profile_rank .rank_bar_back{
+.profile_rank .rank_bar_back {
     position: absolute;
     background: #00000033;
     width: 100%;
     z-index: -2;
 }
 
-.profile_rank .rank_icons{
+.profile_rank .rank_icons {
     position: absolute;
     right: 10px;
     z-index: 0;
 }
 
 /*preferences*/
+
 .preferences_section {
     /*margin-top: 4em !important;*/
     margin-right: 6em !important;
@@ -223,36 +228,38 @@ a, img{
 }
 
 /* float controls */
-.float_control{
+
+.float_control {
     position: fixed;
     transition: color ease-in .2s;
 }
 
-.float_control:hover{
+.float_control:hover {
     position: fixed;
     color: #005cbfaa !important;
     text-shadow: 0 0 20px #005cbf66;
 }
 
-.float_control.feed_controls{
+.float_control.feed_controls {
     font-size: 40px;
     display: none;
 }
 
 /*feed*/
-.feed{
+
+.feed {
     /*background: red;*/
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.feed a{
+.feed a {
     text-decoration: none;
     color: black;
 }
 
-.feed_post{
+.feed_post {
     width: 600px;
     border: 1px solid gray;
     border-radius: 10px;
@@ -260,12 +267,13 @@ a, img{
     margin: 10px;
 }
 
-.feed_post .post_image img{
+.feed_post .post_image img {
     max-width: 90%;
     max-height: 550px;
 }
 
 /*post*/
+
 .post_create {
     border: 1px solid gray;
     border-radius: 4px;
@@ -274,14 +282,14 @@ a, img{
     margin-left: 12em !important;
 }
 
-.post_details{
+.post_details {
     border: 1px solid gray;
     border-radius: 4px;
     display: flex;
     height: 600px;
 }
 
-.post_details_post{
+.post_details_post {
     position: relative;
     flex-grow: 1;
     padding: 20px;
@@ -289,7 +297,7 @@ a, img{
     flex-direction: column;
 }
 
-.post_details_comments{
+.post_details_comments {
     border-left: 1px solid gray;
     flex-grow: 2;
     padding: 20px;
@@ -297,25 +305,25 @@ a, img{
     flex-direction: column;
 }
 
-.post_controls{
+.post_controls {
     position: absolute;
     right: 0;
     z-index: 10;
 }
 
-.post_return{
+.post_return {
     position: absolute;
     left: 20px;
     z-index: 10;
 }
 
-.post_image{
+.post_image {
     display: flex;
     justify-content: center;
     position: relative;
 }
 
-.post_image img{
+.post_image img {
     max-height: 400px;
     max-width: 600px;
     height: auto;
@@ -323,7 +331,7 @@ a, img{
     border-radius: 4px;
 }
 
-.post_details_meta_section{
+.post_details_meta_section {
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -331,7 +339,7 @@ a, img{
     /*background-color: lightgray;*/
 }
 
-.post_details_meta_section>span{
+.post_details_meta_section>span {
     border: 1px solid gray;
     border-radius: 5px;
     /*width: 100% !important;*/
@@ -340,11 +348,11 @@ a, img{
     flex-grow: 1;
 }
 
-.post_details_meta_section>p{
+.post_details_meta_section>p {
     margin-bottom: 1em;
 }
 
-.post_meta_section{
+.post_meta_section {
     list-style-type: none;
     display: flex;
     padding: 0;
@@ -352,13 +360,14 @@ a, img{
     margin-bottom: 0;
 }
 
-.post_meta{
+.post_meta {
     margin-right: 10px;
     font-family: Consolas, serif;
 }
 
 /*comments*/
-.post_comments_section{
+
+.post_comments_section {
     width: 100%;
     border: 1px solid gray;
     border-radius: 4px;
@@ -369,33 +378,34 @@ a, img{
     overflow-y: scroll;
 }
 
-.post_comment{
+.post_comment {
     display: inline-block;
     text-decoration: none;
     color: black;
     flex-basis: 100%;
 }
 
-.post_comment:hover{
+.post_comment:hover {
     text-decoration: none;
 }
 
-.post_comment .comment_username{
+.post_comment .comment_username {
     font-family: Consolas, serif;
     font-weight: bold;
 }
 
-.post_comment .comment_datetime{
+.post_comment .comment_datetime {
     font-family: Consolas, serif;
 }
 
-.post_comment .comment_value{
+.post_comment .comment_value {
     word-break: break-all;
     word-break: break-word;
     /*overflow-wrap: ;*/
 }
 
 /*form*/
+
 form button {
     margin-top: .5em !important;
 }
@@ -405,17 +415,78 @@ li form button, nav form button {
 }
 
 /*chat*/
-.chat_section{
+
+.chat_section {
     border: 1px solid gray;
     border-radius: 4px;
-    margin-right: 12em !important;
-    margin-left: 12em !important;
+    margin-right: 8em !important;
+    margin-left: 8em !important;
     display: flex;
     flex-direction: column;
+    height: 550px;
+}
+
+.chat_rooms {
+    padding: 10px !important;
+}
+
+.chat_input {
+    display: flex;
+    align-items: center;
+    width: 100%;
     padding: 10px;
 }
 
-.message{
+.chat_input button {
+    background: none;
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-top: 0 !important;
+    margin-left: 10px;
+    width: 50px;
+    height: 35px;
+}
+
+.chat_input button:hover {
+    background: #005cbf;
+    color: white
+}
+
+.chat_input button:focus {
+    outline: none;
+}
+
+.chat_input textarea {
+    height: 100%;
+    outline: none;
+    resize: none;
+    box-shadow: none;
+    border: 1px solid gray;
+    border-radius: 5px;
+    flex-grow: 1;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.chat_wall {
+    border-left: 1px solid gray;
+    display: flex;
+    flex-direction: column;
+    height: 550px;
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    flex-flow: column-reverse;
+    flex-grow: 1;
+    padding: 10px;
+    flex-basis: auto;
+    overflow-y: scroll;
+    margin-top: 10px;
+}
+
+.message {
     border: 1px solid gray;
     padding: 10px;
     width: fit-content;
@@ -423,23 +494,35 @@ li form button, nav form button {
     margin: 5px;
     word-break: break-all;
     border-radius: 5px;
+    display: flex;
+    flex-direction: column;
 }
 
-.message.active{
+.message.active {
     background: #1b6ec2;
     border: 1px solid #1861ac;
     color: white;
     align-self: flex-end;
 }
 
-.chat_create_form{
+.message_username{
+    font-size: 14px;
+    border-bottom: 1px double white;
+}
+
+.message_time{
+    font-size: 12px;
+    width: fit-content;
+}
+
+.chat_create_form {
     background: red;
     display: flex;
     padding: 10px;
     align-items: center;
 }
 
-.chat_create_form textarea{
+.chat_create_form textarea {
     flex-grow: 80;
     height: 4em;
     border: 1px solid gray;
@@ -448,7 +531,7 @@ li form button, nav form button {
     resize: none;
 }
 
-.chat_create_form button{
+.chat_create_form button {
     flex-grow: 20;
     height: 3em;
     line-height: 3em;
@@ -459,14 +542,15 @@ li form button, nav form button {
 }
 
 /*image*/
-.miniature-cover{
+
+.miniature-cover {
     width: 100%;
     height: 100%;
     border: #ff5c6c 4px dashed;
     position: absolute;
 }
 
-.miniature-control{
+.miniature-control {
     position: absolute;
     width: 10px;
     height: 10px;
@@ -474,6 +558,6 @@ li form button, nav form button {
     background: #e0a800;
 }
 
-.miniature-control:hover{
+.miniature-control:hover {
     background: #fdc400;
 }

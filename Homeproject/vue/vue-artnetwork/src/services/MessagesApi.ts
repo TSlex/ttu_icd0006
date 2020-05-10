@@ -15,14 +15,13 @@ export abstract class MessagesApi {
         common: {
           'Content-Type': 'application/json'
         },
-        Authorization: 'Bearer ' + store.getters.jwt
       }
     }
   )
 
-  static async postMessage(message: IMessagePostDTO): Promise<ResponseDTO> {
+  static async postMessage(message: IMessagePostDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = ``;
-    const response = await this.axios.post<ResponseDTO>(url, message);
+    const response = await this.axios.post<ResponseDTO>(url, message, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:
@@ -33,9 +32,9 @@ export abstract class MessagesApi {
     }
   }
 
-  static async putMessage(id: string, message: IMessagePutDTO): Promise<ResponseDTO> {
+  static async putMessage(id: string, message: IMessagePutDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = `${id}`;
-    const response = await this.axios.put<ResponseDTO>(url, message);
+    const response = await this.axios.put<ResponseDTO>(url, message, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:
@@ -46,9 +45,9 @@ export abstract class MessagesApi {
     }
   }
 
-  static async deleteMessage(id: string): Promise<ResponseDTO> {
+  static async deleteMessage(id: string, jwt: string | null): Promise<ResponseDTO> {
     const url = `${id}`;
-    const response = await this.axios.delete<ResponseDTO>(url);
+    const response = await this.axios.delete<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:

@@ -6,7 +6,7 @@ import store from "../store";
 
 
 
-export abstract class CommentsApi {
+export abstract class ChatMembersApi {
   private static axios = Axios.create(
     {
       validateStatus: () => true,

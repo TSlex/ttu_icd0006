@@ -3,6 +3,10 @@ module.exports = {
   env: {
     node: true
   },
+  globals: {
+    "$": true,
+    "jQuery": true
+  },
   extends: [
     'plugin:vue/essential',
     '@vue/standard',

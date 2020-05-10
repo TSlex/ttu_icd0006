@@ -8,6 +8,7 @@ import AccountRegister from '../views/account/Register.vue'
 import AccountLogin from '../views/account/Login.vue'
 
 import ProfileIndex from '../views/profile/Index.vue'
+import ChatRoom from '../views/messages/ChatRoom.vue'
 
 Vue.use(VueRouter)
 
@@ -20,8 +21,10 @@ const routes: Array<RouteConfig> = [
   { path: '/account/register', name: 'Register', component: AccountRegister },
 
   // Profile
-  { path: '/:username', name: 'ProfileIndex', component: ProfileIndex, props: true },
+  { path: '/profiles/:username', name: 'ProfileIndex', component: ProfileIndex, props: true },
 
+  // Message
+  { path: '/messages', name: 'ChatRoom', component: ChatRoom },
 ]
 
 const router = new VueRouter({

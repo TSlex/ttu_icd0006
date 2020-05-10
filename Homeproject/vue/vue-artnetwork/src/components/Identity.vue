@@ -5,7 +5,7 @@
         <span class="nav-link text-dark">Hello, {{userName}}!</span>
       </li>
       <li class="nav-item">
-        <a @click="logoutOnClick" class="nav-link text-dark" href>Logout</a>
+        <div @click="logoutOnClick" class="nav-link text-dark" href>Logout</div>
       </li>
     </template>
     <template v-else>
@@ -23,7 +23,6 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import store from "../store";
 import router from "../router";
-import JwtDecode from "jwt-decode";
 
 @Component
 export default class Identity extends Vue {
@@ -31,38 +30,13 @@ export default class Identity extends Vue {
     return store.getters.isAuthenticated;
   }
 
-  get userId(): string {
-    if (store.state.jwt) {
-      const decoded = JwtDecode(store.state.jwt) as Record<string, string>;
-      return decoded[
-        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
-      ];
-    }
-    return "null";
-  }
-
   get userName(): string {
-    if (store.state.jwt) {
-      const decoded = JwtDecode(store.state.jwt) as Record<string, string>;
-      return decoded[
-        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
-      ];
-    }
-    return "null";
-  }
-
-  get userRoles(): string {
-    if (store.state.jwt) {
-      const decoded = JwtDecode(store.state.jwt) as Record<string, string>;
-      return decoded[
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-      ];
-    }
-    return "null";
+    return store.getters.getUserName;
   }
 
   logoutOnClick(): void {
     store.dispatch("clearJwt");
+    router.push("/account/login");
   }
 }
 </script>

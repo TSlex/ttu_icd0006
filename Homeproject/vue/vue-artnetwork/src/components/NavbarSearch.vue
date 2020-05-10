@@ -17,7 +17,7 @@ export default class NavbarSearch extends Vue {
   private userName: string = "";
 
   private search() {
-    router.push(this.userName);
+    router.push('/profiles/' + this.userName);
   }
 }
 </script>

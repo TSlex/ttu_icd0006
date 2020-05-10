@@ -1,6 +1,9 @@
 export interface IMessageDTO {
-  chatRoomId: string
+  id: string;
+  chatRoomId: string;
+  userName: string;
   messageValue: string;
+  messageDateTime: Date;
 }
 
 export interface IMessagePostDTO {
