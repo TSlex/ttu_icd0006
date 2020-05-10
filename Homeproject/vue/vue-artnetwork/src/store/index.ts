@@ -19,7 +19,7 @@ import { ChatMembersApi } from '@/services/ChatMembersApi';
 import { MessagesApi } from '@/services/MessagesApi';
 import { IRankDTO } from './../types/IRankDTO';
 import { IGiftDTO } from './../types/IGiftDTO';
-import { ICommentDTO } from './../types/ICommentDTO';
+import { ICommentDTO, ICommentPostDTO } from './../types/ICommentDTO';
 import { IChatMemberDTO } from './../types/IChatMemberDTO';
 import { IMessageDTO, IMessagePostDTO } from './../types/IMessageDTO';
 import { IChatRoomDTO } from './../types/IChatRoomDTO';
@@ -280,6 +280,10 @@ export default new Vuex.Store({
       context.commit('setPosts', response)
       return response;
     },
+    async postPost(context, post: IPostPostDTO): Promise<ResponseDTO> {
+      const response = await PostsApi.postPost(post, context.state.jwt);
+      return response;
+    },
 
     // Comments
     async getComments(context, params: { postId: string; pageNumber: number }): Promise<ICommentDTO[]> {
@@ -290,6 +294,11 @@ export default new Vuex.Store({
     async setComments(context, params: { postId: string; pageNumber: number }): Promise<ICommentDTO[]> {
       const response = await CommentsApi.getComments(params.postId, params.pageNumber, context.state.jwt);
       context.commit('setComments', response)
+      return response;
+    },
+    async postComment(context, comment: ICommentPostDTO): Promise<ResponseDTO> {
+      const response = await CommentsApi.postComment(comment, context.state.jwt);
+      context.dispatch('setComments', { postId: comment.postId, pageNumber: 1 });
       return response;
     },
 

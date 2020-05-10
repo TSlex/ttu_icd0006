@@ -73,7 +73,7 @@ export abstract class ChatRoomsApi {
     }
   }
 
-  static async getChatRoomIdWithUsername(userName: string, jwt: string | null): Promise<string> {
+  static async getChatRoomWithUsername(userName: string, jwt: string | null): Promise<string | null> {
     const url = userName;
     const response = await this.axios.get<string>(url, { headers: { Authorization: 'Bearer ' + jwt } });
 
@@ -82,7 +82,7 @@ export abstract class ChatRoomsApi {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return "null";
+        return null;
     }
   }
 

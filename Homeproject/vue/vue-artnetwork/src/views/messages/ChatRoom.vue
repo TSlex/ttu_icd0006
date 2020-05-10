@@ -52,6 +52,9 @@ export default class ChatRoom extends Vue {
     messageValue: ""
   };
 
+  @Prop()
+  chatRoomId: string | undefined;
+
   get chatRooms() {
     return store.state.chatRooms;
   }
@@ -92,14 +95,17 @@ export default class ChatRoom extends Vue {
   loadData() {
     store.dispatch("getChatRooms").then(() => {
       if (this.chatRooms.length > 0) {
+        let chatRoomId = this.chatRoomId
+          ? this.chatRoomId
+          : this.chatRooms[0].id;
         store.dispatch("getMessages", {
-          chatRoomId: this.chatRooms[0].id,
+          chatRoomId: chatRoomId,
           pageNumber: 1
         });
 
-        this.messageModel.chatRoomId = this.chatRooms[0].id;
+        this.messageModel.chatRoomId = chatRoomId;
 
-        store.dispatch("getChatMembers", this.chatRooms[0].id);
+        store.dispatch("getChatMembers", chatRoomId);
       }
     });
   }

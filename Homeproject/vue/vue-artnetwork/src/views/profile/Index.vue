@@ -1,115 +1,103 @@
 <template>
-  <div v-if="profile && rank" class="profile_conainer">
-    <div class="profile_section">
-      <div class="col-3 d-flex justify-content-center">
-        <a href="/identity/account/manage/avatar">
-          <div class="profile_image" :style="`background-color: ${rank.rankColor} !important;`">
-            <!--<img alt width="150px" height="150px" :src="profile.profileAvatarUrl" />-->
-            <ImageComponent :id="profile.profileAvatarId" />
-          </div>
-        </a>
-      </div>
-      <div class="profile_description col-9">
-        <ul class="profile_meta_section">
-          <li class="profile_name">{{ profile.userName }}</li>
-          <li class="profile_controls dropdown">
-            <a class="btn fa fa-bars" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
-            <div
-              class="dropdown-menu"
-              aria-labelledby="profile_more"
-              x-placement="bottom-start"
-              style="position: absolute; will-change: transform; top: 0px; left:
+  <div id="profileIndex">
+    <PostDetails v-if="post" :post="post" v-on:closePost="closePost"/>
+    <div v-if="profile && rank" class="profile_conainer">
+      <div class="profile_section">
+        <div class="col-3 d-flex justify-content-center">
+          <a href="/identity/account/manage/avatar">
+            <div class="profile_image" :style="`background-color: ${rank.rankColor} !important;`">
+              <!--<img alt width="150px" height="150px" :src="profile.profileAvatarUrl" />-->
+              <ImageComponent :id="profile.profileAvatarId" />
+            </div>
+          </a>
+        </div>
+        <div class="profile_description col-9">
+          <ul class="profile_meta_section">
+            <li class="profile_name">{{ profile.userName }}</li>
+            <li v-if="!isCurrentUser" class="profile_controls dropdown">
+              <a class="btn fa fa-bars" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+              <div
+                class="dropdown-menu"
+                aria-labelledby="profile_more"
+                x-placement="bottom-start"
+                style="position: absolute; will-change: transform; top: 0px; left:
               20px; transform: translate3d(0px, 38px, 0px);"
-            >
-              <a class="dropdown-item text-center" href="/chatrooms/openorcreate?username=wareware_san">Write a Message</a>
-              <form method="post" action="/wareware_san/followprofile">
-                <button type="submit" class="dropdown-item">
+              >
+                <button class="dropdown-item text-center" @click="openChatWithUser">Write a Message</button>
+                <button v-if="!profile.isUserFollows" type="submit" class="dropdown-item" @click="followProfile">
                   <i class="far fa-bell"></i> Follow
                 </button>
-
-                <input
-                  type="hidden"
-                  data-val="true"
-                  data-val-required="The UserName field is required."
-                  id="UserName"
-                  name="UserName"
-                  value="wareware_san"
-                />
-              </form>
-              <form method="post" action="/wareware_san/blockprofile">
-                <button type="submit" class="dropdown-item">
+                <button v-else type="submit" class="dropdown-item" @click="unfollowProfile">
+                  <i class="fas fa-bell"></i> Unfollow
+                </button>
+                <button v-if="!profile.isUserBlocks" type="submit" class="dropdown-item" @click="blockProfile">
                   <i class="far fa-user"></i> Block
                 </button>
-                <input
-                  type="hidden"
-                  data-val="true"
-                  data-val-required="The UserName field is required."
-                  id="UserName"
-                  name="UserName"
-                  value="wareware_san"
-                />
-              </form>
+                <button v-else type="submit" class="dropdown-item" @click="unblockProfile">
+                  <i class="fas fa-user"></i> Unblock
+                </button>
+              </div>
+            </li>
+          </ul>
+          <div v-if="rank" class="profile_rank">
+            <span class="rank_title" :style="`color: ${rank.textColor}`">{{rank.rankTitle}}</span>
+            <div class="rank_bar_back"></div>
+            <div class="rank_bar" :style="`width: ${rankPercent}%; background-color: ${rank.rankColor}`"></div>
+            <span class="rank_score">{{profile.experience}}/{{rank.maxExperience}}</span>
+            <div class="rank_icons">
+              <i v-for="(icon, i) in rankIcons" :key="i" :class="'fa fa-' + icon" />
             </div>
-          </li>
-        </ul>
-        <div v-if="rank" class="profile_rank">
-          <span class="rank_title" :style="`color: ${rank.textColor}`">{{rank.rankTitle}}</span>
-          <div class="rank_bar_back"></div>
-          <div class="rank_bar" :style="`width: ${rankPercent}%; background-color: ${rank.rankColor}`"></div>
-          <span class="rank_score">{{profile.experience}}/{{rank.maxExperience}}</span>
-          <div class="rank_icons">
-            <i v-for="(icon, i) in rankIcons" :key="i" :class="'fa fa-' + icon" />
+          </div>
+
+          <ul class="profile_meta_section">
+            <li class="profile_meta">
+              <span class="meta_counter">{{ profile.postsCount }}</span>&nbsp;
+              <span class="meta_title">posts</span>
+            </li>
+            <li class="profile_meta">
+              <span class="meta_counter">{{ profile.followersCount }}</span>&nbsp;
+              <span class="meta_title">followers</span>
+            </li>
+            <li class="profile_meta">
+              <span class="meta_counter">{{ profile.followedCount }}</span>&nbsp;
+              <span class="meta_title">followed</span>
+            </li>
+          </ul>
+
+          <div class="profile_about">
+            <h1>{{ profile.profileFullName }}</h1>
+            <span>{{ profile.profileAbout }}</span>
+            <br />
+            <a :href="'//' + profile.profileWorkPlace" target="_blank">
+              {{
+              profile.profileWorkPlace
+              }}
+            </a>
           </div>
         </div>
-
-        <ul class="profile_meta_section">
-          <li class="profile_meta">
-            <span class="meta_counter">{{ profile.postsCount }}</span>&nbsp;
-            <span class="meta_title">posts</span>
-          </li>
-          <li class="profile_meta">
-            <span class="meta_counter">{{ profile.followersCount }}</span>&nbsp;
-            <span class="meta_title">followers</span>
-          </li>
-          <li class="profile_meta">
-            <span class="meta_counter">{{ profile.followedCount }}</span>&nbsp;
-            <span class="meta_title">followed</span>
-          </li>
-        </ul>
-
-        <div class="profile_about">
-          <h1>{{ profile.profileFullName }}</h1>
-          <span>{{ profile.profileAbout }}</span>
-          <br />
-          <a :href="'//' + profile.profileWorkPlace" target="_blank">
-            {{
-            profile.profileWorkPlace
-            }}
+      </div>
+      <hr />
+      <div class="profile_gift_section">
+        <div class="gift_carousel">
+          <div v-for="(gift, index) in gifts" :key="index" class="profile_gift">
+            <img :src="gift.giftImageUrl" alt="gift" />
+          </div>
+        </div>
+        <a class="fa fa-gift btn btn-primary profile_gift_controls" href="#"></a>
+      </div>
+      <hr />
+      <div class="post_section">
+        <div class="post_row card-columns">
+          <a v-for="post in posts" :key="post.id" @click="selectPost(post)">
+            <div class="post_item card">
+              <img alt="post" :src="post.postImageUrl" class="post_image card-img" />
+            </div>
           </a>
         </div>
       </div>
-    </div>
-    <hr />
-    <div class="profile_gift_section">
-      <div class="gift_carousel">
-        <div v-for="(gift, index) in gifts" :key="index" class="profile_gift">
-          <img :src="gift.giftImageUrl" alt="gift" />
-        </div>
+      <div class="text-center">
+        <button @click="loadMore" class="btn_circle fa fa-download"></button>
       </div>
-      <a class="fa fa-gift btn btn-primary profile_gift_controls" href="#"></a>
-    </div>
-    <hr />
-    <div class="post_section">
-      <div class="post_row card-columns">
-        <a v-for="post in posts" :key="post.id" href="#">
-          <div class="post_item card">
-            <img alt="post" :src="post.postImageUrl" class="post_image card-img" />
-          </div>
-        </a>
-      </div>
-    </div>
-    <div class="text-center">
-      <button @click="loadMore" class="btn_circle fa fa-download"></button>
     </div>
   </div>
 </template>
@@ -117,24 +105,36 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import ImageComponent from "../../components/Image.vue";
+import PostDetails from "../../components/PostDetails.vue";
 import store from "@/store";
 import { IProfileDTO } from "@/types/IProfileDTO";
 import { ImagesApi } from "../../services/ImagesApi";
 import { IPostDTO } from "../../types/IPostDTO";
 import { IGiftDTO } from "../../types/IGiftDTO";
 import { IRankDTO } from "../../types/IRankDTO";
+import { ChatRoomsApi } from "../../services/ChatRoomsApi";
+import router from "../../router";
+import { ProfileApi } from "@/services/ProfileApi";
+import { ResponseDTO } from "../../types/Response/ResponseDTO";
 
 @Component({
   components: {
-    ImageComponent
+    ImageComponent,
+    PostDetails
   }
 })
 export default class ProfileIndex extends Vue {
   private pageToLoad = 2;
   private isFetching = false;
 
+  private post: IPostDTO | null = null;
+
   @Prop()
   private username!: string;
+
+  get isCurrentUser(): boolean {
+    return store.getters.getUserName === this.username;
+  }
 
   get canLoadMore(): boolean {
     return store.state.feedLoadedCount === 10;
@@ -152,7 +152,7 @@ export default class ProfileIndex extends Vue {
     if (store.state.profileRank?.rankIcon) {
       return store.state.profileRank.rankIcon
         .split(";")
-        .filter(value => value !== '');
+        .filter(value => value !== "");
     }
     return [];
   }
@@ -177,6 +177,14 @@ export default class ProfileIndex extends Vue {
     return store.state.posts;
   }
 
+  selectPost(post: IPostDTO) {
+    this.post = post;
+  }
+
+  closePost() {
+    this.post = null;
+  }
+
   loadMore() {
     if (!this.isFetching) {
       this.isFetching = true;
@@ -189,6 +197,71 @@ export default class ProfileIndex extends Vue {
           this.isFetching = false;
           this.pageToLoad += 1;
         });
+    }
+  }
+
+  get jwt() {
+    return store.getters.getJwt;
+  }
+
+  openChatWithUser() {
+    if (!this.isCurrentUser) {
+      ChatRoomsApi.getChatRoomWithUsername(this.username, this.jwt).then(
+        (result: string | null) => {
+          if (result) {
+            router.push(`/messages/${result}`);
+          }
+        }
+      );
+    }
+  }
+
+  followProfile() {
+    if (!this.isCurrentUser) {
+      ProfileApi.follow(this.username, this.jwt).then(
+        (response: ResponseDTO) => {
+          console.log(response);
+          if (!response.errors && this.profile) {
+            store.dispatch("getProfile", this.username);
+          }
+        }
+      );
+    }
+  }
+
+  unfollowProfile() {
+    if (!this.isCurrentUser) {
+      ProfileApi.unfollow(this.username, this.jwt).then(
+        (response: ResponseDTO) => {
+          if (!response.errors && this.profile) {
+            store.dispatch("getProfile", this.username);
+          }
+        }
+      );
+    }
+  }
+
+  blockProfile() {
+    if (!this.isCurrentUser) {
+      ProfileApi.block(this.username, this.jwt).then(
+        (response: ResponseDTO) => {
+          if (!response.errors && this.profile) {
+            store.dispatch("getProfile", this.username);
+          }
+        }
+      );
+    }
+  }
+
+  unblockProfile() {
+    if (!this.isCurrentUser) {
+      ProfileApi.unblock(this.username, this.jwt).then(
+        (response: ResponseDTO) => {
+          if (!response.errors && this.profile) {
+            store.dispatch("getProfile", this.username);
+          }
+        }
+      );
     }
   }
 

@@ -21,7 +21,7 @@ export abstract class CommentsApi {
 
   static async getComments(postId: string, pageNumber: number, jwt: string | null): Promise<ICommentDTO[]> {
     const url = `${postId}/${pageNumber}`;
-    const response = await this.axios.put<ICommentDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<ICommentDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:

@@ -39,8 +39,8 @@ export abstract class ProfileApi {
   }
 
   static async follow(userName: string, jwt: string | null): Promise<ResponseDTO> {
-    const url = `${userName}/follow`
-    const response = await this.axios.get<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const url = `/${userName}/follow`
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:
@@ -52,8 +52,8 @@ export abstract class ProfileApi {
   }
 
   static async unfollow(userName: string, jwt: string | null): Promise<ResponseDTO> {
-    const url = `${userName}/unfollow`
-    const response = await this.axios.get<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const url = `/${userName}/unfollow`
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:
@@ -65,8 +65,8 @@ export abstract class ProfileApi {
   }
 
   static async block(userName: string, jwt: string | null): Promise<ResponseDTO> {
-    const url = `${userName}/block`
-    const response = await this.axios.get<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const url = `/${userName}/block`
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:
@@ -78,8 +78,8 @@ export abstract class ProfileApi {
   }
 
   static async unblock(userName: string, jwt: string | null): Promise<ResponseDTO> {
-    const url = `${userName}/unblock`
-    const response = await this.axios.get<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const url = `/${userName}/unblock`
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:

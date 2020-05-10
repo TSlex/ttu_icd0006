@@ -14,7 +14,7 @@ export interface IPostDTO {
 export interface IPostPostDTO {
   postTitle: string;
   postDescription: string;
-  postImageId: string;
+  postImageId: string | null;
   postImageUrl: string;
 }
 

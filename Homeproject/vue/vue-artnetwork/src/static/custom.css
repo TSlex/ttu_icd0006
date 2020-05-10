@@ -33,6 +33,16 @@ a, img {
     float: none;
 }
 
+.modal_back{
+    z-index: 50;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #000000AA;
+    left: 0;
+    top: 0;
+}
+
 /*navbar*/
 
 .navbar {
@@ -323,6 +333,14 @@ a, img {
     border-radius: 4px;
     display: flex;
     height: 600px;
+    width: 1200px;
+
+    margin: 200px auto;
+
+    /* floating */
+    /* position: absolute; */
+    z-index: 100;
+    background: white;
 }
 
 .post_details_post {
@@ -339,6 +357,7 @@ a, img {
     padding: 20px;
     display: flex;
     flex-direction: column;
+    width: 300px;
 }
 
 .post_controls {
@@ -418,7 +437,9 @@ a, img {
     display: inline-block;
     text-decoration: none;
     color: black;
-    flex-basis: 100%;
+    margin-bottom: 10px;
+    /* flex-basis: 100%; */
+    flex-shrink: 0;
 }
 
 .post_comment:hover {
