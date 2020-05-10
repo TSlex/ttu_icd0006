@@ -15,14 +15,13 @@ export abstract class RanksApi {
         common: {
           'Content-Type': 'application/json'
         },
-        Authorization: 'Bearer ' + store.getters.jwt
       }
     }
   )
 
-  static async getProfileRanks(userName: string): Promise<IRankDTO[]> {
+  static async getProfileRanks(userName: string, jwt: string | null): Promise<IRankDTO[]> {
     const url = `${userName}/all`;
-    const response = await this.axios.get<IRankDTO[]>(url);
+    const response = await this.axios.get<IRankDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:
@@ -33,9 +32,9 @@ export abstract class RanksApi {
     }
   }
 
-  static async getProfileRank(userName: string): Promise<IRankDTO> {
+  static async getProfileRank(userName: string, jwt: string | null): Promise<IRankDTO> {
     const url = `${userName}/active`;
-    const response = await this.axios.get<IRankDTO>(url);
+    const response = await this.axios.get<IRankDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:

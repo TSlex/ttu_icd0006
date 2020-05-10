@@ -1,25 +1,32 @@
-import { IChatMemberDTO } from './../types/IChatMemberDTO';
-import { IMessageDTO, IMessagePostDTO } from './../types/IMessageDTO';
-import { IChatRoomDTO } from './../types/IChatRoomDTO';
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
+
+import { AccountApi } from '@/services/AccountApi';
+import { FeedApi } from '@/services/FeedApi';
+
+import JwtDecode from "jwt-decode";
 
 import { ILoginDTO } from '@/types/Identity/ILoginDTO';
 import { IRegisterDTO } from '@/types/Identity/IRegisterDTO'
 import { JwtResponseDTO } from '@/types/Response/JwtResponseDTO';
 import { ResponseDTO } from './../types/Response/ResponseDTO';
 import { IProfileDTO } from './../types/IProfileDTO';
-
-import { AccountApi } from '@/services/AccountApi';
-import { FeedApi } from '@/services/FeedApi';
-
-import JwtDecode from "jwt-decode";
 import { CountResponseDTO } from '@/types/Response/CountResponseDTO';
-import { IPostDTO } from '@/types/IPostDTO';
+import { IPostDTO, IPostPostDTO } from '@/types/IPostDTO';
 import { ProfileApi } from '@/services/ProfileApi';
 import { ChatRoomsApi } from '@/services/ChatRoomsApi';
 import { ChatMembersApi } from '@/services/ChatMembersApi';
 import { MessagesApi } from '@/services/MessagesApi';
+import { IRankDTO } from './../types/IRankDTO';
+import { IGiftDTO } from './../types/IGiftDTO';
+import { ICommentDTO } from './../types/ICommentDTO';
+import { IChatMemberDTO } from './../types/IChatMemberDTO';
+import { IMessageDTO, IMessagePostDTO } from './../types/IMessageDTO';
+import { IChatRoomDTO } from './../types/IChatRoomDTO';
+import { PostsApi } from '@/services/PostsApi';
+import { CommentsApi } from '@/services/CommentsApi';
+import { GiftsApi } from '@/services/GiftsApi';
+import { RanksApi } from '@/services/RanksApi';
 
 Vue.use(Vuex)
 
@@ -33,8 +40,23 @@ export default new Vuex.Store({
     feedCount: 0 as number,
     feedLoadedCount: -1,
 
-    //Profile
+    // Profile
     profile: null as IProfileDTO | null,
+
+    // Posts
+    posts: [] as IPostDTO[],
+    postsLoadedCount: -1,
+
+    // Comments
+    comments: [] as ICommentDTO[],
+    commentsLoadedCount: -1,
+
+    // Gifts
+    profileGifts: [] as IGiftDTO[],
+    giftsLoadedCount: -1,
+
+    // Ranks
+    profileRank: null as IRankDTO | null,
 
     //Messages
     chatRooms: [] as IChatRoomDTO[],
@@ -120,6 +142,27 @@ export default new Vuex.Store({
       state.profile = profile;
     },
 
+    // Posts
+    getPosts(state, posts: IPostDTO[]) {
+      posts.forEach(post => state.posts.push(post))
+    },
+    setPosts(state, posts: IPostDTO[]) {
+      state.posts = posts;
+    },
+
+    // Comments
+    getComments(state, comments: ICommentDTO[]) {
+      comments.forEach(comment => state.comments.push(comment))
+    },
+    setComments(state, comments: ICommentDTO[]) {
+      state.comments = comments;
+    },
+
+    // ProfileGifts
+    setProfileGifts(state, gifts: IGiftDTO[]) {
+      state.profileGifts = gifts;
+    },
+
     // Messages
     setChatRooms(state, chatRooms: IChatRoomDTO[]) {
       state.chatRooms = chatRooms;
@@ -130,6 +173,11 @@ export default new Vuex.Store({
     setMembers(state, members: IChatMemberDTO[]) {
       state.members = members;
     },
+
+    // Rank
+    setProfileRank(state, rank: IRankDTO) {
+      state.profileRank = rank;
+    }
   },
 
   actions: {
@@ -220,6 +268,44 @@ export default new Vuex.Store({
       context.dispatch('getMessages', { chatRoomId: message.chatRoomId, pageNumber: 1 });
       return response;
     },
+
+    // Posts
+    async getPosts(context, params: { userName: string; pageNumber: number }): Promise<IPostPostDTO[]> {
+      const response = await PostsApi.getProfilePosts(params.userName, params.pageNumber, context.state.jwt);
+      context.commit('getPosts', response)
+      return response;
+    },
+    async setPosts(context, params: { userName: string; pageNumber: number }): Promise<IPostPostDTO[]> {
+      const response = await PostsApi.getProfilePosts(params.userName, params.pageNumber, context.state.jwt);
+      context.commit('setPosts', response)
+      return response;
+    },
+
+    // Comments
+    async getComments(context, params: { postId: string; pageNumber: number }): Promise<ICommentDTO[]> {
+      const response = await CommentsApi.getComments(params.postId, params.pageNumber, context.state.jwt);
+      context.commit('getComments', response)
+      return response;
+    },
+    async setComments(context, params: { postId: string; pageNumber: number }): Promise<ICommentDTO[]> {
+      const response = await CommentsApi.getComments(params.postId, params.pageNumber, context.state.jwt);
+      context.commit('setComments', response)
+      return response;
+    },
+
+    // ProfileGifts
+    async getProfileGifts(context, params: { userName: string; pageNumber: number }): Promise<IGiftDTO[]> {
+      const response = await GiftsApi.getProfileGifts(params.userName, params.pageNumber, context.state.jwt);
+      context.commit('setProfileGifts', response)
+      return response;
+    },
+
+    // Rank
+    async getProfileRank(context, userName: string): Promise<IRankDTO> {
+      const response = await RanksApi.getProfileRank(userName, context.state.jwt);
+      context.commit('setProfileRank', response)
+      return response;
+    }
   },
 
   modules: {

@@ -9,8 +9,6 @@ import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import '@fortawesome/fontawesome-free/css/all.css'
-// import '@fortawesome/free-solid-svg-icons'
-// import '@fortawesome/free-regular-svg-icons'
 
 import '@/static/site.css'
 import '@/static/custom.css'

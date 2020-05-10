@@ -47,6 +47,7 @@ export abstract class GiftsApi {
         return [];
     }
   }
+
   static async getProfileGiftsCount(userName: string, jwt: string | null): Promise<CountResponseDTO> {
     const url = `${userName}/count`;
     const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });

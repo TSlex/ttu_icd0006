@@ -131,17 +131,29 @@ a, img {
 }
 
 .profile_gift_section {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.gift_carousel{
     padding: 10px;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
     position: relative;
+    /* overflow-x: scroll; */
+    overflow: hidden;
+    margin-right: 60px;
+    width: 100%;
 }
 
 .profile_gift {
     /*border: 1px solid gray !important;*/
     border-radius: 10px;
     overflow: hidden;
+    flex: 0 0 auto; 
+    margin-left: 20px;
 }
 
 .profile_gift img {
@@ -243,6 +255,30 @@ a, img {
 .float_control.feed_controls {
     font-size: 40px;
     display: none;
+}
+
+/* Commont */
+.btn_circle{
+    color: #005cbf !important;
+    font-size: 30px;
+    transition: color ease-in .2s;
+    transition: text-shadow linear .2s;
+    background: white;
+    border: 1px #005cbf solid;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.btn_circle:hover{
+    color: white !important;
+    background: #005cbfAA;
+    font-size: 30px;
+    box-shadow: 0 0 30px #005cbf66, 0 0 30px #005cbf66;
+}
+
+.btn_circle:active{
+    outline: none;
 }
 
 /*feed*/
@@ -503,16 +539,21 @@ li form button, nav form button {
     border: 1px solid #1861ac;
     color: white;
     align-self: flex-end;
+    text-align: right;
 }
 
-.message_username{
+.message.active .message_username{
     font-size: 14px;
     border-bottom: 1px double white;
 }
 
+.message .message_username{
+    font-size: 14px;
+    border-bottom: 1px double #005cbf;
+}
+
 .message_time{
     font-size: 12px;
-    width: fit-content;
 }
 
 .chat_create_form {

@@ -1,11 +1,11 @@
 <template>
-  <div v-if="profile" class="profile_conainer">
+  <div v-if="profile && rank" class="profile_conainer">
     <div class="profile_section">
       <div class="col-3 d-flex justify-content-center">
         <a href="/identity/account/manage/avatar">
-          <div class="profile_image" style="background-color: #0066FF !important;">
+          <div class="profile_image" :style="`background-color: ${rank.rankColor} !important;`">
             <!--<img alt width="150px" height="150px" :src="profile.profileAvatarUrl" />-->
-            <ImageComponent id="08d7efa2-42f6-440f-89ba-0d0f10be4f7a" />
+            <ImageComponent :id="profile.profileAvatarId" />
           </div>
         </a>
       </div>
@@ -52,14 +52,13 @@
             </div>
           </li>
         </ul>
-        <div class="profile_rank">
-          <span class="rank_title">NO:DATA</span>
+        <div v-if="rank" class="profile_rank">
+          <span class="rank_title" :style="`color: ${rank.textColor}`">{{rank.rankTitle}}</span>
           <div class="rank_bar_back"></div>
-          <div class="rank_bar" style="width: 25%; background-color: #0066FF"></div>
-          <span class="rank_score">203/500</span>
+          <div class="rank_bar" :style="`width: ${rankPercent}%; background-color: ${rank.rankColor}`"></div>
+          <span class="rank_score">{{profile.experience}}/{{rank.maxExperience}}</span>
           <div class="rank_icons">
-            <i class="fa fa-star" />
-            <i class="fa fa-star-half-alt" />
+            <i v-for="(icon, i) in rankIcons" :key="i" :class="'fa fa-' + icon" />
           </div>
         </div>
 
@@ -92,22 +91,38 @@
     </div>
     <hr />
     <div class="profile_gift_section">
-      <div class="profile_gift">
-        <ImageComponent id="08d7efa2-42f6-440f-89ba-0d0f10be4f7a"/>
+      <div class="gift_carousel">
+        <div v-for="(gift, index) in gifts" :key="index" class="profile_gift">
+          <img :src="gift.giftImageUrl" alt="gift" />
+        </div>
       </div>
       <a class="fa fa-gift btn btn-primary profile_gift_controls" href="#"></a>
     </div>
     <hr />
-    <div class="post_section"></div>
+    <div class="post_section">
+      <div class="post_row card-columns">
+        <a v-for="post in posts" :key="post.id" href="#">
+          <div class="post_item card">
+            <img alt="post" :src="post.postImageUrl" class="post_image card-img" />
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="text-center">
+      <button @click="loadMore" class="btn_circle fa fa-download"></button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import ImageComponent from "../../components/Image.vue"
+import ImageComponent from "../../components/Image.vue";
 import store from "@/store";
 import { IProfileDTO } from "@/types/IProfileDTO";
 import { ImagesApi } from "../../services/ImagesApi";
+import { IPostDTO } from "../../types/IPostDTO";
+import { IGiftDTO } from "../../types/IGiftDTO";
+import { IRankDTO } from "../../types/IRankDTO";
 
 @Component({
   components: {
@@ -121,44 +136,60 @@ export default class ProfileIndex extends Vue {
   @Prop()
   private username!: string;
 
-  scrollTop() {
-    document.documentElement.scrollTop = 0;
-  }
-
-  scroll() {
-    window.onscroll = (e: Event) => {
-      let bottomOfWindow =
-        Math.max(
-          window.pageYOffset,
-          document.documentElement.scrollTop,
-          document.body.scrollTop
-        ) +
-          window.innerHeight >
-        document.documentElement.offsetHeight - 1400;
-
-      let toUpButton = document.getElementById("toUpButton")!;
-
-      if (document.documentElement.scrollTop > 100) {
-        toUpButton.style.display = "initial";
-      } else {
-        toUpButton.style.display = "none";
-      }
-
-      if (bottomOfWindow && this.canLoadMore && !this.isFetching) {
-        this.isFetching = true;
-        store.dispatch("getFeed", this.pageToLoad);
-        this.pageToLoad += 1;
-        // console.log(this.pageToLoad);
-      }
-    };
-  }
-
   get canLoadMore(): boolean {
     return store.state.feedLoadedCount === 10;
   }
 
   get profile(): IProfileDTO | null {
     return store.state.profile!;
+  }
+
+  get rank(): IRankDTO | null {
+    return store.state.profileRank!;
+  }
+
+  get rankIcons(): string[] {
+    if (store.state.profileRank?.rankIcon) {
+      return store.state.profileRank.rankIcon
+        .split(";")
+        .filter(value => value !== '');
+    }
+    return [];
+  }
+
+  get rankPercent(): number {
+    let profile = this.profile;
+    let rank = this.rank;
+
+    if (profile && rank && rank.maxExperience !== 0) {
+      return (
+        ((profile.experience - rank.minExperience) / rank.maxExperience) * 100
+      );
+    }
+    return 0;
+  }
+
+  get gifts(): IGiftDTO[] {
+    return store.state.profileGifts;
+  }
+
+  get posts(): IPostDTO[] {
+    return store.state.posts;
+  }
+
+  loadMore() {
+    if (!this.isFetching) {
+      this.isFetching = true;
+      store
+        .dispatch("getPosts", {
+          userName: this.username,
+          pageNumber: this.pageToLoad
+        })
+        .then(() => {
+          this.isFetching = false;
+          this.pageToLoad += 1;
+        });
+    }
   }
 
   beforeCreate(): void {
@@ -168,6 +199,12 @@ export default class ProfileIndex extends Vue {
   created(): void {
     console.log("created");
     store.dispatch("getProfile", this.username);
+    store.dispatch("getProfileRank", this.username);
+    store.dispatch("setPosts", { userName: this.username, pageNumber: 1 });
+    store.dispatch("getProfileGifts", {
+      userName: this.username,
+      pageNumber: 1
+    });
   }
 
   beforeMount(): void {
@@ -176,7 +213,6 @@ export default class ProfileIndex extends Vue {
 
   mounted(): void {
     console.log("mounted");
-    // this.scroll();
   }
 
   beforeUpdate(): void {
@@ -185,8 +221,6 @@ export default class ProfileIndex extends Vue {
 
   updated(): void {
     console.log("updated");
-    // console.log(this.profile);
-    // console.log(this.username);
   }
 
   beforeDestroy(): void {

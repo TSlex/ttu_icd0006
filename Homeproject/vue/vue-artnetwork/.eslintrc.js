@@ -3,10 +3,6 @@ module.exports = {
   env: {
     node: true
   },
-  globals: {
-    "$": true,
-    "jQuery": true
-  },
   extends: [
     'plugin:vue/essential',
     '@vue/standard',
@@ -25,6 +21,7 @@ module.exports = {
     'prefer-const': 'off',
     'spaced-comment': 'off',
     'comma-dangle': 'off',
+    'eol-last': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',
     '@typescript-eslint/interface-name-prefix': [

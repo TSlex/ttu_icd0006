@@ -69,13 +69,11 @@ export default class ChatRoom extends Vue {
   }
 
   sendMessage(e: Event) {
-    if (this.messageModel.messageValue === "") {
-      return;
+    if (this.messageModel.messageValue !== "") {
+      store.dispatch("sendMessage", this.messageModel).then(() => {
+        this.messageModel.messageValue = "";
+      });
     }
-
-    store.dispatch("sendMessage", this.messageModel).then(() => {
-      this.messageModel.messageValue = "";
-    });
 
     e.preventDefault();
   }
