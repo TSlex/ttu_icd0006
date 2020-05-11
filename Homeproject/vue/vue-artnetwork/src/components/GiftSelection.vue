@@ -14,7 +14,7 @@ import store from "../store";
 import router from "../router";
 import { IGiftDTO } from "@/types/IGiftDTO";
 import { GiftsApi } from "../services/GiftsApi";
-import { ResponseDTO } from "../../types/Response/ResponseDTO";
+import { ResponseDTO } from '@/types/Response/ResponseDTO';
 
 @Component
 export default class GiftSelection extends Vue {

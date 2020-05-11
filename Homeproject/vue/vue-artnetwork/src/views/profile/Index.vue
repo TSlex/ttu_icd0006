@@ -56,11 +56,11 @@
               <span class="meta_counter">{{ profile.postsCount }}</span>&nbsp;
               <span class="meta_title">posts</span>
             </li>
-            <li class="profile_meta">
+            <li class="profile_meta" @click="openFollowers">
               <span class="meta_counter">{{ profile.followersCount }}</span>&nbsp;
               <span class="meta_title">followers</span>
             </li>
-            <li class="profile_meta">
+            <li class="profile_meta" @click="openFollowed">
               <span class="meta_counter">{{ profile.followedCount }}</span>&nbsp;
               <span class="meta_title">followed</span>
             </li>
@@ -85,7 +85,7 @@
             <img :src="gift.giftImageUrl" alt="gift" />
           </div>
         </div>
-        <a class="fa fa-gift btn btn-primary profile_gift_controls" @click="openGiftsSelector" href="#"></a>
+        <a v-if="!isCurrentUser" class="fa fa-gift btn btn-primary profile_gift_controls" @click="openGiftsSelector" href="#"></a>
       </div>
       <hr />
       <div class="post_section">
@@ -137,14 +137,6 @@ import { IBlockedProfileDTO } from "../../types/IBlockedProfileDTO";
     ProfilesModal,
     GiftSelection
   },
-  // data() {
-  //   return {
-  //     renderComponent: true
-  //   };
-  // },
-  // beforeRouteUpdate(to, from, next): void {
-  //   () => {this.$el.}
-  // }
 })
 export default class ProfileIndex extends Vue {
   private pageToLoad = 2;
@@ -234,7 +226,7 @@ export default class ProfileIndex extends Vue {
   }
 
   closeFollowers() {
-    this.gifts = null;
+    this.followers = null;
   }
 
   selectPost(post: IPostDTO) {

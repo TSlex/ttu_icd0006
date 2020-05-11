@@ -4,15 +4,31 @@
       <div class="post_details_post">
         <div class="post_image">
           <div v-if="isAuthenticated" class="post_controls">
-            <a class="fa fa-edit" href="/posts/edit/08d7f4fc-ba4e-45bf-85fd-ab5cd7a78f02"></a>
-            <a class="fa fa-times-circle" href="/posts/delete/08d7f4fc-ba4e-45bf-85fd-ab5cd7a78f02"></a>
+            <template v-if="!postEditing">
+              <a class="fa fa-edit mr-2" href="#" @click="editPost(true)"></a>
+              <a class="fa fa-times-circle" href="#" @click="deletePost"></a>
+            </template>
+            <template v-else>
+              <a class="fa fa-check mr-2" href="#" @click="putPost"></a>
+              <a class="fa fa-times" href="#" @click="editPost(false)"></a>
+            </template>
           </div>
           <img :src="post.postImageUrl" alt />
         </div>
 
         <div class="post_details_meta_section">
-          <p>{{post.postTitle}} by "{{post.profileUsername}}"</p>
-          <span>{{post.postDescription}}</span>
+          <template v-if="!postEditing">
+            <p>{{post.postTitle}} by "{{post.profileUsername}}"</p>
+            <span>{{post.postDescription}}</span>
+          </template>
+          <template v-else>
+            <p>
+              <input type="text" class="post_title" v-model="postPutModel.postTitle" />
+              by "{{post.profileUsername}}"
+            </p>
+            <textarea class="post_description" rows="2" v-model="postPutModel.postDescription"></textarea>
+          </template>
+
           <ul class="post_meta_section">
             <li class="post_meta">
               <span class="meta_title">{{post.postPublicationDateTime | formatDate}}</span>
@@ -38,17 +54,31 @@
             <span class="comment_datetime">[{{comment.commentDateTime | formatTime}}]</span>
             <span class="comment_username">@{{comment.userName}}:</span>
             <span class="comment_value">&nbsp;{{comment.commentValue}}</span>
-            <div v-if="isUserComment(comment.userName)" class="comment_controls">
-              <a class="fa fa-edit"></a>
-              <a class="fa fa-times-circle"></a>
+            <div
+              v-if="isUserComment(comment.userName) && (!commentEditing || commentEditing && editedComment.id === comment.id)"
+              class="comment_controls"
+            >
+              <template v-if="!commentEditing">
+                <a class="fa fa-edit" href="#" @click="editComment(comment)"></a>
+                <a class="fa fa-times-circle" href="#" @click="deleteComment(comment.id)"></a>
+              </template>
+              <template v-else>
+                <a class="fa fa-times" href="#" @click="setCommentEditing(false)"></a>
+              </template>
             </div>
           </a>
           <a @click="loadMore" class="text-center text-primary">show more...</a>
         </div>
         <div class="row d-flex justify-content-center mt-3">
           <form v-if="isAuthenticated" class="chat_input">
-            <textarea rows="2" type="text" id="messageValue" v-model="commentModel.commentValue" />
-            <button type="submit" class="far fa-paper-plane" @click="sendComment"></button>
+            <template v-if="!commentEditing">
+              <textarea rows="2" type="text" id="messageValue" v-model="commentModel.commentValue" />
+              <button type="submit" class="far fa-paper-plane" @click="sendComment"></button>
+            </template>
+            <template v-else>
+              <textarea rows="2" type="text" id="messageValue" v-model="commentPutModel.commentValue" />
+              <button type="submit" class="far fa-paper-plane" @click="putComment"></button>
+            </template>
           </form>
           <router-link v-else to="account/login">You must be signed in to leave comments. Sign in now?</router-link>
         </div>
@@ -62,15 +92,40 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import store from "../store";
 import router from "../router";
-import { IPostDTO } from "../types/IPostDTO";
-import { ICommentPostDTO } from "../types/ICommentDTO";
+import { IPostDTO, IPostPutDTO } from "../types/IPostDTO";
+import {
+  ICommentPostDTO,
+  ICommentPutDTO,
+  ICommentDTO
+} from "../types/ICommentDTO";
 import { PostsApi } from "@/services/PostsApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
+import { CommentsApi } from "../services/CommentsApi";
 
 @Component
 export default class PostDetails extends Vue {
   @Prop()
   private post!: IPostDTO;
+
+  private comment: ICommentDTO | null = null;
+
+  private postPutModel: IPostPutDTO = {
+    id: this.post.id,
+    postTitle: this.post.postTitle,
+    postDescription: this.post.postDescription
+  };
+
+  private commentPutModel: ICommentPutDTO = {
+    id: "",
+    commentValue: ""
+  };
+
+  private postEditing: boolean = false;
+  private commentEditing: boolean = false;
+
+  get editedComment() {
+    return this.comment;
+  }
 
   get comments() {
     return store.state.comments;
@@ -82,6 +137,74 @@ export default class PostDetails extends Vue {
 
   get isAuthenticated(): boolean {
     return store.getters.isAuthenticated;
+  }
+
+  setCommentEditing(mode: boolean) {
+    this.commentEditing = mode;
+  }
+
+  editComment(comment: ICommentDTO) {
+    this.comment = comment;
+    this.commentEditing = true;
+    this.commentPutModel.id = comment.id;
+    this.commentPutModel.commentValue = comment.commentValue;
+  }
+
+  putComment(e: Event) {
+    if (
+      this.comment &&
+      this.commentPutModel.id.length > 0 &&
+      this.commentPutModel.commentValue.length > 0
+    ) {
+      this.postEditing = false;
+      CommentsApi.putComment(
+        this.commentPutModel.id,
+        this.commentPutModel,
+        this.jwt
+      ).then((response: ResponseDTO) => {
+        if (!response.errors) {
+          this.comment!.commentValue = this.commentPutModel.commentValue;
+        }
+        this.setCommentEditing(false);
+      });
+    }
+
+    e.preventDefault();
+  }
+
+  deleteComment(commentId: string) {
+    CommentsApi.deleteComment(commentId, this.jwt);
+  }
+
+  editPost(mode: boolean) {
+    this.postEditing = mode;
+  }
+
+  putPost() {
+    if (
+      this.post &&
+      this.postPutModel.id.length > 0 &&
+      this.postPutModel.postTitle.length > 0 &&
+      this.postPutModel.postDescription.length > 0
+    ) {
+      this.postEditing = false;
+      PostsApi.putPost(this.post.id, this.postPutModel, this.jwt).then(
+        (response: ResponseDTO) => {
+          if (!response.errors) {
+            this.post.postTitle = this.postPutModel.postTitle;
+            this.post.postDescription = this.postPutModel.postDescription;
+          }
+        }
+      );
+    }
+  }
+
+  deletePost() {
+    PostsApi.deletePost(this.post.id, this.jwt).then(
+      (response: ResponseDTO) => {
+        this.$emit("closePost");
+      }
+    );
   }
 
   isUserComment(userName: string): boolean {

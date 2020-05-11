@@ -28,6 +28,7 @@ const routes: Array<RouteConfig> = [
   { path: '/posts/create', name: 'PostsCreate', component: PostsCreate },
 
   // Message
+  { path: '/messages', name: 'ChatRoomNoProps', component: ChatRoom, props: true },
   { path: '/messages/:chatRoomId', name: 'ChatRoom', component: ChatRoom, props: true },
 ]
 
