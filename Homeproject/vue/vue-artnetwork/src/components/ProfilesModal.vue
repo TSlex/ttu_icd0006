@@ -1,5 +1,5 @@
 <template>
-<div class="modal_back" @click.prevent="$emit('closeProfiles')"></div>
+<div class="modal_back" @click="$emit('closeProfiles')"></div>
 </template>
 
 <script lang="ts">

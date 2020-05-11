@@ -19,7 +19,7 @@
     </header>
     <div class="container">
       <main role="main">
-        <router-view v-cloak></router-view>
+        <router-view v-cloak :key="$route.fullPath"></router-view>
       </main>
     </div>
 

@@ -124,7 +124,9 @@ export abstract class PostsApi {
 
   static async favorite(id: string, jwt: string | null): Promise<ResponseDTO> {
     const url = `${id}/favorite`;
-    const response = await this.axios.post<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
+
+    console.log(response)
 
     switch (response.status) {
       case 200:
@@ -137,7 +139,9 @@ export abstract class PostsApi {
 
   static async unfavorite(id: string, jwt: string | null): Promise<ResponseDTO> {
     const url = `${id}/unfavorite`;
-    const response = await this.axios.post<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
+
+    console.log(response)
 
     switch (response.status) {
       case 200:

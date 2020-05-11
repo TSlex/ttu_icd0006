@@ -1,11 +1,10 @@
 <template>
-  <div>
+  <div class="text-center">
     <h1>Register</h1>
 
-    <div class="row">
+    <div class="row justify-content-center">
       <div class="col-md-4">
         <form>
-          <h4>Create a new account.</h4>
           <hr />
           <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
             <ul>
@@ -33,20 +32,10 @@
             <span class="text-danger field-validation-valid" data-valmsg-for="Input.ConfirmPassword" data-valmsg-replace="true"></span>
           </div>
           <button type="submit" class="btn btn-primary" @click="onSubmit">Register</button>
+          <p class="mt-3">
+            <router-link to="login">Already have an account? Login</router-link>
+          </p>
         </form>
-      </div>
-      <div class="col-md-6 col-md-offset-2">
-        <section>
-          <h4>Use another service to register.</h4>
-          <hr />
-          <div>
-            <p>
-              There are no external authentication services configured. See
-              <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-              for details on setting up this ASP.NET application to support logging in via external services.
-            </p>
-          </div>
-        </section>
       </div>
     </div>
   </div>

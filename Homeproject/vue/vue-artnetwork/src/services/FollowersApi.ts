@@ -48,6 +48,7 @@ export abstract class FollowersApi {
         return [];
     }
   }
+
   static async getFollowedCount(userName: string, jwt: string | null): Promise<CountResponseDTO> {
     const url = `${userName}/followed/count`;
     const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });

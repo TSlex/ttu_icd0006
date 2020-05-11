@@ -27,6 +27,8 @@ import { PostsApi } from '@/services/PostsApi';
 import { CommentsApi } from '@/services/CommentsApi';
 import { GiftsApi } from '@/services/GiftsApi';
 import { RanksApi } from '@/services/RanksApi';
+import { FollowersApi } from '@/services/FollowersApi';
+import { IFollowerDTO } from '@/types/IFollowerDTO';
 
 Vue.use(Vuex)
 
@@ -247,6 +249,16 @@ export default new Vuex.Store({
       return response;
     },
 
+    // Followers
+    async getFollowers(context, params: { userName: string; pageNumber: number }): Promise<IFollowerDTO[]> {
+      const response = await FollowersApi.getFollowers(params.userName, params.pageNumber, context.state.jwt);
+      return response;
+    },
+    async getFollowed(context, params: { userName: string; pageNumber: number }): Promise<IFollowerDTO[]> {
+      const response = await FollowersApi.getFollowed(params.userName, params.pageNumber, context.state.jwt);
+      return response;
+    },
+
     // Messages
     async getChatRooms(context): Promise<IChatRoomDTO[]> {
       const response = await ChatRoomsApi.getChatRooms(context.state.jwt);
@@ -299,6 +311,12 @@ export default new Vuex.Store({
     async postComment(context, comment: ICommentPostDTO): Promise<ResponseDTO> {
       const response = await CommentsApi.postComment(comment, context.state.jwt);
       context.dispatch('setComments', { postId: comment.postId, pageNumber: 1 });
+      return response;
+    },
+
+    // Gifts
+    async getGifts(context, pageNumber: number): Promise<IGiftDTO[]> {
+      const response = await GiftsApi.getGifts(pageNumber, context.state.jwt);
       return response;
     },
 

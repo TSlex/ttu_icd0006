@@ -77,8 +77,8 @@ export abstract class GiftsApi {
   }
 
   static async sendGiftToUsername(userName: string, giftCode: string, jwt: string | null): Promise<ResponseDTO> {
-    const url = `${userName}/send`
-    const response = await this.axios.post<ResponseDTO>(url, { giftCode: giftCode }, { headers: { Authorization: 'Bearer ' + jwt } });
+    const url = `${userName}/${giftCode}/send`
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:

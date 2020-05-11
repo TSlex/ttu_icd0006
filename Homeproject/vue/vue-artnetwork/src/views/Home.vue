@@ -1,12 +1,9 @@
 <template>
   <div class="home">
-    <a
-      class="float_control feed_controls far fa-caret-square-up"
-      id="toUpButton"
-      v-on:click="scrollTop"
-    ></a>
+    <PostDetails v-if="post" :post="post" v-on:closePost="closePost" />
+    <a class="float_control feed_controls far fa-caret-square-up" id="toUpButton" v-on:click="scrollTop"></a>
     <div class="feed text-center">
-      <a v-for="post in feed" :key="post.id" href="#">
+      <a v-for="post in feed" :key="post.id" @click="selectPost(post)">
         <div class="feed_post">
           <div class="post_image">
             <img v-bind:src="post.postImageUrl" alt />
@@ -39,14 +36,29 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import PostDetails from "../components/PostDetails.vue";
 import store from "../store";
 import router from "../router";
 import { IPostDTO } from "../types/IPostDTO";
 
-@Component
+@Component({
+  components: {
+    PostDetails
+  }
+})
 export default class Home extends Vue {
   private pageToLoad = 2;
   private isFetching = false;
+
+  private post: IPostDTO | null = null;
+
+  selectPost(post: IPostDTO) {
+    this.post = post;
+  }
+
+  closePost() {
+    this.post = null;
+  }
 
   scrollTop() {
     document.documentElement.scrollTop = 0;

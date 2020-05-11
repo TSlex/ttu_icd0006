@@ -1,13 +1,15 @@
 <template>
   <div id="profileIndex">
-    <PostDetails v-if="post" :post="post" v-on:closePost="closePost"/>
+    <ProfilesModal v-if="followers" :profilesData="followers" v-on:closeProfiles="closeFollowers" />
+    <GiftSelection v-if="gifts" :gifts="gifts" :username="username" v-on:closeGifts="closeGiftsSelector" />
+    <PostDetails v-if="post" :post="post" v-on:closePost="closePost" />
     <div v-if="profile && rank" class="profile_conainer">
       <div class="profile_section">
         <div class="col-3 d-flex justify-content-center">
           <a href="/identity/account/manage/avatar">
             <div class="profile_image" :style="`background-color: ${rank.rankColor} !important;`">
               <!--<img alt width="150px" height="150px" :src="profile.profileAvatarUrl" />-->
-              <ImageComponent :id="profile.profileAvatarId" />
+              <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId" />
             </div>
           </a>
         </div>
@@ -79,11 +81,11 @@
       <hr />
       <div class="profile_gift_section">
         <div class="gift_carousel">
-          <div v-for="(gift, index) in gifts" :key="index" class="profile_gift">
+          <div v-for="(gift, index) in profileGifts" :key="index" class="profile_gift">
             <img :src="gift.giftImageUrl" alt="gift" />
           </div>
         </div>
-        <a class="fa fa-gift btn btn-primary profile_gift_controls" href="#"></a>
+        <a class="fa fa-gift btn btn-primary profile_gift_controls" @click="openGiftsSelector" href="#"></a>
       </div>
       <hr />
       <div class="post_section">
@@ -106,28 +108,52 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import ImageComponent from "../../components/Image.vue";
 import PostDetails from "../../components/PostDetails.vue";
+import ProfilesModal from "../../components/ProfilesModal.vue";
+import GiftSelection from "../../components/GiftSelection.vue";
 import store from "@/store";
+import router from "../../router";
 import { IProfileDTO } from "@/types/IProfileDTO";
 import { ImagesApi } from "../../services/ImagesApi";
 import { IPostDTO } from "../../types/IPostDTO";
 import { IGiftDTO } from "../../types/IGiftDTO";
 import { IRankDTO } from "../../types/IRankDTO";
-import { ChatRoomsApi } from "../../services/ChatRoomsApi";
-import router from "../../router";
-import { ProfileApi } from "@/services/ProfileApi";
 import { ResponseDTO } from "../../types/Response/ResponseDTO";
+import { ChatRoomsApi } from "../../services/ChatRoomsApi";
+import { ProfileApi } from "@/services/ProfileApi";
+import { IFollowerDTO } from "../../types/IFollowerDTO";
+import { IBlockedProfileDTO } from "../../types/IBlockedProfileDTO";
+// import VueRouter from 'vue-router';
+
+// const router = new VueRouter({
+//   routes: [
+//     { path: '/user/:id', component: ProfileIndex }
+//   ]
+// })
 
 @Component({
   components: {
     ImageComponent,
-    PostDetails
-  }
+    PostDetails,
+    ProfilesModal,
+    GiftSelection
+  },
+  // data() {
+  //   return {
+  //     renderComponent: true
+  //   };
+  // },
+  // beforeRouteUpdate(to, from, next): void {
+  //   () => {this.$el.}
+  // }
 })
 export default class ProfileIndex extends Vue {
   private pageToLoad = 2;
   private isFetching = false;
 
   private post: IPostDTO | null = null;
+
+  private followers: IFollowerDTO[] | null = null;
+  private gifts: IGiftDTO[] | null = null;
 
   @Prop()
   private username!: string;
@@ -169,12 +195,46 @@ export default class ProfileIndex extends Vue {
     return 0;
   }
 
-  get gifts(): IGiftDTO[] {
+  get jwt() {
+    return store.getters.getJwt;
+  }
+
+  get profileGifts(): IGiftDTO[] {
     return store.state.profileGifts;
   }
 
   get posts(): IPostDTO[] {
     return store.state.posts;
+  }
+
+  openGiftsSelector() {
+    store.dispatch("getGifts", 1).then((response: IGiftDTO[]) => {
+      this.gifts = response;
+    });
+  }
+
+  closeGiftsSelector() {
+    this.gifts = null;
+  }
+
+  openFollowers() {
+    store
+      .dispatch("getFollowers", { userName: this.username, pageNumber: 1 })
+      .then((response: IFollowerDTO[]) => {
+        this.followers = response;
+      });
+  }
+
+  openFollowed() {
+    store
+      .dispatch("getFollowed", { userName: this.username, pageNumber: 1 })
+      .then((response: IFollowerDTO[]) => {
+        this.followers = response;
+      });
+  }
+
+  closeFollowers() {
+    this.gifts = null;
   }
 
   selectPost(post: IPostDTO) {
@@ -198,10 +258,6 @@ export default class ProfileIndex extends Vue {
           this.pageToLoad += 1;
         });
     }
-  }
-
-  get jwt() {
-    return store.getters.getJwt;
   }
 
   openChatWithUser() {
@@ -294,6 +350,7 @@ export default class ProfileIndex extends Vue {
 
   updated(): void {
     console.log("updated");
+    console.log(this.username);
   }
 
   beforeDestroy(): void {

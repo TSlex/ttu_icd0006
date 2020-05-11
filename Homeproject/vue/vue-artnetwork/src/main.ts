@@ -8,6 +8,9 @@ import 'popper.js'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
 import '@fortawesome/fontawesome-free/css/all.css'
 
 import '@/static/site.css'
@@ -28,6 +31,8 @@ Vue.filter('formatTime', function (value: any) {
 })
 
 Vue.config.productionTip = false;
+
+Vue.use(VueSweetalert2);
 
 new Vue({
   router,

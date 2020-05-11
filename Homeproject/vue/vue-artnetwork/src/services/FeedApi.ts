@@ -19,14 +19,7 @@ export abstract class FeedApi {
 
   static async getFeedCount(jwt: string | null): Promise<CountResponseDTO> {
     const url = "count";
-
-    let response;
-
-    if (jwt) {
-      response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
-    } else {
-      response = await this.axios.get<CountResponseDTO>(url);
-    }
+    const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:
@@ -41,13 +34,7 @@ export abstract class FeedApi {
 
   static async getFeed(pageNUmber: number, jwt: string | null): Promise<IPostDTO[]> {
     const url = pageNUmber.toString();
-    let response;
-
-    if (jwt) {
-      response = await this.axios.get<IPostDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
-    } else {
-      response = await this.axios.get<IPostDTO[]>(url);
-    }
+    const response = await this.axios.get<IPostDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:
