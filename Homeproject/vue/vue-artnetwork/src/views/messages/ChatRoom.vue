@@ -1,6 +1,18 @@
 <template>
   <div class="chat_section mt-5">
-    <ProfilesModal v-if="isMembersModal" :profilesData="members" v-on:closeProfiles="closeMembers" />
+    <Modal v-if="isMembersModal" v-on:closeModal="closeMembers">
+      <router-link class="gallery_item" :to="member.userName" v-for="(member, index) in members" :key="index">
+        <form asp-action="Delete">
+          <button type="submit" class="item_controls btn-link">
+            <i class="fas fa-times-circle"></i>
+          </button>
+          <input type="hidden" asp-for="@follower.Id" name="Id" />
+        </form>
+
+        <ImageComponent :id="member.profileAvatarId" :key="member.profileAvatarId" height="100px" width="100px" />
+        <span class="item_name">{{member.userName}}</span>
+      </router-link>
+    </Modal>
 
     <div class="col-md-4" style="padding: unset">
       <ul class="nav nav-pills flex-column chat_rooms text-center">
@@ -110,7 +122,7 @@
 import $ from "jquery";
 import { Component, Prop, Vue } from "vue-property-decorator";
 import ImageComponent from "../../components/Image.vue";
-import ProfilesModal from "../../components/ProfilesModal.vue";
+import Modal from "../../components/Modal.vue";
 import store from "@/store";
 import { IMessagePostDTO } from "../../types/IMessageDTO";
 import { IChatMemberDTO } from "@/types/IChatMemberDTO";
@@ -120,7 +132,7 @@ import Axios, { AxiosResponse } from "axios";
 @Component({
   components: {
     ImageComponent,
-    ProfilesModal
+    Modal
   }
 })
 export default class ChatRoom extends Vue {

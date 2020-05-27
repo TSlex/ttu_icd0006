@@ -1,5 +1,5 @@
 <template>
-  <div class="modal_back" @click="$emit('closePost')">
+  <div class="modal_back" @click="closeModal">
     <ProfilesModal v-if="favorites" :profilesData="favorites" v-on:closeProfiles="closeFavorites" />
     <div class="post_details" @click.stop>
       <div class="post_details_post">
@@ -14,7 +14,7 @@
               <a class="fa fa-times" href="#" @click="editPost(false)"></a>
             </template>
           </div>
-          <img :src="post.postImageUrl" alt />
+          <ImageComponent :id="post.postImageId" :key="post.postImageId" height="unset" width="unset" />
         </div>
 
         <div class="post_details_meta_section">
@@ -24,10 +24,10 @@
           </template>
           <template v-else>
             <p>
-              <input type="text" class="post_title" v-model="postPutModel.postTitle" />
+              <input type="text" class="post_title text-center" v-model="postPutModel.postTitle" />
               by "{{post.profileUsername}}"
             </p>
-            <textarea class="post_description" rows="2" v-model="postPutModel.postDescription"></textarea>
+            <textarea class="post_description text-center" rows="2" v-model="postPutModel.postDescription"></textarea>
           </template>
 
           <ul class="post_meta_section">
@@ -39,7 +39,8 @@
               <span class="meta_title">favorites</span>
             </li>
             <li class="post_meta">
-              <span class="meta_counter">{{post.postCommentsCount}}&nbsp;</span>
+              <span class="meta_counter" v-if="comments.length">{{comments.length}}&nbsp;</span>
+              <span class="meta_counter" v-else>{{post.postCommentsCount}}&nbsp;</span>
               <span class="meta_title">comments</span>
             </li>
             <li v-if="isAuthenticated">
@@ -61,7 +62,7 @@
             >
               <template v-if="!commentEditing">
                 <a class="fa fa-edit" href="#" @click="editComment(comment)"></a>
-                <a class="fa fa-times-circle" href="#" @click="deleteComment(comment.id)"></a>
+                <a class="fa fa-times-circle" href="#" @click="deleteComment(comment)"></a>
               </template>
               <template v-else>
                 <a class="fa fa-times" href="#" @click="setCommentEditing(false)"></a>
@@ -99,6 +100,7 @@ import {
   ICommentPutDTO,
   ICommentDTO
 } from "../types/ICommentDTO";
+import ImageComponent from "../components/Image.vue";
 import ProfilesModal from "../components/ProfilesModal.vue";
 import { PostsApi } from "@/services/PostsApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
@@ -107,6 +109,7 @@ import { IFavoriteDTO } from "../types/IFavoriteDTO";
 
 @Component({
   components: {
+    ImageComponent,
     ProfilesModal
   }
 })
@@ -130,6 +133,12 @@ export default class PostDetails extends Vue {
   private postEditing: boolean = false;
   private commentEditing: boolean = false;
   private favorites: IFavoriteDTO[] | null = null;
+
+  closeModal() {
+    if (!this.postEditing) {
+      this.$emit('closePost')
+    }
+  }
 
   openFavorites() {
     store
@@ -192,8 +201,8 @@ export default class PostDetails extends Vue {
     e.preventDefault();
   }
 
-  deleteComment(commentId: string) {
-    CommentsApi.deleteComment(commentId, this.jwt);
+  deleteComment(comment: ICommentDTO) {
+    store.dispatch("deleteComment", comment)
   }
 
   editPost(mode: boolean) {

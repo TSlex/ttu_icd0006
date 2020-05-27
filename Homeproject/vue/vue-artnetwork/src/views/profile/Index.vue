@@ -3,6 +3,23 @@
     <ProfilesModal v-if="followers" :profilesData="followers" v-on:closeProfiles="closeFollowers" />
     <GiftSelection v-if="gifts" :gifts="gifts" :username="username" v-on:closeGifts="closeGiftsSelector" />
     <PostDetails v-if="post" :post="post" v-on:closePost="closePost" />
+    <Modal v-if="isRankDetails" v-on:closeModal="closeRankDetails">
+      <div class="d-flex flex-column align-items-center text-center" style="position: relative; padding: 20px">
+        <div
+          class="progress_container"
+          style="background: conic-gradient(#6633FF 100%, #FFFFFF 105%) 50% 50% / 100% 100% no-repeat;"
+        >
+          <div class="progress_container_front">
+            <span class="progress_value">100%</span>
+          </div>
+        </div>
+        <span class="mt-4" style="color: #000000; font-size: 24px; font-family: Consolas, serif">Master</span>
+        <hr style="width: 400px" />
+        <span
+          style="display: inline-block; max-width: 600px; word-break: break-all; word-break: break-word;"
+        >Yes, you feel confidence and even can teach the basics to Newbies. However, there is no limit to perfection C:</span>
+      </div>
+    </Modal>
     <div v-if="profile && rank" class="profile_conainer">
       <div class="profile_section">
         <div class="col-3 d-flex justify-content-center">
@@ -40,7 +57,7 @@
               </div>
             </li>
           </ul>
-          <div v-if="rank" class="profile_rank">
+          <div v-if="rank" class="profile_rank" @click="openRankDetails" style="cursor: pointer;">
             <span class="rank_title" :style="`color: ${rank.textColor}`">{{rank.rankTitle}}</span>
             <div class="rank_bar_back"></div>
             <div class="rank_bar" :style="`width: ${rankPercent}%; background-color: ${rank.rankColor}`"></div>
@@ -93,11 +110,17 @@
         <a v-if="!isCurrentUser" class="fa fa-gift btn btn-primary profile_gift_controls" @click="openGiftsSelector" href="#"></a>
       </div>
       <hr />
-      <div class="posts_section justify-content-center">
+      <div class="posts_section align-content-center d-flex flex-column">
         <div v-if="posts.length > 0" class="post_row card-columns">
           <a v-for="post in posts" :key="post.id" @click="selectPost(post)">
             <div class="post_item card">
-              <img alt="post" :src="post.postImageUrl" class="post_image card-img" />
+              <ImageComponent
+                :id="post.postImageId"
+                :key="post.postImageId"
+                height="unset"
+                width="unset"
+                htmlClass="post_image card-img"
+              />
             </div>
           </a>
         </div>
@@ -115,6 +138,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import ImageComponent from "../../components/Image.vue";
 import PostDetails from "../../components/PostDetails.vue";
 import ProfilesModal from "../../components/ProfilesModal.vue";
+import Modal from "../../components/Modal.vue";
 import GiftSelection from "../../components/GiftSelection.vue";
 import store from "@/store";
 import router from "../../router";
@@ -141,6 +165,7 @@ import { IBlockedProfileDTO } from "../../types/IBlockedProfileDTO";
     ImageComponent,
     PostDetails,
     ProfilesModal,
+    Modal,
     GiftSelection
   }
 })
@@ -152,6 +177,8 @@ export default class ProfileIndex extends Vue {
 
   private followers: IFollowerDTO[] | null = null;
   private gifts: IGiftDTO[] | null = null;
+
+  private isRankDetails: boolean = false;
 
   @Prop()
   private username!: string;
@@ -220,6 +247,16 @@ export default class ProfileIndex extends Vue {
     let reg = new RegExp("(?:http(?:s)?:[/]{2})?[A-z]*[.][A-z]*(?:[/].*)?");
 
     return url !== null && url.search(reg) === 0;
+  }
+
+  openRankDetails() {
+    if (this.rank && this.isCurrentUser) {
+      this.isRankDetails = true;
+    }
+  }
+
+  closeRankDetails() {
+    this.isRankDetails = false;
   }
 
   openGiftsSelector() {

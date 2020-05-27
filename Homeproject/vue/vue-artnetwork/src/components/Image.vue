@@ -1,5 +1,6 @@
-<template>
-  <img v-if="src" img :src="src" alt="image component" :height="Height" :width="Width" />
+<template v-if="src">
+  <img v-if="Class" :class="Class" :src="src" alt="image component" :height="Height" :width="Width" />
+  <img v-else :src="src" alt="image component" :height="Height" :width="Width" />
 </template>
 
 <script lang="ts">
@@ -12,6 +13,7 @@ export default class ImageComponent extends Vue {
   @Prop() private id!: string;
   @Prop() private height!: string;
   @Prop() private width!: string;
+  @Prop() private htmlClass!: string;
 
   get Id() {
     return this.id ?? "null";
@@ -23,6 +25,10 @@ export default class ImageComponent extends Vue {
 
   get Width() {
     return this.width ?? "150px";
+  }
+
+  get Class() {
+    return this.htmlClass ?? null;
   }
 
   private src: string = "";

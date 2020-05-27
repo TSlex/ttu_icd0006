@@ -160,6 +160,14 @@ export default new Vuex.Store({
     setComments(state, comments: ICommentDTO[]) {
       state.comments = comments;
     },
+    deleteComment(state, comment: ICommentDTO) {
+      state.comments.forEach((element: ICommentDTO, index) => {
+        console.log(element.id === comment.id)
+        if (element.id === comment.id) {
+          state.comments.splice(index, 1)
+        }
+      });
+    },
 
     // ProfileGifts
     setProfileGifts(state, gifts: IGiftDTO[]) {
@@ -261,7 +269,7 @@ export default new Vuex.Store({
     },
 
     // Favorites
-    async getFavorites(context, params: { postId: string; pageNumber: number}): Promise<IFollowerDTO[]> {
+    async getFavorites(context, params: { postId: string; pageNumber: number }): Promise<IFollowerDTO[]> {
       const response = await FavoritesApi.getFavorites(params.postId, params.pageNumber, context.state.jwt);
       return response;
     },
@@ -289,12 +297,12 @@ export default new Vuex.Store({
     },
 
     // Posts
-    async getPosts(context, params: { userName: string; pageNumber: number }): Promise<IPostPostDTO[]> {
+    async getPosts(context, params: { userName: string; pageNumber: number }): Promise<IPostDTO[]> {
       const response = await PostsApi.getProfilePosts(params.userName, params.pageNumber, context.state.jwt);
       context.commit('getPosts', response)
       return response;
     },
-    async setPosts(context, params: { userName: string; pageNumber: number }): Promise<IPostPostDTO[]> {
+    async setPosts(context, params: { userName: string; pageNumber: number }): Promise<IPostDTO[]> {
       const response = await PostsApi.getProfilePosts(params.userName, params.pageNumber, context.state.jwt);
       context.commit('setPosts', response)
       return response;
@@ -318,6 +326,11 @@ export default new Vuex.Store({
     async postComment(context, comment: ICommentPostDTO): Promise<ResponseDTO> {
       const response = await CommentsApi.postComment(comment, context.state.jwt);
       context.dispatch('setComments', { postId: comment.postId, pageNumber: 1 });
+      return response;
+    },
+    async deleteComment(context, comment: ICommentDTO): Promise<ResponseDTO> {
+      const response = await CommentsApi.deleteComment(comment.id, context.state.jwt);
+      context.commit('deleteComment', comment);
       return response;
     },
 

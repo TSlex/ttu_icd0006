@@ -135,6 +135,7 @@ export default class Home extends Vue {
 
   beforeDestroy(): void {
     console.log("beforeDestroy");
+    window.onscroll = null;
   }
 
   destroyed(): void {

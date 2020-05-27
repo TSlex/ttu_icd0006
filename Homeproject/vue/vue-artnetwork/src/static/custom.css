@@ -92,6 +92,8 @@ header {
 
 .float_control {
     position: fixed;
+    top: 100px;
+    left: 100px;
     transition: color ease-in .2s;
 }
 
@@ -102,8 +104,32 @@ header {
 }
 
 .float_control.feed_controls {
-    font-size: 40px;
+    font-size: 50px;
     display: none;
+}
+
+/* Commont */
+.btn_circle{
+    color: #005cbf !important;
+    font-size: 30px;
+    transition: color ease-in .2s;
+    transition: text-shadow linear .2s;
+    background: white;
+    border: 1px #005cbf solid;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.btn_circle:hover{
+    color: white !important;
+    background: #005cbfAA;
+    font-size: 30px;
+    box-shadow: 0 0 30px #005cbf66, 0 0 30px #005cbf66;
+}
+
+.btn_circle:active{
+    outline: none;
 }
 
 /*navbar*/
@@ -370,6 +396,32 @@ header {
     z-index: 0;
 }
 
+.progress_container{
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 1px solid gray;
+    padding: 10px;
+}
+
+.progress_container_front{
+    background: white;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.progress_value{
+    font-family: Consolas, serif;
+    font-size: 30px;
+}
+
 /*preferences*/
 .preferences_section {
     /*margin-top: 4em !important;*/
@@ -420,6 +472,9 @@ header {
     border-radius: 4px;
     display: flex;
     height: 600px;
+    background: white;
+    margin: 100px auto;
+    max-width: 1140px;
 }
 
 .post_details_post {
