@@ -35,8 +35,8 @@ export abstract class FavoritesApi {
     }
   }
 
-  static async getFavorites(postId: string, pageNUmber: number, jwt: string | null): Promise<IFavoriteDTO[]> {
-    const url = `${postId}/${pageNUmber}`
+  static async getFavorites(postId: string, pageNumber: number, jwt: string | null): Promise<IFavoriteDTO[]> {
+    const url = `${postId}/${pageNumber}`
     const response = await this.axios.get<IFavoriteDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {

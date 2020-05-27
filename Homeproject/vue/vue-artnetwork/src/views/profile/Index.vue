@@ -8,7 +8,6 @@
         <div class="col-3 d-flex justify-content-center">
           <a href="/identity/account/manage/avatar">
             <div class="profile_image" :style="`background-color: ${rank.rankColor} !important;`">
-              <!--<img alt width="150px" height="150px" :src="profile.profileAvatarUrl" />-->
               <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId" />
             </div>
           </a>
@@ -45,7 +44,8 @@
             <span class="rank_title" :style="`color: ${rank.textColor}`">{{rank.rankTitle}}</span>
             <div class="rank_bar_back"></div>
             <div class="rank_bar" :style="`width: ${rankPercent}%; background-color: ${rank.rankColor}`"></div>
-            <span class="rank_score">{{profile.experience}}/{{rank.maxExperience}}</span>
+            <span v-if="!isExpMax" class="rank_score">{{profile.experience}}/{{rank.maxExperience}}</span>
+            <span v-else class="rank_score">MAX</span>
             <div class="rank_icons">
               <i v-for="(icon, i) in rankIcons" :key="i" :class="'fa fa-' + icon" />
             </div>
@@ -57,12 +57,16 @@
               <span class="meta_title">posts</span>
             </li>
             <li class="profile_meta" @click="openFollowers">
-              <span class="meta_counter">{{ profile.followersCount }}</span>&nbsp;
-              <span class="meta_title">followers</span>
+              <a class="btn-link">
+                <span class="meta_counter">{{ profile.followersCount }}</span>&nbsp;
+                <span class="meta_title">followers</span>
+              </a>
             </li>
             <li class="profile_meta" @click="openFollowed">
-              <span class="meta_counter">{{ profile.followedCount }}</span>&nbsp;
-              <span class="meta_title">followed</span>
+              <a class="btn-link">
+                <span class="meta_counter">{{ profile.followedCount }}</span>&nbsp;
+                <span class="meta_title">followed</span>
+              </a>
             </li>
           </ul>
 
@@ -70,35 +74,37 @@
             <h1>{{ profile.profileFullName }}</h1>
             <span>{{ profile.profileAbout }}</span>
             <br />
-            <a :href="'//' + profile.profileWorkPlace" target="_blank">
-              {{
-              profile.profileWorkPlace
-              }}
-            </a>
+            <a
+              v-if="isLink(profile.profileWorkPlace)"
+              :href="profile.profileWorkPlace"
+              target="_blank"
+            >{{profile.profileWorkPlace}}</a>
+            <span v-else>{{profile.profileWorkPlace}}</span>
           </div>
         </div>
       </div>
       <hr />
       <div class="profile_gift_section">
-        <div class="gift_carousel">
-          <div v-for="(gift, index) in profileGifts" :key="index" class="profile_gift">
-            <img :src="gift.giftImageUrl" alt="gift" />
-          </div>
+        <div v-for="(gift, index) in profileGifts" :key="index" class="profile_gift">
+          <ImageComponent :id="gift.giftImageId" :key="gift.giftImageId" />
         </div>
+        <span v-if="profileGifts.length <= 0">This user has no gifts yet. Give? :)</span>
+
         <a v-if="!isCurrentUser" class="fa fa-gift btn btn-primary profile_gift_controls" @click="openGiftsSelector" href="#"></a>
       </div>
       <hr />
-      <div class="post_section">
-        <div class="post_row card-columns">
+      <div class="posts_section justify-content-center">
+        <div v-if="posts.length > 0" class="post_row card-columns">
           <a v-for="post in posts" :key="post.id" @click="selectPost(post)">
             <div class="post_item card">
               <img alt="post" :src="post.postImageUrl" class="post_image card-img" />
             </div>
           </a>
         </div>
-      </div>
-      <div class="text-center">
-        <button @click="loadMore" class="btn_circle fa fa-download"></button>
+        <div class="text-center" v-if="posts.length > 0">
+          <button @click="loadMore" class="btn_circle fa fa-download"></button>
+        </div>
+        <span v-else>Nothing here yet</span>
       </div>
     </div>
   </div>
@@ -136,7 +142,7 @@ import { IBlockedProfileDTO } from "../../types/IBlockedProfileDTO";
     PostDetails,
     ProfilesModal,
     GiftSelection
-  },
+  }
 })
 export default class ProfileIndex extends Vue {
   private pageToLoad = 2;
@@ -162,6 +168,13 @@ export default class ProfileIndex extends Vue {
     return store.state.profile!;
   }
 
+  get isExpMax(): boolean {
+    if (this.profile && this.rank) {
+      return this.profile.experience === this.rank.maxExperience;
+    }
+    return false;
+  }
+
   get rank(): IRankDTO | null {
     return store.state.profileRank!;
   }
@@ -179,9 +192,13 @@ export default class ProfileIndex extends Vue {
     let profile = this.profile;
     let rank = this.rank;
 
-    if (profile && rank && rank.maxExperience !== 0) {
+    if (profile && rank && rank.maxExperience - rank.minExperience !== 0) {
+      let minExperience = rank.minExperience >= 0 ? rank.minExperience : 0;
+
       return (
-        ((profile.experience - rank.minExperience) / rank.maxExperience) * 100
+        ((profile.experience - minExperience) /
+          (rank.maxExperience - minExperience)) *
+        100
       );
     }
     return 0;
@@ -197,6 +214,12 @@ export default class ProfileIndex extends Vue {
 
   get posts(): IPostDTO[] {
     return store.state.posts;
+  }
+
+  isLink(url: string): boolean {
+    let reg = new RegExp("(?:http(?:s)?:[/]{2})?[A-z]*[.][A-z]*(?:[/].*)?");
+
+    return url !== null && url.search(reg) === 0;
   }
 
   openGiftsSelector() {

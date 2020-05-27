@@ -1,12 +1,14 @@
 <template>
   <div class="home">
     <PostDetails v-if="post" :post="post" v-on:closePost="closePost" />
+    <h3 class="text-center">Last posts</h3>
+    <hr />
     <a class="float_control feed_controls far fa-caret-square-up" id="toUpButton" v-on:click="scrollTop"></a>
     <div class="feed text-center">
       <a v-for="post in feed" :key="post.id" @click="selectPost(post)">
         <div class="feed_post">
           <div class="post_image">
-            <img v-bind:src="post.postImageUrl" alt />
+            <ImageComponent :id="post.postImageId" :key="post.postImageId" height="unset" width="unset" />
           </div>
 
           <div class="post_details_meta_section">
@@ -30,12 +32,14 @@
           </div>
         </div>
       </a>
+      <span v-if="feed.length <= 0" style="margin-top: 100px">Nothing here yet...</span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import ImageComponent from "../components/Image.vue";
 import PostDetails from "../components/PostDetails.vue";
 import store from "../store";
 import router from "../router";
@@ -43,6 +47,7 @@ import { IPostDTO } from "../types/IPostDTO";
 
 @Component({
   components: {
+    ImageComponent,
     PostDetails
   }
 })

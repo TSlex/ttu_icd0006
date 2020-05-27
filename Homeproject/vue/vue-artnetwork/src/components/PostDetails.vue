@@ -1,5 +1,6 @@
 <template>
-  <div class="modal_back" @click.prevent="$emit('closePost')">
+  <div class="modal_back" @click="$emit('closePost')">
+    <ProfilesModal v-if="favorites" :profilesData="favorites" v-on:closeProfiles="closeFavorites" />
     <div class="post_details" @click.stop>
       <div class="post_details_post">
         <div class="post_image">
@@ -33,7 +34,7 @@
             <li class="post_meta">
               <span class="meta_title">{{post.postPublicationDateTime | formatDate}}</span>
             </li>
-            <li class="post_meta">
+            <li class="post_meta" @click="openFavorites">
               <span class="meta_counter">{{post.postFavoritesCount}}&nbsp;</span>
               <span class="meta_title">favorites</span>
             </li>
@@ -98,11 +99,17 @@ import {
   ICommentPutDTO,
   ICommentDTO
 } from "../types/ICommentDTO";
+import ProfilesModal from "../components/ProfilesModal.vue";
 import { PostsApi } from "@/services/PostsApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import { CommentsApi } from "../services/CommentsApi";
+import { IFavoriteDTO } from "../types/IFavoriteDTO";
 
-@Component
+@Component({
+  components: {
+    ProfilesModal
+  }
+})
 export default class PostDetails extends Vue {
   @Prop()
   private post!: IPostDTO;
@@ -122,6 +129,19 @@ export default class PostDetails extends Vue {
 
   private postEditing: boolean = false;
   private commentEditing: boolean = false;
+  private favorites: IFavoriteDTO[] | null = null;
+
+  openFavorites() {
+    store
+      .dispatch("getFavorites", { postId: this.post.id, pageNumber: 1 })
+      .then((response: IFavoriteDTO[]) => {
+        this.favorites = response;
+      });
+  }
+
+  closeFavorites() {
+    this.favorites = null;
+  }
 
   get editedComment() {
     return this.comment;

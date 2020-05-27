@@ -29,6 +29,7 @@ import { GiftsApi } from '@/services/GiftsApi';
 import { RanksApi } from '@/services/RanksApi';
 import { FollowersApi } from '@/services/FollowersApi';
 import { IFollowerDTO } from '@/types/IFollowerDTO';
+import { FavoritesApi } from '@/services/FavoritesApi';
 
 Vue.use(Vuex)
 
@@ -256,6 +257,12 @@ export default new Vuex.Store({
     },
     async getFollowed(context, params: { userName: string; pageNumber: number }): Promise<IFollowerDTO[]> {
       const response = await FollowersApi.getFollowed(params.userName, params.pageNumber, context.state.jwt);
+      return response;
+    },
+
+    // Favorites
+    async getFavorites(context, params: { postId: string; pageNumber: number}): Promise<IFollowerDTO[]> {
+      const response = await FavoritesApi.getFavorites(params.postId, params.pageNumber, context.state.jwt);
       return response;
     },
 

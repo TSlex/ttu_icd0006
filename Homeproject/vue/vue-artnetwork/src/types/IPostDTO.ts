@@ -4,7 +4,6 @@ export interface IPostDTO {
   postDescription: string;
   profileUsername: string;
   postImageId: string;
-  postImageUrl: string;
   postPublicationDateTime: Date;
   postFavoritesCount: number;
   postCommentsCount: number;

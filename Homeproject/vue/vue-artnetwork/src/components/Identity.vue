@@ -10,10 +10,10 @@
     </template>
     <template v-else>
       <li class="nav-item">
-        <router-link to="/account/login" class="nav-link text-dark">Login</router-link>
+        <router-link to="/account/register" class="nav-link text-dark">Register</router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/account/register" class="nav-link text-dark">Register</router-link>
+        <router-link to="/account/login" class="nav-link text-dark">Login</router-link>
       </li>
     </template>
   </ul>

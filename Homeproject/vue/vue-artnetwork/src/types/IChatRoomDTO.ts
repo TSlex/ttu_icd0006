@@ -5,6 +5,7 @@ export interface IChatRoomDTO {
   chatRoomImageId: string;
   lastMessageValue: string;
   lastMessageDateTime: Date;
+  lastMessageProfileAvatarId: string;
 }
 
 export interface IChatRoomPutDTO {

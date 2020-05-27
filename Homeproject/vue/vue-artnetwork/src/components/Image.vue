@@ -29,7 +29,6 @@ export default class ImageComponent extends Vue {
 
   beforeMount() {
     ImagesApi.getImage(this.Id).then(imageData => {
-      // this.src = 'data:image/jpg;base64,'.concat(imageData);
       this.src = imageData;
     });
   }

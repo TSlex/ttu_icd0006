@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <h1>Register</h1>
+    <h1>Create a new account</h1>
 
     <div class="row justify-content-center">
       <div class="col-md-4">

@@ -2,6 +2,7 @@ export interface IMessageDTO {
   id: string;
   chatRoomId: string;
   userName: string;
+  profileAvatarId: string;
   messageValue: string;
   messageDateTime: Date;
 }
