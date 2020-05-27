@@ -183,6 +183,13 @@ export default new Vuex.Store({
     setMessages(state, messages: IMessageDTO[]) {
       state.messages = messages;
     },
+    deleteMessage(state, message: IMessageDTO) {
+      state.messages.forEach((element: IMessageDTO, index) => {
+        if (element.id === message.id) {
+          state.messages.splice(index, 1)
+        }
+      });
+    },
 
     // Chat members
     setMembers(state, members: IChatMemberDTO[]) {
@@ -304,6 +311,11 @@ export default new Vuex.Store({
     async sendMessage(context, message: IMessagePostDTO): Promise<ResponseDTO> {
       const response = await MessagesApi.postMessage(message, context.state.jwt);
       context.dispatch('getMessages', { chatRoomId: message.chatRoomId, pageNumber: 1 });
+      return response;
+    },
+    async deleteMessage(context, message: IMessageDTO): Promise<ResponseDTO> {
+      const response = await MessagesApi.deleteMessage(message.id, context.state.jwt);
+      context.commit('deleteMessage', message);
       return response;
     },
 

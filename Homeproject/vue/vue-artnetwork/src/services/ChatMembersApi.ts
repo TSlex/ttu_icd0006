@@ -34,7 +34,8 @@ export abstract class ChatMembersApi {
 
   static async setMemberRole(id: string, chatRole: string, jwt: string | null): Promise<ResponseDTO> {
     const url = `${id}/${chatRole}/set`
-    const response = await this.axios.get<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:

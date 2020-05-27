@@ -13,6 +13,6 @@ export interface IMessagePostDTO {
 }
 
 export interface IMessagePutDTO {
-  chatRoomId: string
+  id: string
   messageValue: string;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="chat_section mt-5">
+  <div v-if="chatRooms" class="chat_section mt-5">
     <Modal v-if="isMembersModal" v-on:closeModal="closeMembers">
       <router-link
         class="gallery_item"
@@ -25,20 +25,23 @@
       </router-link>
     </Modal>
 
-    <Modal v-if="isRolesModal && selectedChatRole" v-on:closeModal="closeRoles">
+    <Modal v-if="isRolesModal && selectedMemberRole" v-on:closeModal="closeRoles">
       <div class="col-md-5 text-center" style="padding: 50px;">
         <div class="form-group d-flex flex-column">
           <label class="control-label" for="ChatMember_ChatRoleId">Chat role</label>
-          <select class="form-control valid">
-            <option v-for="(chatRole, index) in chatRoles" :key="index" value
-            :selected="selectedChatMember.chatRole === chatRole.roleTitle ? 'selected' : ''">{{chatRole.roleTitleValue}}</option>
+          <select class="form-control valid" v-model="selectedMemberRole">
+            <option
+              v-for="(chatRole, index) in chatRoles"
+              :key="index"
+              :value="chatRole"
+              @click="sellectRole(chatRole)"
+            >{{chatRole.roleTitleValue}}</option>
           </select>
         </div>
-        <input type="hidden" id="ChatMember_Id" name="ChatMember.Id" value="08d7ff49-f7bd-444f-87ad-21baae2a5c3d" />
 
         <div class="form-group">
-          <input type="submit" value="Сохранить" class="btn btn-success mr-1" />
-          <a class="btn btn-secondary" href="/chatmembers?chatRoomId=08d7ff49-f728-44c9-8434-ae58f0eabc4f">Отмена</a>
+          <button class="btn btn-success mr-1" @click="commitRole">Submit</button>
+          <button class="btn btn-secondary" @click="closeRoles">Cancel</button>
         </div>
       </div>
     </Modal>
@@ -47,7 +50,7 @@
       <ul class="nav nav-pills flex-column chat_rooms text-center">
         <li v-for="chatRoom in chatRooms" :key="chatRoom.id" class="nav-item">
           <a class="chat_room btn-link" @click="selectChatRoom(chatRoom)">
-            <div v-if="chatRoom.lastMessageValue" class="message">
+            <div v-if="chatRoom.lastMessageValue" :key="chatRoom.lastMessageValue" class="message">
               <div class="message_profile" style="width: 240px;">
                 <div class="message_avatar">
                   <ImageComponent :id="chatRoom.chatRoomImageId" :key="chatRoom.chatRoomImageId" height="50px" width="50px" />
@@ -65,6 +68,7 @@
             </div>
             <div
               v-else
+              class="mb-3"
               style="color: black !important; margin: auto; max-width: 400px;
                                     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
                                 background: white; border: 1px solid gray; border-radius: 5px; padding: 10px"
@@ -99,8 +103,8 @@
               <div class="dropdown-menu" aria-labelledby="profile_more">
                 <div class="text-center d-flex flex-column">
                   <a class="btn-link" @click="openMembers">Members</a>
-                  <a class="btn-link">Change Title</a>
-                  <a class="btn-link">Leave</a>
+                  <a class="btn-link" @click="renameRoom">Change Title</a>
+                  <a class="btn-link" @click="leaveRoom">Leave</a>
                 </div>
               </div>
             </div>
@@ -111,14 +115,16 @@
               :key="index"
               :class="'message ' + (message.userName === userName ? 'active' : '')"
             >
-              <div class="message_controls">
-                <a class="fa fa-edit" asp-action="Edit" asp-controller="Messages" asp-route-id="@item.Id"></a>
-
-                <form asp-action="Delete" asp-controller="Messages" method="post" class="disable_form_style">
-                  <input type="hidden" name="id" asp-for="@item.Id" />
-                  <button class="btn-link fa fa-times-circle" style="margin: 0 !important;"></button>
-                </form>
+              <div
+                v-if="currentMember.canEditMessages &&
+              currentMember.userName == message.userName ||
+              currentMember.canEditAllMessages"
+                class="message_controls"
+              >
+                <button class="btn-link fa fa-edit" @click="editMessage(message)"></button>
+                <button class="btn-link fa fa-times-circle" @click="deleteMessage(message)"></button>
               </div>
+
               <a class="message_profile" asp-controller="Profiles" asp-action="Index" asp-route-username="@item.Profile.UserName">
                 <div class="message_avatar">
                   <ImageComponent :id="message.profileAvatarId" :key="message.profileAvatarId" height="50px" width="50px" />
@@ -132,9 +138,20 @@
               <span class="message_datetime">{{message.messageDateTime | formatDate}}</span>
             </div>
           </div>
-          <form class="chat_input">
-            <textarea rows="2" type="text" id="messageValue" v-model="messageModel.messageValue" />
-            <button type="submit" class="far fa-paper-plane" @click="sendMessage"></button>
+          <template v-if="!messageEditing">
+            <form v-if="currentMember && currentMember.canWriteMessages" class="chat_input">
+              <textarea rows="2" type="text" id="messageValue" v-model="messageModel.messageValue" />
+              <button type="submit" class="far fa-paper-plane" @click="sendMessage"></button>
+            </form>
+            <span
+              v-else
+              class="text-center p-3 text-danger"
+              style="border-top: solid 1px gray;"
+            >You cannot send messages to this chat!</span>
+          </template>
+          <form v-else class="chat_input">
+            <textarea rows="2" type="text" id="messageValue" v-model="messagePutModel.messageValue" />
+            <button type="submit" class="far fa-paper-plane" @click="putMessage"></button>
           </form>
         </template>
       </div>
@@ -148,13 +165,21 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import ImageComponent from "../../components/Image.vue";
 import Modal from "../../components/Modal.vue";
 import store from "@/store";
-import { IMessagePostDTO } from "../../types/IMessageDTO";
+import {
+  IMessagePostDTO,
+  IMessageDTO,
+  IMessagePutDTO
+} from "../../types/IMessageDTO";
 import { IChatMemberDTO } from "@/types/IChatMemberDTO";
 import { IChatRoomDTO } from "@/types/IChatRoomDTO";
 import Axios, { AxiosResponse } from "axios";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import { swal } from "vue/types/umd";
 import { IChatRoleDTO } from "../../types/IChatRoleDTO";
+import { ChatMembersApi } from "../../services/ChatMembersApi";
+import { ChatRolesApi } from "../../services/ChatRolesApi";
+import { ChatRoomsApi } from "../../services/ChatRoomsApi";
+import { MessagesApi } from "../../services/MessagesApi";
 
 @Component({
   components: {
@@ -171,18 +196,29 @@ export default class ChatRoom extends Vue {
     messageValue: ""
   };
 
+  private messagePutModel: IMessagePutDTO = {
+    id: "",
+    messageValue: ""
+  };
+
   @Prop()
   chatRoomId: string | undefined;
 
   private isMembersModal: boolean = false;
   private isRolesModal: boolean = false;
+  private messageEditing: boolean = false;
 
   private selectedChatRoom: IChatRoomDTO | null = null;
-  private selectedChatRole: IChatRoleDTO | null = null;
+  private selectedMemberRole: IChatRoleDTO | null = null;
   private selectedChatMember: IChatMemberDTO | null = null;
+  private selectedMessage: IMessageDTO | null = null;
 
   get chatRoles() {
     return store.state.chatRoles;
+  }
+
+  get jwt() {
+    return store.getters.getJwt;
   }
 
   get chatRooms() {
@@ -213,25 +249,112 @@ export default class ChatRoom extends Vue {
     return store.getters.getUserName;
   }
 
+  setMessageEditing(mode: boolean) {
+    this.messageEditing = mode;
+  }
+
+  editMessage(message: IMessageDTO) {
+    this.selectedMessage = message;
+    this.messageEditing = true;
+    this.messagePutModel.id = message.id;
+    this.messagePutModel.messageValue = message.messageValue;
+  }
+
+  putMessage(e: Event) {
+    if (
+      this.selectedMessage &&
+      this.messagePutModel.id.length > 0 &&
+      this.messagePutModel.messageValue.length > 0
+    ) {
+      this.messageEditing = false;
+      MessagesApi.putMessage(
+        this.messagePutModel.id,
+        this.messagePutModel,
+        this.jwt
+      ).then((response: ResponseDTO) => {
+        if (!response.errors) {
+          this.selectedMessage!.messageValue = this.messagePutModel.messageValue;
+        }
+        this.setMessageEditing(false);
+      });
+    }
+
+    e.preventDefault();
+    store.dispatch("getChatRooms");
+  }
+
+  deleteMessage(message: IMessageDTO) {
+    store.dispatch("deleteMessage", message);
+  }
+
+  leaveRoom() {
+    if (this.currentMember && this.currentMember.canEditMembers) {
+      store.dispatch("deleteChatMember", this.currentMember);
+    }
+
+    this.selectedChatRoom = null;
+    store.dispatch("getChatRooms");
+  }
+
+  renameRoom() {
+    if (this.currentMember?.canEditMembers) {
+      this.$swal({
+        title: "Enter a new room title",
+        input: "text",
+        inputValue: this.selectedChatRoom!.chatRoomTitle,
+        showCancelButton: true,
+        inputValidator: (value: string) => {
+          if (!value) {
+            return "Room title cannot be empty!";
+          } else {
+            ChatRoomsApi.putChatTitle(
+              this.selectedChatRoom!.id,
+              { id: this.selectedChatRoom!.id, chatRoomTitle: value },
+              this.jwt
+            ).then((response: ResponseDTO) => {
+              if (!response.errors) {
+                this.$swal("Room title was changed").then(() => {
+                  this.$emit("closeGifts");
+                });
+              }
+            });
+          }
+        }
+      });
+    }
+  }
+
   changeRole(member: IChatMemberDTO) {
     this.isRolesModal = true;
     this.selectedChatMember = member;
 
     this.chatRoles.forEach((chatRole: IChatRoleDTO) => {
       if (member.chatRole === chatRole.roleTitle) {
-        this.selectedChatRole = chatRole;
+        this.selectedMemberRole = chatRole;
       }
     });
   }
 
-  setRole(){
+  commitRole() {
+    if (
+      this.currentMember?.canEditMembers &&
+      !this.selectedMemberRole?.canEditMembers &&
+      this.selectedMemberRole
+    ) {
+      ChatMembersApi.setMemberRole(
+        this.selectedChatMember!.id,
+        this.selectedMemberRole.roleTitle,
+        this.jwt
+      ).then(() => store.dispatch("getChatMembers", this.selectedChatRoom!.id));
+    }
 
+    this.closeRoles();
   }
 
   closeRoles() {
     this.isRolesModal = false;
     this.selectedChatMember = null;
-    this.selectedChatRole = null;
+    this.selectedMemberRole = null;
   }
 
   openMembers() {
@@ -245,6 +368,7 @@ export default class ChatRoom extends Vue {
   deleteMember(member: IChatMemberDTO) {
     if (this.currentMember && this.currentMember.canEditMembers) {
       store.dispatch("deleteChatMember", member);
+      store.dispatch("getChatRooms");
     }
   }
 
