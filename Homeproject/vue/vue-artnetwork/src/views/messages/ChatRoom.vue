@@ -1,17 +1,46 @@
 <template>
   <div class="chat_section mt-5">
     <Modal v-if="isMembersModal" v-on:closeModal="closeMembers">
-      <router-link class="gallery_item" :to="member.userName" v-for="(member, index) in members" :key="index">
-        <form asp-action="Delete">
-          <button type="submit" class="item_controls btn-link">
+      <router-link
+        class="gallery_item"
+        style="width: 150px !important; height: 150px !important"
+        :to="'profiles/' + member.userName"
+        v-for="(member, index) in members"
+        :key="index"
+        @click.stop
+      >
+        <template v-if="member.userName != userName && currentMember != null && currentMember.canEditMembers">
+          <button class="item_controls btn-link" style="right: unset; left: 0" @click="deleteMember(member)" @click.prevent>
             <i class="fas fa-times-circle"></i>
           </button>
-          <input type="hidden" asp-for="@follower.Id" name="Id" />
-        </form>
 
-        <ImageComponent :id="member.profileAvatarId" :key="member.profileAvatarId" height="100px" width="100px" />
+          <button class="item_controls btn-link" style="right: 0; left: unset" @click="changeRole(member)" @click.prevent>
+            <i class="fas fa-edit"></i>
+          </button>
+        </template>
+
+        <ImageComponent :id="member.profileAvatarId" :key="member.profileAvatarId" height="150px" width="150px" />
+        <span class="item_name" style="bottom: 15px">{{member.chatRoleValue}}</span>
         <span class="item_name">{{member.userName}}</span>
       </router-link>
+    </Modal>
+
+    <Modal v-if="isRolesModal && selectedChatRole" v-on:closeModal="closeRoles">
+      <div class="col-md-5 text-center" style="padding: 50px;">
+        <div class="form-group d-flex flex-column">
+          <label class="control-label" for="ChatMember_ChatRoleId">Chat role</label>
+          <select class="form-control valid">
+            <option v-for="(chatRole, index) in chatRoles" :key="index" value
+            :selected="selectedChatMember.chatRole === chatRole.roleTitle ? 'selected' : ''">{{chatRole.roleTitleValue}}</option>
+          </select>
+        </div>
+        <input type="hidden" id="ChatMember_Id" name="ChatMember.Id" value="08d7ff49-f7bd-444f-87ad-21baae2a5c3d" />
+
+        <div class="form-group">
+          <input type="submit" value="Сохранить" class="btn btn-success mr-1" />
+          <a class="btn btn-secondary" href="/chatmembers?chatRoomId=08d7ff49-f728-44c9-8434-ae58f0eabc4f">Отмена</a>
+        </div>
+      </div>
     </Modal>
 
     <div class="col-md-4" style="padding: unset">
@@ -21,12 +50,7 @@
             <div v-if="chatRoom.lastMessageValue" class="message">
               <div class="message_profile" style="width: 240px;">
                 <div class="message_avatar">
-                  <ImageComponent
-                    :id="chatRoom.lastMessageProfileAvatarId"
-                    :key="chatRoom.lastMessageProfileAvatarI"
-                    height="50px"
-                    width="50px"
-                  />
+                  <ImageComponent :id="chatRoom.chatRoomImageId" :key="chatRoom.chatRoomImageId" height="50px" width="50px" />
                 </div>
                 <div
                   class="profile_name"
@@ -128,6 +152,9 @@ import { IMessagePostDTO } from "../../types/IMessageDTO";
 import { IChatMemberDTO } from "@/types/IChatMemberDTO";
 import { IChatRoomDTO } from "@/types/IChatRoomDTO";
 import Axios, { AxiosResponse } from "axios";
+import { ResponseDTO } from "@/types/Response/ResponseDTO";
+import { swal } from "vue/types/umd";
+import { IChatRoleDTO } from "../../types/IChatRoleDTO";
 
 @Component({
   components: {
@@ -147,18 +174,15 @@ export default class ChatRoom extends Vue {
   @Prop()
   chatRoomId: string | undefined;
 
-  // private members: IChatMemberDTO[] | null = null;
-
   private isMembersModal: boolean = false;
+  private isRolesModal: boolean = false;
 
   private selectedChatRoom: IChatRoomDTO | null = null;
+  private selectedChatRole: IChatRoleDTO | null = null;
+  private selectedChatMember: IChatMemberDTO | null = null;
 
-  openMembers() {
-    this.isMembersModal = true;
-  }
-
-  closeMembers() {
-    this.isMembersModal = false;
+  get chatRoles() {
+    return store.state.chatRoles;
   }
 
   get chatRooms() {
@@ -169,12 +193,59 @@ export default class ChatRoom extends Vue {
     return store.state.messages;
   }
 
+  get currentMember(): IChatMemberDTO | null {
+    let current: IChatMemberDTO | null = null;
+
+    this.members.forEach((member: IChatMemberDTO) => {
+      if (member.userName === this.userName) {
+        current = member;
+      }
+    });
+
+    return current;
+  }
+
   get members() {
     return store.state.members;
   }
 
   get userName() {
     return store.getters.getUserName;
+  }
+
+  changeRole(member: IChatMemberDTO) {
+    this.isRolesModal = true;
+    this.selectedChatMember = member;
+
+    this.chatRoles.forEach((chatRole: IChatRoleDTO) => {
+      if (member.chatRole === chatRole.roleTitle) {
+        this.selectedChatRole = chatRole;
+      }
+    });
+  }
+
+  setRole(){
+
+  }
+
+  closeRoles() {
+    this.isRolesModal = false;
+    this.selectedChatMember = null;
+    this.selectedChatRole = null;
+  }
+
+  openMembers() {
+    this.isMembersModal = true;
+  }
+
+  closeMembers() {
+    this.isMembersModal = false;
+  }
+
+  deleteMember(member: IChatMemberDTO) {
+    if (this.currentMember && this.currentMember.canEditMembers) {
+      store.dispatch("deleteChatMember", member);
+    }
   }
 
   checkURL(url: string) {
@@ -206,6 +277,7 @@ export default class ChatRoom extends Vue {
 
   loadData() {
     store.dispatch("getChatRooms");
+    store.dispatch("getChatRoles");
   }
 
   scroll() {

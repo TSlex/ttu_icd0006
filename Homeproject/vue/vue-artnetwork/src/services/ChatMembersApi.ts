@@ -32,9 +32,22 @@ export abstract class ChatMembersApi {
     }
   }
 
-  static async setMemberRole(chatMemberId: string, chatRole: string, jwt: string | null): Promise<ResponseDTO> {
-    const url = `${chatMemberId}/${chatRole}/set`
+  static async setMemberRole(id: string, chatRole: string, jwt: string | null): Promise<ResponseDTO> {
+    const url = `${id}/${chatRole}/set`
     const response = await this.axios.get<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+
+    switch (response.status) {
+      case 200:
+        return response.data;
+      default:
+        console.log(response.status + ":" + response.statusText)
+        return response.data;
+    }
+  }
+
+  static async deleteChatMember(id: string, jwt: string | null): Promise<ResponseDTO> {
+    const url = `${id}`
+    const response = await this.axios.delete<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:

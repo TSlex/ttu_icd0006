@@ -1,3 +1,4 @@
+import { IChatRoleDTO } from './../types/IChatRoleDTO';
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
 
@@ -30,6 +31,7 @@ import { RanksApi } from '@/services/RanksApi';
 import { FollowersApi } from '@/services/FollowersApi';
 import { IFollowerDTO } from '@/types/IFollowerDTO';
 import { FavoritesApi } from '@/services/FavoritesApi';
+import { ChatRolesApi } from '@/services/ChatRolesApi';
 
 Vue.use(Vuex)
 
@@ -66,6 +68,7 @@ export default new Vuex.Store({
     messages: [] as IMessageDTO[],
     messagesLoadedCount: -1,
     members: [] as IChatMemberDTO[],
+    chatRoles: [] as IChatRoleDTO[],
   },
 
   getters: {
@@ -162,7 +165,6 @@ export default new Vuex.Store({
     },
     deleteComment(state, comment: ICommentDTO) {
       state.comments.forEach((element: ICommentDTO, index) => {
-        console.log(element.id === comment.id)
         if (element.id === comment.id) {
           state.comments.splice(index, 1)
         }
@@ -181,8 +183,22 @@ export default new Vuex.Store({
     setMessages(state, messages: IMessageDTO[]) {
       state.messages = messages;
     },
+
+    // Chat members
     setMembers(state, members: IChatMemberDTO[]) {
       state.members = members;
+    },
+    deleteChatMember(state, member: IChatMemberDTO) {
+      state.members.forEach((element: IChatMemberDTO, index) => {
+        if (element.id === member.id) {
+          state.members.splice(index, 1)
+        }
+      });
+    },
+
+    // Chat roles
+    getChatRoles(state, roles: IChatRoleDTO[]) {
+      state.chatRoles = roles;
     },
 
     // Rank
@@ -285,14 +301,28 @@ export default new Vuex.Store({
       context.commit('setMessages', response)
       return response;
     },
+    async sendMessage(context, message: IMessagePostDTO): Promise<ResponseDTO> {
+      const response = await MessagesApi.postMessage(message, context.state.jwt);
+      context.dispatch('getMessages', { chatRoomId: message.chatRoomId, pageNumber: 1 });
+      return response;
+    },
+
+    //Chat members
     async getChatMembers(context, chatRoomId: string): Promise<IChatMemberDTO[]> {
       const response = await ChatMembersApi.getChatMembers(chatRoomId, context.state.jwt);
       context.commit('setMembers', response)
       return response;
     },
-    async sendMessage(context, message: IMessagePostDTO): Promise<ResponseDTO> {
-      const response = await MessagesApi.postMessage(message, context.state.jwt);
-      context.dispatch('getMessages', { chatRoomId: message.chatRoomId, pageNumber: 1 });
+    async deleteChatMember(context, member: IChatMemberDTO): Promise<ResponseDTO> {
+      const response = await ChatMembersApi.deleteChatMember(member.id, context.state.jwt);
+      context.commit('deleteChatMember', member);
+      return response;
+    },
+
+    // Chat roles
+    async getChatRoles(context): Promise<IChatRoleDTO[]> {
+      const response = await ChatRolesApi.getChatRoles(context.state.jwt);
+      context.commit('getChatRoles', response)
       return response;
     },
 
