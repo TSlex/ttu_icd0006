@@ -2,7 +2,7 @@
   <ul class="navbar-nav">
     <template v-if="isAuthenticated">
       <li class="nav-item">
-        <span class="nav-link text-dark">Hello, {{userName}}!</span>
+        <router-link to="/account/manage" class="nav-link text-dark">Hello, {{userName}}!</router-link>
       </li>
       <li class="nav-item">
         <div @click="logoutOnClick" class="nav-link text-dark" href>Logout</div>

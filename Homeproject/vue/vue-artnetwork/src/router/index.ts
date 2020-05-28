@@ -7,6 +7,8 @@ import About from '../views/About.vue'
 import AccountRegister from '../views/account/Register.vue'
 import AccountLogin from '../views/account/Login.vue'
 
+import IdentityManage from '../views/identity/Manage.vue'
+
 import ProfileIndex from '../views/profile/Index.vue'
 import PostsCreate from '../views/posts/Create.vue'
 import ChatRoom from '../views/messages/ChatRoom.vue'
@@ -20,6 +22,7 @@ const routes: Array<RouteConfig> = [
   // Account
   { path: '/account/login', name: 'Login', component: AccountLogin },
   { path: '/account/register', name: 'Register', component: AccountRegister },
+  { path: '/account/manage', name: 'Manage', component: IdentityManage },
 
   // Profile
   { path: '/profiles/:username', name: 'ProfileIndex', component: ProfileIndex, props: true },

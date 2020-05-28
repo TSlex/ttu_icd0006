@@ -3,6 +3,9 @@ import { ILoginDTO } from '../types/Identity/ILoginDTO';
 import { IRegisterDTO } from '@/types/Identity/IRegisterDTO';
 import { JwtResponseDTO } from '@/types/Response/JwtResponseDTO';
 import { ResponseDTO } from '@/types/Response/ResponseDTO';
+import { IProfilePasswordDTO } from '@/types/Identity/IProfilePasswordDTO';
+import { IProfileEmailDTO } from '@/types/Identity/IProfileEmailDTO';
+import { IProfileDataDTO } from '@/types/Identity/IProfileDataDTO';
 
 
 export abstract class AccountApi {
@@ -37,6 +40,54 @@ export abstract class AccountApi {
   static async userRegister(registerDTO: IRegisterDTO): Promise<ResponseDTO> {
     const url = "register"
     const response = await this.axios.post(url, registerDTO);
+
+    switch (response.status) {
+      case 200:
+      case 404:
+      case 400:
+        return response.data as ResponseDTO
+      default:
+        return {
+          errors: ["Authorisation fails"]
+        } as ResponseDTO
+    }
+  }
+
+  static async putEmail(emailModel: IProfileEmailDTO): Promise<ResponseDTO> {
+    const url = "register"
+    const response = await this.axios.post(url, emailModel);
+
+    switch (response.status) {
+      case 200:
+      case 404:
+      case 400:
+        return response.data as ResponseDTO
+      default:
+        return {
+          errors: ["Authorisation fails"]
+        } as ResponseDTO
+    }
+  }
+
+  static async putPassword(passwordModel: IProfilePasswordDTO): Promise<ResponseDTO> {
+    const url = "register"
+    const response = await this.axios.post(url, passwordModel);
+
+    switch (response.status) {
+      case 200:
+      case 404:
+      case 400:
+        return response.data as ResponseDTO
+      default:
+        return {
+          errors: ["Authorisation fails"]
+        } as ResponseDTO
+    }
+  }
+
+  static async putProfileData(dataModel: IProfileDataDTO): Promise<ResponseDTO> {
+    const url = "register"
+    const response = await this.axios.post(url, dataModel);
 
     switch (response.status) {
       case 200:
