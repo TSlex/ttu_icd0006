@@ -12,7 +12,7 @@
         </button>
         <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId" height="100px" width="100px" />
 
-        <span class="item_name">TSlex</span>
+        <span class="item_name">{{profile.userName}}</span>
       </router-link>
     </Modal>
     <div class="row">
@@ -76,7 +76,10 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
   }
 })
 export default class IdentityManage extends Vue {
-  private currentPage: ManageNav = ManageNav.ProfileData;
+  @Prop()
+  private startup!: string | null;
+
+  private currentPage: ManageNav = this.resolveStartup;
 
   private isBlacklistModal: boolean = false;
 
@@ -88,6 +91,19 @@ export default class IdentityManage extends Vue {
 
   get ManageNavs() {
     return ManageNav;
+  }
+
+  get resolveStartup(): ManageNav {
+    let result: ManageNav = ManageNav.ProfileData
+
+    for (let key in ManageNav) {
+      let value: string = ManageNav[key as keyof typeof ManageNav];
+      if (value === this.startup) {
+        result = value as ManageNav;
+      }
+    }
+
+    return result;
   }
 
   openBlacklist() {

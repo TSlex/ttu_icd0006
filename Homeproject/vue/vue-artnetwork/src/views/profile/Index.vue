@@ -1,33 +1,81 @@
 <template>
   <div id="profileIndex">
-    <ProfilesModal v-if="followers" :profilesData="followers" v-on:closeProfiles="closeFollowers" />
+    <Modal v-if="followers" v-on:closeModal="closeFollowers">
+      <router-link
+        v-for="follower in followers"
+        :key="follower.userName"
+        :to="`/profiles/${follower.userName}`"
+        class="gallery_item"
+      >
+        <button
+          v-if="isCurrentUser && isFollowedOpen"
+          class="item_controls btn-link"
+          @click="deleteFollowed(follower)"
+          @click.prevent
+        >
+          <i class="fas fa-times-circle"></i>
+        </button>
+        <ImageComponent :id="follower.profileAvatarId" :key="follower.profileAvatarId" height="100px" width="100px" />
+
+        <span class="item_name">{{follower.userName}}</span>
+      </router-link>
+    </Modal>
     <GiftSelection v-if="gifts" :gifts="gifts" :username="username" v-on:closeGifts="closeGiftsSelector" />
     <PostDetails v-if="post" :post="post" v-on:closePost="closePost" />
     <Modal v-if="isRankDetails" v-on:closeModal="closeRankDetails">
       <div class="d-flex flex-column align-items-center text-center" style="position: relative; padding: 20px">
         <div
           class="progress_container"
-          style="background: conic-gradient(#6633FF 100%, #FFFFFF 105%) 50% 50% / 100% 100% no-repeat;"
+          :style="`background: conic-gradient(${rank.rankColor} ${rankPercent}%, #FFFFFF ${rankPercent + 5}%) 50% 50% / 100% 100% no-repeat;`"
         >
           <div class="progress_container_front">
-            <span class="progress_value">100%</span>
+            <span class="progress_value">{{rankPercent}}%</span>
           </div>
         </div>
-        <span class="mt-4" style="color: #000000; font-size: 24px; font-family: Consolas, serif">Master</span>
+        <span
+          class="mt-4"
+          :style="`color: ${rank.rankTextColor}; font-size: 24px; font-family: Consolas, serif`"
+        >{{rank.rankTitle}}</span>
         <hr style="width: 400px" />
         <span
           style="display: inline-block; max-width: 600px; word-break: break-all; word-break: break-word;"
-        >Yes, you feel confidence and even can teach the basics to Newbies. However, there is no limit to perfection C:</span>
+        >{{rank.rankDescription}}</span>
+      </div>
+    </Modal>
+    <Modal v-if="isGiftDetails" v-on:closeModal="closeGiftDetails">
+      <div class="d-flex flex-column align-items-center" style="position: relative">
+        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
+          <ul>
+            <li style="display:none"></li>
+          </ul>
+        </div>
+
+        <div class="profile_gift">
+          <img src="/images/00000000-0000-0000-0000-000000000002" alt style="height: 300px; width: 300px;" class="m-3" />
+        </div>
+        <span class="font-weight-bold">Together forever!</span>
+
+        <span class="font-weight-bold mt-2">From "admin"</span>
+        <span class="font-weight-bold mt-2">Message:</span>
+        <div
+          style="color: black !important; margin: auto; max-width: 400px; overflow: hidden; text-overflow: ellipsis; word-break: break-word"
+        >sdasdasdas</div>
+
+        <hr />
+        <span>[27/05/2020 15:36:26]</span>
       </div>
     </Modal>
     <div v-if="profile && rank" class="profile_conainer">
       <div class="profile_section">
         <div class="col-3 d-flex justify-content-center">
-          <a href="/identity/account/manage/avatar">
+          <router-link v-if="isCurrentUser" :to="`/account/manage/avatar`">
             <div class="profile_image" :style="`background-color: ${rank.rankColor} !important;`">
               <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId" />
             </div>
-          </a>
+          </router-link>
+          <div v-else class="profile_image" :style="`background-color: ${rank.rankColor} !important;`">
+            <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId" />
+          </div>
         </div>
         <div class="profile_description col-9">
           <ul class="profile_meta_section">
@@ -100,15 +148,17 @@
           </div>
         </div>
       </div>
-      <hr />
-      <div class="profile_gift_section">
-        <div v-for="(gift, index) in profileGifts" :key="index" class="profile_gift">
-          <ImageComponent :id="gift.giftImageId" :key="gift.giftImageId" />
-        </div>
-        <span v-if="profileGifts.length <= 0">This user has no gifts yet. Give? :)</span>
+      <template v-if="!(isCurrentUser && profileGifts.length <= 0)">
+        <hr />
+        <div class="profile_gift_section">
+          <div v-for="(gift, index) in profileGifts" :key="index" class="profile_gift btn-link" @click="openGiftDetails(gift)">
+            <ImageComponent :id="gift.imageId" :key="gift.imageId" />
+          </div>
+          <span v-if="profileGifts.length <= 0">This user has no gifts yet. Give? :)</span>
 
-        <a v-if="!isCurrentUser" class="fa fa-gift btn btn-primary profile_gift_controls" @click="openGiftsSelector" href="#"></a>
-      </div>
+          <a v-if="!isCurrentUser" class="fa fa-gift btn btn-primary profile_gift_controls" @click="openGiftsSelector" href="#"></a>
+        </div>
+      </template>
       <hr />
       <div class="posts_section align-content-center d-flex flex-column">
         <div v-if="posts.length > 0" class="post_row card-columns">
@@ -127,7 +177,7 @@
         <div class="text-center" v-if="posts.length > 0">
           <button @click="loadMore" class="btn_circle fa fa-download"></button>
         </div>
-        <span v-else>Nothing here yet</span>
+        <span v-else class="text-center">Nothing here yet</span>
       </div>
     </div>
   </div>
@@ -152,13 +202,6 @@ import { ChatRoomsApi } from "../../services/ChatRoomsApi";
 import { ProfileApi } from "@/services/ProfileApi";
 import { IFollowerDTO } from "../../types/IFollowerDTO";
 import { IBlockedProfileDTO } from "../../types/IBlockedProfileDTO";
-// import VueRouter from 'vue-router';
-
-// const router = new VueRouter({
-//   routes: [
-//     { path: '/user/:id', component: ProfileIndex }
-//   ]
-// })
 
 @Component({
   components: {
@@ -174,11 +217,15 @@ export default class ProfileIndex extends Vue {
   private isFetching = false;
 
   private post: IPostDTO | null = null;
+  private gift: IProfileDTO | null = null;
 
   private followers: IFollowerDTO[] | null = null;
   private gifts: IGiftDTO[] | null = null;
 
+  private isFollowedOpen: boolean = false;
+
   private isRankDetails: boolean = false;
+  private isGiftDetails: boolean = false;
 
   @Prop()
   private username!: string;
@@ -249,6 +296,16 @@ export default class ProfileIndex extends Vue {
     return url !== null && url.search(reg) === 0;
   }
 
+  openGiftDetails(gift: IProfileDTO) {
+    this.gift = gift;
+    this.isGiftDetails = true;
+  }
+
+  closeGiftDetails() {
+    this.isGiftDetails = false;
+    this.gift = null;
+  }
+
   openRankDetails() {
     if (this.rank && this.isCurrentUser) {
       this.isRankDetails = true;
@@ -281,12 +338,31 @@ export default class ProfileIndex extends Vue {
     store
       .dispatch("getFollowed", { userName: this.username, pageNumber: 1 })
       .then((response: IFollowerDTO[]) => {
+        this.isFollowedOpen = true;
         this.followers = response;
       });
   }
 
   closeFollowers() {
+    this.isFollowedOpen = false;
     this.followers = null;
+  }
+
+  deleteFollowed(followed: IFollowerDTO) {
+    if (this.isCurrentUser) {
+      store
+        .dispatch("profileUnfollow", followed.userName)
+        .then((response: ResponseDTO) => {
+          this.profile!.followedCount -= 1;
+          if (this.followers) {
+            this.followers!.forEach((element: IFollowerDTO, index) => {
+              if (element.userName === followed.userName) {
+                this.followers!.splice(index, 1);
+              }
+            });
+          }
+        });
+    }
   }
 
   selectPost(post: IPostDTO) {

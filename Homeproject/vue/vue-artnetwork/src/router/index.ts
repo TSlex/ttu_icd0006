@@ -22,7 +22,7 @@ const routes: Array<RouteConfig> = [
   // Account
   { path: '/account/login', name: 'Login', component: AccountLogin },
   { path: '/account/register', name: 'Register', component: AccountRegister },
-  { path: '/account/manage', name: 'Manage', component: IdentityManage },
+  { path: '/account/manage/:startup?', name: 'Manage', component: IdentityManage, props: true },
 
   // Profile
   { path: '/profiles/:username', name: 'ProfileIndex', component: ProfileIndex, props: true },

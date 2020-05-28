@@ -1,7 +1,7 @@
 export enum ManageNav {
-  Avatar,
-  ProfileData,
-  Email,
-  Password,
-  Privacy
+  Avatar = "avatar",
+  ProfileData = "profile",
+  Email = "email",
+  Password = "password",
+  Privacy = "privacy"
 }

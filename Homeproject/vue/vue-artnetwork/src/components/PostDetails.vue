@@ -4,14 +4,14 @@
     <div class="post_details" @click.stop>
       <div class="post_details_post">
         <div class="post_image">
-          <div v-if="isAuthenticated" class="post_controls">
+          <div v-if="isAuthenticated && currentUsername == post.profileUsername" class="post_controls">
             <template v-if="!postEditing">
-              <a class="fa fa-edit mr-2" href="#" @click="editPost(true)"></a>
-              <a class="fa fa-times-circle" href="#" @click="deletePost"></a>
+              <a class="fa fa-edit mr-2 btn-link" href="#" @click="editPost(true)"></a>
+              <a class="fa fa-times-circle btn-link" href="#" @click="deletePost"></a>
             </template>
             <template v-else>
-              <a class="fa fa-check mr-2" href="#" @click="putPost"></a>
-              <a class="fa fa-times" href="#" @click="editPost(false)"></a>
+              <a class="fa fa-check mr-2 btn-link" href="#" @click="putPost"></a>
+              <a class="fa fa-times btn-link" href="#" @click="editPost(false)"></a>
             </template>
           </div>
           <ImageComponent :id="post.postImageId" :key="post.postImageId" height="unset" width="unset" />
@@ -57,19 +57,23 @@
             <span class="comment_username">@{{comment.userName}}:</span>
             <span class="comment_value">&nbsp;{{comment.commentValue}}</span>
             <div
-              v-if="isUserComment(comment.userName) && (!commentEditing || commentEditing && editedComment.id === comment.id)"
+              v-if="!commentEditing
+            || commentEditing && editedComment.id === comment.id"
               class="comment_controls"
             >
-              <template v-if="!commentEditing">
-                <a class="fa fa-edit" href="#" @click="editComment(comment)"></a>
-                <a class="fa fa-times-circle" href="#" @click="deleteComment(comment)"></a>
+              <template v-if="!commentEditing && currentUsername === comment.userName">
+                <a class="fa fa-edit btn-link mr-2" href="#" @click="editComment(comment)"></a>
+                <a class="fa fa-times-circle btn-link" href="#" @click="deleteComment(comment)"></a>
               </template>
-              <template v-else>
-                <a class="fa fa-times" href="#" @click="setCommentEditing(false)"></a>
+              <template v-else-if="!commentEditing && currentUsername === post.profileUsername">
+                <a class="fa fa-times-circle btn-link" href="#" @click="deleteComment(comment)"></a>
+              </template>
+              <template v-if="commentEditing">
+                <a class="fa fa-times btn-link" href="#" @click="setCommentEditing(false)"></a>
               </template>
             </div>
           </a>
-          <a @click="loadMore" class="text-center text-primary">show more...</a>
+          <a @click="loadMore" class="text-center btn-link">show more...</a>
         </div>
         <div class="row d-flex justify-content-center mt-3">
           <form v-if="isAuthenticated" class="chat_input">
@@ -136,7 +140,7 @@ export default class PostDetails extends Vue {
 
   closeModal() {
     if (!this.postEditing) {
-      this.$emit('closePost')
+      this.$emit("closePost");
     }
   }
 
@@ -166,6 +170,10 @@ export default class PostDetails extends Vue {
 
   get isAuthenticated(): boolean {
     return store.getters.isAuthenticated;
+  }
+
+  get currentUsername(): string {
+    return store.getters.getUserName;
   }
 
   setCommentEditing(mode: boolean) {
@@ -202,7 +210,8 @@ export default class PostDetails extends Vue {
   }
 
   deleteComment(comment: ICommentDTO) {
-    store.dispatch("deleteComment", comment)
+    store.dispatch("deleteComment", comment);
+    this.post.postCommentsCount -= 1;
   }
 
   editPost(mode: boolean) {
@@ -277,6 +286,7 @@ export default class PostDetails extends Vue {
     if (this.commentModel.commentValue !== "") {
       store.dispatch("postComment", this.commentModel).then(() => {
         this.commentModel.commentValue = "";
+        this.post.postCommentsCount += 1;
       });
     }
 

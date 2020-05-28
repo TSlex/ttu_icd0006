@@ -1,14 +1,7 @@
 <template>
   <div class="modal_back" @click="$emit('closeProfiles')">
     <div class="gift_gallery_modal" @click.stop>
-      <router-link class="gallery_item" :to="profile.userName" v-for="(profile, index) in profilesData" :key="index">
-        <form asp-action="Delete">
-          <button type="submit" class="item_controls btn-link">
-            <i class="fas fa-times-circle"></i>
-          </button>
-          <input type="hidden" asp-for="@follower.Id" name="Id" />
-        </form>
-
+      <router-link class="gallery_item" :to="`/profiles/${profile.userName}`" v-for="(profile, index) in profilesData" :key="index">
         <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId" height="100px" width="100px" />
         <span class="item_name">{{profile.userName}}</span>
       </router-link>

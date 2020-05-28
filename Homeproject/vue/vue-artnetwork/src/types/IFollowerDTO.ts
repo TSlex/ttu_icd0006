@@ -1,4 +1,4 @@
 export interface IFollowerDTO {
   userName: string
-  profileAvatarUrl: string;
+  profileAvatarId: string;
 }

@@ -1,3 +1,4 @@
+import { IFavoriteDTO } from './../types/IFavoriteDTO';
 import { IChatRoleDTO } from './../types/IChatRoleDTO';
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
@@ -292,7 +293,7 @@ export default new Vuex.Store({
     },
 
     // Favorites
-    async getFavorites(context, params: { postId: string; pageNumber: number }): Promise<IFollowerDTO[]> {
+    async getFavorites(context, params: { postId: string; pageNumber: number }): Promise<IFavoriteDTO[]> {
       const response = await FavoritesApi.getFavorites(params.postId, params.pageNumber, context.state.jwt);
       return response;
     },

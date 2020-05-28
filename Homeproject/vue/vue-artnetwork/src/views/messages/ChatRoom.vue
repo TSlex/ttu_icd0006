@@ -70,7 +70,7 @@
               v-else
               class="mb-3"
               style="color: black !important; margin: auto; max-width: 400px;
-                                    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+                                    overflow: hidden; text-overflow: ellipsis;
                                 background: white; border: 1px solid gray; border-radius: 5px; padding: 10px"
             >{{chatRoom.chatRoomTitle}}</div>
           </a>

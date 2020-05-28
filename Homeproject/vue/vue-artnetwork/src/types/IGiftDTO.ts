@@ -1,7 +1,10 @@
 export interface IGiftDTO {
+  id: string;
   giftName: string;
-  giftCode: string;
-  giftImageId: string;
-  giftImageUrl: string;
-  price: string;
+  username: string;
+  fromUsername: string | null;
+  imageId: string;
+  giftDateTime: Date;
+  price: number;
+  message: string | null;
 }
