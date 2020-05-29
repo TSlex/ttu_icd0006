@@ -53,9 +53,37 @@ export abstract class AccountApi {
     }
   }
 
-  static async putEmail(emailModel: IProfileEmailDTO): Promise<ResponseDTO> {
-    const url = "register"
-    const response = await this.axios.post(url, emailModel);
+  static async getEmail(jwt: string | null): Promise<string> {
+    const url = "getemail"
+    const response = await this.axios.get(url, { headers: { Authorization: 'Bearer ' + jwt } });
+
+    switch (response.status) {
+      case 200:
+      case 404:
+      case 400:
+        return response.data as string
+      default:
+        return "";
+    }
+  }
+
+  static async getProfileData(jwt: string | null): Promise<IProfileDataDTO | null> {
+    const url = "getprofiledata"
+    const response = await this.axios.get(url, { headers: { Authorization: 'Bearer ' + jwt } });
+
+    switch (response.status) {
+      case 200:
+      case 404:
+      case 400:
+        return response.data as IProfileDataDTO
+      default:
+        return null;
+    }
+  }
+
+  static async putEmail(emailModel: IProfileEmailDTO, jwt: string | null): Promise<ResponseDTO> {
+    const url = "updateprofileemail"
+    const response = await this.axios.put(url, emailModel, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:
@@ -69,9 +97,9 @@ export abstract class AccountApi {
     }
   }
 
-  static async putPassword(passwordModel: IProfilePasswordDTO): Promise<ResponseDTO> {
-    const url = "register"
-    const response = await this.axios.post(url, passwordModel);
+  static async putPassword(passwordModel: IProfilePasswordDTO, jwt: string | null): Promise<ResponseDTO> {
+    const url = "updateprofilepassword"
+    const response = await this.axios.put(url, passwordModel, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:
@@ -85,9 +113,9 @@ export abstract class AccountApi {
     }
   }
 
-  static async putProfileData(dataModel: IProfileDataDTO): Promise<ResponseDTO> {
-    const url = "register"
-    const response = await this.axios.post(url, dataModel);
+  static async putProfileData(dataModel: IProfileDataDTO, jwt: string | null): Promise<ResponseDTO> {
+    const url = "updateprofiledata"
+    const response = await this.axios.put(url, dataModel, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:

@@ -22,6 +22,7 @@ module.exports = {
     'spaced-comment': 'off',
     'comma-dangle': 'off',
     'eol-last': 'off',
+    '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',
     '@typescript-eslint/interface-name-prefix': [

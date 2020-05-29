@@ -10,38 +10,20 @@
         Your account contains personal data that you have given us.
         <br />This page allows you to download or delete that data.
       </span>
-      <form method="post" class="form-group" action="/identity/account/manage/downloadpersonaldata">
-        <button class="btn btn-primary" type="submit">Download</button>
-        <input
-          name="__RequestVerificationToken"
-          type="hidden"
-          value="CfDJ8ImaPa_EwGJOqso6edmeSTTvC3bGPKFjFDLL9R94tv9eyFkEnQ6fM3ynaUg319Kv86_Wj7ZS_arDLbTDy6n29DiverLAP_a2yxcL7996F1C7C3lvKSsqdUQftYM-iCzpK478ui29gMtcKgKRBa8SY4QTaAsb1Tccce9LQfi97lo0lXH8wBqw5hvJ72-wNcGRLg"
-        />
+      <form class="form-group">
+        <button class="btn btn-primary" @click="downloadData">Download</button>
       </form>
       <p>
         <strong class="alert-danger">Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
       </p>
-      <form
-        method="post"
-        class="form-inline d-inline"
-        action="/identity/account/manage/deletepersonaldata"
-        novalidate="novalidate"
-      >
-        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-          <ul>
-            <li style="display:none"></li>
-          </ul>
-        </div>
-        <input
-          type="password"
-          placeholder="Password"
-          class="form-control mt-2"
-          data-val="true"
-          data-val-required="The Password field is required."
-          id="Input_Password"
-          name="Input.Password"
-        />
-        <button class="btn btn-danger" type="submit">Delete</button>
+      <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
+        <ul>
+          <li style="display:none"></li>
+        </ul>
+      </div>
+      <form class="form-inline d-inline">
+        <input type="password" placeholder="Password" class="form-control mt-2 mr-1" />
+        <button class="btn btn-danger" type="button">Delete</button>
       </form>
     </div>
   </div>
@@ -51,6 +33,8 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import ImageComponent from "../../../components/Image.vue";
 import store from "@/store";
+import { AccountApi } from "@/services/AccountApi";
+import { IProfileDataDTO } from "@/types/Identity/IProfileDataDTO";
 
 @Component({
   components: {
@@ -60,6 +44,22 @@ import store from "@/store";
 export default class ManageSecurity extends Vue {
   get jwt() {
     return store.getters.getJwt;
+  }
+
+  downloadData() {
+    AccountApi.getProfileData(this.jwt).then(
+      (response: IProfileDataDTO | null) => {
+        let dataStr =
+          "data:text/json;charset=utf-8," +
+          encodeURIComponent(JSON.stringify(response, null, ' '));
+        let downloadAnchorNode = document.createElement("a");
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "personal.json");
+        document.body.appendChild(downloadAnchorNode); // required for firefox
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+      }
+    );
   }
 }
 </script>
