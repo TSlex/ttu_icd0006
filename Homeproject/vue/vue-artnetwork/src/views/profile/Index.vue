@@ -163,13 +163,13 @@
       <div class="posts_section align-content-center d-flex flex-column">
         <div v-if="posts.length > 0" class="post_row card-columns">
           <a v-for="post in posts" :key="post.id" @click="selectPost(post)">
-            <div class="post_item card">
+            <div class="post_item card mb-3">
               <ImageComponent
                 :id="post.postImageId"
                 :key="post.postImageId"
                 height="unset"
                 width="unset"
-                htmlClass="post_image card-img"
+                htmlClass="card-img"
               />
             </div>
           </a>

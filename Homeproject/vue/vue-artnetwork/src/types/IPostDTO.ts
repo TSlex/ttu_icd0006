@@ -11,10 +11,10 @@ export interface IPostDTO {
 }
 
 export interface IPostPostDTO {
+  id: string,
   postTitle: string;
   postDescription: string;
-  postImageId: string | null;
-  postImageUrl: string;
+  postImageId: string;
 }
 
 export interface IPostPutDTO {

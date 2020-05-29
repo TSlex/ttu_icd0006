@@ -54,7 +54,7 @@ export abstract class ImagesApi {
     formData.append('imageFile', imageModel.imageFile ? imageModel.imageFile : '')
 
     const response = await this.axios.post(url, formData,
-      { headers: { Authorization: 'Bearer ' + jwt } });
+      { headers: { Authorization: 'Bearer ' + jwt }, responseType: "json" });
 
     switch (response.status) {
       case 200:
@@ -80,7 +80,7 @@ export abstract class ImagesApi {
     formData.append('imageFile', imageModel.imageFile ? imageModel.imageFile : '')
 
     const response = await this.axios.put(url, formData,
-      { headers: { Authorization: 'Bearer ' + jwt } });
+      { headers: { Authorization: 'Bearer ' + jwt }, responseType: "json" });
 
     switch (response.status) {
       case 200:
