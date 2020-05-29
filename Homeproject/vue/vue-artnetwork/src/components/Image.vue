@@ -1,6 +1,5 @@
 <template v-if="src">
-  <img v-if="Class" :class="Class" :src="src" alt="image component" :height="Height" :width="Width" />
-  <img v-else :src="src" alt="image component" :height="Height" :width="Width" />
+  <img :id="HtmlId" :class="HtmlClass" :src="src" alt="image component" :height="Height" :width="Width" draggable="false" />
 </template>
 
 <script lang="ts">
@@ -13,7 +12,9 @@ export default class ImageComponent extends Vue {
   @Prop() private id!: string;
   @Prop() private height!: string;
   @Prop() private width!: string;
-  @Prop() private htmlClass!: string;
+  @Prop() private htmlClass!: string | null;
+  @Prop() private htmlId!: string | null;
+  @Prop() private original!: boolean;
 
   get Id() {
     return this.id ?? "null";
@@ -27,16 +28,30 @@ export default class ImageComponent extends Vue {
     return this.width ?? "150px";
   }
 
-  get Class() {
+  get HtmlClass() {
     return this.htmlClass ?? null;
+  }
+
+  get HtmlId() {
+    return this.htmlId ?? null;
+  }
+
+  get IsOriginal() {
+    return this.original ?? false;
   }
 
   private src: string = "";
 
   beforeMount() {
-    ImagesApi.getImage(this.Id).then(imageData => {
-      this.src = imageData;
-    });
+    if (!this.IsOriginal) {
+      ImagesApi.getImage(this.Id).then(imageData => {
+        this.src = imageData;
+      });
+    } else {
+      ImagesApi.getOriginalImage(this.Id).then(imageData => {
+        this.src = imageData;
+      });
+    }
   }
 }
 </script>

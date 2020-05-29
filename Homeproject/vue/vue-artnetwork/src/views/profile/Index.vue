@@ -70,11 +70,11 @@
         <div class="col-3 d-flex justify-content-center">
           <router-link v-if="isCurrentUser" :to="`/account/manage/avatar`">
             <div class="profile_image" :style="`background-color: ${rank.rankColor} !important;`">
-              <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId" />
+              <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId"/>
             </div>
           </router-link>
           <div v-else class="profile_image" :style="`background-color: ${rank.rankColor} !important;`">
-            <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId" />
+            <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId"/>
           </div>
         </div>
         <div class="profile_description col-9">
