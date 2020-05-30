@@ -1,3 +1,5 @@
+import { DomainEntityBaseMetaSoftUpdateDelete } from '@/types/Domain/DomainEntityBaseMetaSoftUpdateDelete'
+
 export interface IImageDTO {
   id: string;
   imageUrl: string;
@@ -34,4 +36,18 @@ export interface IImagePutDTO {
   paddingBottom: number;
   paddingLeft: number;
   imageFile: File | null;
+}
+
+export interface IImageAdminDTO extends DomainEntityBaseMetaSoftUpdateDelete{
+  imageUrl: string | null;
+  originalImageUrl: string | null;
+  heightPx: number;
+  widthPx: number;
+  paddingTop: number;
+  paddingRight: number;
+  paddingBottom: number;
+  paddingLeft: number;
+  imageFile: File | null;
+  imageType: number;
+  imageFor: string | null;
 }

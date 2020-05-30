@@ -1,3 +1,5 @@
+import { DomainEntityBaseMetaSoftUpdateDelete } from '@/types/Domain/DomainEntityBaseMetaSoftUpdateDelete'
+
 export interface IMessageDTO {
   id: string;
   chatRoomId: string;
@@ -15,4 +17,11 @@ export interface IMessagePostDTO {
 export interface IMessagePutDTO {
   id: string
   messageValue: string;
+}
+
+export interface IMessageAdminDTO extends DomainEntityBaseMetaSoftUpdateDelete {
+  messageValue: string;
+  messageDateTime: Date;
+  profileId: string;
+  chatRoomId: string;
 }

@@ -1,3 +1,5 @@
+import { DomainEntityBaseMetaSoftUpdateDelete} from '@/types/Domain/DomainEntityBaseMetaSoftUpdateDelete'
+
 export interface IChatMemberDTO {
   id: string
   userName: string;
@@ -9,4 +11,11 @@ export interface IChatMemberDTO {
   canWriteMessages: boolean;
   canEditAllMessages: boolean;
   canEditMessages: boolean;
+}
+
+export interface IChatMemberAdminDTO extends DomainEntityBaseMetaSoftUpdateDelete {
+  chatRoomTitle: string | null;
+  chatRoomId: string;
+  chatRoleId: string;
+  profileId: string;
 }

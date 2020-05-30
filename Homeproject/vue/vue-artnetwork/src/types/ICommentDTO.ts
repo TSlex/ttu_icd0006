@@ -1,7 +1,9 @@
+import { DomainEntityBaseMetaSoftUpdateDelete } from '@/types/Domain/DomainEntityBaseMetaSoftUpdateDelete'
+
 export interface ICommentDTO {
   id: string;
   userName: string;
-  profileAvatarUrl: string;
+  profileAvatarId: string | null;
   commentValue: string;
   commentDateTime: Date;
 }
@@ -14,4 +16,11 @@ export interface ICommentPostDTO {
 export interface ICommentPutDTO {
   id: string;
   commentValue: string;
+}
+
+export interface ICommentPutAdminDTO extends DomainEntityBaseMetaSoftUpdateDelete{
+  commentValue: string;
+  commentDateTime: Date;
+  profileId: string;
+  postId: string;
 }

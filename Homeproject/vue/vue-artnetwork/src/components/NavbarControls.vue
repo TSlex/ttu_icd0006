@@ -1,5 +1,6 @@
 <template>
   <div>
+    <slot></slot>
     <template v-if="isAuthenticated">
       <router-link class="btn btn-primary fas fa-user-alt mr-2" :to="'/profiles/' + userName"></router-link>
       <router-link class="btn btn-primary fas fa-plus-square mr-2" to="/posts/create"></router-link>

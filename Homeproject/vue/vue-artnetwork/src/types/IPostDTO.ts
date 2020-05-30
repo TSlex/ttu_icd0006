@@ -1,9 +1,11 @@
+import { DomainEntityBaseMetaSoftUpdateDelete } from '@/types/Domain/DomainEntityBaseMetaSoftUpdateDelete'
+
 export interface IPostDTO {
   id: string;
   postTitle: string;
-  postDescription: string;
+  postDescription: string | null;
   profileUsername: string;
-  postImageId: string;
+  postImageId: string | null;
   postPublicationDateTime: Date;
   postFavoritesCount: number;
   postCommentsCount: number;
@@ -13,12 +15,22 @@ export interface IPostDTO {
 export interface IPostPostDTO {
   id: string,
   postTitle: string;
-  postDescription: string;
-  postImageId: string;
+  postDescription: string | null;
+  postImageId: string | null;
 }
 
 export interface IPostPutDTO {
   id: string;
   postTitle: string;
-  postDescription: string;
+  postDescription: string | null;
+}
+
+export interface IPostAdminDTO extends DomainEntityBaseMetaSoftUpdateDelete {
+  postTitle: string;
+  postImageId: string | null;
+  postDescription: string | null;
+  postPublicationDateTime: Date;
+  postFavoritesCount: number;
+  postCommentsCount: number;
+  profileId: string;
 }
