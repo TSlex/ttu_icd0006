@@ -80,7 +80,6 @@ export default class Avatar extends Vue {
   }
 
   get fileName() {
-    console.log(this.imageModel?.imageFile?.name);
     return this.imageModel?.imageFile?.name;
   }
 
