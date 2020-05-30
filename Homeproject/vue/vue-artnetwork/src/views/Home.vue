@@ -40,7 +40,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import ImageComponent from "../components/Image.vue";
-import PostDetails from "../components/PostDetails.vue";
+import PostDetails from "../views/posts/PostDetails.vue";
 import store from "../store";
 import router from "../router";
 import { IPostDTO } from "../types/IPostDTO";

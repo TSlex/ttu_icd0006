@@ -1,6 +1,9 @@
 <template>
   <div class="modal_back" @click="closeModal">
     <ProfilesModal v-if="favorites" :profilesData="favorites" v-on:closeProfiles="closeFavorites" />
+    <Modal v-if="imageEditing" v-on:closeModal="closeImageEdit">
+      <PostsEditImage :id="post.postImageId" v-on:closeModal="closeImageEdit"/>
+    </Modal>
     <div class="post_details" @click.stop>
       <div class="post_details_post">
         <div class="post_image">
@@ -14,7 +17,12 @@
               <a class="fa fa-times btn-link" href="#" @click="editPost(false)"></a>
             </template>
           </div>
-          <ImageComponent :id="post.postImageId" :key="post.postImageId" height="unset" width="unset" />
+          <template v-if="isAuthenticated && currentUsername == post.profileUsername">
+            <div class="post_controls" style="position: absolute; top: 0; left: 0; width: fit-content">
+              <a class="fa fa-paint-brush btn-link" @click="openImageEdit"></a>
+            </div>
+          </template>
+          <ImageComponent v-if="!imageEditing" :id="post.postImageId" :key="post.postImageId" height="unset" width="unset" />
         </div>
 
         <div class="post_details_meta_section">
@@ -34,7 +42,7 @@
             <li class="post_meta">
               <span class="meta_title">{{post.postPublicationDateTime | formatDate}}</span>
             </li>
-            <li class="post_meta" @click="openFavorites">
+            <li class="post_meta btn-link" @click="openFavorites">
               <span class="meta_counter">{{post.postFavoritesCount}}&nbsp;</span>
               <span class="meta_title">favorites</span>
             </li>
@@ -44,8 +52,8 @@
               <span class="meta_title">comments</span>
             </li>
             <li v-if="isAuthenticated">
-              <a v-if="post.isFavorite" class="fas fa-heart" @click="unfavorite"></a>
-              <a v-else class="far fa-heart" @click="favorite"></a>
+              <a v-if="post.isFavorite" class="fas fa-heart btn-link" @click="unfavorite"></a>
+              <a v-else class="far fa-heart btn-link" @click="favorite"></a>
             </li>
           </ul>
         </div>
@@ -56,11 +64,8 @@
             <span class="comment_datetime">[{{comment.commentDateTime | formatTime}}]</span>
             <span class="comment_username">@{{comment.userName}}:</span>
             <span class="comment_value">&nbsp;{{comment.commentValue}}</span>
-            <div
-              v-if="!commentEditing
-            || commentEditing && editedComment.id === comment.id"
-              class="comment_controls"
-            >
+            <div v-if="!commentEditing
+            || commentEditing && editedComment.id === comment.id" class="comment_controls">
               <template v-if="!commentEditing && currentUsername === comment.userName">
                 <a class="fa fa-edit btn-link mr-2" href="#" @click="editComment(comment)"></a>
                 <a class="fa fa-times-circle btn-link" href="#" @click="deleteComment(comment)"></a>
@@ -96,25 +101,29 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import store from "../store";
-import router from "../router";
-import { IPostDTO, IPostPutDTO } from "../types/IPostDTO";
+import store from "../../store";
+import router from "../../router";
+import { IPostDTO, IPostPutDTO } from "../../types/IPostDTO";
 import {
   ICommentPostDTO,
   ICommentPutDTO,
   ICommentDTO
-} from "../types/ICommentDTO";
-import ImageComponent from "../components/Image.vue";
-import ProfilesModal from "../components/ProfilesModal.vue";
+} from "../../types/ICommentDTO";
+import ImageComponent from "../../components/Image.vue";
+import ProfilesModal from "../../components/ProfilesModal.vue";
+import Modal from "../../components/Modal.vue";
+import PostsEditImage from "./EditImage.vue";
 import { PostsApi } from "@/services/PostsApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
-import { CommentsApi } from "../services/CommentsApi";
-import { IFavoriteDTO } from "../types/IFavoriteDTO";
+import { CommentsApi } from "../../services/CommentsApi";
+import { IFavoriteDTO } from "../../types/IFavoriteDTO";
 
 @Component({
   components: {
     ImageComponent,
-    ProfilesModal
+    ProfilesModal,
+    PostsEditImage,
+    Modal
   }
 })
 export default class PostDetails extends Vue {
@@ -136,12 +145,21 @@ export default class PostDetails extends Vue {
 
   private postEditing: boolean = false;
   private commentEditing: boolean = false;
+  private imageEditing: boolean = false;
   private favorites: IFavoriteDTO[] | null = null;
 
   closeModal() {
     if (!this.postEditing) {
       this.$emit("closePost");
     }
+  }
+
+  openImageEdit() {
+    this.imageEditing = true;
+  }
+
+  closeImageEdit() {
+    this.imageEditing = false;
   }
 
   openFavorites() {

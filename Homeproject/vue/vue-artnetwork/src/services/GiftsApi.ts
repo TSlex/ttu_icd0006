@@ -4,6 +4,7 @@ import { IProfileDTO } from './../types/IProfileDTO';
 import Axios from 'axios';
 import store from "../store";
 import { CountResponseDTO } from '@/types/Response/CountResponseDTO';
+import { IProfileGiftDTO, IProfileGiftPostDTO } from '@/types/IProfileGiftDTO';
 
 
 
@@ -63,9 +64,9 @@ export abstract class GiftsApi {
     }
   }
 
-  static async getProfileGifts(userName: string, pageNUmber: number, jwt: string | null): Promise<IGiftDTO[]> {
+  static async getProfileGifts(userName: string, pageNUmber: number, jwt: string | null): Promise<IProfileGiftDTO[]> {
     const url = `${userName}/${pageNUmber}`
-    const response = await this.axios.get<IGiftDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IProfileGiftDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:
@@ -76,9 +77,22 @@ export abstract class GiftsApi {
     }
   }
 
-  static async sendGiftToUsername(userName: string, giftCode: string, jwt: string | null): Promise<ResponseDTO> {
-    const url = `${userName}/${giftCode}/send`
-    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
+  static async sendGiftToUsername(userName: string, gift: IProfileGiftPostDTO, jwt: string | null): Promise<ResponseDTO> {
+    const url = `${userName}/send`
+    const response = await this.axios.post<ResponseDTO>(url, gift, { headers: { Authorization: 'Bearer ' + jwt } });
+
+    switch (response.status) {
+      case 200:
+        return response.data;
+      default:
+        console.log(response.status + ":" + response.statusText)
+        return response.data;
+    }
+  }
+
+  static async deleteProfileGift(id: string, jwt: string | null): Promise<ResponseDTO> {
+    const url = id
+    const response = await this.axios.delete<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
 
     switch (response.status) {
       case 200:

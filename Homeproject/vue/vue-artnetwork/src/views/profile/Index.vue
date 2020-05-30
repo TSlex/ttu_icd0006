@@ -44,25 +44,30 @@
     </Modal>
     <Modal v-if="isGiftDetails" v-on:closeModal="closeGiftDetails">
       <div class="d-flex flex-column align-items-center" style="position: relative">
-        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-          <ul>
-            <li style="display:none"></li>
-          </ul>
+        <button
+          v-if="isCurrentUser"
+          class="item_controls btn-link"
+          style="position: absolute; right: 0"
+          @click="deleteProfileGift(gift)"
+          @click.prevent
+        >
+          <i class="fas fa-times-circle"></i>
+        </button>
+        <div>
+          <ImageComponent :id="gift.imageId" :key="gift.imageId" height="300px" width="300px" />
         </div>
+        <span class="font-weight-bold">{{gift.giftName}}</span>
 
-        <div class="profile_gift">
-          <img src="/images/00000000-0000-0000-0000-000000000002" alt style="height: 300px; width: 300px;" class="m-3" />
-        </div>
-        <span class="font-weight-bold">Together forever!</span>
-
-        <span class="font-weight-bold mt-2">From "admin"</span>
-        <span class="font-weight-bold mt-2">Message:</span>
-        <div
-          style="color: black !important; margin: auto; max-width: 400px; overflow: hidden; text-overflow: ellipsis; word-break: break-word"
-        >sdasdasdas</div>
-
+        <span v-if="gift.fromUsername" class="font-weight-bold mt-2">From "{{gift.fromUsername}}"</span>
+        <span v-else class="font-weight-bold mt-2">Anonymous</span>
+        <template v-if="gift.message">
+          <span class="font-weight-bold mt-2">Message:</span>
+          <div
+            style="color: black !important; margin: auto; max-width: 400px; overflow: hidden; text-overflow: ellipsis; word-break: break-word"
+          >{{gift.message}}</div>
+        </template>
         <hr />
-        <span>[27/05/2020 15:36:26]</span>
+        <span>[{{gift.giftDateTime | formatDate}}]</span>
       </div>
     </Modal>
     <div v-if="profile && rank" class="profile_conainer">
@@ -70,11 +75,11 @@
         <div class="col-3 d-flex justify-content-center">
           <router-link v-if="isCurrentUser" :to="`/account/manage/avatar`">
             <div class="profile_image" :style="`background-color: ${rank.rankColor} !important;`">
-              <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId"/>
+              <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId" />
             </div>
           </router-link>
           <div v-else class="profile_image" :style="`background-color: ${rank.rankColor} !important;`">
-            <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId"/>
+            <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId" />
           </div>
         </div>
         <div class="profile_description col-9">
@@ -164,13 +169,7 @@
         <div v-if="posts.length > 0" class="post_row card-columns">
           <a v-for="post in posts" :key="post.id" @click="selectPost(post)">
             <div class="post_item card mb-3">
-              <ImageComponent
-                :id="post.postImageId"
-                :key="post.postImageId"
-                height="unset"
-                width="unset"
-                htmlClass="card-img"
-              />
+              <ImageComponent :id="post.postImageId" :key="post.postImageId" height="unset" width="unset" htmlClass="card-img" />
             </div>
           </a>
         </div>
@@ -184,24 +183,25 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import ImageComponent from "../../components/Image.vue";
-import PostDetails from "../../components/PostDetails.vue";
-import ProfilesModal from "../../components/ProfilesModal.vue";
-import Modal from "../../components/Modal.vue";
-import GiftSelection from "../../components/GiftSelection.vue";
 import store from "@/store";
-import router from "../../router";
+import router from "@/router";
+import { Component, Prop, Vue } from "vue-property-decorator";
+import ImageComponent from "@/components/Image.vue";
+import PostDetails from "@/views/posts/PostDetails.vue";
+import ProfilesModal from "@/components/ProfilesModal.vue";
+import Modal from "@/components/Modal.vue";
+import GiftSelection from "@/views/gifts/GiftSelection.vue";
 import { IProfileDTO } from "@/types/IProfileDTO";
-import { ImagesApi } from "../../services/ImagesApi";
-import { IPostDTO } from "../../types/IPostDTO";
-import { IGiftDTO } from "../../types/IGiftDTO";
-import { IRankDTO } from "../../types/IRankDTO";
-import { ResponseDTO } from "../../types/Response/ResponseDTO";
-import { ChatRoomsApi } from "../../services/ChatRoomsApi";
+import { ImagesApi } from "@/services/ImagesApi";
+import { IPostDTO } from "@/types/IPostDTO";
+import { IProfileGiftDTO } from "@/types/IProfileGiftDTO";
+import { IRankDTO } from "@/types/IRankDTO";
+import { ResponseDTO } from "@/types/Response/ResponseDTO";
+import { ChatRoomsApi } from "@/services/ChatRoomsApi";
 import { ProfileApi } from "@/services/ProfileApi";
-import { IFollowerDTO } from "../../types/IFollowerDTO";
-import { IBlockedProfileDTO } from "../../types/IBlockedProfileDTO";
+import { IFollowerDTO } from "@/types/IFollowerDTO";
+import { IBlockedProfileDTO } from "@/types/IBlockedProfileDTO";
+import { IGiftDTO } from "@/types/IGiftDTO";
 
 @Component({
   components: {
@@ -217,7 +217,7 @@ export default class ProfileIndex extends Vue {
   private isFetching = false;
 
   private post: IPostDTO | null = null;
-  private gift: IProfileDTO | null = null;
+  private gift: IProfileGiftDTO | null = null;
 
   private followers: IFollowerDTO[] | null = null;
   private gifts: IGiftDTO[] | null = null;
@@ -282,7 +282,7 @@ export default class ProfileIndex extends Vue {
     return store.getters.getJwt;
   }
 
-  get profileGifts(): IGiftDTO[] {
+  get profileGifts(): IProfileGiftDTO[] {
     return store.state.profileGifts;
   }
 
@@ -296,7 +296,15 @@ export default class ProfileIndex extends Vue {
     return url !== null && url.search(reg) === 0;
   }
 
-  openGiftDetails(gift: IProfileDTO) {
+  deleteProfileGift(gift: IProfileGiftDTO) {
+    if (this.isCurrentUser) {
+      store.dispatch("deleteProfileGift", gift).then(() => {
+        this.closeGiftDetails()
+      });
+    }
+  }
+
+  openGiftDetails(gift: IProfileGiftDTO) {
     this.gift = gift;
     this.isGiftDetails = true;
   }

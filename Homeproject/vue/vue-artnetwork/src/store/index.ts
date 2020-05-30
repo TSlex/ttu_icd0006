@@ -33,6 +33,7 @@ import { FollowersApi } from '@/services/FollowersApi';
 import { IFollowerDTO } from '@/types/IFollowerDTO';
 import { FavoritesApi } from '@/services/FavoritesApi';
 import { ChatRolesApi } from '@/services/ChatRolesApi';
+import { IProfileGiftDTO } from '@/types/IProfileGiftDTO';
 
 Vue.use(Vuex)
 
@@ -58,7 +59,7 @@ export default new Vuex.Store({
     commentsLoadedCount: -1,
 
     // Gifts
-    profileGifts: [] as IGiftDTO[],
+    profileGifts: [] as IProfileGiftDTO[],
     giftsLoadedCount: -1,
 
     // Ranks
@@ -173,8 +174,15 @@ export default new Vuex.Store({
     },
 
     // ProfileGifts
-    setProfileGifts(state, gifts: IGiftDTO[]) {
+    setProfileGifts(state, gifts: IProfileGiftDTO[]) {
       state.profileGifts = gifts;
+    },
+    async deleteProfileGift(state, profileGift: IProfileGiftDTO) {
+      state.profileGifts.forEach((element: IProfileGiftDTO, index) => {
+        if (element.id === profileGift.id) {
+          state.profileGifts.splice(index, 1)
+        }
+      });
     },
 
     // Messages
@@ -384,9 +392,14 @@ export default new Vuex.Store({
     },
 
     // ProfileGifts
-    async getProfileGifts(context, params: { userName: string; pageNumber: number }): Promise<IGiftDTO[]> {
+    async getProfileGifts(context, params: { userName: string; pageNumber: number }): Promise<IProfileGiftDTO[]> {
       const response = await GiftsApi.getProfileGifts(params.userName, params.pageNumber, context.state.jwt);
       context.commit('setProfileGifts', response)
+      return response;
+    },
+    async deleteProfileGift(context, profileGift: IProfileGiftDTO): Promise<ResponseDTO> {
+      const response = await GiftsApi.deleteProfileGift(profileGift.id, context.state.jwt);
+      context.commit('deleteProfileGift', profileGift);
       return response;
     },
 
