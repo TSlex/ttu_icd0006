@@ -24,7 +24,10 @@ export default class IndexControls extends Vue {
   }
 
   get IsOriginalRecord() {
-    return !!(this.Model as BaseSoftUpdate).masterId;
+    if ((this.Model as BaseSoftUpdate).masterId === null) {
+      return true
+    }
+    return false;
   }
 
   get IsDeleted() {

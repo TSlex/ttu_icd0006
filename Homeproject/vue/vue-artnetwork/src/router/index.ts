@@ -20,6 +20,10 @@ import BPIndexA from '@/views/admin/views/BlockedProfiles/Index.vue'
 import BPDetailsA from '@/views/admin/views/BlockedProfiles/Details.vue'
 import BPEditA from '@/views/admin/views/BlockedProfiles/Edit.vue'
 
+import CMIndexA from '@/views/admin/views/ChatMembers/Index.vue'
+import CMDetailsA from '@/views/admin/views/ChatMembers/Details.vue'
+import CMEditA from '@/views/admin/views/ChatMembers/Edit.vue'
+
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -48,6 +52,10 @@ const routes: Array<RouteConfig> = [
   { path: '/admin/blockedprofiles', name: 'BPIndexA', component: BPIndexA },
   { path: '/admin/blockedprofiles/details/:id', name: 'BPDetailsA', component: BPDetailsA, props: true },
   { path: '/admin/blockedprofiles/edit/:id', name: 'BPEditA', component: BPEditA, props: true },
+
+  { path: '/admin/chatmembers', name: 'CMIndexA', component: CMIndexA },
+  { path: '/admin/chatmembers/details/:id', name: 'CMDetailsA', component: CMDetailsA, props: true },
+  { path: '/admin/chatmembers/edit/:id', name: 'CMEditA', component: CMEditA, props: true },
 ]
 
 const router = new VueRouter({

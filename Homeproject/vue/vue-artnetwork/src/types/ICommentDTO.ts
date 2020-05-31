@@ -18,7 +18,7 @@ export interface ICommentPutDTO {
   commentValue: string;
 }
 
-export interface ICommentPutAdminDTO extends DomainEntityBaseMetaSoftUpdateDelete{
+export interface ICommentAdminDTO extends DomainEntityBaseMetaSoftUpdateDelete{
   commentValue: string;
   commentDateTime: Date;
   profileId: string;
