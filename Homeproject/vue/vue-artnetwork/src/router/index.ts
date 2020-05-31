@@ -39,6 +39,14 @@ import CommentsDetailsA from '@/views/admin/views/Comments/Details.vue'
 import CommentsEditA from '@/views/admin/views/Comments/Edit.vue'
 import CommentsCreateA from '@/views/admin/views/Comments/Create.vue'
 
+import FavoritesIndexA from '@/views/admin/views/Favorites/Index.vue'
+import FavoritesDetailsA from '@/views/admin/views/Favorites/Details.vue'
+import FavoritesEditA from '@/views/admin/views/Favorites/Edit.vue'
+
+import FollowersIndexA from '@/views/admin/views/Followers/Index.vue'
+import FollowersDetailsA from '@/views/admin/views/Followers/Details.vue'
+import FollowersEditA from '@/views/admin/views/Followers/Edit.vue'
+
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -86,6 +94,14 @@ const routes: Array<RouteConfig> = [
   { path: '/admin/comments/create', name: 'CommentsCreateA', component: CommentsCreateA },
   { path: '/admin/comments/details/:id', name: 'CommentsDetailsA', component: CommentsDetailsA, props: true },
   { path: '/admin/comments/edit/:id', name: 'CommentsEditA', component: CommentsEditA, props: true },
+
+  { path: '/admin/favorites', name: 'FavoritesIndexA', component: FavoritesIndexA },
+  { path: '/admin/favorites/details/:id', name: 'FavoritesDetailsA', component: FavoritesDetailsA, props: true },
+  { path: '/admin/favorites/edit/:id', name: 'FavoritesEditA', component: FavoritesEditA, props: true },
+
+  { path: '/admin/followers', name: 'FollowersIndexA', component: FollowersIndexA },
+  { path: '/admin/followers/details/:id', name: 'FollowersDetailsA', component: FollowersDetailsA, props: true },
+  { path: '/admin/followers/edit/:id', name: 'FollowersEditA', component: FollowersEditA, props: true },
 ]
 
 const router = new VueRouter({
