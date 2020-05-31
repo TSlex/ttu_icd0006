@@ -47,6 +47,11 @@ import FollowersIndexA from '@/views/admin/views/Followers/Index.vue'
 import FollowersDetailsA from '@/views/admin/views/Followers/Details.vue'
 import FollowersEditA from '@/views/admin/views/Followers/Edit.vue'
 
+import ImagesIndexA from '@/views/admin/views/Images/Index.vue'
+import ImagesDetailsA from '@/views/admin/views/Images/Details.vue'
+import ImagesEditA from '@/views/admin/views/Images/Edit.vue'
+import ImagesCreateA from '@/views/admin/views/Images/Create.vue'
+
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -102,6 +107,11 @@ const routes: Array<RouteConfig> = [
   { path: '/admin/followers', name: 'FollowersIndexA', component: FollowersIndexA },
   { path: '/admin/followers/details/:id', name: 'FollowersDetailsA', component: FollowersDetailsA, props: true },
   { path: '/admin/followers/edit/:id', name: 'FollowersEditA', component: FollowersEditA, props: true },
+
+  { path: '/admin/images', name: 'ImagesIndexA', component: ImagesIndexA },
+  { path: '/admin/images/create', name: 'ImagesCreateA', component: ImagesCreateA },
+  { path: '/admin/images/details/:id', name: 'ImagesDetailsA', component: ImagesDetailsA, props: true },
+  { path: '/admin/images/edit/:id', name: 'ImagesEditA', component: ImagesEditA, props: true },
 ]
 
 const router = new VueRouter({
