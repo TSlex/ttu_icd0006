@@ -14,7 +14,7 @@
       </thead>
       <tbody>
         <tr v-for="item in Model" :key="item.id">
-          <td>{{item.id}}</td>
+          <td>{{item.profileId}}</td>
           <td>-&gt;</td>
           <td>{{item.bProfileId}}</td>
           <td>{{item.deletedAt != null}}</td>

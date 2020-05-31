@@ -3,20 +3,32 @@
     <h1>Details</h1>
 
     <div>
-      <h4>ChatMember</h4>
+      <h4>ChatRole</h4>
       <hr />
       <dl class="row">
         <dt class="col-sm-2">(ID)</dt>
         <dd class="col-sm-10">{{Model.id}}</dd>
 
-        <dt class="col-sm-2">Profile (ID)</dt>
-        <dd class="col-sm-10">{{Model.profileId}}</dd>
+        <dt class="col-sm-2">Title</dt>
+        <dd class="col-sm-10">{{Model.roleTitle}}</dd>
 
-        <dt class="col-sm-2">Room (ID)</dt>
-        <dd class="col-sm-10">{{Model.chatRoomId}}</dd>
+        <dt class="col-sm-2">Title [CULTURE]</dt>
+        <dd class="col-sm-10">{{Model.roleTitleValue}}</dd>
 
-        <dt class="col-sm-2">Role (ID)</dt>
-        <dd class="col-sm-10">{{Model.chatRoleId}}</dd>
+        <dt class="col-sm-2">Can rename room?</dt>
+        <dd class="col-sm-10">{{Model.canRenameRoom}}</dd>
+
+        <dt class="col-sm-2">Can edit members?</dt>
+        <dd class="col-sm-10">{{Model.canEditMembers}}</dd>
+
+        <dt class="col-sm-2">Can write messages?</dt>
+        <dd class="col-sm-10">{{Model.canWriteMessages}}</dd>
+
+        <dt class="col-sm-2">Can edit all messages?</dt>
+        <dd class="col-sm-10">{{Model.canEditAllMessages}}</dd>
+
+        <dt class="col-sm-2">Can edit own messages?</dt>
+        <dd class="col-sm-10">{{Model.canEditMessages}}</dd>
 
         <dt class="col-sm-2">CreatedBy</dt>
         <dd class="col-sm-10">{{Model.createdBy}}</dd>
@@ -49,17 +61,17 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import store from "@/store";
 import router from "@/router";
 
-import { IChatMemberAdminDTO } from "@/types/IChatMemberDTO";
+import { IChatRoleAdminDTO } from "@/types/IChatRoleDTO";
 
-import { ChatMembersApi } from "@/services/admin/ChatMembersApi";
+import { ChatRolesApi } from "@/services/admin/ChatRolesApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 @Component
-export default class CMDetailsA extends Vue {
+export default class ChatRolesDetailsA extends Vue {
   @Prop()
   private id!: string;
 
-  private Model: IChatMemberAdminDTO | null = null;
+  private Model: IChatRoleAdminDTO | null = null;
 
   private errors: string[] = [];
 
@@ -72,12 +84,12 @@ export default class CMDetailsA extends Vue {
   }
 
   onEdit(id: string) {
-    router.push({ name: "CMEditA", params: { id } });
+    router.push({ name: "ChatRolesEditA", params: { id } });
   }
 
   mounted() {
-    ChatMembersApi.details(this.Id, this.jwt).then(
-      (response: IChatMemberAdminDTO) => {
+    ChatRolesApi.details(this.Id, this.jwt).then(
+      (response: IChatRoleAdminDTO) => {
         this.Model = response;
       }
     );

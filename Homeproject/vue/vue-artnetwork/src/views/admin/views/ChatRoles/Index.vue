@@ -5,18 +5,18 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Profile (ID)</th>
-          <th>Room (ID)</th>
-          <th>Role (ID)</th>
+          <th>(ID)</th>
+          <th>Title</th>
+          <th>Title [CULTURE]</th>
           <th>IS DELETED?</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in Model" :key="item.id">
-          <td>{{item.profileId}}</td>
-          <td>{{item.chatRoomId}}</td>
-          <td>{{item.chatRoleId}}</td>
+          <td>{{item.id}}</td>
+          <td>{{item.roleTitle}}</td>
+          <td>{{item.roleTitleValue}}</td>
           <td>{{item.deletedAt != null}}</td>
           <td>
             <IndexControls
@@ -38,9 +38,9 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import store from "@/store";
 
-import { IChatMemberAdminDTO } from "@/types/IChatMemberDTO";
+import { IChatRoleAdminDTO } from "@/types/IChatRoleDTO";
 
-import { ChatMembersApi } from "@/services/admin/ChatMembersApi";
+import { ChatRolesApi } from "@/services/admin/ChatRolesApi";
 
 import IndexControls from "@/views/admin/components/IndexControls.vue";
 import router from "../../../../router";
@@ -51,34 +51,34 @@ import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
     IndexControls
   }
 })
-export default class CMIndexA extends Vue {
-  private Model: IChatMemberAdminDTO[] = [];
+export default class ChatRolesIndexA extends Vue {
+  private Model: IChatRoleAdminDTO[] = [];
 
   get jwt() {
     return store.getters.getJwt;
   }
 
   onHistory(id: string) {
-    ChatMembersApi.history(id, this.jwt).then(
-      (response: IChatMemberAdminDTO[]) => {
+    ChatRolesApi.history(id, this.jwt).then(
+      (response: IChatRoleAdminDTO[]) => {
         this.Model = response;
       }
     );
   }
 
   onEdit(id: string) {
-    router.push({ name: "CMEditA", params: { id } });
+    router.push({ name: "ChatRolesEditA", params: { id } });
   }
 
   onDetails(id: string) {
-    router.push({ name: "CMDetailsA", params: { id } });
+    router.push({ name: "ChatRolesDetailsA", params: { id } });
   }
 
   onDelete(id: string) {
-    ChatMembersApi.delete(id, this.jwt).then((response: ResponseDTO) => {
+    ChatRolesApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
-        ChatMembersApi.index(this.jwt).then(
-          (response: IChatMemberAdminDTO[]) => {
+        ChatRolesApi.index(this.jwt).then(
+          (response: IChatRoleAdminDTO[]) => {
             this.Model = response;
           }
         );
@@ -87,10 +87,10 @@ export default class CMIndexA extends Vue {
   }
 
   onRestore(id: string) {
-    ChatMembersApi.restore(id, this.jwt).then((response: ResponseDTO) => {
+    ChatRolesApi.restore(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
-        ChatMembersApi.index(this.jwt).then(
-          (response: IChatMemberAdminDTO[]) => {
+        ChatRolesApi.index(this.jwt).then(
+          (response: IChatRoleAdminDTO[]) => {
             this.Model = response;
           }
         );
@@ -99,7 +99,7 @@ export default class CMIndexA extends Vue {
   }
 
   mounted() {
-    ChatMembersApi.index(this.jwt).then((response: IChatMemberAdminDTO[]) => {
+    ChatRolesApi.index(this.jwt).then((response: IChatRoleAdminDTO[]) => {
       this.Model = response;
     });
   }

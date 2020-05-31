@@ -6,6 +6,9 @@
       <h4>BlockedProfile</h4>
       <hr />
       <dl class="row">
+        <dt class="col-sm-2">(ID)</dt>
+        <dd class="col-sm-10">{{Model.id}}</dd>
+
         <dt class="col-sm-2">Profile (ID)</dt>
         <dd class="col-sm-10">{{Model.profileId}}</dd>
 
@@ -35,7 +38,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import store from "@/store";
-import router from '@/router';
+import router from "@/router";
 
 import { IBlockedProfileAdminDTO } from "@/types/IBlockedProfileDTO";
 
