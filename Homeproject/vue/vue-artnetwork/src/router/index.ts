@@ -27,6 +27,7 @@ import CMEditA from '@/views/admin/views/ChatMembers/Edit.vue'
 import ChatRolesIndexA from '@/views/admin/views/ChatRoles/Index.vue'
 import ChatRolesDetailsA from '@/views/admin/views/ChatRoles/Details.vue'
 import ChatRolesEditA from '@/views/admin/views/ChatRoles/Edit.vue'
+import ChatRolesCreateA from '@/views/admin/views/ChatRoles/Create.vue'
 
 Vue.use(VueRouter)
 
@@ -62,6 +63,7 @@ const routes: Array<RouteConfig> = [
   { path: '/admin/chatmembers/edit/:id', name: 'CMEditA', component: CMEditA, props: true },
 
   { path: '/admin/chatroles', name: 'ChatRolesIndexA', component: ChatRolesIndexA },
+  { path: '/admin/chatroles/create', name: 'ChatRolesCreateA', component: ChatRolesCreateA },
   { path: '/admin/chatroles/details/:id', name: 'ChatRolesDetailsA', component: ChatRolesDetailsA, props: true },
   { path: '/admin/chatroles/edit/:id', name: 'ChatRolesEditA', component: ChatRolesEditA, props: true },
 ]

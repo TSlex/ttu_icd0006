@@ -1,7 +1,9 @@
 <template>
   <div>
     <h1>Index</h1>
-
+    <p>
+      <a href="#" @click="onCreate" @click.prevent>Create New</a>
+    </p>
     <table class="table">
       <thead>
         <tr>
@@ -58,12 +60,14 @@ export default class ChatRolesIndexA extends Vue {
     return store.getters.getJwt;
   }
 
+  onCreate() {
+    router.push({ name: "ChatRolesCreateA" });
+  }
+
   onHistory(id: string) {
-    ChatRolesApi.history(id, this.jwt).then(
-      (response: IChatRoleAdminDTO[]) => {
-        this.Model = response;
-      }
-    );
+    ChatRolesApi.history(id, this.jwt).then((response: IChatRoleAdminDTO[]) => {
+      this.Model = response;
+    });
   }
 
   onEdit(id: string) {
@@ -77,11 +81,9 @@ export default class ChatRolesIndexA extends Vue {
   onDelete(id: string) {
     ChatRolesApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
-        ChatRolesApi.index(this.jwt).then(
-          (response: IChatRoleAdminDTO[]) => {
-            this.Model = response;
-          }
-        );
+        ChatRolesApi.index(this.jwt).then((response: IChatRoleAdminDTO[]) => {
+          this.Model = response;
+        });
       }
     });
   }
@@ -89,11 +91,9 @@ export default class ChatRolesIndexA extends Vue {
   onRestore(id: string) {
     ChatRolesApi.restore(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
-        ChatRolesApi.index(this.jwt).then(
-          (response: IChatRoleAdminDTO[]) => {
-            this.Model = response;
-          }
-        );
+        ChatRolesApi.index(this.jwt).then((response: IChatRoleAdminDTO[]) => {
+          this.Model = response;
+        });
       }
     });
   }

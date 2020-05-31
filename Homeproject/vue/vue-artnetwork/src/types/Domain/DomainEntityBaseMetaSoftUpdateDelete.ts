@@ -1,6 +1,6 @@
 export interface DomainEntityBaseMetaSoftUpdateDelete{
   id: string;
-  masterId: string;
+  masterId: string | null;
 
   createdBy: string | null;
   createdAt: Date;
