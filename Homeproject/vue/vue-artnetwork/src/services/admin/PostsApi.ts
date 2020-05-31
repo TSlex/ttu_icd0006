@@ -8,7 +8,7 @@ export abstract class PostsApi {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
-      baseURL: "https://localhost:5001/api/v1/admin/adminchatmembers/",
+      baseURL: "https://localhost:5001/api/v1/admin/adminposts/",
       headers: {
         common: {
           'Content-Type': 'application/json'

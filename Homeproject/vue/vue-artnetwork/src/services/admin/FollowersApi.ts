@@ -8,7 +8,7 @@ export abstract class FollowersApi {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
-      baseURL: "https://localhost:5001/api/v1/admin/adminblockedprofiles",
+      baseURL: "https://localhost:5001/api/v1/admin/adminfollowers",
       headers: {
         common: {
           'Content-Type': 'application/json'

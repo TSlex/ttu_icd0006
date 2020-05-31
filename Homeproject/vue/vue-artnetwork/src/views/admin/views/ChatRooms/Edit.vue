@@ -1,0 +1,83 @@
+<template>
+  <div v-if="Id && Model">
+    <h1 class="text-center">Edit</h1>
+    <hr />
+    <div class="row text-center justify-content-center">
+      <div class="col-md-4">
+          <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
+            <ul>
+              <li v-for="(error, index) in errors" :key="index">{{error}}</li>
+            </ul>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="RoomTitle">Title</label>
+            <input
+              class="form-control"
+              type="text"
+              required
+              id="RoomTitle"
+              maxlength="100"
+              name="RoomTitle"
+              v-model="Model.chatRoomTitle"
+            />
+            <span class="text-danger field-validation-valid"></span>
+          </div>
+
+          <div class="form-group">
+            <button class="btn btn-success mr-1" @click="submit">Save</button>
+            <button class="btn btn-secondary" @click="$router.go(-1)">Back to List</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Prop, Vue } from "vue-property-decorator";
+import store from "@/store";
+
+import { IChatRoomAdminDTO } from "@/types/IChatRoomDTO";
+
+import { ChatRoomsApi } from "@/services/admin/ChatRoomsApi";
+import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
+
+@Component
+export default class ChatRoomsEditA extends Vue {
+  @Prop()
+  private id!: string;
+
+  private Model: IChatRoomAdminDTO | null = null;
+
+  private errors: string[] = [];
+
+  get jwt() {
+    return store.getters.getJwt;
+  }
+
+  get Id() {
+    return this.id;
+  }
+
+  mounted() {
+    ChatRoomsApi.details(this.Id, this.jwt).then(
+      (response: IChatRoomAdminDTO) => {
+        this.Model = response;
+      }
+    );
+  }
+
+  submit() {
+    if (this.Id && this.Model) {
+      ChatRoomsApi.edit(this.Id, this.Model, this.jwt).then(
+        (response: ResponseDTO) => {
+          if (response?.errors) {
+            this.errors = response.errors;
+          } else {
+            this.$router.go(-1);
+          }
+        }
+      );
+    }
+  }
+}
+</script>

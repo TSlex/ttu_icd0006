@@ -8,7 +8,7 @@ export abstract class FavoritesApi {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
-      baseURL: "https://localhost:5001/api/v1/admin/adminblockedprofiles",
+      baseURL: "https://localhost:5001/api/v1/admin/adminfavorites",
       headers: {
         common: {
           'Content-Type': 'application/json'

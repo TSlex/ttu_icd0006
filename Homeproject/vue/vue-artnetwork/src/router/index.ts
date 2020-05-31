@@ -29,6 +29,16 @@ import ChatRolesDetailsA from '@/views/admin/views/ChatRoles/Details.vue'
 import ChatRolesEditA from '@/views/admin/views/ChatRoles/Edit.vue'
 import ChatRolesCreateA from '@/views/admin/views/ChatRoles/Create.vue'
 
+import ChatRoomsIndexA from '@/views/admin/views/ChatRooms/Index.vue'
+import ChatRoomsDetailsA from '@/views/admin/views/ChatRooms/Details.vue'
+import ChatRoomsEditA from '@/views/admin/views/ChatRooms/Edit.vue'
+import ChatRoomsCreateA from '@/views/admin/views/ChatRooms/Create.vue'
+
+import CommentsIndexA from '@/views/admin/views/Comments/Index.vue'
+import CommentsDetailsA from '@/views/admin/views/Comments/Details.vue'
+import CommentsEditA from '@/views/admin/views/Comments/Edit.vue'
+import CommentsCreateA from '@/views/admin/views/Comments/Create.vue'
+
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -66,6 +76,16 @@ const routes: Array<RouteConfig> = [
   { path: '/admin/chatroles/create', name: 'ChatRolesCreateA', component: ChatRolesCreateA },
   { path: '/admin/chatroles/details/:id', name: 'ChatRolesDetailsA', component: ChatRolesDetailsA, props: true },
   { path: '/admin/chatroles/edit/:id', name: 'ChatRolesEditA', component: ChatRolesEditA, props: true },
+
+  { path: '/admin/chatrooms', name: 'ChatRoomsIndexA', component: ChatRoomsIndexA },
+  { path: '/admin/chatrooms/create', name: 'ChatRoomsCreateA', component: ChatRoomsCreateA },
+  { path: '/admin/chatrooms/details/:id', name: 'ChatRoomsDetailsA', component: ChatRoomsDetailsA, props: true },
+  { path: '/admin/chatrooms/edit/:id', name: 'ChatRoomsEditA', component: ChatRoomsEditA, props: true },
+
+  { path: '/admin/comments', name: 'CommentsIndexA', component: CommentsIndexA },
+  { path: '/admin/comments/create', name: 'CommentsCreateA', component: CommentsCreateA },
+  { path: '/admin/comments/details/:id', name: 'CommentsDetailsA', component: CommentsDetailsA, props: true },
+  { path: '/admin/comments/edit/:id', name: 'CommentsEditA', component: CommentsEditA, props: true },
 ]
 
 const router = new VueRouter({
