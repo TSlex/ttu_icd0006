@@ -3,7 +3,9 @@
     <header>
       <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 fixed-to">
         <div class="container">
-          <a class="navbar-brand" asp-area="Admin" asp-controller="Home" asp-action="Index"><i class="fab fa-galactic-senate"></i>Admin panel</a>
+          <a class="navbar-brand" asp-area="Admin" asp-controller="Home" asp-action="Index">
+            <i class="fab fa-galactic-senate"></i>Admin panel
+          </a>
           <button
             class="navbar-toggler"
             type="button"
@@ -46,40 +48,26 @@ import NavbarControls from "@/views/admin/components/NavbarControls.vue";
     NavbarControls
   }
 })
-export default class AdminArea extends Vue {}
+export default class AdminArea extends Vue {
+  beforeCreate() {
+    let exist = document.getElementById("admin_style");
+
+    if (!exist) {
+      let link = document.createElement("link");
+      link.setAttribute("id", "admin_style");
+      link.setAttribute("rel", "stylesheet");
+      link.setAttribute("href", "admin.css");
+
+      document.head.append(link);
+    }
+  }
+
+  beforeDestroy() {
+    let exist = document.getElementById("admin_style");
+
+    if (exist) {
+      exist.remove();
+    }
+  }
+}
 </script>
-
-<style>
-
-.bg-white{
-    background-color: lightgray!important;
-    font-family: Consolas, serif;
-    font-weight: bold !important;
-}
-
-.nav-link{
-    /*font-weight: bold !important;*/
-    display: block !important;
-    border: none;
-}
-
-a{
-    color: #FF6633;
-}
-
-.btn-primary{
-    background-color: #FF6633;
-    border-color: #CC3300;
-}
-
-.btn-primary:hover{
-    background-color: #CC3300;
-    border-color: #CC3300;
-}
-
-.btn-primary:focus{
-    outline-width: 3px !important;
-    outline-color: #CC3300 !important;
-}
-
-</style>

@@ -17,8 +17,5 @@ import AdminArea from "@/views/areas/AdminArea.vue";
   }
 })
 export default class App extends Vue {
-  mounted() {
-    console.log(this.$route.path.indexOf('admin'));
-  }
 }
 </script>

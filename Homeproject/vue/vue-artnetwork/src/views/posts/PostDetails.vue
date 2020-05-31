@@ -241,7 +241,7 @@ export default class PostDetails extends Vue {
       this.post &&
       this.postPutModel.id.length > 0 &&
       this.postPutModel.postTitle.length > 0 &&
-      this.postPutModel.postDescription.length > 0
+      this.postPutModel.postDescription!.length > 0
     ) {
       this.postEditing = false;
       PostsApi.putPost(this.post.id, this.postPutModel, this.jwt).then(

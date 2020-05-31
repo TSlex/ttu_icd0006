@@ -160,7 +160,7 @@ export default class PostsCreate extends Vue {
     if (
       this.imageModel.imageFile &&
       this.postModel.postTitle.length > 0 &&
-      this.postModel.postDescription.length > 0
+      this.postModel.postDescription!.length > 0
     ) {
       ImagesApi.postImageModel(this.imageModel, this.jwt).then(
         (response: IImageDTO) => {

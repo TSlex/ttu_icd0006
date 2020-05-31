@@ -1,10 +1,10 @@
 export interface DomainEntityBaseMetadata{
   id: string;
 
-  createdBy: string;
+  createdBy: string | null;
   createdAt: Date;
-  changedBy: string;
+  changedBy: string | null;
   changedAt: Date;
-  deletedBy: string;
-  deletedAt: Date;
+  deletedBy: string | null;
+  deletedAt: Date | null;
 }
