@@ -52,6 +52,21 @@ import ImagesDetailsA from '@/views/admin/views/Images/Details.vue'
 import ImagesEditA from '@/views/admin/views/Images/Edit.vue'
 import ImagesCreateA from '@/views/admin/views/Images/Create.vue'
 
+import MessagesIndexA from '@/views/admin/views/Messages/Index.vue'
+import MessagesDetailsA from '@/views/admin/views/Messages/Details.vue'
+import MessagesEditA from '@/views/admin/views/Messages/Edit.vue'
+import MessagesCreateA from '@/views/admin/views/Messages/Create.vue'
+
+import GiftsIndexA from '@/views/admin/views/Gifts/Index.vue'
+import GiftsDetailsA from '@/views/admin/views/Gifts/Details.vue'
+import GiftsEditA from '@/views/admin/views/Gifts/Edit.vue'
+import GiftsCreateA from '@/views/admin/views/Gifts/Create.vue'
+
+import PostsIndexA from '@/views/admin/views/Posts/Index.vue'
+import PostsDetailsA from '@/views/admin/views/Posts/Details.vue'
+import PostsEditA from '@/views/admin/views/Posts/Edit.vue'
+import PostsCreateA from '@/views/admin/views/Posts/Create.vue'
+
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -112,6 +127,21 @@ const routes: Array<RouteConfig> = [
   { path: '/admin/images/create', name: 'ImagesCreateA', component: ImagesCreateA },
   { path: '/admin/images/details/:id', name: 'ImagesDetailsA', component: ImagesDetailsA, props: true },
   { path: '/admin/images/edit/:id', name: 'ImagesEditA', component: ImagesEditA, props: true },
+
+  { path: '/admin/messages', name: 'MessagesIndexA', component: MessagesIndexA },
+  { path: '/admin/messages/create', name: 'MessagesCreateA', component: MessagesCreateA },
+  { path: '/admin/messages/details/:id', name: 'MessagesDetailsA', component: MessagesDetailsA, props: true },
+  { path: '/admin/messages/edit/:id', name: 'MessagesEditA', component: MessagesEditA, props: true },
+
+  { path: '/admin/gifts', name: 'GiftsIndexA', component: GiftsIndexA },
+  { path: '/admin/gifts/create', name: 'GiftsCreateA', component: GiftsCreateA },
+  { path: '/admin/gifts/details/:id', name: 'GiftsDetailsA', component: GiftsDetailsA, props: true },
+  { path: '/admin/gifts/edit/:id', name: 'GiftsEditA', component: GiftsEditA, props: true },
+
+  { path: '/admin/posts', name: 'PostsIndexA', component: PostsIndexA },
+  { path: '/admin/posts/create', name: 'PostsCreateA', component: PostsCreateA },
+  { path: '/admin/posts/details/:id', name: 'PostsDetailsA', component: PostsDetailsA, props: true },
+  { path: '/admin/posts/edit/:id', name: 'PostsEditA', component: PostsEditA, props: true },
 ]
 
 const router = new VueRouter({

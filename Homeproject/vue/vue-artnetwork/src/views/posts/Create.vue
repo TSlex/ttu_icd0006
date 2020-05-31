@@ -56,11 +56,14 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import store from "@/store";
 import router from "@/router";
 import $ from "jquery";
+
 import ImageComponent from "../../components/Image.vue";
+
 import { ImageType } from "../../types/Enums/ImageType";
 import { IPostPostDTO } from "@/types/IPostDTO";
 import { IImagePostDTO, IImageDTO } from "@/types/IImageDTO";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
+
 import { ImagesApi } from "@/services/ImagesApi";
 
 @Component({
