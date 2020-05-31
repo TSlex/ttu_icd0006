@@ -17,6 +17,8 @@ import ChatRoom from '@/views/messages/ChatRoom.vue'
 import AdminPanel from '@/views/admin/views/AdminPanel.vue'
 
 import BPIndexA from '@/views/admin/views/BlockedProfiles/Index.vue'
+import BPDetailsA from '@/views/admin/views/BlockedProfiles/Details.vue'
+import BPEditA from '@/views/admin/views/BlockedProfiles/Edit.vue'
 
 Vue.use(VueRouter)
 
@@ -44,6 +46,8 @@ const routes: Array<RouteConfig> = [
   { path: '/admin', name: 'AdminPanel', component: AdminPanel },
 
   { path: '/admin/blockedprofiles', name: 'BPIndexA', component: BPIndexA },
+  { path: '/admin/blockedprofiles/details/:id', name: 'BPDetailsA', component: BPDetailsA, props: true },
+  { path: '/admin/blockedprofiles/edit/:id', name: 'BPEditA', component: BPEditA, props: true },
 ]
 
 const router = new VueRouter({

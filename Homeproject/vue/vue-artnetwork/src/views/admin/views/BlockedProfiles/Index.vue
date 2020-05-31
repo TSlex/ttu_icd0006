@@ -19,7 +19,12 @@
           <td>{{item.bProfileId}}</td>
           <td>{{item.deletedAt != null}}</td>
           <td>
-            <IndexControls :model="item"/>
+            <IndexControls
+              :model="item"
+              v-on:onEdit="onEdit(item.id)"
+              v-on:onDetails="onDetails(item.id)"
+              v-on:onDelete="onDelete(item.id)"
+            />
           </td>
         </tr>
       </tbody>
@@ -36,6 +41,8 @@ import { IBlockedProfileAdminDTO } from "@/types/IBlockedProfileDTO";
 import { BlockedProfilesApi } from "@/services/admin/BlockedProfilesApi";
 
 import IndexControls from "@/views/admin/components/IndexControls.vue";
+import router from "../../../../router";
+import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 @Component({
   components: {
@@ -47,6 +54,26 @@ export default class BPIndexA extends Vue {
 
   get jwt() {
     return store.getters.getJwt;
+  }
+
+  onEdit(id: string) {
+    router.push({ name: "BPEditA", params: { id } });
+  }
+
+  onDetails(id: string) {
+    router.push({ name: "BPDetailsA", params: { id } });
+  }
+
+  onDelete(id: string) {
+    BlockedProfilesApi.delete(id, this.jwt).then((response: ResponseDTO) => {
+      if (!response?.errors) {
+        BlockedProfilesApi.index(this.jwt).then(
+          (response: IBlockedProfileAdminDTO[]) => {
+            this.Model = response;
+          }
+        );
+      }
+    });
   }
 
   mounted() {
