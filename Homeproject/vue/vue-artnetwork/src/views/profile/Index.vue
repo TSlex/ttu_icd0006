@@ -198,7 +198,7 @@ import { IProfileGiftDTO } from "@/types/IProfileGiftDTO";
 import { IRankDTO } from "@/types/IRankDTO";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import { ChatRoomsApi } from "@/services/ChatRoomsApi";
-import { ProfileApi } from "@/services/ProfileApi";
+import { ProfilesApi } from "@/services/ProfilesApi";
 import { IFollowerDTO } from "@/types/IFollowerDTO";
 import { IBlockedProfileDTO } from "@/types/IBlockedProfileDTO";
 import { IGiftDTO } from "@/types/IGiftDTO";
@@ -410,7 +410,7 @@ export default class ProfileIndex extends Vue {
 
   followProfile() {
     if (!this.isCurrentUser) {
-      ProfileApi.follow(this.username, this.jwt).then(
+      ProfilesApi.follow(this.username, this.jwt).then(
         (response: ResponseDTO) => {
           console.log(response);
           if (!response.errors && this.profile) {
@@ -423,7 +423,7 @@ export default class ProfileIndex extends Vue {
 
   unfollowProfile() {
     if (!this.isCurrentUser) {
-      ProfileApi.unfollow(this.username, this.jwt).then(
+      ProfilesApi.unfollow(this.username, this.jwt).then(
         (response: ResponseDTO) => {
           if (!response.errors && this.profile) {
             store.dispatch("getProfile", this.username);
@@ -435,7 +435,7 @@ export default class ProfileIndex extends Vue {
 
   blockProfile() {
     if (!this.isCurrentUser) {
-      ProfileApi.block(this.username, this.jwt).then(
+      ProfilesApi.block(this.username, this.jwt).then(
         (response: ResponseDTO) => {
           if (!response.errors && this.profile) {
             store.dispatch("getProfile", this.username);
@@ -447,7 +447,7 @@ export default class ProfileIndex extends Vue {
 
   unblockProfile() {
     if (!this.isCurrentUser) {
-      ProfileApi.unblock(this.username, this.jwt).then(
+      ProfilesApi.unblock(this.username, this.jwt).then(
         (response: ResponseDTO) => {
           if (!response.errors && this.profile) {
             store.dispatch("getProfile", this.username);

@@ -47,7 +47,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import ImageComponent from "../../../components/Image.vue";
 import store from "@/store";
 import { IProfileDTO } from "../../../types/IProfileDTO";
-import { ProfileApi } from "../../../services/ProfileApi";
+import { ProfilesApi } from "../../../services/ProfilesApi";
 import {
   IImageDTO,
   IImagePostDTO,
@@ -86,7 +86,7 @@ export default class Avatar extends Vue {
   private profile: IProfileDTO | null = null;
 
   beforeMount() {
-    ProfileApi.getProfile(this.userName, this.jwt).then(
+    ProfilesApi.getProfile(this.userName, this.jwt).then(
       (response: IProfileDTO) => {
         this.profile = response;
         if (this.isAvatarExist) {

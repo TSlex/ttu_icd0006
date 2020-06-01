@@ -15,7 +15,7 @@ import { ResponseDTO } from './../types/Response/ResponseDTO';
 import { IProfileDTO } from './../types/IProfileDTO';
 import { CountResponseDTO } from '@/types/Response/CountResponseDTO';
 import { IPostDTO, IPostPostDTO } from '@/types/IPostDTO';
-import { ProfileApi } from '@/services/ProfileApi';
+import { ProfilesApi } from '@/services/ProfilesApi';
 import { ChatRoomsApi } from '@/services/ChatRoomsApi';
 import { ChatMembersApi } from '@/services/ChatMembersApi';
 import { MessagesApi } from '@/services/MessagesApi';
@@ -265,28 +265,28 @@ export default new Vuex.Store({
 
     // Profile
     async getProfile(context, username: string): Promise<IProfileDTO> {
-      const response = await ProfileApi.getProfile(username, context.state.jwt);
+      const response = await ProfilesApi.getProfile(username, context.state.jwt);
       context.commit('setProfile', response);
       return response;
     },
 
     async profileFollow(context, username: string): Promise<ResponseDTO> {
-      const response = await ProfileApi.follow(username, context.state.jwt);
+      const response = await ProfilesApi.follow(username, context.state.jwt);
       return response;
     },
 
     async profileUnfollow(context, username: string): Promise<ResponseDTO> {
-      const response = await ProfileApi.unfollow(username, context.state.jwt);
+      const response = await ProfilesApi.unfollow(username, context.state.jwt);
       return response;
     },
 
     async profileBlock(context, username: string): Promise<ResponseDTO> {
-      const response = await ProfileApi.block(username, context.state.jwt);
+      const response = await ProfilesApi.block(username, context.state.jwt);
       return response;
     },
 
     async profileUnblock(context, username: string): Promise<ResponseDTO> {
-      const response = await ProfileApi.unblock(username, context.state.jwt);
+      const response = await ProfilesApi.unblock(username, context.state.jwt);
       return response;
     },
 

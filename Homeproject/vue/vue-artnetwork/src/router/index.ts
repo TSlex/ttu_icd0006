@@ -67,6 +67,26 @@ import PostsDetailsA from '@/views/admin/views/Posts/Details.vue'
 import PostsEditA from '@/views/admin/views/Posts/Edit.vue'
 import PostsCreateA from '@/views/admin/views/Posts/Create.vue'
 
+import ProfileGiftsIndexA from '@/views/admin/views/ProfileGifts/Index.vue'
+import ProfileGiftsDetailsA from '@/views/admin/views/ProfileGifts/Details.vue'
+import ProfileGiftsEditA from '@/views/admin/views/ProfileGifts/Edit.vue'
+import ProfileGiftsCreateA from '@/views/admin/views/ProfileGifts/Create.vue'
+
+import ProfileRanksIndexA from '@/views/admin/views/ProfileRanks/Index.vue'
+import ProfileRanksDetailsA from '@/views/admin/views/ProfileRanks/Details.vue'
+import ProfileRanksEditA from '@/views/admin/views/ProfileRanks/Edit.vue'
+import ProfileRanksCreateA from '@/views/admin/views/ProfileRanks/Create.vue'
+
+import ProfilesIndexA from '@/views/admin/views/Profiles/Index.vue'
+import ProfilesDetailsA from '@/views/admin/views/Profiles/Details.vue'
+import ProfilesEditA from '@/views/admin/views/Profiles/Edit.vue'
+import ProfilesCreateA from '@/views/admin/views/Profiles/Create.vue'
+
+import RanksIndexA from '@/views/admin/views/Ranks/Index.vue'
+import RanksDetailsA from '@/views/admin/views/Ranks/Details.vue'
+import RanksEditA from '@/views/admin/views/Ranks/Edit.vue'
+import RanksCreateA from '@/views/admin/views/Ranks/Create.vue'
+
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -142,6 +162,26 @@ const routes: Array<RouteConfig> = [
   { path: '/admin/posts/create', name: 'PostsCreateA', component: PostsCreateA },
   { path: '/admin/posts/details/:id', name: 'PostsDetailsA', component: PostsDetailsA, props: true },
   { path: '/admin/posts/edit/:id', name: 'PostsEditA', component: PostsEditA, props: true },
+
+  { path: '/admin/profilegifts', name: 'ProfileGiftsIndexA', component: ProfileGiftsIndexA },
+  { path: '/admin/profilegifts/create', name: 'ProfileGiftsCreateA', component: ProfileGiftsCreateA },
+  { path: '/admin/profilegifts/details/:id', name: 'ProfileGiftsDetailsA', component: ProfileGiftsDetailsA, props: true },
+  { path: '/admin/profilegifts/edit/:id', name: 'ProfileGiftsEditA', component: ProfileGiftsEditA, props: true },
+
+  { path: '/admin/profileranks', name: 'ProfileRanksIndexA', component: ProfileRanksIndexA },
+  { path: '/admin/profileranks/create', name: 'ProfileRanksCreateA', component: ProfileRanksCreateA },
+  { path: '/admin/profileranks/details/:id', name: 'ProfileRanksDetailsA', component: ProfileRanksDetailsA, props: true },
+  { path: '/admin/profileranks/edit/:id', name: 'ProfileRanksEditA', component: ProfileRanksEditA, props: true },
+
+  { path: '/admin/profiles', name: 'ProfilesIndexA', component: ProfilesIndexA },
+  { path: '/admin/profiles/create', name: 'ProfilesCreateA', component: ProfilesCreateA },
+  { path: '/admin/profiles/details/:id', name: 'ProfilesDetailsA', component: ProfilesDetailsA, props: true },
+  { path: '/admin/profiles/edit/:id', name: 'ProfilesEditA', component: ProfilesEditA, props: true },
+
+  { path: '/admin/ranks', name: 'RanksIndexA', component: RanksIndexA },
+  { path: '/admin/ranks/create', name: 'RanksCreateA', component: RanksCreateA },
+  { path: '/admin/ranks/details/:id', name: 'RanksDetailsA', component: RanksDetailsA, props: true },
+  { path: '/admin/ranks/edit/:id', name: 'RanksEditA', component: RanksEditA, props: true },
 ]
 
 const router = new VueRouter({
