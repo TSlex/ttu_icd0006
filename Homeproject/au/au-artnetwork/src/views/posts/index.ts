@@ -1,6 +1,6 @@
 import { IPost } from 'domain/ipost';
 import { autoinject } from 'aurelia-framework';
-import { PostService } from 'servises/post-servise';
+import { PostService } from 'servises/PostsApi';
 
 @autoinject
 export class PostsIndex{

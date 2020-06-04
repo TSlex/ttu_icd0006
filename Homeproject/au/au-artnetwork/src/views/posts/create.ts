@@ -1,6 +1,6 @@
 import { autoinject } from 'aurelia-framework';
 import { RouteConfig, NavigationInstruction, Router } from 'aurelia-router';
-import { PostService } from './../../servises/post-servise';
+import { PostService } from '../../servises/PostsApi';
 
 @autoinject
 export class PostsCreate {
