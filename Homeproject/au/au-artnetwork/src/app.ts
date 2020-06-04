@@ -6,6 +6,8 @@ import { RouterConfiguration, Router } from 'aurelia-router';
 export class App {
   router?: Router;
 
+  private userName: string;
+
   constructor(private appState: AppState) { }
 
   configureRouter(config: RouterConfiguration, router: Router): void {
@@ -33,6 +35,10 @@ export class App {
     ]);
 
     config.mapUnknownRoutes('views/home/index');
+  }
+
+  attached() {
+    this.userName = this.appState.userName;
   }
 
   logout(){

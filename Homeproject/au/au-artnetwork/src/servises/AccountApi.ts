@@ -48,9 +48,7 @@ export class AccountApi extends BaseApi {
         case 204:
           return (await response.json()) as IResponseDTO
         default:
-          return {
-            errors: ["Authorisation fails"]
-          } as IResponseDTO
+          return (await response.json()) as IResponseDTO
       }
     } catch (reason) {
       return {

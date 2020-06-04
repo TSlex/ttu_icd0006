@@ -56,7 +56,7 @@ export class AppState {
   get userRoles() {
     if (this.isAuthenticated) {
       const decoded = JwtDecode(this.jwt!) as Record<string, string>;
-      return decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] as unknown as string[]
+      return decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].toString().split(',') as string[]
     }
     return [];
   }
