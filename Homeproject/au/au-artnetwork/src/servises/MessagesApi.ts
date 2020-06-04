@@ -1,3 +1,5 @@
+import { IResponseDTO } from './../types/Response/IResponseDTO';
+import { IMessagePostDTO } from './../types/IMessageDTO';
 import { autoinject } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-fetch-client';
 import { BaseApi } from 'servises/BaseApi';
@@ -13,119 +15,25 @@ export class MessagesApi extends BaseApi {
   }
 
   async Index(chatRoomId: string): Promise<IFetchResponse<IMessageGetDTO[]>> {
-    try {
-      const response = await this.httpClient.get(this.fetchUrl + chatRoomId, { headers: this.authHeaders })
+    const url = `${this.fetchUrl}/${chatRoomId}`;
 
-      switch (response.status) {
-        case 200:
-        case 201:
-        case 204:
-          return {
-            status: response.status.toString(),
-            errors: [],
-            data: (await response.json()) as IMessageGetDTO[]
-          }
-        default:
-          return {
-            status: response.status.toString(),
-            errors: [response.statusText.toString()],
-            data: null
-          }
-      }
-    } catch (reason) {
-      return {
-        status: "-1",
-        errors: [reason],
-        data: null
-      }
-    }
+    return await this._index<IMessageGetDTO>(url, this.authHeaders as RequestInit)
   }
 
-  async Create(chatRoomId: string): Promise<IFetchResponse<IMessageGetDTO[]>> {
-    try {
-      const response = await this.httpClient.post(this.fetchUrl + chatRoomId, {}, { headers: this.authHeaders })
+  async Create(model: IMessagePostDTO): Promise<IResponseDTO> {
 
-      switch (response.status) {
-        case 200:
-        case 201:
-        case 204:
-          return {
-            status: response.status.toString(),
-            errors: [],
-            data: (await response.json()) as IMessageGetDTO[]
-          }
-        default:
-          return {
-            status: response.status.toString(),
-            errors: [response.statusText.toString()],
-            data: null
-          }
-      }
-    } catch (reason) {
-      return {
-        status: "-1",
-        errors: [reason],
-        data: null
-      }
-    }
+    return await this._create<IMessageGetDTO>("", model, this.authHeaders as RequestInit)
   }
 
-  async Edit(chatRoomId: string): Promise<IFetchResponse<IMessageGetDTO[]>> {
-    try {
-      const response = await this.httpClient.put(this.fetchUrl + chatRoomId, {}, { headers: this.authHeaders })
+  async Edit(id: string, model: IMessagePostDTO): Promise<IResponseDTO> {
+    const url = `${this.fetchUrl}/${id}`;
 
-      switch (response.status) {
-        case 200:
-        case 201:
-        case 204:
-          return {
-            status: response.status.toString(),
-            errors: [],
-            data: (await response.json()) as IMessageGetDTO[]
-          }
-        default:
-          return {
-            status: response.status.toString(),
-            errors: [response.statusText.toString()],
-            data: null
-          }
-      }
-    } catch (reason) {
-      return {
-        status: "-1",
-        errors: [reason],
-        data: null
-      }
-    }
+    return await this._edit<IMessageGetDTO>(url, model, this.authHeaders as RequestInit)
   }
 
-  async Delete(chatRoomId: string): Promise<IFetchResponse<IMessageGetDTO[]>> {
-    try {
-      const response = await this.httpClient.delete(this.fetchUrl + chatRoomId, {}, { headers: this.authHeaders })
+  async Delete(id: string): Promise<IResponseDTO> {
+    const url = `${this.fetchUrl}/${id}`;
 
-      switch (response.status) {
-        case 200:
-        case 201:
-        case 204:
-          return {
-            status: response.status.toString(),
-            errors: [],
-            data: (await response.json()) as IMessageGetDTO[]
-          }
-        default:
-          return {
-            status: response.status.toString(),
-            errors: [response.statusText.toString()],
-            data: null
-          }
-      }
-    } catch (reason) {
-      return {
-        status: "-1",
-        errors: [reason],
-        data: null
-      }
-    }
+    return await this._edit<IMessageGetDTO>(url, this.authHeaders as RequestInit)
   }
-
 }
