@@ -1,7 +1,7 @@
 import { Router } from 'aurelia-router';
 import { autoinject } from "aurelia-framework"
 import { AccountService } from "servises/account-service";
-import { AppState } from "state/app-state";
+import { AppState } from "state/state";
 
 @autoinject
 export class AccountRegister {

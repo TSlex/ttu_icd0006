@@ -1,4 +1,4 @@
-import { AppState } from './state/app-state';
+import { AppState } from './state/state';
 import { autoinject, PLATFORM } from 'aurelia-framework';
 import { RouterConfiguration, Router } from 'aurelia-router';
 
