@@ -17,23 +17,23 @@ export class MessagesApi extends BaseApi {
   async Index(chatRoomId: string): Promise<IFetchResponse<IMessageGetDTO[]>> {
     const url = `${this.fetchUrl}/${chatRoomId}`;
 
-    return await this._index<IMessageGetDTO>(url, this.authHeaders as RequestInit)
+    return await this._index<IMessageGetDTO>(url, this.headers as RequestInit)
   }
 
   async Create(model: IMessagePostDTO): Promise<IResponseDTO> {
 
-    return await this._create<IMessageGetDTO>("", model, this.authHeaders as RequestInit)
+    return await this._create<IMessageGetDTO>("", model, this.headers as RequestInit)
   }
 
   async Edit(id: string, model: IMessagePostDTO): Promise<IResponseDTO> {
     const url = `${this.fetchUrl}/${id}`;
 
-    return await this._edit<IMessageGetDTO>(url, model, this.authHeaders as RequestInit)
+    return await this._edit<IMessageGetDTO>(url, model, this.headers as RequestInit)
   }
 
   async Delete(id: string): Promise<IResponseDTO> {
     const url = `${this.fetchUrl}/${id}`;
 
-    return await this._edit<IMessageGetDTO>(url, this.authHeaders as RequestInit)
+    return await this._edit<IMessageGetDTO>(url, this.headers as RequestInit)
   }
 }

@@ -9,12 +9,15 @@ export class BaseApi {
 
   protected fetchUrl: string;
 
-  protected authHeaders = {
-    'Authorization': 'Bearer '
+  protected headers = {
+    Authorization: 'Bearer ',
+    common: {
+      'Content-Type': 'application/json'
+    }
   }
 
   constructor(protected appState: AppState, protected url: string, protected httpClient: HttpClient) {
-    this.authHeaders['Authorization'] += this.appState.jwt;
+    this.headers['Authorization'] += this.appState.jwt;
     this.fetchUrl = this.appState.baseUrl + url;
   }
 
@@ -78,7 +81,7 @@ export class BaseApi {
 
   protected async _create<TData>(input: string | Request, body?: any, init?: RequestInit): Promise<IResponseDTO> {
     try {
-      const response = await this.httpClient.post(input, body, init)
+      const response = await this.httpClient.post(input, JSON.stringify(body), init)
 
       switch (response.status) {
         case 200:
@@ -86,10 +89,7 @@ export class BaseApi {
         case 204:
           return (await response.json()) as IResponseDTO
         default:
-          return {
-            status: response.status.toString(),
-            errors: [response.statusText.toString()],
-          }
+          return (await response.json()) as IResponseDTO
       }
     } catch (reason) {
       return {
@@ -101,7 +101,7 @@ export class BaseApi {
 
   protected async _edit<TData>(input: string | Request, body?: any, init?: RequestInit): Promise<IResponseDTO> {
     try {
-      const response = await this.httpClient.put(input, body, init)
+      const response = await this.httpClient.put(input, JSON.stringify(body), init)
 
       switch (response.status) {
         case 200:
@@ -109,10 +109,7 @@ export class BaseApi {
         case 204:
           return (await response.json()) as IResponseDTO
         default:
-          return {
-            status: response.status.toString(),
-            errors: [response.statusText.toString()],
-          }
+          return (await response.json()) as IResponseDTO
       }
     } catch (reason) {
       return {
@@ -132,10 +129,7 @@ export class BaseApi {
         case 204:
           return (await response.json()) as IResponseDTO
         default:
-          return {
-            status: response.status.toString(),
-            errors: [response.statusText.toString()],
-          }
+          return (await response.json()) as IResponseDTO
       }
     } catch (reason) {
       return {
