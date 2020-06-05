@@ -1,3 +1,6 @@
+import { IChatRoomDTO } from "./IChatRoomDTO";
+import { IChatMemberDTO } from "./IChatMemberDTO";
+
 export interface IMessageGetDTO {
   id: string;
   chatRoomId: string;

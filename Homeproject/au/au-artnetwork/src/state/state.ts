@@ -1,10 +1,14 @@
 import JwtDecode from "jwt-decode";
 
+import { IRoomMessages } from "types/IRoomMessages";
+
 export class AppState {
   constructor() {
   }
 
-  public readonly baseUrl = 'https://localhost:5001/api/v1/';
+  public readonly baseUrl = 'https://localhost:5001/api/v1';
+
+  public roomMessages: Record<string, IRoomMessages> = {}
 
   get jwt(): string | null {
     return localStorage.getItem('jwt');

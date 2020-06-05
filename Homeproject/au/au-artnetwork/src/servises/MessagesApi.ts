@@ -15,9 +15,11 @@ export class MessagesApi extends BaseApi {
   }
 
   async Index(chatRoomId: string): Promise<IFetchResponse<IMessageGetDTO[]>> {
-    const url = `${this.fetchUrl}/${chatRoomId}`;
+    const url = `${this.appState.baseUrl}/chatrooms/${chatRoomId}/1`;
 
-    return await this._index<IMessageGetDTO>(url, this.headers as RequestInit)
+    console.log(url)
+
+    return await this._index<IMessageGetDTO>(url, {headers: this.headers})
   }
 
   async Create(model: IMessagePostDTO): Promise<IResponseDTO> {

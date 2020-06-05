@@ -2,19 +2,19 @@ import { autoinject } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-fetch-client';
 import { BaseApi } from 'servises/BaseApi';
 import { AppState } from 'state/state';
-import { IChatRoomDTO } from 'types/IChatRoomDTO';
+import { IChatMemberDTO } from 'types/IChatMemberDTO';
 import { IFetchResponse } from 'types/Response/IFetchResponseDTO';
 
 @autoinject
-export class ChatRoomsApi extends BaseApi {
+export class ChatMembersApi extends BaseApi {
 
   constructor(protected appState: AppState, protected httpClient: HttpClient) {
-    super(appState, "chatrooms", httpClient);
+    super(appState, "chatmembers", httpClient);
   }
 
-  async Index(): Promise<IFetchResponse<IChatRoomDTO[]>> {
-    const url = `${this.fetchUrl}`;
+  async Index(chatRoomId: string): Promise<IFetchResponse<IChatMemberDTO[]>> {
+    const url = `${this.fetchUrl}/${chatRoomId}`;
 
-    return await this._index<IChatRoomDTO>(url, {headers: this.headers})
+    return await this._index<IChatMemberDTO>(url, {headers: this.headers})
   }
 }

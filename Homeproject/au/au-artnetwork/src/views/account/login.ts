@@ -21,14 +21,19 @@ export class AccountLogin {
   onSubmit(event: Event) {
     event.preventDefault();
 
-    this.errors = [];
-
     if (
       this.model.email.length > 0 &&
       this.model.password.length > 0
     ) {
+      const element = (document.querySelector('button[type="submit"]') as HTMLButtonElement)
+
+      element.disabled = true;
+
+      this.errors = [];
+      
       this.accountApi.login(this.model).then(
         (response: IJwtResponseDTO) => {
+          element.disabled = false;
           if (response?.errors) {
             this.errors = response.errors;
           } else {

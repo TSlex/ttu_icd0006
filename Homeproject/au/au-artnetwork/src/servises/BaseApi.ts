@@ -9,16 +9,14 @@ export class BaseApi {
 
   protected fetchUrl: string;
 
-  protected headers = {
+  protected headers: HeadersInit = {
     Authorization: 'Bearer ',
-    common: {
-      'Content-Type': 'application/json'
-    }
+    "Content-Type": "application/json"
   }
 
   constructor(protected appState: AppState, protected url: string, protected httpClient: HttpClient) {
     this.headers['Authorization'] += this.appState.jwt;
-    this.fetchUrl = this.appState.baseUrl + url;
+    this.fetchUrl = this.appState.baseUrl + "/" + url;
   }
 
   protected async _index<TData>(input: string | Request, init?: RequestInit): Promise<IFetchResponse<TData[]>> {

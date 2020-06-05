@@ -23,9 +23,7 @@ export class AccountRegister {
   onSubmit(event: Event) {
     event.preventDefault();
 
-    this.errors = [];
-
-    if (this.model.password !== this.passwordConfirmation){
+    if (this.model.password !== this.passwordConfirmation) {
       this.errors = ["Passwords must match!"]
       return
     }
@@ -35,8 +33,15 @@ export class AccountRegister {
       this.model.email.length > 0 &&
       this.model.password.length > 0
     ) {
+      const element = (document.querySelector('button[type="submit"]') as HTMLButtonElement)
+
+      element.disabled = true;
+
+      this.errors = [];
+
       this.accountApi.register(this.model).then(
         (response: IResponseDTO) => {
+          element.disabled = false;
           if (response?.errors) {
             this.errors = response.errors;
           } else {

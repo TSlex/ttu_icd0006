@@ -1,6 +1,9 @@
-export interface IChatRoleDTO {
-  roleTitle: string;
-  roleTitleValue: string;
+export interface IChatMemberDTO {
+  id: string;
+  userName: string;
+  profileAvatarId: string;
+  chatRole: string;
+  chatRoleValue: string;
   canRenameRoom: boolean;
   canEditMembers: boolean;
   canWriteMessages: boolean;
