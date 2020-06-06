@@ -10,32 +10,39 @@ import { IMessageGetDTO } from 'types/IMessageDTO';
 @autoinject
 export class MessagesApi extends BaseApi {
 
-  constructor(protected appState: AppState, protected httpClient: HttpClient) {
-    super(appState, "messages", httpClient);
-  }
+    constructor(protected appState: AppState, protected httpClient: HttpClient) {
+        super(appState, "messages", httpClient);
+    }
 
-  async Index(chatRoomId: string): Promise<IFetchResponse<IMessageGetDTO[]>> {
-    const url = `${this.appState.baseUrl}/chatrooms/${chatRoomId}/1`;
+    async Index(chatRoomId: string): Promise<IFetchResponse<IMessageGetDTO[]>> {
+        const url = `${this.appState.baseUrl}/chatrooms/${chatRoomId}/1`;
 
-    console.log(url)
+        console.log(url)
 
-    return await this._index<IMessageGetDTO>(url, {headers: this.headers})
-  }
+        return await this._index<IMessageGetDTO>(url, { headers: this.headers })
+    }
 
-  async Create(model: IMessagePostDTO): Promise<IResponseDTO> {
+    async Details(id: string): Promise<IFetchResponse<IMessageGetDTO>> {
+        const url = `${this.fetchUrl}/${id}`;
 
-    return await this._create<IMessageGetDTO>("", model, this.headers as RequestInit)
-  }
+        return await this._details<IMessageGetDTO>(url, { headers: this.headers })
+    }
 
-  async Edit(id: string, model: IMessagePostDTO): Promise<IResponseDTO> {
-    const url = `${this.fetchUrl}/${id}`;
+    async Create(model: IMessagePostDTO): Promise<IResponseDTO> {
+        const url = `${this.fetchUrl}`;
 
-    return await this._edit<IMessageGetDTO>(url, model, this.headers as RequestInit)
-  }
+        return await this._create(url, model, { headers: this.headers })
+    }
 
-  async Delete(id: string): Promise<IResponseDTO> {
-    const url = `${this.fetchUrl}/${id}`;
+    async Edit(id: string, model: IMessagePostDTO): Promise<IResponseDTO> {
+        const url = `${this.fetchUrl}/${id}`;
 
-    return await this._edit<IMessageGetDTO>(url, this.headers as RequestInit)
-  }
+        return await this._edit(url, model, { headers: this.headers })
+    }
+
+    async Delete(id: string): Promise<IResponseDTO> {
+        const url = `${this.fetchUrl}/${id}`;
+
+        return await this._edit(url, { headers: this.headers })
+    }
 }

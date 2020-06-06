@@ -1,4 +1,5 @@
 import { autoinject, PLATFORM } from 'aurelia-framework';
+import { Router } from 'aurelia-router';
 
 import { ChatMembersApi } from 'servises/ChatMembersApi';
 import { MessagesApi } from 'servises/MessagesApi';
@@ -17,7 +18,9 @@ export class MessagesIndex {
         return Object.values(this.appState.roomMessages);
     }
 
-    constructor(private appState: AppState, private messagesApi: MessagesApi, private chatMembersApi: ChatMembersApi, private chatRoomsApi: ChatRoomsApi) { }
+    constructor(private appState: AppState, private messagesApi: MessagesApi, 
+        private chatMembersApi: ChatMembersApi, private chatRoomsApi: ChatRoomsApi,
+        private router: Router) { }
 
     created() {
         this.chatRoomsApi.Index()
@@ -51,7 +54,7 @@ export class MessagesIndex {
     }
 
     onEdit(message: IMessageGetDTO){
-        console.log(message)
+        // this.router.navigateToRoute()
     }
 
     onDelete(message: IMessageGetDTO){

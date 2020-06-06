@@ -1,0 +1,17 @@
+<template>
+    <require from="views/shared/create-controls"></require>
+    <require from="./shared/create-edit"></require>
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
+                <ul>
+                    <li style="display:none"></li>
+                </ul>
+            </div>
+
+            <create-edit></create-edit>
+
+            <create-controls></create-controls>
+        </div>
+    </div>
+</template>

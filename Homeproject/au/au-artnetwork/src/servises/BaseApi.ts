@@ -77,7 +77,7 @@ export class BaseApi {
     }
   }
 
-  protected async _create<TData>(input: string | Request, body?: any, init?: RequestInit): Promise<IResponseDTO> {
+  protected async _create(input: string | Request, body?: any, init?: RequestInit): Promise<IResponseDTO> {
     try {
       const response = await this.httpClient.post(input, JSON.stringify(body), init)
 
@@ -97,7 +97,7 @@ export class BaseApi {
     }
   }
 
-  protected async _edit<TData>(input: string | Request, body?: any, init?: RequestInit): Promise<IResponseDTO> {
+  protected async _edit(input: string | Request, body?: any, init?: RequestInit): Promise<IResponseDTO> {
     try {
       const response = await this.httpClient.put(input, JSON.stringify(body), init)
 
@@ -117,7 +117,7 @@ export class BaseApi {
     }
   }
 
-  protected async _delete<TData>(input: string | Request, init?: RequestInit): Promise<IResponseDTO> {
+  protected async _delete(input: string | Request, init?: RequestInit): Promise<IResponseDTO> {
     try {
       const response = await this.httpClient.delete(input, {}, init)
 
