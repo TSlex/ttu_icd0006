@@ -1,5 +1,5 @@
 import { IResponseDTO } from './../types/Response/IResponseDTO';
-import { IMessagePostDTO } from './../types/IMessageDTO';
+import { IMessagePostDTO, IMessagePutDTO } from './../types/IMessageDTO';
 import { autoinject } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-fetch-client';
 import { BaseApi } from 'servises/BaseApi';
@@ -34,7 +34,7 @@ export class MessagesApi extends BaseApi {
         return await this._create(url, model, { headers: this.headers })
     }
 
-    async Edit(id: string, model: IMessagePostDTO): Promise<IResponseDTO> {
+    async Edit(id: string, model: IMessagePutDTO): Promise<IResponseDTO> {
         const url = `${this.fetchUrl}/${id}`;
 
         return await this._edit(url, model, { headers: this.headers })
