@@ -28,7 +28,7 @@ export class MessagesCreateEdit extends FormComponentBase {
 
         console.log(this.id)
         console.log(this.chatRoomId)
-        
+
         // bind properties
         if (params.id && typeof (params.id) == 'string') {
             this.id = params.id;
@@ -80,12 +80,28 @@ export class MessagesCreateEdit extends FormComponentBase {
                         chatRoomId: this.chatRoomId,
                         messageValue: this.messageValue
                     })
-                    .then((response: IResponseDTO) => {
-                        if (!response?.errors) {
+                    .then((response: IFetchResponse<IMessageGetDTO>) => {
+
+                        console.log(response)
+                        console.log(this.appState.roomMessages)
+
+
+                        if (!(response?.errors?.length > 0)) {
+                            let newRecord = response.data
+                            let roomMessage = this.appState.roomMessages[newRecord.chatRoomId]
+
+                            if (roomMessage.messages) {
+                                roomMessage.messages.reverse()
+                                roomMessage.messages.push(newRecord)
+                                roomMessage.messages.reverse()
+
+                                roomMessage.chatRoom.lastMessageDateTime = newRecord.messageDateTime
+                            }
+
                             this.onCancel();
                         } else {
-                            this.errors = response.errors
-                            this.unlockBottons()
+                            this.errors = response.errors;
+                            this.unlockBottons();
                         }
                     })
             } else {

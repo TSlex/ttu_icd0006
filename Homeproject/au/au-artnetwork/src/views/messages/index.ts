@@ -1,3 +1,4 @@
+import { IResponseDTO } from 'types/Response/IResponseDTO';
 import { autoinject, PLATFORM } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
 
@@ -15,10 +16,18 @@ import { AppState } from 'state/state';
 export class MessagesIndex {
 
     get rooms() {
-        return Object.values(this.appState.roomMessages);
+        return Object.values(this.appState.roomMessages).sort(
+            (one, two) => {
+                return new Date(one.chatRoom.lastMessageDateTime).getTime() < new Date(two.chatRoom.lastMessageDateTime).getTime() ? 1 : -1
+            });
     }
 
-    constructor(private appState: AppState, private messagesApi: MessagesApi, 
+    canEditThis(member: IChatMemberDTO, message: IMessageGetDTO) {
+        return message.userName === member.userName && member.canEditMessages ||
+            member.canEditAllMessages
+    }
+
+    constructor(private appState: AppState, private messagesApi: MessagesApi,
         private chatMembersApi: ChatMembersApi, private chatRoomsApi: ChatRoomsApi,
         private router: Router) { }
 
@@ -53,11 +62,27 @@ export class MessagesIndex {
             })
     }
 
-    onEdit(message: IMessageGetDTO){
+    onEdit(member: IChatMemberDTO, message: IMessageGetDTO) {
+        if (this.canEditThis(member, message)) {
+            this.appState.selectedMessage = message;
+        }
+
         // this.router.navigateToRoute()
     }
 
-    onDelete(message: IMessageGetDTO){
-        console.log(message)
+    onDelete(member: IChatMemberDTO, message: IMessageGetDTO) {
+        if (this.canEditThis(member, message)) {
+            this.messagesApi.Delete(message.id).then((response: IResponseDTO) => {
+                if (!response?.errors) {
+                    let messages = this.appState.roomMessages[message.chatRoomId].messages;
+
+                    messages.forEach((item: IMessageGetDTO, index) => {
+                        if (item.id === message.id) {
+                            messages.splice(index, 1);
+                        }
+                    })
+                }
+            })
+        }
     }
 }

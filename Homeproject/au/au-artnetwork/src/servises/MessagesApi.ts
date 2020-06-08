@@ -28,10 +28,10 @@ export class MessagesApi extends BaseApi {
         return await this._details<IMessageGetDTO>(url, { headers: this.headers })
     }
 
-    async Create(model: IMessagePostDTO): Promise<IResponseDTO> {
+    async Create(model: IMessagePostDTO): Promise<IFetchResponse<IMessageGetDTO>> {
         const url = `${this.fetchUrl}`;
 
-        return await this._create(url, model, { headers: this.headers })
+        return await this._createAndReturn(url, model, { headers: this.headers })
     }
 
     async Edit(id: string, model: IMessagePutDTO): Promise<IResponseDTO> {
@@ -43,6 +43,6 @@ export class MessagesApi extends BaseApi {
     async Delete(id: string): Promise<IResponseDTO> {
         const url = `${this.fetchUrl}/${id}`;
 
-        return await this._edit(url, { headers: this.headers })
+        return await this._delete(url, { headers: this.headers })
     }
 }

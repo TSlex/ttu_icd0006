@@ -36,7 +36,7 @@ export class BaseApi {
                 default:
                     return {
                         status: response.status.toString(),
-                        errors: [response.statusText.toString()],
+                        errors: [(await response.json()).errors],
                         data: null
                     }
             }
@@ -65,7 +65,7 @@ export class BaseApi {
                 default:
                     return {
                         status: response.status.toString(),
-                        errors: [response.statusText.toString()],
+                        errors: [(await response.json()).errors],
                         data: null
                     }
             }
@@ -114,7 +114,7 @@ export class BaseApi {
                 default:
                     return {
                         status: response.status.toString(),
-                        errors: [response.statusText.toString()],
+                        errors: [(await response.json()).errors],
                         data: null
                     }
             }
