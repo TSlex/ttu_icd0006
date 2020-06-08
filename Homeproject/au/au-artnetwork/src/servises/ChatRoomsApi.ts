@@ -18,8 +18,8 @@ export class ChatRoomsApi extends BaseApi {
         return await this._index<IChatRoomDTO>(url, { headers: this.headers })
     }
 
-    async Exist(id: string): Promise<Boolean> {
-        const url = `${this.fetchUrl}/${id}/count`;
+    async Exists(id: string): Promise<Boolean> {
+        const url = `${this.fetchUrl}/${id}/exists`;
 
         try {
             const response = await this.httpClient.get(url, { headers: this.headers })
@@ -28,7 +28,7 @@ export class ChatRoomsApi extends BaseApi {
                 case 200:
                 case 201:
                 case 204:
-                    return true
+                    return (await response.json()) as Boolean
                 default:
                     return false
 

@@ -14,7 +14,7 @@ export abstract class FormComponentBase {
         protected eventAggregator: EventAggregator,
         protected router: Router,
         protected appState: AppState) {
-            
+
         this.subscriptions.push(
             this.eventAggregator.subscribe("onSubmit", () => this.onSubmit()),
             this.eventAggregator.subscribe("onCancel", () => this.onCancel())
@@ -23,6 +23,20 @@ export abstract class FormComponentBase {
 
     abstract onSubmit(): void
     abstract onCancel(): void
+
+    lockBottons() {
+        let buttons = document.querySelectorAll('.btn')
+        buttons.forEach((button: HTMLButtonElement) => {
+            button.disabled = true;
+        })
+    }
+
+    unlockBottons() {
+        let buttons = document.querySelectorAll('.btn')
+        buttons.forEach((button: HTMLButtonElement) => {
+            button.disabled = false;
+        })
+    }
 
     detached() {
         this.subscriptions.forEach(subscription => {

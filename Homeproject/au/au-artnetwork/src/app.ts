@@ -33,8 +33,8 @@ export class App {
 
             // messages
             { route: ['messages', 'messages/index'], name: 'messages', moduleId: PLATFORM.moduleName('views/messages/index'), nav: true, title: 'Messages' },
-            { route: ['messages/create/:chatRoomId'], name: 'messages-create', moduleId: PLATFORM.moduleName('views/messages/create') },
-            { route: ['messages/edit/:id'], name: 'messages-edit', moduleId: PLATFORM.moduleName('views/messages/edit') },
+            { route: ['messages/create/:chatRoomId'], name: 'messages-create', moduleId: PLATFORM.moduleName('views/messages/create-edit') },
+            { route: ['messages/edit/:id'], name: 'messages-edit', moduleId: PLATFORM.moduleName('views/messages/create-edit') },
 
         ]);
 

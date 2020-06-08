@@ -1,6 +1,6 @@
 import { ChatRoomsApi } from 'servises/ChatRoomsApi';
-import { IResponseDTO } from './../../types/Response/IResponseDTO';
-import { IImagePostDTO } from './../../types/IImageDTO';
+import { IResponseDTO } from '../../types/Response/IResponseDTO';
+import { IImagePostDTO } from '../../types/IImageDTO';
 import { Router } from 'aurelia-router';
 import { autoinject, bindable } from 'aurelia-framework';
 import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
@@ -12,7 +12,7 @@ import { AppState } from 'state/state';
 
 
 @autoinject
-export class MessagesCreate extends FormComponentBase {
+export class MessagesCreateEdit extends FormComponentBase {
 
     constructor(appState: AppState, eventAggregator: EventAggregator, router: Router,
         private messagesApi: MessagesApi, private chatRoomsApi: ChatRoomsApi) {
@@ -24,23 +24,14 @@ export class MessagesCreate extends FormComponentBase {
 
     private messageValue: string;
 
-    // bind properties
-    activate(params: any) {
-        if (params.id && typeof (params.id) == 'string') {
-            this.id = params.id;
-        }
-        if (params.chatRoomId && typeof (params.chatRoomId) == 'string') {
-            this.chatRoomId = params.chatRoomId;
-        }
-    }
-
-    async created() {
+    async activate(params: any) {
 
         console.log(this.id)
         console.log(this.chatRoomId)
-
-
-        if (this.id) {
+        
+        // bind properties
+        if (params.id && typeof (params.id) == 'string') {
+            this.id = params.id;
 
             let response = await this.messagesApi.Details(this.id)
 
@@ -50,10 +41,12 @@ export class MessagesCreate extends FormComponentBase {
             else {
                 this.onCancel();
             }
+        }
+        else if (params.chatRoomId && typeof (params.chatRoomId) == 'string') {
+            this.chatRoomId = params.chatRoomId;
 
-        } else if (this.chatRoomId) {
-            let exist = await this.chatRoomsApi.Exist(this.chatRoomId)
-
+            let exist = await this.chatRoomsApi.Exists(this.chatRoomId)
+            console.log(exist)
             if (!exist) {
                 this.onCancel();
             }
@@ -63,6 +56,7 @@ export class MessagesCreate extends FormComponentBase {
     onSubmit() {
         if (this.messageValue?.length > 0) {
             this.errors = []
+            this.lockBottons()
 
             if (this.id) {
                 this.messagesApi.Edit(this.id,
@@ -76,6 +70,7 @@ export class MessagesCreate extends FormComponentBase {
                             this.onCancel();
                         } else {
                             this.errors = response.errors
+                            this.unlockBottons()
                         }
                     })
             }
@@ -90,6 +85,7 @@ export class MessagesCreate extends FormComponentBase {
                             this.onCancel();
                         } else {
                             this.errors = response.errors
+                            this.unlockBottons()
                         }
                     })
             } else {
