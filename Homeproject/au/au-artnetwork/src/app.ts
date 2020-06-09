@@ -29,13 +29,13 @@ export class App {
 
             // posts
             { route: ['posts', 'posts/index'], name: 'posts', moduleId: PLATFORM.moduleName('views/posts/index'), nav: true, title: 'Posts' },
-            { route: ['posts/create'], name: 'posts-create', moduleId: PLATFORM.moduleName('views/posts/create') },
-            { route: ['posts/edit'], name: 'posts-edit', moduleId: PLATFORM.moduleName('views/posts/edit') },
-            { route: ['posts/detail'], name: 'posts-details', moduleId: PLATFORM.moduleName('views/posts/detail') },
-            { route: ['posts/delete'], name: 'posts-delete', moduleId: PLATFORM.moduleName('views/posts/delete') },
+            // { route: ['posts/create'], name: 'posts-create', moduleId: PLATFORM.moduleName('views/posts/create-edit') },
+            // { route: ['posts/edit/:id'], name: 'posts-edit', moduleId: PLATFORM.moduleName('views/posts/create-edit') },
 
             // comments
             { route: ['comments', 'comments/index'], name: 'comments', moduleId: PLATFORM.moduleName('views/comments/index'), nav: true, title: 'Comments' },
+            // { route: ['comments/create'], name: 'comments-create', moduleId: PLATFORM.moduleName('views/comments/create-edit') },
+            // { route: ['comments/edit/:id'], name: 'comments-edit', moduleId: PLATFORM.moduleName('views/comments/create-edit') },
 
             // messages
             { route: ['messages', 'messages/index'], name: 'messages', moduleId: PLATFORM.moduleName('views/messages/index'), nav: true, title: 'Messages' },

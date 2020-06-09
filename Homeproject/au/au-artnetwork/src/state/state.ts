@@ -1,5 +1,6 @@
 import JwtDecode from "jwt-decode";
 
+import { IPostComments } from 'types/IPostComments';
 import { IRoomMessages } from "types/IRoomMessages";
 import { IMessageGetDTO } from "types/IMessageDTO";
 import { ICommentGetDTO } from "types/ICommentDTO";
@@ -19,6 +20,7 @@ export class AppState {
     public selectedPost: IPostGetDTO | null = null
 
     // comments
+    public postComments: Record<string, IPostComments> = {}
     public selectedComment: ICommentGetDTO | null = null
 
     // component loading
