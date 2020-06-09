@@ -2,9 +2,10 @@ import { Router } from 'aurelia-router';
 import { autoinject, bindable } from 'aurelia-framework';
 import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
 import { AppState } from 'state/state';
+import { ViewBase } from 'components/ViewBase';
 
 @autoinject
-export abstract class FormComponentBase {
+export abstract class FormComponentBase extends ViewBase {
 
     private subscriptions: Subscription[] = [];
 
@@ -14,7 +15,8 @@ export abstract class FormComponentBase {
         protected eventAggregator: EventAggregator,
         protected router: Router,
         protected appState: AppState) {
-
+        super();
+        
         this.subscriptions.push(
             this.eventAggregator.subscribe("onSubmit", () => this.onSubmit()),
             this.eventAggregator.subscribe("onCancel", () => this.onCancel())

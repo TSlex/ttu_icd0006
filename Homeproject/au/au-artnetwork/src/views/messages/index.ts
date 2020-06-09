@@ -11,9 +11,10 @@ import { IChatRoomDTO } from 'types/IChatRoomDTO';
 import { IChatMemberDTO } from 'types/IChatMemberDTO';
 import { IFetchResponse } from 'types/Response/IFetchResponseDTO';
 import { AppState } from 'state/state';
+import { ViewBase } from 'components/ViewBase';
 
 @autoinject
-export class MessagesIndex {
+export class MessagesIndex extends ViewBase {
 
     get rooms() {
         return Object.values(this.appState.roomMessages).sort(
@@ -29,9 +30,13 @@ export class MessagesIndex {
 
     constructor(private appState: AppState, private messagesApi: MessagesApi,
         private chatMembersApi: ChatMembersApi, private chatRoomsApi: ChatRoomsApi,
-        private router: Router) { }
+        private router: Router) { super(); }
 
     created() {
+        if (!(this.rooms.length > 0)){
+            this.isLoading = true
+        }
+
         this.chatRoomsApi.Index()
             .then((response: IFetchResponse<IChatRoomDTO[]>) => {
                 if (response?.errors.length === 0) {
@@ -55,6 +60,7 @@ export class MessagesIndex {
                                             chatMember: chatMember,
                                             messages: response.data
                                         }
+                                        // this.isLoading = false;
                                     })
                             })
                     })
@@ -64,9 +70,9 @@ export class MessagesIndex {
 
     onEdit(member: IChatMemberDTO, message: IMessageGetDTO) {
         if (this.canEditThis(member, message)) {
-            console.log(message)
             this.appState.selectedMessage = message;
-            this.router.navigateToRoute("messages-edit", {id: message.id});
+            this.isLoading = true;
+            this.router.navigateToRoute("messages-edit", { id: message.id });
         }
     }
 

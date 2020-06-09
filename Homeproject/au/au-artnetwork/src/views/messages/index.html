@@ -1,49 +1,53 @@
 <template>
     <require from="conventers/DateFormatConventer"></require>
-    <h1 class="text-center">Messages</h1>
-    <template repeat.for="room of rooms">
-        <h4 style="position: relative; text-align: center;">
-            <span style="position: absolute; left: 0;">
-                <${room.chatMember.chatRoleValue}>
-            </span>
-            <span style="display: inline-block; max-width: 600px; overflow: hidden; text-overflow: ellipsis;">
-                ${room.chatRoom.chatRoomTitle}
-            </span>
-            <span if.bind="room.chatMember.canWriteMessages" style="position: absolute; right: 0;">
-                <a class="far fa-plus-square"
-                    route-href="route: messages-create; params.bind: { chatRoomId: room.chatRoom.id }"></a>
-            </span>
-            <span else class="text-danger" style="position: absolute; right: 0; font-size: 14px; top: 50%">
-                You cannot write in this chat
-            </span>
-        </h4>
-        <table class="table">
-            <tbody>
-                <tr repeat.for="message of room.messages">
-                    <td style="width: 10%">
-                        ${message.userName}
-                    </td>
-                    <td style="width: 100%">
-                        ${message.messageValue}
-                    </td>
-                    <td style="white-space: nowrap;">
-                        ${message.messageDateTime | dateFormat}
-                    </td>
-                    <td>
-                        <div if.bind="canEditThis(room.chatMember, message)" class="d-flex justify-content-end">
-                            <button class="btn btn-primary fa fa-edit index_controls mr-1"
-                                click.delegate="onEdit(room.chatMember, message)"></button>
-                            <button class="btn btn-danger fa fa-trash index_controls     "
-                                click.delegate="onDelete(room.chatMember, message)"></button>
-                        </div>
-                        <div else class="d-flex justify-content-end">
-                            <button class="btn btn-secondary fa fa-edit index_controls mr-1" disabled></button>
-                            <button class="btn btn-secondary fa fa-trash index_controls    " disabled></button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <br>
-    </template>
+    <require from="components/loadingOverlay.html"></require>
+    <loadingOverlay if.bind="isLoading"></loadingOverlay>
+    <div if.bind="rooms.length > 0" class.bind="bluredClass">
+        <h1 class="text-center">Messages</h1>
+        <template repeat.for="room of rooms">
+            <h4 style="position: relative; text-align: center;">
+                <span style="position: absolute; left: 0;">
+                    <${room.chatMember.chatRoleValue}>
+                </span>
+                <span style="display: inline-block; max-width: 600px; overflow: hidden; text-overflow: ellipsis;">
+                    ${room.chatRoom.chatRoomTitle}
+                </span>
+                <span if.bind="room.chatMember.canWriteMessages" style="position: absolute; right: 0;">
+                    <a class="far fa-plus-square"
+                        route-href="route: messages-create; params.bind: { chatRoomId: room.chatRoom.id }"></a>
+                </span>
+                <span else class="text-danger" style="position: absolute; right: 0; font-size: 14px; top: 50%">
+                    You cannot write in this chat
+                </span>
+            </h4>
+            <table class="table">
+                <tbody>
+                    <tr repeat.for="message of room.messages">
+                        <td style="width: 10%">
+                            ${message.userName}
+                        </td>
+                        <td style="width: 100%">
+                            ${message.messageValue}
+                        </td>
+                        <td style="white-space: nowrap;">
+                            ${message.messageDateTime | dateFormat}
+                        </td>
+                        <td>
+                            <div if.bind="canEditThis(room.chatMember, message)" class="d-flex justify-content-end">
+                                <button class="btn btn-primary fa fa-edit index_controls mr-1"
+                                    click.delegate="onEdit(room.chatMember, message)"></button>
+                                <button class="btn btn-danger fa fa-trash index_controls     "
+                                    click.delegate="onDelete(room.chatMember, message)"></button>
+                            </div>
+                            <div else class="d-flex justify-content-end">
+                                <button class="btn btn-secondary fa fa-edit index_controls mr-1" disabled></button>
+                                <button class="btn btn-secondary fa fa-trash index_controls    " disabled></button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+        </template>
+    </div>
 </template>
