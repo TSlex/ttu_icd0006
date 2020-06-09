@@ -31,8 +31,6 @@ export class MessagesCreateEdit extends FormComponentBase {
 
             let response = await this.messagesApi.Details(this.id)
 
-            console.log(response)
-
             if (!(response?.errors.length > 0)) {
                 this.messageValue = response.data.messageValue;
             }
@@ -44,11 +42,12 @@ export class MessagesCreateEdit extends FormComponentBase {
             this.chatRoomId = params.chatRoomId;
 
             let exist = await this.chatRoomsApi.Exists(this.chatRoomId)
-            console.log(exist)
             if (!exist) {
                 this.onCancel();
             }
         }
+
+        this.isLoading = false;
     }
 
     onSubmit() {

@@ -1,8 +1,6 @@
 <template>
     <require from="conventers/DateFormatConventer"></require>
-    <require from="components/loadingOverlay.html"></require>
-    <loadingOverlay if.bind="isLoading"></loadingOverlay>
-    <div if.bind="rooms.length > 0" class.bind="bluredClass">
+    <template if.bind="isLoaded">
         <h1 class="text-center">Messages</h1>
         <template repeat.for="room of rooms">
             <h4 style="position: relative; text-align: center;">
@@ -34,14 +32,22 @@
                         </td>
                         <td>
                             <div if.bind="canEditThis(room.chatMember, message)" class="d-flex justify-content-end">
-                                <button class="btn btn-primary fa fa-edit index_controls mr-1"
-                                    click.delegate="onEdit(room.chatMember, message)"></button>
-                                <button class="btn btn-danger fa fa-trash index_controls     "
-                                    click.delegate="onDelete(room.chatMember, message)"></button>
+                                <button class="btn btn-primary index_controls mr-1"
+                                    click.delegate="onEdit(room.chatMember, message)">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger index_controls     "
+                                    click.delegate="onDelete(room.chatMember, message)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
                             </div>
                             <div else class="d-flex justify-content-end">
-                                <button class="btn btn-secondary fa fa-edit index_controls mr-1" disabled></button>
-                                <button class="btn btn-secondary fa fa-trash index_controls    " disabled></button>
+                                <button class="btn btn-secondary index_controls mr-1" disabled>
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-secondary index_controls    " disabled>
+                                    <i class="fa fa-trash"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -49,5 +55,5 @@
             </table>
             <br>
         </template>
-    </div>
+    </template>
 </template>

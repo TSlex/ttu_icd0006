@@ -6,6 +6,10 @@ import { RouterConfiguration, Router } from 'aurelia-router';
 export class App {
     router?: Router;
 
+    get isLoading(){
+        return this.appState.isComponentLoading;
+    }
+
     constructor(private appState: AppState) { }
 
     configureRouter(config: RouterConfiguration, router: Router): void {

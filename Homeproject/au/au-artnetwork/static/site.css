@@ -96,3 +96,15 @@ body {
     -webkit-transition: all 2s linear;
     -o-transition: all 2s linear;
 }
+
+.index_controls{
+    height: 30px;
+    line-height: 30px;
+    width: 40px;
+    text-align: center;
+}
+
+.index_controls *{
+    vertical-align: super;
+    pointer-events: none;
+}

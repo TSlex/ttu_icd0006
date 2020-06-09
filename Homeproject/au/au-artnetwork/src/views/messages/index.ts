@@ -23,18 +23,26 @@ export class MessagesIndex extends ViewBase {
             });
     }
 
+    private isLoaded: boolean = true;
+
     canEditThis(member: IChatMemberDTO, message: IMessageGetDTO) {
         return message.userName === member.userName && member.canEditMessages ||
             member.canEditAllMessages
     }
 
-    constructor(private appState: AppState, private messagesApi: MessagesApi,
-        private chatMembersApi: ChatMembersApi, private chatRoomsApi: ChatRoomsApi,
-        private router: Router) { super(); }
+    constructor(
+        appState: AppState,
+        private messagesApi: MessagesApi,
+        private chatMembersApi: ChatMembersApi,
+        private chatRoomsApi: ChatRoomsApi,
+        private router: Router) {
+        super(appState);
+    }
 
     created() {
-        if (!(this.rooms.length > 0)){
-            this.isLoading = true
+        if (!(this.rooms.length > 0)) {
+            this.isLoading = true;
+            this.isLoaded = false;
         }
 
         this.chatRoomsApi.Index()
@@ -60,7 +68,9 @@ export class MessagesIndex extends ViewBase {
                                             chatMember: chatMember,
                                             messages: response.data
                                         }
-                                        // this.isLoading = false;
+
+                                        this.isLoading = false;
+                                        this.isLoaded = true;
                                     })
                             })
                     })
@@ -77,7 +87,17 @@ export class MessagesIndex extends ViewBase {
     }
 
     onDelete(member: IChatMemberDTO, message: IMessageGetDTO) {
+        if ((event.target as HTMLElement).tagName.toLowerCase() !== 'button') return;
+
         if (this.canEditThis(member, message)) {
+            let element: HTMLButtonElement = (event.target as HTMLButtonElement);
+
+            element.disabled = true;
+            element.innerHTML = "";
+            element.innerHTML = `<span disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="sr-only">Loading...</span></span>`
+
             this.messagesApi.Delete(message.id).then((response: IResponseDTO) => {
                 if (!response?.errors) {
                     let messages = this.appState.roomMessages[message.chatRoomId].messages;

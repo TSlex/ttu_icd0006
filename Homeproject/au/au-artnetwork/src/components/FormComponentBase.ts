@@ -14,9 +14,9 @@ export abstract class FormComponentBase extends ViewBase {
     constructor(
         protected eventAggregator: EventAggregator,
         protected router: Router,
-        protected appState: AppState) {
-        super();
-        
+        appState: AppState) {
+        super(appState);
+
         this.subscriptions.push(
             this.eventAggregator.subscribe("onSubmit", () => this.onSubmit()),
             this.eventAggregator.subscribe("onCancel", () => this.onCancel())

@@ -21,6 +21,18 @@ export class AppState {
     // comments
     public selectedComment: ICommentGetDTO | null = null
 
+    // component loading
+    private _isComponentLoading: boolean = false
+
+    get isComponentLoading(){
+        return this._isComponentLoading;
+    }
+
+    set isComponentLoading(value: boolean){
+        this._isComponentLoading = value;
+    }
+
+    // JWT
     get jwt(): string | null {
         return localStorage.getItem('jwt');
     }
