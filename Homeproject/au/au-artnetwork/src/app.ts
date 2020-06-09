@@ -10,6 +10,10 @@ export class App {
         return this.appState.isComponentLoading;
     }
 
+    get userName(){
+        return this.appState.userName;
+    }
+
     constructor(private appState: AppState) { }
 
     configureRouter(config: RouterConfiguration, router: Router): void {

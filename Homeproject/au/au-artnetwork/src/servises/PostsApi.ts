@@ -2,79 +2,44 @@ import { autoinject } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-fetch-client';
 import { AppState } from 'state/state';
 import { BaseApi } from './BaseApi';
+import { IFetchResponse } from 'types/Response/IFetchResponseDTO';
+import { IPostGetDTO, IPostPostDTO, IPostPutDTO } from 'types/IPostDTO';
+import { IResponseDTO } from 'types/Response/IResponseDTO';
 
 @autoinject
 export class PostsApi extends BaseApi {
-  
-  constructor(protected appState: AppState, protected httpClient: HttpClient) {
-    super(appState, "posts", httpClient);
-  }
 
-  // private readonly _baseUrl = 'posts';
+    constructor(protected appState: AppState, protected httpClient: HttpClient) {
+        super(appState, "posts", httpClient);
+    }
 
-  // getPosts(): Promise<IPost[]> {
-  //   return this.httpClient
-  //     .fetch(this._baseUrl, { cache: "no-store", headers: {authorization: "bearer " + this.appState.jwt}})
-  //     .then(response => response.json())
-  //     .then((data: IPost[]) => data)
-  //     .catch(reason => {
-  //       console.error(reason);
-  //       return [];
-  //     });
+    async Index(): Promise<IFetchResponse<IPostGetDTO[]>> {
+        const url = `${this.appState.baseUrl}/feed/`;
 
-  // }
+        return await this._index<IPostGetDTO>(url, { headers: this.headers })
+    }
 
-  // getPost(id: string): Promise<IPost | null> {
-  //   return this.httpClient
-  //     .fetch(this._baseUrl + '/' + id, { cache: "no-store" })
-  //     .then(response => response.json())
-  //     .then((data: IPost) => data)
-  //     .catch(reason => {
-  //       console.error(reason);
-  //       return null;
-  //     });
-  // }
+    async Details(id: string): Promise<IFetchResponse<IPostGetDTO>> {
+        const url = `${this.fetchUrl}/${id}`;
 
-  // createPost(post: IPost): Promise<string> {
-  //   return this.httpClient.post(this._baseUrl, JSON.stringify(post), {
-  //     cache: 'no-store'
-  //   }).then(
-  //     response => {
-  //       console.log('createPost response', response);
-  //       return response.statusText;
-  //     }
-  //   ).catch(reason => {
-  //     console.error(reason);
-  //     return JSON.stringify(reason);
-  //   });
-  // }
+        return await this._details<IPostGetDTO>(url, { headers: this.headers })
+    }
 
-  // updatePost(post: IPost): Promise<string> {
-  //   return this.httpClient.put(this._baseUrl + '/' + post.id, JSON.stringify(post), {
-  //     cache: 'no-store'
-  //   }).then(
-  //     response => {
-  //       console.log('updatePost response', response);
-  //       return response.statusText;
-  //     }
-  //   ).catch(reason => {
-  //     console.error(reason);
-  //     return JSON.stringify(reason);
-  //   });
-  // }
+    async Create(model: IPostPostDTO): Promise<IFetchResponse<IPostGetDTO>> {
+        const url = `${this.fetchUrl}`;
 
-  // deletePost(post: IPost): Promise<string> {
-  //   return this.httpClient.delete(this._baseUrl + '/' + post.id, JSON.stringify(post), {
-  //     cache: 'no-store'
-  //   }).then(
-  //     response => {
-  //       console.log('deletePost response', response);
-  //       return response.statusText;
-  //     }
-  //   ).catch(reason => {
-  //     console.error(reason);
-  //     return JSON.stringify(reason);
-  //   });
-  // }
+        return await this._createAndReturn(url, model, { headers: this.headers })
+    }
 
+    async Edit(id: string, model: IPostPutDTO): Promise<IResponseDTO> {
+        const url = `${this.fetchUrl}/${id}`;
+
+        return await this._edit(url, model, { headers: this.headers })
+    }
+
+    async Delete(id: string): Promise<IResponseDTO> {
+        const url = `${this.fetchUrl}/${id}`;
+
+        return await this._delete(url, { headers: this.headers })
+    }
 }
