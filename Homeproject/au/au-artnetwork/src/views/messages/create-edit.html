@@ -1,5 +1,6 @@
 <template>
     <require from="views/shared/create-controls"></require>
+    <require from="views/shared/edit-controls"></require>
     <div class="row d-flex justify-content-center">
         <div class="col-md-6 text-center">
             <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
@@ -16,7 +17,8 @@
                     name="MessageValue" value.bind="messageValue"></textarea>
             </div>
 
-            <create-controls></create-controls>
+            <create-controls if.bind="chatRoomId"></create-controls>
+            <edit-controls else></edit-controls>
         </div>
     </div>
 </template>

@@ -1,7 +1,13 @@
 import { IResponseDTO } from 'types/Response/IResponseDTO';
 
 export async function parseResponse(response: Response): Promise<IResponseDTO> {
-    let obj = (await response.json()) as IResponseDTO
+    let obj: IResponseDTO;
+
+    try {
+        obj = (await response.json()) as IResponseDTO;
+    } catch (e){
+        obj = {} as IResponseDTO;
+    }
 
     if ('title' in obj && (obj as any)['title'].indexOf('validation') !== -1) {
 
@@ -9,7 +15,7 @@ export async function parseResponse(response: Response): Promise<IResponseDTO> {
         let errorsArray: string[] = []
 
         Object.values(errors).forEach((item: string[]) => {
-            item.forEach((error: string) => { 
+            item.forEach((error: string) => {
                 errorsArray.push(error);
             });
         });

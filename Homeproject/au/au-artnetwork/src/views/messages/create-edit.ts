@@ -25,17 +25,15 @@ export class MessagesCreateEdit extends FormComponentBase {
     private messageValue: string;
 
     async activate(params: any) {
-
-        console.log(this.id)
-        console.log(this.chatRoomId)
-
         // bind properties
         if (params.id && typeof (params.id) == 'string') {
             this.id = params.id;
 
             let response = await this.messagesApi.Details(this.id)
 
-            if (!response?.errors) {
+            console.log(response)
+
+            if (!(response?.errors.length > 0)) {
                 this.messageValue = response.data.messageValue;
             }
             else {
@@ -64,9 +62,12 @@ export class MessagesCreateEdit extends FormComponentBase {
                         id: this.id,
                         messageValue: this.messageValue
                     }).then((response: IResponseDTO) => {
+
                         if (!response?.errors) {
 
-                            this.appState.selectedMessage!.messageValue = this.messageValue;
+                            if (this.appState.selectedMessage) {
+                                this.appState.selectedMessage!.messageValue = this.messageValue;
+                            }
                             this.onCancel();
                         } else {
                             this.errors = response.errors
@@ -81,11 +82,6 @@ export class MessagesCreateEdit extends FormComponentBase {
                         messageValue: this.messageValue
                     })
                     .then((response: IFetchResponse<IMessageGetDTO>) => {
-
-                        console.log(response)
-                        console.log(this.appState.roomMessages)
-
-
                         if (!(response?.errors?.length > 0)) {
                             let newRecord = response.data
                             let roomMessage = this.appState.roomMessages[newRecord.chatRoomId]

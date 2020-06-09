@@ -64,10 +64,10 @@ export class MessagesIndex {
 
     onEdit(member: IChatMemberDTO, message: IMessageGetDTO) {
         if (this.canEditThis(member, message)) {
+            console.log(message)
             this.appState.selectedMessage = message;
+            this.router.navigateToRoute("messages-edit", {id: message.id});
         }
-
-        // this.router.navigateToRoute()
     }
 
     onDelete(member: IChatMemberDTO, message: IMessageGetDTO) {
