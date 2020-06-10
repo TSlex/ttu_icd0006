@@ -27,6 +27,9 @@ export class App {
             { route: ['account/login'], name: 'account-login', moduleId: PLATFORM.moduleName('views/account/login'), nav: false, title: 'Login' },
             { route: ['account/register'], name: 'account-register', moduleId: PLATFORM.moduleName('views/account/register'), nav: false, title: 'Register' },
 
+            // Manage
+            { route: ['account/manage/:page?'], name: 'account-manage', moduleId: PLATFORM.moduleName('views/identity/manage'), nav: false, title: 'Manage' },
+
             // posts
             { route: ['posts', 'posts/index'], name: 'posts', moduleId: PLATFORM.moduleName('views/posts/index'), nav: true, title: 'Posts' },
             // { route: ['posts/create'], name: 'posts-create', moduleId: PLATFORM.moduleName('views/posts/create-edit') },

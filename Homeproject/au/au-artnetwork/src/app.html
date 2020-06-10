@@ -12,7 +12,7 @@
 
                     <ul if.bind="appState.jwt" class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="#">Hello, ${userName}!</a>
+                            <a class="nav-link text-dark" route-href="route: account-manage">Hello, ${userName}!</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" click.delegate="logout()">Logout</a>
