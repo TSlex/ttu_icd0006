@@ -99,7 +99,7 @@ export class AccountApi extends BaseApi {
         const url = `${this.fetchUrl}/updateprofileemail`
 
         try {
-            const response = await this.httpClient.put(url, emailModel, { headers: this.headers });
+            const response = await this.httpClient.put(url, JSON.stringify(emailModel), { headers: this.headers });
 
             switch (response.status) {
                 case 200:
@@ -117,7 +117,7 @@ export class AccountApi extends BaseApi {
         }
     }
 
-    async getProfileData(jwt: string | null): Promise<IFetchResponse<IProfileDataDTO>> {
+    async getProfileData(): Promise<IFetchResponse<IProfileDataDTO>> {
         const url = `${this.fetchUrl}/getprofiledata`
 
         try {
@@ -152,7 +152,7 @@ export class AccountApi extends BaseApi {
         const url = `${this.fetchUrl}/updateprofiledata`
 
         try {
-            const response = await this.httpClient.put(url, dataModel, { headers: this.headers });
+            const response = await this.httpClient.put(url, JSON.stringify(dataModel), { headers: this.headers });
 
             switch (response.status) {
                 case 200:
@@ -174,7 +174,7 @@ export class AccountApi extends BaseApi {
         const url = `${this.fetchUrl}/updateprofilepassword`
 
         try {
-            const response = await this.httpClient.put(url, passwordModel, { headers: this.headers });
+            const response = await this.httpClient.put(url, JSON.stringify(passwordModel), { headers: this.headers });
 
             switch (response.status) {
                 case 200:

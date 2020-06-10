@@ -1,3 +1,35 @@
 <template>
-    <h1>Secutiry</h1>
-</template>
+    <div>
+      <h4>Privacy and Security</h4>
+      <hr />
+  
+      <h5 class="mt-3">Personal Data</h5>
+  
+      <div class>
+        <span>
+          Your account contains personal data that you have given us.
+          <br />This page allows you to download or delete that data.
+        </span>
+
+        <form class="form-group">
+          <button class="btn btn-primary mt-2" click.delegate="downloadData()">Download</button>
+        </form>
+
+        <p>
+          <strong class="alert-danger">Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
+        </p>
+
+        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
+          <ul>
+            <li style="display:none"></li>
+          </ul>
+        </div>
+
+        <form class="form-inline d-inline">
+          <input type="password" placeholder="Password" class="form-control mr-1" />
+          <button class="btn btn-danger" type="button">Delete</button>
+        </form>
+      </div>
+    </div>
+  </template>
+  

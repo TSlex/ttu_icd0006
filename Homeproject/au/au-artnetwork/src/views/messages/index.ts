@@ -23,8 +23,6 @@ export class MessagesIndex extends ViewBase {
             });
     }
 
-    private isLoaded: boolean = true;
-
     canEditThis(member: IChatMemberDTO, message: IMessageGetDTO) {
         return message.userName === member.userName && member.canEditMessages ||
             member.canEditAllMessages
