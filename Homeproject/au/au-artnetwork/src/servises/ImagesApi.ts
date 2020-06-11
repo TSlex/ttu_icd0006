@@ -134,6 +134,9 @@ export class ImagesApi extends BaseApi {
     }
 
     async getOriginalImage(id: string = ''): Promise<string> {
+
+        console.log(id)
+
         const url = `${this.fetchUrl}/${id}/original`;
         const response = await this.httpClient.get(url, { headers: this.headers });
 

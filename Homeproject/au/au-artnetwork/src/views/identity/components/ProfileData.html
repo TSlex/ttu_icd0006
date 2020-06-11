@@ -1,3 +1,68 @@
 <template>
-    <h1>Profile</h1>
+    <require from="components/alert"></require>
+    <div v-if="profileDataModel">
+        <h4 class>Profile</h4>
+
+        <div class="row">
+            <div class="col-md-6">
+                <alert if.bind="alert" alert-data.bind="alert"></alert>
+                <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
+                    <ul>
+                        <li repeat.for="error of errors">
+                            ${error}
+                        </li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Fullname</label>
+                    <input class="form-control" type="text" maxlength="100" value.bind="profileDataModel.profileFullName" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="Input.ProfileFullName"
+                        data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <label for="Input_UserName">Username</label>
+                    <input class="form-control" type="text" maxlength="300" value.bind="profileDataModel.username" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="Input.UserName"
+                        data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="Input_ProfileWorkPlace">Work place</label>
+                    <input class="form-control" type="text" maxlength="300" value.bind="profileDataModel.profileWorkPlace" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="Input.ProfileWorkPlace"
+                        data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="Input_ProfileAbout">About</label>
+                    <textarea class="form-control form-" maxlength="1000" value.bind="profileDataModel.profileAbout"></textarea>
+                    <span class="text-danger field-validation-valid" data-valmsg-for="Input.ProfileAbout"
+                        data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <label for="Input_PhoneNumber">Phone number</label>
+                    <input class="form-control" type="tel" maxlength="300" value.bind="profileDataModel.phoneNumber" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="Input.PhoneNumber"
+                        data-valmsg-replace="true"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="Input_ProfileGender">Gender</label>
+                    <select class="form-control" id="ProfileGender" value.bind="profileDataModel.profileGender">
+                        <option repeat.for="Key of ProfileGenderKeys" model.bind="ProfileGenders[Key]">
+                            ${Key}
+                        </option>
+                    </select>
+                </div>
+
+                <div show.bind="isGenderOwn" class="form-group" id="profile-gender-own">
+                    <label for="Input_ProfileGenderOwn">Own variant</label>
+                    <input class="form-control" type="text" id="GenderOwn" value.bind="profileDataModel.profileGenderOwn" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="Input.ProfileGenderOwn"
+                        data-valmsg-replace="true"></span>
+                </div>
+
+                <button id="update-profile-button" class="btn btn-success align-self-center"
+                    click.delegate="onSubmit()">Save</button>
+            </div>
+        </div>
+    </div>
 </template>

@@ -8,22 +8,22 @@ export class ImageComponent {
     }
 
     @bindable public id!: string;
-    @bindable public height!: string;
-    @bindable public width!: string;
+    @bindable public htmlHeight!: string;
+    @bindable public htmlWidth!: string;
     @bindable public htmlClass!: string | null;
     @bindable public htmlId!: string | null;
     @bindable public original!: boolean;
 
     get Id() {
-        return this.id ?? "12422331-eaf3-46f4-9649-b6beaa2dbb9b";
+        return this.id ?? null;
     }
 
     get Height(): string {
-        return this.height ?? "150px";
+        return this.htmlHeight ?? "150px";
     }
 
     get Width(): string {
-        return this.width ?? "150px ";
+        return this.htmlWidth ?? "150px";
     }
 
     get HtmlClass(): string {
@@ -38,13 +38,23 @@ export class ImageComponent {
         return this.original ?? false;
     }
 
-    get Style(){
-        return `width: ${this.Width}; height: ${this.Height}`
+    get Style() {
+        let styles: string[] = []
+
+        if (!isNaN(Number(this.Width))){
+            styles.push(`width: ${this.Width};`)
+        }
+
+        if (!isNaN(Number(this.Height))){
+            styles.push(`height: ${this.Height};`)
+        }
+
+        return styles.join("; ")
     }
 
     private src: string = "";
 
-    created() {
+    attached() {
         if (!this.IsOriginal) {
             this.imagesApi.getImage(this.Id).then(imageData => {
                 this.src = imageData;

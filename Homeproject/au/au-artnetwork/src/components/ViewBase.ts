@@ -1,6 +1,7 @@
 import { autoinject, PLATFORM } from 'aurelia-framework';
 import { AppState } from 'state/state';
 import { IAlertData } from 'types/IAlertData';
+import * as $ from "jquery";
 
 @autoinject
 export class ViewBase{

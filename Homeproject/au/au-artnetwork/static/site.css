@@ -108,3 +108,24 @@ body {
     vertical-align: super;
     pointer-events: none;
 }
+
+/* Image ---------------------------------------- */
+
+.miniature-cover {
+    width: 100%;
+    height: 100%;
+    border: #ff5c6c 4px dashed;
+    position: absolute;
+}
+
+.miniature-control {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    /*border-radius: 10px;*/
+    background: #e0a800;
+}
+
+.miniature-control:hover {
+    background: #fdc400;
+}

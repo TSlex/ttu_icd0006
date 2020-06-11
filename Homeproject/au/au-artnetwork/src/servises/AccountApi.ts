@@ -13,6 +13,7 @@ import { IProfileEmailDTO } from 'types/Identity/IProfileEmailDTO';
 import { IResponseDTO } from 'types/Response/IResponseDTO';
 import { IProfileDataDTO } from 'types/Identity/IProfileDataDTO';
 import { IProfilePasswordDTO } from 'types/Identity/IProfilePasswordDTO';
+import { IProfileDTO } from 'types/IProfileDTO';
 
 
 @autoinject
@@ -63,6 +64,39 @@ export class AccountApi extends BaseApi {
             } as IResponseDTO
         }
     }
+
+    async getProfile(userName: string): Promise<IFetchResponse<IProfileDTO>> {
+        const url = this.appState.baseUrl + "/profiles/" + userName;
+
+        try {
+            const response = await this.httpClient.get(url, { headers: this.headers });
+
+            switch (response.status) {
+                case 200:
+                case 201:
+                case 204:
+                    return {
+                        status: response.status.toString(),
+                        errors: [],
+                        data: (await response.json()) as IProfileDTO
+                    }
+                default:
+                    return {
+                        status: response.status.toString(),
+                        errors: [(await response.json()).errors],
+                        data: null
+                    }
+            }
+        } catch (reason) {
+            return {
+                status: "-1",
+                errors: [reason],
+                data: null
+            }
+        }
+    }
+
+
 
     async getEmail(): Promise<IFetchResponse<string>> {
         const url = `${this.fetchUrl}/getemail`
