@@ -16,8 +16,11 @@ export class PostsIndex extends ViewBase {
         super(appState);
     }
 
-    get posts(){
-        return this.appState.posts;
+    get posts() {
+        return this.appState.posts.sort(
+            (one, two) => {
+                return new Date(one.postPublicationDateTime).getTime() < new Date(two.postPublicationDateTime).getTime() ? 1 : -1
+            });
     }
 
     canEditThis(post: IPostGetDTO) {
@@ -38,7 +41,7 @@ export class PostsIndex extends ViewBase {
 
             this.appState.selectedPost = post;
             // this.isLoading = true;
-            this.router.navigateToRoute("posts-edit", {id: post.id});
+            this.router.navigateToRoute("posts-edit", { id: post.id });
         }
     }
 

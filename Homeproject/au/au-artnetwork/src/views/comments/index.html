@@ -1,7 +1,7 @@
 <template>
     <require from="conventers/DateFormatConventer"></require>
     <template if.bind="isLoaded">
-        <h1 class="text-center">Messages</h1>
+        <h1 class="text-center">Comments</h1>
         <template repeat.for="room of rooms">
             <h4 style="position: relative; text-align: center;">
                 <span style="position: absolute; left: 0;">
@@ -10,9 +10,9 @@
                 <span style="display: inline-block; max-width: 600px; overflow: hidden; text-overflow: ellipsis;">
                     ${room.chatRoom.chatRoomTitle}
                 </span>
-                <span if.bind="room.chatMember.canWriteMessages" style="position: absolute; right: 0;">
+                <span if.bind="room.chatMember.canWriteComments" style="position: absolute; right: 0;">
                     <a class="far fa-plus-square"
-                        route-href="route: messages-create; params.bind: { chatRoomId: room.chatRoom.id }"></a>
+                        route-href="route: comments-create; params.bind: { chatRoomId: room.chatRoom.id }"></a>
                 </span>
                 <span else class="text-danger" style="position: absolute; right: 0; font-size: 14px; top: 50%">
                     You cannot write in this chat
@@ -20,24 +20,24 @@
             </h4>
             <table class="table">
                 <tbody>
-                    <tr repeat.for="message of room.messages">
+                    <tr repeat.for="comment of room.comments">
                         <td style="width: 10%">
-                            ${message.userName}
+                            ${comment.userName}
                         </td>
                         <td style="width: 100%">
-                            ${message.messageValue}
+                            ${comment.commentValue}
                         </td>
                         <td style="white-space: nowrap;">
-                            ${message.messageDateTime | dateFormat}
+                            ${comment.commentDateTime | dateFormat}
                         </td>
                         <td>
-                            <div if.bind="canEditThis(room.chatMember, message)" class="d-flex justify-content-end">
+                            <div if.bind="canEditThis(room.chatMember, comment)" class="d-flex justify-content-end">
                                 <button class="btn btn-primary index_controls mr-1"
-                                    click.delegate="onEdit(room.chatMember, message)">
+                                    click.delegate="onEdit(room.chatMember, comment)">
                                     <i class="fa fa-edit"></i>
                                 </button>
                                 <button class="btn btn-danger index_controls     "
-                                    click.delegate="onDelete(room.chatMember, message)">
+                                    click.delegate="onDelete(room.chatMember, comment)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </div>

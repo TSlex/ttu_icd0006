@@ -5,34 +5,34 @@ import { Router } from 'aurelia-router';
 import { autoinject, bindable } from 'aurelia-framework';
 import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
 import { FormComponentBase } from 'components/FormComponentBase';
-import { MessagesApi } from 'servises/MessagesApi';
-import { IMessageGetDTO } from 'types/IMessageDTO';
+import { CommentsApi } from 'servises/CommentsApi';
+import { ICommentGetDTO } from 'types/ICommentDTO';
 import { IFetchResponse } from 'types/Response/IFetchResponseDTO';
 import { AppState } from 'state/state';
 
 
 @autoinject
-export class MessagesCreateEdit extends FormComponentBase {
+export class CommentsCreateEdit extends FormComponentBase {
 
     constructor(appState: AppState, eventAggregator: EventAggregator, router: Router,
-        private messagesApi: MessagesApi, private chatRoomsApi: ChatRoomsApi) {
+        private commentsApi: CommentsApi, private chatRoomsApi: ChatRoomsApi) {
         super(eventAggregator, router, appState)
     }
 
     private id: string;
     private chatRoomId: string;
 
-    private messageValue: string;
+    private commentValue: string;
 
     async activate(params: any) {
         // bind properties
         if (params.id && typeof (params.id) == 'string') {
             this.id = params.id;
 
-            let response = await this.messagesApi.Details(this.id)
+            let response = await this.commentsApi.Details(this.id)
 
             if (!(response?.errors.length > 0)) {
-                this.messageValue = response.data.messageValue;
+                this.commentValue = response.data.commentValue;
             }
             else {
                 this.onCancel();
@@ -51,21 +51,21 @@ export class MessagesCreateEdit extends FormComponentBase {
     }
 
     onSubmit() {
-        if (this.messageValue?.length > 0) {
+        if (this.commentValue?.length > 0) {
             this.errors = []
             this.lockBottons()
 
             if (this.id) {
-                this.messagesApi.Edit(this.id,
+                this.commentsApi.Edit(this.id,
                     {
                         id: this.id,
-                        messageValue: this.messageValue
+                        commentValue: this.commentValue
                     }).then((response: IResponseDTO) => {
 
                         if (!response?.errors) {
 
-                            if (this.appState.selectedMessage) {
-                                this.appState.selectedMessage!.messageValue = this.messageValue;
+                            if (this.appState.selectedComment) {
+                                this.appState.selectedComment!.commentValue = this.commentValue;
                             }
                             this.onCancel();
                         } else {
@@ -75,22 +75,22 @@ export class MessagesCreateEdit extends FormComponentBase {
                     })
             }
             else if (this.chatRoomId) {
-                this.messagesApi.Create(
+                this.commentsApi.Create(
                     {
                         chatRoomId: this.chatRoomId,
-                        messageValue: this.messageValue
+                        commentValue: this.commentValue
                     })
-                    .then((response: IFetchResponse<IMessageGetDTO>) => {
+                    .then((response: IFetchResponse<ICommentGetDTO>) => {
                         if (!(response?.errors?.length > 0)) {
                             let newRecord = response.data
-                            let roomMessage = this.appState.roomMessages[newRecord.chatRoomId]
+                            let roomComment = this.appState.roomComments[newRecord.chatRoomId]
 
-                            if (roomMessage.messages) {
-                                roomMessage.messages.reverse()
-                                roomMessage.messages.push(newRecord)
-                                roomMessage.messages.reverse()
+                            if (roomComment.comments) {
+                                roomComment.comments.reverse()
+                                roomComment.comments.push(newRecord)
+                                roomComment.comments.reverse()
 
-                                roomMessage.chatRoom.lastMessageDateTime = newRecord.messageDateTime
+                                roomComment.chatRoom.lastCommentDateTime = newRecord.commentDateTime
                             }
 
                             this.onCancel();
@@ -106,6 +106,6 @@ export class MessagesCreateEdit extends FormComponentBase {
     }
 
     onCancel() {
-        this.router.navigateToRoute('messages')
+        this.router.navigateToRoute('comments')
     }
 }
