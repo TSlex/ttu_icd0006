@@ -42,4 +42,24 @@ export class PostsApi extends BaseApi {
 
         return await this._delete(url, { headers: this.headers })
     }
+
+    async Exists(id: string): Promise<Boolean> {
+        const url = `${this.fetchUrl}/${id}/exists`;
+
+        try {
+            const response = await this.httpClient.get(url, { headers: this.headers })
+
+            switch (response.status) {
+                case 200:
+                case 201:
+                case 204:
+                    return (await response.json()) as Boolean
+                default:
+                    return false
+
+            }
+        } catch (reason) {
+            return false
+        }
+    }
 }

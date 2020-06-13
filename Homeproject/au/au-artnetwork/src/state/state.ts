@@ -27,6 +27,9 @@ export class AppState {
     // component loading
     private _isComponentLoading: boolean = false
 
+    // images
+    public imagesData: Record<string, string> = {}
+
     get isComponentLoading(){
         return this._isComponentLoading;
     }

@@ -3,13 +3,9 @@ import { IResponseDTO } from 'types/Response/IResponseDTO';
 import { autoinject, PLATFORM } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
 
-import { ChatMembersApi } from 'servises/ChatMembersApi';
 import { CommentsApi } from 'servises/CommentsApi';
-import { ChatRoomsApi } from 'servises/ChatRoomsApi';
 
 import { ICommentGetDTO } from 'types/ICommentDTO';
-import { IChatRoomDTO } from 'types/IChatRoomDTO';
-import { IChatMemberDTO } from 'types/IChatMemberDTO';
 import { IFetchResponse } from 'types/Response/IFetchResponseDTO';
 import { AppState } from 'state/state';
 import { ViewBase } from 'components/ViewBase';
@@ -30,7 +26,7 @@ export class CommentsIndex extends ViewBase {
     }
 
     canDeleteThis(post: IPostGetDTO, comment: ICommentGetDTO) {
-        return comment.userName === this.appState.userName && post.profileUsername === this.appState.userName;
+        return comment.userName === this.appState.userName || post.profileUsername === this.appState.userName;
     }
 
     constructor(
@@ -41,12 +37,12 @@ export class CommentsIndex extends ViewBase {
         super(appState);
     }
 
-    created() {
-        // if (!(this.posts.length > 0)) {
-        //     this.isLoading = true;
-        //     this.isLoaded = false;
-        // }
+    activated() {
+        this.checkLoaded(this.posts.length > 0)
+    }
 
+    created() {
+        this.checkLoaded(this.posts.length > 0)
         this.postsApi.Index()
             .then((response: IFetchResponse<IPostGetDTO[]>) => {
                 if (response?.errors.length === 0) {
@@ -60,8 +56,7 @@ export class CommentsIndex extends ViewBase {
                                     comments: response.data
                                 }
 
-                                this.isLoading = false;
-                                this.isLoaded = true;
+                                this.setLoaded(true)
                             })
                     })
                 }

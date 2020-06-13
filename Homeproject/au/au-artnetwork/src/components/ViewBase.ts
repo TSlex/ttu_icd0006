@@ -18,6 +18,22 @@ export class ViewBase{
         document.querySelectorAll('alert').forEach((element: HTMLElement) => {element.remove()})
     }
 
+    checkLoaded(whenLoad: boolean) {
+        this.setLoaded(false)
+        if (whenLoad) {
+            this.isLoading = false;
+            this.isLoaded = true;
+        } else {
+            this.isLoading = true;
+            this.isLoaded = false;
+        }
+    }
+
+    setLoaded(bool: boolean){
+        this.isLoaded = bool;
+        this.isLoading = !bool;
+    }
+
     get isLoading(){
         return this.appState.isComponentLoading;
     }

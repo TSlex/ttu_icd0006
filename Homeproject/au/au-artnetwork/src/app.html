@@ -1,5 +1,5 @@
 <template>
-    <require from="components/loadingOverlay.html"></require>
+    <require from="components/loadingOverlay"></require>
     <header>
         <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -41,7 +41,7 @@
         </nav>
     </header>
     <div class="container">
-        <loadingOverlay if.bind="isLoading"></loadingOverlay>
+        <loading-overlay if.bind="isLoading"></loading-overlay>
         <main role="main">
              <router-view></router-view> 
         </main>

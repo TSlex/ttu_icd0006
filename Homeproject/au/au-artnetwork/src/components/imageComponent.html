@@ -1,4 +1,8 @@
 <template>
-    <img id.bind="HtmlId" class.bind="HtmlClass" src.bind="src" alt="image component" style.bind="Style"
+    <require from="components/loadingOverlay"></require>
+    <div if.bind="!imageLoaded" style.bind="LoadingStyle">
+        <loading-overlay fixed="false"></loadingOverlay>
+    </div>
+    <img show.bind="imageLoaded" id.bind="HtmlId" class.bind="HtmlClass" src.bind="src" alt="image component" style.bind="Style"
         draggable="false" />
 </template>

@@ -27,11 +27,19 @@ export class PostsIndex extends ViewBase {
         return post.profileUsername === this.appState.userName;
     }
 
+    activated() {
+        this.checkLoaded(this.posts.length > 0)
+    }
+
     created() {
+        this.checkLoaded(this.posts.length > 0)
+
         this.postsApi.Index()
             .then((response: IFetchResponse<IPostGetDTO[]>) => {
                 if (response?.errors.length === 0) {
                     this.appState.posts = response.data;
+
+                    this.setLoaded(true)
                 }
             })
     }
@@ -40,7 +48,7 @@ export class PostsIndex extends ViewBase {
         if (this.canEditThis(post)) {
 
             this.appState.selectedPost = post;
-            // this.isLoading = true;
+            this.isLoading = true;
             this.router.navigateToRoute("posts-edit", { id: post.id });
         }
     }

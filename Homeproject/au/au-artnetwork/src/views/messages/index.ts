@@ -37,12 +37,12 @@ export class MessagesIndex extends ViewBase {
         super(appState);
     }
 
-    created() {
-        if (!(this.rooms.length > 0)) {
-            this.isLoading = true;
-            this.isLoaded = false;
-        }
+    activated() {
+        this.checkLoaded(this.rooms.length > 0)
+    }
 
+    created() {
+        this.checkLoaded(this.rooms.length > 0)
         this.chatRoomsApi.Index()
             .then((response: IFetchResponse<IChatRoomDTO[]>) => {
                 if (response?.errors.length === 0) {
@@ -67,8 +67,7 @@ export class MessagesIndex extends ViewBase {
                                             messages: response.data
                                         }
 
-                                        this.isLoading = false;
-                                        this.isLoaded = true;
+                                        this.setLoaded(true)
                                     })
                             })
                     })

@@ -1,6 +1,4 @@
-import { ChatRoomsApi } from 'servises/ChatRoomsApi';
 import { IResponseDTO } from '../../types/Response/IResponseDTO';
-import { IImagePostDTO } from '../../types/IImageDTO';
 import { Router } from 'aurelia-router';
 import { autoinject, bindable } from 'aurelia-framework';
 import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
@@ -9,18 +7,19 @@ import { CommentsApi } from 'servises/CommentsApi';
 import { ICommentGetDTO } from 'types/ICommentDTO';
 import { IFetchResponse } from 'types/Response/IFetchResponseDTO';
 import { AppState } from 'state/state';
+import { PostsApi } from 'servises/PostsApi';
 
 
 @autoinject
 export class CommentsCreateEdit extends FormComponentBase {
 
     constructor(appState: AppState, eventAggregator: EventAggregator, router: Router,
-        private commentsApi: CommentsApi, private chatRoomsApi: ChatRoomsApi) {
+        private commentsApi: CommentsApi, private postsApi: PostsApi) {
         super(eventAggregator, router, appState)
     }
 
     private id: string;
-    private chatRoomId: string;
+    private postId: string;
 
     private commentValue: string;
 
@@ -38,10 +37,10 @@ export class CommentsCreateEdit extends FormComponentBase {
                 this.onCancel();
             }
         }
-        else if (params.chatRoomId && typeof (params.chatRoomId) == 'string') {
-            this.chatRoomId = params.chatRoomId;
+        else if (params.postId && typeof (params.postId) == 'string') {
+            this.postId = params.postId;
 
-            let exist = await this.chatRoomsApi.Exists(this.chatRoomId)
+            let exist = await this.postsApi.Exists(this.postId)
             if (!exist) {
                 this.onCancel();
             }
@@ -74,23 +73,22 @@ export class CommentsCreateEdit extends FormComponentBase {
                         }
                     })
             }
-            else if (this.chatRoomId) {
+            else if (this.postId) {
                 this.commentsApi.Create(
                     {
-                        chatRoomId: this.chatRoomId,
+                        postId: this.postId,
                         commentValue: this.commentValue
                     })
                     .then((response: IFetchResponse<ICommentGetDTO>) => {
                         if (!(response?.errors?.length > 0)) {
+
                             let newRecord = response.data
-                            let roomComment = this.appState.roomComments[newRecord.chatRoomId]
+                            let postComment = this.appState.postComments[this.postId]
 
-                            if (roomComment.comments) {
-                                roomComment.comments.reverse()
-                                roomComment.comments.push(newRecord)
-                                roomComment.comments.reverse()
-
-                                roomComment.chatRoom.lastCommentDateTime = newRecord.commentDateTime
+                            if (postComment.comments) {
+                                postComment.comments.reverse()
+                                postComment.comments.push(newRecord)
+                                postComment.comments.reverse()
                             }
 
                             this.onCancel();

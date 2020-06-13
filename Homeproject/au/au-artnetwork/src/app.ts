@@ -37,8 +37,8 @@ export class App {
 
             // comments
             { route: ['comments', 'comments/index'], name: 'comments', moduleId: PLATFORM.moduleName('views/comments/index'), nav: true, title: 'Comments' },
-            // { route: ['comments/create'], name: 'comments-create', moduleId: PLATFORM.moduleName('views/comments/create-edit') },
-            // { route: ['comments/edit/:id'], name: 'comments-edit', moduleId: PLATFORM.moduleName('views/comments/create-edit') },
+            { route: ['comments/create/:postId'], name: 'comments-create', moduleId: PLATFORM.moduleName('views/comments/create-edit') },
+            { route: ['comments/edit/:id'], name: 'comments-edit', moduleId: PLATFORM.moduleName('views/comments/create-edit') },
 
             // messages
             { route: ['messages', 'messages/index'], name: 'messages', moduleId: PLATFORM.moduleName('views/messages/index'), nav: true, title: 'Messages' },

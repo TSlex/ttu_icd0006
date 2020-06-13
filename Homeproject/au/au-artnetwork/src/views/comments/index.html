@@ -1,56 +1,66 @@
 <template>
     <require from="conventers/DateFormatConventer"></require>
+    <require from="components/imageComponent"></require>
     <template if.bind="isLoaded">
         <h1 class="text-center">Comments</h1>
-        <template repeat.for="room of rooms">
-            <h4 style="position: relative; text-align: center;">
-                <span style="position: absolute; left: 0;">
-                    <${room.chatMember.chatRoleValue}>
+        <template repeat.for="post of posts">
+            <div style="max-width: 14rem; margin: auto;">
+                <image-component id.bind="post.post.postImageId" html-height="unset" html-width="unset" html-class="card-img">
+                </image-component>
+            </div>
+            <h4 style="position: relative;" class="mt-3 d-flex align-content-center justify-content-center">
+                <span
+                    style="display: inline-block; max-width: 600px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                    ${post.post.postTitle}
                 </span>
-                <span style="display: inline-block; max-width: 600px; overflow: hidden; text-overflow: ellipsis;">
-                    ${room.chatRoom.chatRoomTitle}
+                <span style="display: inline-block;">
+                    &nbsp;by "${post.post.profileUsername}"
                 </span>
-                <span if.bind="room.chatMember.canWriteComments" style="position: absolute; right: 0;">
-                    <a class="far fa-plus-square"
-                        route-href="route: comments-create; params.bind: { chatRoomId: room.chatRoom.id }"></a>
-                </span>
-                <span else class="text-danger" style="position: absolute; right: 0; font-size: 14px; top: 50%">
-                    You cannot write in this chat
+                <span style="position: absolute; right: 0;">
+                    <a class="far fa-plus-square" route-href="route: comments-create; params.bind: { postId: post.post.id }"></a>
                 </span>
             </h4>
             <table class="table">
                 <tbody>
-                    <tr repeat.for="comment of room.comments">
-                        <td style="width: 10%">
-                            ${comment.userName}
-                        </td>
-                        <td style="width: 100%">
-                            ${comment.commentValue}
-                        </td>
-                        <td style="white-space: nowrap;">
-                            ${comment.commentDateTime | dateFormat}
-                        </td>
-                        <td>
-                            <div if.bind="canEditThis(room.chatMember, comment)" class="d-flex justify-content-end">
-                                <button class="btn btn-primary index_controls mr-1"
-                                    click.delegate="onEdit(room.chatMember, comment)">
-                                    <i class="fa fa-edit"></i>
-                                </button>
-                                <button class="btn btn-danger index_controls     "
-                                    click.delegate="onDelete(room.chatMember, comment)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </div>
-                            <div else class="d-flex justify-content-end">
-                                <button class="btn btn-secondary index_controls mr-1" disabled>
-                                    <i class="fa fa-edit"></i>
-                                </button>
-                                <button class="btn btn-secondary index_controls    " disabled>
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                    <template if.bind="post.comments.length > 0">
+                        <tr repeat.for="comment of post.comments">
+                            <td style="width: 10%">
+                                ${comment.userName}
+                            </td>
+                            <td style="width: 100%">
+                                ${comment.commentValue}
+                            </td>
+                            <td style="white-space: nowrap;">
+                                ${comment.commentDateTime | dateFormat}
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-end">
+                                    <button if.bind="canEditThis(comment)" class="btn btn-primary index_controls mr-1"
+                                        click.delegate="onEdit(comment)">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button else class="btn btn-secondary index_controls mr-1" disabled>
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+
+                                    <button if.bind="canDeleteThis(post.post, comment)" class="btn btn-danger index_controls     "
+                                        click.delegate="onDelete(post.post, comment)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                    <button else class="btn btn-secondary index_controls    " disabled>
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </template>
+                    <template else>
+                        <tr>
+                            <td class="text-center">
+                                no comments...
+                            </td>
+                        </tr>
+                    </template>
                 </tbody>
             </table>
             <br>
