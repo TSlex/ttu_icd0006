@@ -1,5 +1,57 @@
 <template>
     <require from="components/imageComponent"></require>
-    <h1>Index</h1>
-    <image-component height="unset" width="unset"></image-component>
+    <h1 class="text-center" style="position: relative;">
+        <span>Posts</span>
+        <span style="position: absolute; right: 0;">
+            <a class="far fa-plus-square" route-href="route: posts-create;"></a>
+        </span>
+    </h1>
+    <div class="posts_section align-content-center d-flex flex-column">
+        <div v-if="posts.length > 0" class="post_row card-columns">
+            <a repeat.for="post of posts" @click="selectPost(post)">
+                <div class="post_item card mb-3">
+                    <image-component id.bind="post.postImageId" html-height="unset" html-width="unset" html-class="card-img">
+                    </image-component>
+                    <div class="card-body d-flex flex-column align-content-center text-center">
+                        <span>
+                            <span class="post-title">
+                                ${post.postTitle} by "${post.profileUsername}"
+                            </span>
+                        </span>
+                        <span class="post-description">
+                            <span>${post.postDescription}</span>
+                        </span>
+                        <span class="mt-2">
+                            <span class="font-weight-bold">Likes: </span>
+                            <span>${post.postFavoritesCount}</span>
+                        </span>
+                        <span>
+                            <span class="font-weight-bold">Comments: </span>
+                            <span>${post.postCommentsCount}</span>
+                        </span>
+                        <span class="mt-2">
+                            <template if.bind="canEditThis(post)">
+                                <button class="btn btn-primary index_controls mr-1"
+                                    click.delegate="onEdit(post)">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger index_controls      "
+                                    click.delegate="onDelete(post)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </template>
+                            <template else>
+                                <button class="btn btn-secondary index_controls mr-1" disabled>
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-secondary index_controls     " disabled>
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </template>
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 </template>

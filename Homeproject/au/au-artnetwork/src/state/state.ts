@@ -17,6 +17,7 @@ export class AppState {
     public selectedMessage: IMessageGetDTO | null = null
 
     // posts
+    public posts: IPostGetDTO[] = []
     public selectedPost: IPostGetDTO | null = null
 
     // comments

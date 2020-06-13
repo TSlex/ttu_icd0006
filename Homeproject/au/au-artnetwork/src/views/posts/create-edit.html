@@ -1,0 +1,49 @@
+<template>
+    <require from="components/imageComponent"></require>
+    <require from="views/shared/create-controls"></require>
+    <require from="views/shared/edit-controls"></require>
+    <div class="row d-flex flex-column align-items-center text-center">
+        <div show.bind="isImageLoaded" class="card mb-2" id="image-miniature" style="width: 18rem; user-select: none">
+            <image-component html-height="inherit" html-width="inherit" original="true" html-id="render_image"
+                html-class="card-img" id.bind="postModel.postImageId">
+            </image-component>
+        </div>
+        <div class="col-md-6">
+
+            <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
+                <ul>
+                    <li repeat.for="error of errors">
+                        ${error}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="postTitle">Post Title</label>
+                <input class="form-control" id="postTitle" value.bind="postModel.postTitle" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="postDescription">Post Desription</label>
+                <textarea class="form-control" id="postDescription" value.bind="postModel.postDescription"></textarea>
+            </div>
+
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile"
+                    input.delegate="loadFile()" />
+                <label class="custom-file-label" style="overflow: hidden">${fileName}</label>
+            </div>
+
+            <input type="hidden" type="number" id="HeightPx" name="HeightPx" value.bind="imageModel.heightPx" />
+            <input type="hidden" type="number" id="WidthPx" name="WidthPx" value.bind="imageModel.widthPx" />
+            <input type="hidden" type="number" id="PaddingTop" name="PaddingTop" value.bind="imageModel.paddingTop" />
+            <input type="hidden" type="number" id="PaddingRight" name="PaddingRight" value.bind="imageModel.paddingRight" />
+            <input type="hidden" type="number" id="PaddingBottom" name="PaddingBottom" value.bind="imageModel.paddingBottom" />
+            <input type="hidden" type="number" id="PaddingLeft" name="PaddingLeft" value.bind="imageModel.paddingLeft">
+
+            <div class="form-group mt-3">
+                <edit-controls if.bind="id"></edit-controls>
+                <create-controls else></create-controls>
+            </div>
+        </div>
+    </div>
+</template>

@@ -126,8 +126,6 @@ export class ImagesApi extends BaseApi {
         const url = `${this.fetchUrl}/${id}`;
         const response = await this.httpClient.get(url, { headers: this.headers });
 
-        console.log(response)
-
         switch (response.status) {
             case 200:
                 return this._imageEncode(await response.arrayBuffer());

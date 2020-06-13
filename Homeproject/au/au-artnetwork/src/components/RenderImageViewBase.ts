@@ -15,6 +15,8 @@ export class RenderImageViewBase extends ViewBase {
 
     protected imageModel: IImageDTO | null = null;
 
+    protected isImageLoaded: boolean = false;
+
     get fileName() {
         return this.imageModel?.imageFile?.name;
     }
@@ -74,7 +76,6 @@ export class RenderImageViewBase extends ViewBase {
                 image.src = e.target!.result as string;
 
                 image.onload = function () {
-                    console.log("image");
 
                     let height = $("#HeightPx");
                     let width = $("#WidthPx");
@@ -90,20 +91,27 @@ export class RenderImageViewBase extends ViewBase {
             };
 
             reader.readAsDataURL(this.imageModel.imageFile);
+            this.isImageLoaded = true;
         }
     }
 
     loadScript() {
         let exist = document.getElementById("image_miniature_script");
 
-        if (exist) {
-            // exist.remove();
-        } else {
+        if (!exist) {
             let script = document.createElement("script");
             script.setAttribute("id", "image_miniature_script");
             script.setAttribute("src", "js/image-miniature.js");
             script.setAttribute("defer", "defer");
             document.body.appendChild(script);
+        }
+    }
+
+    detached() {
+        let exist = document.getElementById("image_miniature_script");
+
+        if (exist) {
+            exist.remove();
         }
     }
 }

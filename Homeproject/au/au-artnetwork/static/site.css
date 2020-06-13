@@ -81,6 +81,31 @@ body {
 
 /* Custom ---------------------------------------- */
 
+html {
+    user-select: none !important;
+}
+
+html::-webkit-scrollbar {
+    width: .5em;
+}
+
+span::-webkit-scrollbar, p::-webkit-scrollbar{
+    width: 0;
+}
+
+html::-webkit-scrollbar-track {
+    border-left: 1px solid lightgray;
+}
+
+html::-webkit-scrollbar-thumb {
+    background-color: lightgray;
+    outline: 1px solid slategrey;
+}
+
+hr {
+    width: 100%;
+}
+
 .blur {
     -webkit-filter: blur(5px);
     -moz-filter: blur(5px);
@@ -97,14 +122,14 @@ body {
     -o-transition: all 2s linear;
 }
 
-.index_controls{
+.index_controls {
     height: 30px;
     line-height: 30px;
     width: 40px;
     text-align: center;
 }
 
-.index_controls *{
+.index_controls * {
     vertical-align: super;
     pointer-events: none;
 }
@@ -128,4 +153,30 @@ body {
 
 .miniature-control:hover {
     background: #fdc400;
+}
+
+/* Post ----------------------------------------- */
+
+.post-title {
+    display: inline-block;
+    overflow: auto;
+    text-overflow: ellipsis;
+    max-height: 1.5em;
+    box-sizing: content-box;
+    margin-left: auto;
+    margin-right: auto;
+    word-break: break-all;
+}
+
+.post-description {
+    border: 1px solid gray;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 10px;
+    justify-self: flex-end;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-overflow: ellipsis;
+    max-height: 3.2em;
+    box-sizing: content-box;
 }

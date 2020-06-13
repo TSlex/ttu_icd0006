@@ -1,25 +1,25 @@
 import { Router } from 'aurelia-router';
-import { autoinject, bindable } from 'aurelia-framework';
+import { RenderImageViewBase } from 'components/RenderImageViewBase';
 import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
+import { autoinject, PLATFORM } from 'aurelia-framework';
 import { AppState } from 'state/state';
-import { ViewBase } from 'components/ViewBase';
 
 @autoinject
-export abstract class FormComponentBase extends ViewBase {
+export abstract class ImageFormComponent extends RenderImageViewBase {
 
-    
     constructor(
         protected eventAggregator: EventAggregator,
         protected router: Router,
-        appState: AppState) {
-            super(appState);
-            
-            this.subscriptions.push(
-                this.eventAggregator.subscribe("onSubmit", () => this.onSubmit()),
-                this.eventAggregator.subscribe("onCancel", () => this.onCancel())
-                )
-            }
-            
+        appState: AppState
+    ) {
+        super(appState);
+
+        this.subscriptions.push(
+            this.eventAggregator.subscribe("onSubmit", () => this.onSubmit()),
+            this.eventAggregator.subscribe("onCancel", () => this.onCancel())
+        )
+    }
+
     private subscriptions: Subscription[] = [];
     protected errors: string[] = [];
 

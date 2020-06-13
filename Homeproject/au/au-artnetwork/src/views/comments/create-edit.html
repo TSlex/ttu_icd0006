@@ -1,0 +1,24 @@
+<template>
+    <require from="views/shared/create-controls"></require>
+    <require from="views/shared/edit-controls"></require>
+    <div class="row d-flex justify-content-center mt-5">
+        <div class="col-md-6 text-center">
+            <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
+                <ul>
+                    <li repeat.for="error of errors">
+                        ${error}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="MessageValue">Message</label>
+                <textarea rows="5" class="form-control text-center" required id="MessageValue" maxlength="3000"
+                    name="MessageValue" value.bind="messageValue"></textarea>
+            </div>
+
+            <create-controls if.bind="chatRoomId"></create-controls>
+            <edit-controls else></edit-controls>
+        </div>
+    </div>
+</template>
