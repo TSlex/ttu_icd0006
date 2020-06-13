@@ -1,3 +1,4 @@
+import { IFetchResponse } from './../../../types/Response/IFetchResponseDTO';
 import { ImagesApi } from 'servises/ImagesApi';
 import { autoinject } from 'aurelia-framework';
 import { AccountApi } from 'servises/AccountApi';
@@ -5,6 +6,7 @@ import { AppState } from 'state/state';
 import { RenderImageViewBase } from 'components/RenderImageViewBase';
 import { IProfileDTO } from 'types/IProfileDTO';
 import { ImageType } from 'types/Enums/ImageType';
+import { IImagePostDTO, IImageDTO, IImagePutDTO } from 'types/IImageDTO';
 
 @autoinject
 export class ManageAvatar extends RenderImageViewBase {
@@ -29,43 +31,34 @@ export class ManageAvatar extends RenderImageViewBase {
         if (this.isAvatarExist) {
             this.imageModel = (await this.imagesApi.getImageModel(this.profile!.profileAvatarId)).data
         } else {
-            this.imageModel = {
-                id: "00000000-0000-0000-0000-000000000000",
-                imageUrl: "",
-                originalImageUrl: "",
-                heightPx: 0,
-                widthPx: 0,
-                paddingTop: 0,
-                paddingRight: 0,
-                paddingBottom: 0,
-                paddingLeft: 0,
-                imageFile: null,
-                imageType: ImageType.ProfileAvatar,
-                imageFor: ""
-            };
+            this.imageModel = this.getNewImageModel(ImageType.ProfileAvatar)
         }
+
+        this.loadScript()
     }
-
-    attached() {
-        let exist = document.getElementById("image_miniature_script");
-
-        if (exist) {
-            // exist.remove();
-        } else {
-            let script = document.createElement("script");
-            script.setAttribute("id", "image_miniature_script");
-            script.setAttribute("src", "js/image-miniature.js");
-            script.setAttribute("defer", "defer");
-            document.body.appendChild(script);
-        }
-    }
-
 
     onSubmit() {
-        if (true) {
-
+        if (this.imageModel) {
             this.clearNotifier()
 
+            if (!this.isAvatarExist) {
+                let postModel = this.imagePostModel;
+
+                this.imagesApi.postImageModel(postModel).then(
+                    (response: IFetchResponse<IImageDTO>) => {
+                        console.log(response);
+                    }
+                );
+
+            } else if (this.isAvatarExist) {
+                let putModel = this.imagePutModel;
+
+                this.imagesApi.putImageModel(this.imageModel.id, putModel).then(
+                    (response: IFetchResponse<IImageDTO>) => {
+                        console.log(response);
+                    }
+                );
+            }
         }
     }
 }

@@ -56,6 +56,8 @@ export class ImagesApi extends BaseApi {
         formData.append('widthPx', imageModel.widthPx.toString())
         formData.append('heightPx', imageModel.heightPx.toString())
         formData.append('imageFile', imageModel.imageFile ? imageModel.imageFile : '')
+            
+        delete this.headers["Content-Type"]
 
         try {
             const response = await this.httpClient.post(url, formData, { headers: this.headers });
@@ -99,8 +101,10 @@ export class ImagesApi extends BaseApi {
         formData.append('heightPx', imageModel.heightPx.toString())
         formData.append('imageFile', imageModel.imageFile ? imageModel.imageFile : '')
 
+        delete this.headers["Content-Type"]
+
         try {
-            const response = await this.httpClient.put(url, formData, { headers: this.headers });
+            const response = await this.httpClient.put(url, formData, { headers: this.headers});
 
             switch (response.status) {
                 case 200:
@@ -134,8 +138,6 @@ export class ImagesApi extends BaseApi {
     }
 
     async getOriginalImage(id: string = ''): Promise<string> {
-
-        console.log(id)
 
         const url = `${this.fetchUrl}/${id}/original`;
         const response = await this.httpClient.get(url, { headers: this.headers });

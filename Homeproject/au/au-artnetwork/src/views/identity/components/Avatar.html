@@ -22,19 +22,21 @@
 
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile"
-                        @change="loadFile" />
-                    <label class="custom-file-label" style="overflow: hidden">{{fileName}}</label>
+                        input.delegate="loadFile()" />
+                    <label class="custom-file-label" style="overflow: hidden">${fileName}</label>
                 </div>
 
-                <input type="hidden" id="HeightPx" name="HeightPx" model.bind="imageModel.heightPx" />
-                <input type="hidden" id="WidthPx" name="WidthPx" model.bind="imageModel.widthPx" />
-                <input type="hidden" id="PaddingTop" name="PaddingTop" model.bind="imageModel.paddingTop" />
-                <input type="hidden" id="PaddingRight" name="PaddingRight" model.bind="imageModel.paddingRight" />
-                <input type="hidden" id="PaddingBottom" name="PaddingBottom" model.bind="imageModel.paddingBottom" />
-                <input type="hidden" id="PaddingLeft" name="PaddingLeft" value="0"/>
+                <input type="hidden" type="number" id="HeightPx" name="HeightPx" value.bind="imageModel.heightPx" />
+                <input type="hidden" type="number" id="WidthPx" name="WidthPx" value.bind="imageModel.widthPx" />
+
+                <input type="hidden" type="number" id="PaddingTop" name="PaddingTop" value.bind="imageModel.paddingTop" />
+                <input type="hidden" type="number" id="PaddingRight" name="PaddingRight" value.bind="imageModel.paddingRight" />
+                <input type="hidden" type="number" id="PaddingBottom" name="PaddingBottom"
+                    value.bind="imageModel.paddingBottom" />
+                <input type="hidden" type="number" id="PaddingLeft" name="PaddingLeft" value.bind="imageModel.paddingLeft">
 
                 <div class="form-group mt-2">
-                    <button type="submit" class="btn btn-success mt-2" click.delegate="onSubmit">Save</button>
+                    <button type="submit" class="btn btn-success mt-2" click.delegate="onSubmit()">Save</button>
                 </div>
             </div>
         </div>
