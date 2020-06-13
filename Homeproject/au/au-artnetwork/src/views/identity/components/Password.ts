@@ -11,6 +11,7 @@ export class ManagePassword extends ViewBase {
 
     constructor(private accountApi: AccountApi, appState: AppState) {
         super(appState);
+        this.setLocalLoaded(false);
     }
 
     private passwordModel: IProfilePasswordDTO = {
@@ -19,6 +20,10 @@ export class ManagePassword extends ViewBase {
     };
 
     private passwordConfirmation: string = "";
+
+    bind(){
+        this.setLocalLoaded(true)
+    }
 
     onSubmit() {
         if (
@@ -45,5 +50,9 @@ export class ManagePassword extends ViewBase {
                 }
             })
         }
+    }
+
+    unbind(){
+        this.setLocalLoaded(false)
     }
 }

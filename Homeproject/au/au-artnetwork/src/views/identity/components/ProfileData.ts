@@ -13,6 +13,8 @@ export class ManageProfileData extends ViewBase {
 
     constructor(private accountApi: AccountApi, appState: AppState) {
         super(appState);
+
+        this.setLocalLoaded(false);
     }
 
     private profileDataModel: IProfileDataDTO | null = null;
@@ -31,10 +33,11 @@ export class ManageProfileData extends ViewBase {
         return ProfileGender;
     }
 
-    async created() {
+    bind() {
         this.accountApi.getProfileData().then(
             (response: IFetchResponse<IProfileDataDTO>) => {
                 this.profileDataModel = response.data;
+                this.setLocalLoaded(true);
             }
         );
     }
@@ -54,5 +57,9 @@ export class ManageProfileData extends ViewBase {
                 }
             );
         }
+    }
+
+    unbind(){
+        this.setLocalLoaded(false)
     }
 }

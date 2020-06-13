@@ -1,8 +1,10 @@
+import { ViewBase } from 'components/ViewBase';
 import { ManageNav } from './ManageNav';
 
-export class Manage {
+export class Manage extends ViewBase {
 
     private currentPage: ManageNav = ManageNav.ProfileData;
+    private navLoaded: boolean = true;
 
     get ManageNavs() {
         return ManageNav;
@@ -21,14 +23,30 @@ export class Manage {
         return result;
     }
 
-    activate(params: any) {
-        // bind properties
-        if (params.page && typeof (params.page) == 'string') {
-            this.currentPage = this.resolveStartup(params.page)
+    getNavStyle(page: ManageNav) {
+        if (page === this.currentPage) {
+            return "nav-link active"
+        } else {
+            return "nav-link"
         }
     }
 
-    setPage(page: ManageNav) {
+    activate(params: any) {
+        this.setLoaded(false)
+
+        // bind properties
+        if (params.page && typeof (params.page) == 'string') {
+            this.setPage(this.resolveStartup(params.page))
+        } else { 
+            this.setPage(this.resolveStartup(ManageNav.ProfileData))
+        }
+
+        this.setLoaded(true)
+    }
+
+    async setPage(page: ManageNav) {
+        this.navLoaded = false;
         this.currentPage = page;
+        setTimeout(() => { this.navLoaded = true; }, .001)
     }
 }

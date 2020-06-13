@@ -53,6 +53,11 @@
     })
 
     let image = document.getElementById("render_image");
+
+    if (image == null){
+        return;
+    }
+
     image.addEventListener("load", ev => {
         init();
     });

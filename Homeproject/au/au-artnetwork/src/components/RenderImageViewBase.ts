@@ -98,13 +98,15 @@ export class RenderImageViewBase extends ViewBase {
     loadScript() {
         let exist = document.getElementById("image_miniature_script");
 
-        if (!exist) {
-            let script = document.createElement("script");
-            script.setAttribute("id", "image_miniature_script");
-            script.setAttribute("src", "js/image-miniature.js");
-            script.setAttribute("defer", "defer");
-            document.body.appendChild(script);
+        if (exist){
+            exist.remove();
         }
+
+        let script = document.createElement("script");
+        script.setAttribute("id", "image_miniature_script");
+        script.setAttribute("src", "js/image-miniature.js");
+        script.setAttribute("defer", "defer");
+        document.body.appendChild(script);
     }
 
     detached() {

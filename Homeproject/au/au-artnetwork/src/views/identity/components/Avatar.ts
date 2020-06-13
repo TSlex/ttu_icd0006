@@ -1,22 +1,27 @@
+import { ImageFormComponent } from 'components/ImageFormComponent';
 import { IFetchResponse } from './../../../types/Response/IFetchResponseDTO';
 import { ImagesApi } from 'servises/ImagesApi';
 import { autoinject } from 'aurelia-framework';
 import { AccountApi } from 'servises/AccountApi';
+import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
 import { AppState } from 'state/state';
-import { RenderImageViewBase } from 'components/RenderImageViewBase';
 import { IProfileDTO } from 'types/IProfileDTO';
+import { Router } from 'aurelia-router';
 import { ImageType } from 'types/Enums/ImageType';
-import { IImagePostDTO, IImageDTO, IImagePutDTO } from 'types/IImageDTO';
+import { IImageDTO } from 'types/IImageDTO';
+import { AlertType } from 'types/Enums/AlertType';
 
 @autoinject
-export class ManageAvatar extends RenderImageViewBase {
+export class ManageAvatar extends ImageFormComponent {
 
     constructor(
         private accountApi: AccountApi,
         private imagesApi: ImagesApi,
+        router: Router,
+        eventAggregator: EventAggregator,
         appState: AppState
     ) {
-        super(appState);
+        super(eventAggregator, router, appState);
     }
 
     private profile: IProfileDTO | null = null
@@ -25,7 +30,7 @@ export class ManageAvatar extends RenderImageViewBase {
         return this.profile?.profileAvatarId != null;
     }
 
-    async created() {
+    async bind() {
         this.profile = (await this.accountApi.getProfile(this.appState.userName)).data;
 
         if (this.isAvatarExist) {
@@ -35,18 +40,26 @@ export class ManageAvatar extends RenderImageViewBase {
         }
 
         this.loadScript()
+        this.setLocalLoaded(true);
     }
-
+    
     onSubmit() {
         if (this.imageModel) {
             this.clearNotifier()
+            this.lockBottons();
 
             if (!this.isAvatarExist) {
                 let postModel = this.imagePostModel;
 
                 this.imagesApi.postImageModel(postModel).then(
                     (response: IFetchResponse<IImageDTO>) => {
-                        console.log(response);
+                        if (!(response.errors?.length > 0)) {
+                            this.alert = { message: "Avatar was updated successfully.", type: AlertType.Success, dismissable: true }
+                        }
+                        else {
+                            this.errors = response.errors;
+                        }
+                        this.unlockBottons();
                     }
                 );
 
@@ -55,10 +68,23 @@ export class ManageAvatar extends RenderImageViewBase {
 
                 this.imagesApi.putImageModel(this.imageModel.id, putModel).then(
                     (response: IFetchResponse<IImageDTO>) => {
-                        console.log(response);
+                        if (!(response.errors?.length > 0)) {
+                            this.alert = { message: "Avatar was updated successfully.", type: AlertType.Success, dismissable: true }
+                        }
+                        else {
+                            this.errors = response.errors;
+                        }
+                        this.unlockBottons();
                     }
                 );
             }
         }
+    }
+
+    onCancel() {
+    }
+
+    unbind(){
+        this.setLocalLoaded(false)
     }
 }

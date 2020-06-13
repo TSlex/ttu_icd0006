@@ -68,7 +68,7 @@ export class ChatRoomsCreateEdit extends ImageFormComponent {
 
         this.loadScript();
 
-        // this.isLoading = false;
+        this.isLoading = false;
     }
 
     onSubmit() {
@@ -78,6 +78,8 @@ export class ChatRoomsCreateEdit extends ImageFormComponent {
             this.postModel.postTitle.length > 0 &&
             this.postModel.postDescription.length > 0
         ) {
+            this.lockBottons()
+
             if (this.id) {
                 this.postsApi.Edit(this.postModel.id, this.postModel as IPostPutDTO).then(
                     (response: IResponseDTO) => {
@@ -85,6 +87,7 @@ export class ChatRoomsCreateEdit extends ImageFormComponent {
                             this.onCancel();
                         } else {
                             response.errors.forEach((error: string) => { this.errors.push(error) })
+                            this.unlockBottons()
                         }
                     }
                 )
@@ -93,6 +96,7 @@ export class ChatRoomsCreateEdit extends ImageFormComponent {
                     (response: IResponseDTO) => {
                         if (response.errors?.length > 0) {
                             response.errors.forEach((error: string) => { this.errors.push(error) })
+                            this.unlockBottons()
                         }
                     }
                 )
@@ -109,7 +113,8 @@ export class ChatRoomsCreateEdit extends ImageFormComponent {
                                     this.appState.posts.push(response.data)
                                     this.onCancel();
                                 } else {
-
+                                    response.errors.forEach((error: string) => { this.errors.push(error) })
+                                    this.unlockBottons()
                                 }
                             }
                         )

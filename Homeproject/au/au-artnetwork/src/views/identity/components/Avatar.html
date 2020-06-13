@@ -1,8 +1,18 @@
 <template>
+    <require from="components/loadingOverlay"></require>
     <require from="components/imageComponent"></require>
     <require from="components/alert"></require>
     <div if.bind="imageModel">
         <h4 class>Avatar</h4>
+
+        <alert if.bind="alert" alert-data.bind="alert"></alert>
+        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
+            <ul>
+                <li repeat.for="error of errors">
+                    ${error}
+                </li>
+            </ul>
+        </div>
 
         <div class="row d-flex flex-column align-items-center text-center mt-2">
             <div class="card" style="width: 20rem; user-select: none; position: relative;" id="image-miniature">
@@ -10,16 +20,7 @@
                     html-id="render_image" html-class="card-img"></image-component>
             </div>
 
-            <div class="col-md-8">
-                <alert if.bind="alert" alert-data.bind="alert"></alert>
-                <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-                    <ul>
-                        <li repeat.for="error of errors">
-                            ${error}
-                        </li>
-                    </ul>
-                </div>
-
+            <div class="col-md-8 mt-2">
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile"
                         input.delegate="loadFile()" />
@@ -41,4 +42,5 @@
             </div>
         </div>
     </div>
+    <loading-overlay if.bind="isLocalLoading" fixed="false" style="border-radius: 4px; overflow: hidden; height: 600px; background-color: #DDDDDD;"></loading-overlay>
 </template>

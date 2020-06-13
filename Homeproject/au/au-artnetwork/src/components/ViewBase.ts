@@ -34,6 +34,11 @@ export class ViewBase{
         this.isLoading = !bool;
     }
 
+    setLocalLoaded(bool: boolean){
+        this.isLoaded = bool;
+        this.isLocalLoading = !bool;
+    }
+
     get isLoading(){
         return this.appState.isComponentLoading;
     }

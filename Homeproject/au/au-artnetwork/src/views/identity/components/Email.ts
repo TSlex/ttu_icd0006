@@ -12,6 +12,7 @@ export class ManageEmail extends ViewBase {
 
     constructor(private accountApi: AccountApi, appState: AppState) {
         super(appState);
+        this.setLocalLoaded(false);
     }
 
     private emailModel: IProfileEmailDTO = {
@@ -19,13 +20,15 @@ export class ManageEmail extends ViewBase {
         newEmail: ""
     }
 
-    async created() {
+    async bind() {
         let email: string = (await this.accountApi.getEmail()).data
 
         this.emailModel = {
             currentEmail: email,
             newEmail: email
         };
+
+        this.setLocalLoaded(true)
     }
 
     onSubmit() {
@@ -43,5 +46,9 @@ export class ManageEmail extends ViewBase {
                 }
             })
         }
+    }
+
+    unbind(){
+        this.setLocalLoaded(false)
     }
 }
