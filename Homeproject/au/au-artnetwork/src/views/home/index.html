@@ -1,6 +1,14 @@
 <template>
-  <span>${token}</span>
-  <span>${isAdmin}</span>
-  <span>${username}</span>
-  <span>${id}</span>
+    <div class="text-center">
+        <require from="components/imageComponent"></require>
+        <h2>Current user:</h2>
+        <div if.bind="imageId" class="row d-flex flex-column align-items-center text-center mt-2">
+            <div class="card" style="width: 20rem; user-select: none; position: relative;" id="image-miniature">
+                <image-component id.bind="imageId" html-height="unset" html-width="unset"
+                    html-id="render_image" html-class="card-img"></image-component>
+            </div>
+        </div>
+        <h3>${username}</h4>
+        <h5 if.bind="isAdmin" class="text-danger font-weight-bold">admininstator</h4>
+    </div>
 </template>

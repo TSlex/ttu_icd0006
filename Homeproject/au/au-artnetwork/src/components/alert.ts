@@ -8,4 +8,10 @@ export class Alert {
 
     constructor() {
     }
+
+    dismiss(){
+        document.querySelectorAll("alert").forEach((element: HTMLElement) => {
+            element.remove()
+        })
+    }
 }

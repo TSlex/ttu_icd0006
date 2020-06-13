@@ -44,7 +44,7 @@ export class ManageProfileData extends ViewBase {
 
     onSubmit() {
         if (this.profileDataModel) {
-
+            
             this.clearNotifier();
 
             this.accountApi.putProfileData(this.profileDataModel).then(

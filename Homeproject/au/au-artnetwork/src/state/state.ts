@@ -30,11 +30,14 @@ export class AppState {
     // images
     public imagesData: Record<string, string> = {}
 
-    get isComponentLoading(){
+    // profile image
+    public profileImageId: string | null = null;
+
+    get isComponentLoading() {
         return this._isComponentLoading;
     }
 
-    set isComponentLoading(value: boolean){
+    set isComponentLoading(value: boolean) {
         this._isComponentLoading = value;
     }
 
