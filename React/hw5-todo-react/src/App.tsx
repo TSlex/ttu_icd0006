@@ -1,15 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route, Switch } from 'react-router-dom';
 
 import Header from './components/shared/Header';
 
-function App() {
+import Home from './components/Home';
+
+import TasksIndex from './components/TodoTasks/Index';
+import CategoriesIndex from './components/TodoCategories/Index';
+import PrioritiesIndex from './components/TodoPriorities/Index';
+
+export default function App() {
   return (
     <div className="App">
-      <Header/>
+      <Header />
+      <div className="container">
+        <main role="main">
+          <Switch>
+            <Route path="/tasks">
+              <TasksIndex />
+            </Route>
+            <Route path="/categories">
+              <CategoriesIndex />
+            </Route>
+            <Route path="/priorities">
+              <PrioritiesIndex />
+            </Route>
+            <Route path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </main>
+      </div>
     </div>
   );
 }
-
-export default App;

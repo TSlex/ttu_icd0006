@@ -11,12 +11,15 @@
     "@types/node": "^12.12.47",
     "@types/react": "^16.9.36",
     "@types/react-dom": "^16.9.8",
+    "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.5.1",
+    "moment": "^2.26.0",
     "popper.js": "^1.16.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "typescript": "^3.7.5"
   },
@@ -43,6 +46,7 @@
   },
   "devDependencies": {
     "@types/bootstrap": "^4.5.0",
-    "@types/jquery": "^3.3.38"
+    "@types/jquery": "^3.3.38",
+    "@types/react-router-dom": "^5.1.5"
   }
 }
