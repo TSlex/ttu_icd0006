@@ -1,9 +1,10 @@
 import {
     TodoPriorityGetPrioritiesAction,
     TodoPrioritySelectPriorityAction,
+    TodoPriorityUnselectPriorityAction,
     TodoPriorityCreatePriorityAction,
     TodoPriorityEditPriorityAction,
-    TodoPriorityDeletePriorityAction
+    TodoPriorityDeletePriorityAction,
 } from 'redux/types';
 
 import { ITodoPriorityGetDTO } from "types/ITodoPriorityDTO";
@@ -11,9 +12,10 @@ import { ITodoPriorityGetDTO } from "types/ITodoPriorityDTO";
 export enum TodoPrioritiesActions {
     GetPriorities = "TodoPriorities:GetPriorities",
     SelectPriority = "TodoPriorities:SelectPriority",
+    UnselectPriority = "TodoPriorities:UnselectPriority",
     CreatePriority = "TodoPriorities:CreatePriority",
     EditPriority = "TodoPriorities:EditPriority",
-    DeletePriority = "TodoPriorities:DeletePriority"
+    DeletePriority = "TodoPriorities:DeletePriority",
 }
 
 export const getPriorities = (): TodoPriorityGetPrioritiesAction => ({
@@ -22,6 +24,10 @@ export const getPriorities = (): TodoPriorityGetPrioritiesAction => ({
 
 export const selectPriority = (priority: ITodoPriorityGetDTO): TodoPrioritySelectPriorityAction => ({
     priority: priority,
+    type: TodoPrioritiesActions.SelectPriority
+});
+
+export const unselectPriority = (): TodoPriorityUnselectPriorityAction => ({
     type: TodoPrioritiesActions.SelectPriority
 });
 

@@ -1,6 +1,7 @@
 import {
     TodoCategoryGetCategoriesAction,
     TodoCategorySelectCategoryAction,
+    TodoCategoryUnselectCategoryAction,
     TodoCategoryCreateCategoryAction,
     TodoCategoryEditCategoryAction,
     TodoCategoryDeleteCategoryAction
@@ -11,6 +12,7 @@ import { ITodoCategoryGetDTO } from "types/ITodoCategoryDTO";
 export enum TodoCategoriesActions {
     GetCategories = "TodoCategories:GetCategories",
     SelectCategory = "TodoCategories:SelectCategory",
+    UnselectCategory = "TodoCategories:UnselectCategory",
     CreateCategory = "TodoCategories:CreateCategory",
     EditCategory = "TodoCategories:EditCategory",
     DeleteCategory = "TodoCategories:DeleteCategory"
@@ -22,6 +24,10 @@ export const getCategories = (): TodoCategoryGetCategoriesAction => ({
 
 export const selectCategory = (category: ITodoCategoryGetDTO): TodoCategorySelectCategoryAction => ({
     category: category,
+    type: TodoCategoriesActions.SelectCategory
+});
+
+export const unselectCategory = (category: ITodoCategoryGetDTO): TodoCategoryUnselectCategoryAction => ({
     type: TodoCategoriesActions.SelectCategory
 });
 

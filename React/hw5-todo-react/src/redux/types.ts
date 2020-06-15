@@ -14,19 +14,19 @@ export type Account = {
 // tasks
 export type TodoTasks = {
     tasks: ITodoTaskGetDTO[];
-    selectedTask: ITodoTaskGetDTO;
+    selectedTask: ITodoTaskGetDTO | null;
 }
 
 // categories
 export type TodoCategories = {
     categories: ITodoCategoryGetDTO[];
-    selectedCategory: ITodoCategoryGetDTO;
+    selectedCategory: ITodoCategoryGetDTO | null;
 }
 
 // priorities
 export type TodoPriorities = {
     priorities: ITodoPriorityGetDTO[];
-    selectedpriority: ITodoPriorityGetDTO;
+    selectedPriority: ITodoPriorityGetDTO | null;
 }
 
 export type AppState = {
@@ -47,11 +47,15 @@ type BaseAction = {
 export type AccountLoginAction = {
 } & BaseAction
 
+export type AccountLogoutAction = {
+} & BaseAction
+
 export type AccountRegisterAction = {
 } & BaseAction
 
 export type AccountAction =
     AccountLoginAction |
+    AccountLogoutAction |
     AccountRegisterAction
 
 
@@ -66,6 +70,9 @@ export type TodoTaskGetTasksAction = {
 export type TodoTaskSelectTaskAction = {
 } & BaseAction & TodoTaskBaseAction
 
+export type TodoTaskUnselectTaskAction = {
+} & BaseAction
+
 export type TodoTaskCreateTaskAction = {
 } & BaseAction & TodoTaskBaseAction
 
@@ -78,6 +85,7 @@ export type TodoTaskDeleteTaskAction = {
 export type TodoTaskAction =
     TodoTaskGetTasksAction |
     TodoTaskSelectTaskAction |
+    TodoTaskUnselectTaskAction |
     TodoTaskCreateTaskAction |
     TodoTaskEditTaskAction |
     TodoTaskDeleteTaskAction
@@ -94,6 +102,9 @@ export type TodoCategoryGetCategoriesAction = {
 export type TodoCategorySelectCategoryAction = {
 } & BaseAction & TodoCategoryBaseAction
 
+export type TodoCategoryUnselectCategoryAction = {
+} & BaseAction
+
 export type TodoCategoryCreateCategoryAction = {
 } & BaseAction & TodoCategoryBaseAction
 
@@ -106,6 +117,7 @@ export type TodoCategoryDeleteCategoryAction = {
 export type TodoCategoryAction =
     TodoCategoryGetCategoriesAction |
     TodoCategorySelectCategoryAction |
+    TodoCategoryUnselectCategoryAction |
     TodoCategoryCreateCategoryAction |
     TodoCategoryEditCategoryAction |
     TodoCategoryDeleteCategoryAction
@@ -122,6 +134,9 @@ export type TodoPriorityGetPrioritiesAction = {
 export type TodoPrioritySelectPriorityAction = {
 } & BaseAction & TodoPriorityBaseAction
 
+export type TodoPriorityUnselectPriorityAction = {
+} & BaseAction
+
 export type TodoPriorityCreatePriorityAction = {
 } & BaseAction & TodoPriorityBaseAction
 
@@ -134,6 +149,7 @@ export type TodoPriorityDeletePriorityAction = {
 export type TodoPriorityAction =
     TodoPriorityGetPrioritiesAction |
     TodoPrioritySelectPriorityAction |
+    TodoPriorityUnselectPriorityAction |
     TodoPriorityCreatePriorityAction |
     TodoPriorityEditPriorityAction |
     TodoPriorityDeletePriorityAction

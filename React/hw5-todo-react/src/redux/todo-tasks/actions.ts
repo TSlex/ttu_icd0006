@@ -1,9 +1,10 @@
 import {
     TodoTaskGetTasksAction,
     TodoTaskSelectTaskAction,
+    TodoTaskUnselectTaskAction,
     TodoTaskCreateTaskAction,
     TodoTaskEditTaskAction,
-    TodoTaskDeleteTaskAction
+    TodoTaskDeleteTaskAction,
 } from 'redux/types';
 
 import { ITodoTaskGetDTO } from "types/ITodoTaskDTO";
@@ -11,6 +12,7 @@ import { ITodoTaskGetDTO } from "types/ITodoTaskDTO";
 export enum TodoTasksActions {
     GetTasks = "TodoTasks:GetTasks",
     SelectTask = "TodoTasks:SelectTask",
+    UnselectTask = "TodoTasks:UnselectTask",
     CreateTask = "TodoTasks:CreateTask",
     EditTask = "TodoTasks:EditTask",
     DeleteTask = "TodoTasks:DeleteTask"
@@ -22,6 +24,10 @@ export const getTasks = (): TodoTaskGetTasksAction => ({
 
 export const selectTask = (task: ITodoTaskGetDTO): TodoTaskSelectTaskAction => ({
     task: task,
+    type: TodoTasksActions.SelectTask
+});
+
+export const unselectTask = (): TodoTaskUnselectTaskAction => ({
     type: TodoTasksActions.SelectTask
 });
 
