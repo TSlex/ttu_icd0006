@@ -1,19 +1,19 @@
-import { TodoTasks, TodoTaskAction } from "redux/types";
+import { TodoCategories, TodoCategoryAction } from "redux/types";
 import { TodoCategoriesActions } from "./actions";
 
-export const initialState: TodoTasks = {
-    tasks: [],
-    selectedTask: null,
+export const initialState: TodoCategories = {
+    categories: [],
+    selectedCategory: null
 }
 
 export const todoCategories = (
-    state: TodoTasks = initialState,
-    action: TodoTaskAction
+    state: TodoCategories = initialState,
+    action: TodoCategoryAction
 ) => {
 
-    const newState: TodoTasks = {
-        tasks: state.tasks,
-        selectedTask: state.selectedTask,
+    const newState: TodoCategories = {
+        categories: state.categories,
+        selectedCategory: state.selectedCategory,
     }
 
     switch (action.type) {
