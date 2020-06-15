@@ -27,10 +27,10 @@ export default function () {
 
                         <ul className="navbar-nav">
                             <li className="nav-item">
-                                <a href="#" className="nav-link text-dark">Register</a>
+                                <Link to="/account/register" className="nav-link text-dark">Register</Link>
                             </li>
                             <li className="nav-item">
-                                <a href="#" className="nav-link text-dark">Login</a>
+                                <Link to="/account/login" className="nav-link text-dark">Login</Link>
                             </li>
                         </ul>
 
