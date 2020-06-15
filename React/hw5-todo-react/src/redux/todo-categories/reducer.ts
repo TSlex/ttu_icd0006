@@ -6,7 +6,7 @@ export const initialState: TodoTasks = {
     selectedTask: null,
 }
 
-export const todoTasks = (
+export const todoCategories = (
     state: TodoTasks = initialState,
     action: TodoTaskAction
 ) => {
