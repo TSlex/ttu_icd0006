@@ -1,33 +1,30 @@
-import { Account, AccountAction } from "redux/types";
-import { ACCOUNT_ACTION_TYPES } from "./actions";
+import { LoadingSystem, LoadingSystemAction } from "redux/types";
+import { LOADING_SYSTEM_ACTION_TYPES } from "./actions";
 
-export const initialState: Account = {
-    jwt: null,
-    username: null,
-    expired: -1,
-
-    errors: [],
-    succMsg: null,
+export const initialState: LoadingSystem = {
+    isGlobalLoading: false,
+    isGlobalLoaded: false,
+    isLocalLoading: false,
+    isLocalLoaded: false,
 }
 
 export const account = (
-    state: Account = initialState,
-    action: AccountAction
+    state: LoadingSystem = initialState,
+    action: LoadingSystemAction
 ) => {
 
-    const newState: Account = {
-        jwt: state.jwt,
-        username: state.username,
-        expired: state.expired,
-
-        errors: state.errors,
-        succMsg: state.succMsg,
+    const newState: LoadingSystem = {
+        isGlobalLoading: state.isGlobalLoading,
+        isGlobalLoaded: state.isGlobalLoaded,
+        isLocalLoading: state.isLocalLoading,
+        isLocalLoaded: state.isLocalLoaded,
     }
 
     switch (action.type) {
-        case ACCOUNT_ACTION_TYPES.LOGIN:
-        case ACCOUNT_ACTION_TYPES.LOGOUT:
-        case ACCOUNT_ACTION_TYPES.REGISTER:
+        case LOADING_SYSTEM_ACTION_TYPES.SET_GLOBAL_LOADING:
+        case LOADING_SYSTEM_ACTION_TYPES.SET_GLOBAL_LOADED:
+        case LOADING_SYSTEM_ACTION_TYPES.SET_LOCAL_LOADING:
+        case LOADING_SYSTEM_ACTION_TYPES.SET_LOCAL_LOADED:
         default: return state;
     }
 }

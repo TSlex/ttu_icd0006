@@ -1,33 +1,25 @@
-import { Account, AccountAction } from "redux/types";
-import { ACCOUNT_ACTION_TYPES } from "./actions";
+import { Notification, NotificationAction } from "redux/types";
+import { NOTIFICATION_ACTION_TYPES } from "./actions";
 
-export const initialState: Account = {
-    jwt: null,
-    username: null,
-    expired: -1,
-
+export const initialState: Notification = {
     errors: [],
     succMsg: null,
 }
 
 export const account = (
-    state: Account = initialState,
-    action: AccountAction
+    state: Notification = initialState,
+    action: NotificationAction
 ) => {
 
-    const newState: Account = {
-        jwt: state.jwt,
-        username: state.username,
-        expired: state.expired,
-
+    const newState: Notification = {
         errors: state.errors,
         succMsg: state.succMsg,
     }
 
     switch (action.type) {
-        case ACCOUNT_ACTION_TYPES.LOGIN:
-        case ACCOUNT_ACTION_TYPES.LOGOUT:
-        case ACCOUNT_ACTION_TYPES.REGISTER:
+        case NOTIFICATION_ACTION_TYPES.CLEAR_NOTIFICATION:
+        case NOTIFICATION_ACTION_TYPES.SET_ERRORS:
+        case NOTIFICATION_ACTION_TYPES.SET_SUCC_MSG:
         default: return state;
     }
 }

@@ -1,44 +1,29 @@
 import {
-    AccountLoginAction,
-    AccountLogoutAction,
-    AccountRegisterAction,
-    NotificationCrearNotificationsAction,
-    NotificationSetErrorsAction,
-    NotificationSetSuccMsgAction,
+    LoadingSystemSetGlobalLoadingAction,
+    LoadingSystemSetGlobalLoadedAction,
+    LoadingSystemSetLocalLoadingAction,
+    LoadingSystemSetLocalLoadedAction
 } from 'redux/types';
 
-export enum ACCOUNT_ACTION_TYPES {
-    LOGIN = "ACCOUNT:LOGIN",
-    LOGOUT = "ACCOUNT:LOGOUT",
-    REGISTER = "ACCOUNT:REGISTER",
-
-    CLEAR_NOTIFICATION = "ACCOUNT:CLEAR_NOTIFICATION",
-    SET_ERRORS = "ACCOUNT:SET_ERRORS",
-    SET_SUCC_MSG = "ACCOUNT:SET_SUCC_MSG",
+export enum LOADING_SYSTEM_ACTION_TYPES {
+    SET_GLOBAL_LOADING = "LOADING_SYSTEM:SET_GLOBAL_LOADING",
+    SET_GLOBAL_LOADED = "LOADING_SYSTEM:SET_GLOBAL_LOADED",
+    SET_LOCAL_LOADING = "LOADING_SYSTEM:SET_LOCAL_LOADING",
+    SET_LOCAL_LOADED = "LOADING_SYSTEM:SET_LOCAL_LOADED",
 }
 
-export const login = (dispatch: any): AccountLoginAction => ({
-    type: ACCOUNT_ACTION_TYPES.LOGIN
+export const setGlobalLoading = (payload: boolean): LoadingSystemSetGlobalLoadingAction => ({
+    type: LOADING_SYSTEM_ACTION_TYPES.SET_GLOBAL_LOADING
 });
 
-export const logout = (): AccountLogoutAction => ({
-    type: ACCOUNT_ACTION_TYPES.LOGOUT
+export const setGlobalLoaded = (payload: boolean): LoadingSystemSetGlobalLoadedAction => ({
+    type: LOADING_SYSTEM_ACTION_TYPES.SET_GLOBAL_LOADED
 });
 
-export const register = (): AccountRegisterAction => ({
-    type: ACCOUNT_ACTION_TYPES.REGISTER
+export const setLocalLoading = (payload: boolean): LoadingSystemSetLocalLoadingAction => ({
+    type: LOADING_SYSTEM_ACTION_TYPES.SET_LOCAL_LOADING
 });
 
-// Notifications
-
-export const crearNotifications = (): NotificationCrearNotificationsAction => ({
-    type: ACCOUNT_ACTION_TYPES.CLEAR_NOTIFICATION,
-});
-
-export const setErrors = (): NotificationSetErrorsAction => ({
-    type: ACCOUNT_ACTION_TYPES.SET_ERRORS,
-});
-
-export const setSuccMsg = (): NotificationSetSuccMsgAction => ({
-    type: ACCOUNT_ACTION_TYPES.SET_SUCC_MSG,
+export const setLoacalLoaded = (payload: boolean): LoadingSystemSetLocalLoadedAction => ({
+    type: LOADING_SYSTEM_ACTION_TYPES.SET_LOCAL_LOADED
 });

@@ -6,7 +6,7 @@ import { ITodoPriorityGetDTO } from 'types/ITodoPriorityDTO';
 
 // notification
 
-export type Notifications = {
+export type Notification = {
     errors: string[];
     succMsg: string | null;
 }
