@@ -1,9 +1,12 @@
 import { TodoTasks, TodoTaskAction } from "redux/types";
-import { TodoTasksActions } from "./actions";
+import { TODO_TASKS_ACTION_TYPES } from "./actions";
 
 export const initialState: TodoTasks = {
     tasks: [],
     selectedTask: null,
+
+    errors: [],
+    succMsg: null,
 }
 
 export const todoTasks = (
@@ -14,15 +17,18 @@ export const todoTasks = (
     const newState: TodoTasks = {
         tasks: state.tasks,
         selectedTask: state.selectedTask,
+
+        errors: state.errors,
+        succMsg: state.succMsg,
     }
 
     switch (action.type) {
-        case TodoTasksActions.GetTasks:
-        case TodoTasksActions.SelectTask:
-        case TodoTasksActions.UnselectTask:
-        case TodoTasksActions.CreateTask:
-        case TodoTasksActions.EditTask:
-        case TodoTasksActions.DeleteTask:
+        case TODO_TASKS_ACTION_TYPES.GET_TASKS:
+        case TODO_TASKS_ACTION_TYPES.SELECT_TASK:
+        case TODO_TASKS_ACTION_TYPES.UNSELECT_TASK:
+        case TODO_TASKS_ACTION_TYPES.CREATE_TASK:
+        case TODO_TASKS_ACTION_TYPES.EDIT_TASK:
+        case TODO_TASKS_ACTION_TYPES.DELETE_TASK:
         default: return state;
     }
 }

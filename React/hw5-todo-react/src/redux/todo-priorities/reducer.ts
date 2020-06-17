@@ -1,9 +1,12 @@
 import { TodoPriorities, TodoPriorityAction } from "redux/types";
-import { TodoPrioritiesActions } from "./actions";
+import { TODO_PRIORITIES_ACTION_TYPES } from "./actions";
 
 export const initialState: TodoPriorities = {
     priorities: [],
     selectedPriority: null,
+
+    errors: [],
+    succMsg: null,
 }
 
 export const todoPriorities = (
@@ -14,15 +17,18 @@ export const todoPriorities = (
     const newState: TodoPriorities = {
         priorities: state.priorities,
         selectedPriority: state.selectedPriority,
+
+        errors: state.errors,
+        succMsg: state.succMsg,
     }
 
     switch (action.type) {
-        case TodoPrioritiesActions.GetPriorities:
-        case TodoPrioritiesActions.SelectPriority:
-        case TodoPrioritiesActions.UnselectPriority:
-        case TodoPrioritiesActions.CreatePriority:
-        case TodoPrioritiesActions.EditPriority:
-        case TodoPrioritiesActions.DeletePriority:
+        case TODO_PRIORITIES_ACTION_TYPES.GET_PRIORITIES:
+        case TODO_PRIORITIES_ACTION_TYPES.SELECT_PRIORITY:
+        case TODO_PRIORITIES_ACTION_TYPES.UNSELECT_PRIORITY:
+        case TODO_PRIORITIES_ACTION_TYPES.CREATE_PRIORITY:
+        case TODO_PRIORITIES_ACTION_TYPES.EDIT_PRIORITY:
+        case TODO_PRIORITIES_ACTION_TYPES.DELETE_PRIORITY:
         default: return state;
     }
 }

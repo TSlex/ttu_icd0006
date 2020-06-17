@@ -9,24 +9,36 @@ export type Account = {
     jwt: string | null;
     username: string | null;
     expired: number;
+
+    errors: string[];
+    succMsg: string | null;
 }
 
 // tasks
 export type TodoTasks = {
     tasks: ITodoTaskGetDTO[];
     selectedTask: ITodoTaskGetDTO | null;
+
+    errors: string[];
+    succMsg: string | null;
 }
 
 // categories
 export type TodoCategories = {
     categories: ITodoCategoryGetDTO[];
     selectedCategory: ITodoCategoryGetDTO | null;
+
+    errors: string[];
+    succMsg: string | null;
 }
 
 // priorities
 export type TodoPriorities = {
     priorities: ITodoPriorityGetDTO[];
     selectedPriority: ITodoPriorityGetDTO | null;
+
+    errors: string[];
+    succMsg: string | null;
 }
 
 export type AppState = {
@@ -38,10 +50,23 @@ export type AppState = {
 
 // -------------Actions-------------
 
+// common
 type BaseAction = {
     type: string
 }
 
+// notification
+
+export type CrearNotificationsAction = {
+} & BaseAction
+
+export type SetErrorsAction = {
+} & BaseAction
+
+export type SetSuccMsgAction = {
+} & BaseAction
+
+export type NotificationAction = CrearNotificationsAction | SetErrorsAction | SetSuccMsgAction
 
 // account
 export type AccountLoginAction = {
@@ -56,7 +81,8 @@ export type AccountRegisterAction = {
 export type AccountAction =
     AccountLoginAction |
     AccountLogoutAction |
-    AccountRegisterAction
+    AccountRegisterAction |
+    NotificationAction
 
 
 // tasks
@@ -88,7 +114,8 @@ export type TodoTaskAction =
     TodoTaskUnselectTaskAction |
     TodoTaskCreateTaskAction |
     TodoTaskEditTaskAction |
-    TodoTaskDeleteTaskAction
+    TodoTaskDeleteTaskAction |
+    NotificationAction
 
 
 // categories
@@ -120,7 +147,8 @@ export type TodoCategoryAction =
     TodoCategoryUnselectCategoryAction |
     TodoCategoryCreateCategoryAction |
     TodoCategoryEditCategoryAction |
-    TodoCategoryDeleteCategoryAction
+    TodoCategoryDeleteCategoryAction |
+    NotificationAction
 
 
 // priorities
@@ -152,4 +180,5 @@ export type TodoPriorityAction =
     TodoPriorityUnselectPriorityAction |
     TodoPriorityCreatePriorityAction |
     TodoPriorityEditPriorityAction |
-    TodoPriorityDeletePriorityAction
+    TodoPriorityDeletePriorityAction |
+    NotificationAction

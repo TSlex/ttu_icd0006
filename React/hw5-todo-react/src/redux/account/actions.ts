@@ -1,23 +1,44 @@
 import {
     AccountLoginAction,
     AccountLogoutAction,
-    AccountRegisterAction
+    AccountRegisterAction,
+    CrearNotificationsAction,
+    SetErrorsAction,
+    SetSuccMsgAction,
 } from 'redux/types';
 
-export enum AccountActions {
-    Login = "Account:Login",
-    Logout = "Account:Logout",
-    Register = "Account:Register",
+export enum ACCOUNT_ACTION_TYPES {
+    LOGIN = "ACCOUNT:LOGIN",
+    LOGOUT = "ACCOUNT:LOGOUT",
+    REGISTER = "ACCOUNT:REGISTER",
+
+    CLEAR_NOTIFICATION = "ACCOUNT:CLEAR_NOTIFICATION",
+    SET_ERRORS = "ACCOUNT:SET_ERRORS",
+    SET_SUCC_MSG = "ACCOUNT:SET_SUCC_MSG",
 }
 
 export const login = (): AccountLoginAction => ({
-    type: AccountActions.Login
+    type: ACCOUNT_ACTION_TYPES.LOGIN
 });
 
 export const logout = (): AccountLogoutAction => ({
-    type: AccountActions.Logout
+    type: ACCOUNT_ACTION_TYPES.LOGOUT
 });
 
 export const register = (): AccountRegisterAction => ({
-    type: AccountActions.Register
+    type: ACCOUNT_ACTION_TYPES.REGISTER
+});
+
+// Notifications
+
+export const crearNotifications = (): CrearNotificationsAction => ({
+    type: ACCOUNT_ACTION_TYPES.CLEAR_NOTIFICATION,
+});
+
+export const setErrors = (): SetErrorsAction => ({
+    type: ACCOUNT_ACTION_TYPES.SET_ERRORS,
+});
+
+export const setSuccMsg = (): SetSuccMsgAction => ({
+    type: ACCOUNT_ACTION_TYPES.SET_SUCC_MSG,
 });

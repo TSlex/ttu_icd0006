@@ -1,10 +1,13 @@
 import { Account, AccountAction } from "redux/types";
-import { AccountActions } from "./actions";
+import { ACCOUNT_ACTION_TYPES } from "./actions";
 
 export const initialState: Account = {
     jwt: null,
     username: null,
-    expired: -1
+    expired: -1,
+
+    errors: [],
+    succMsg: null,
 }
 
 export const account = (
@@ -15,13 +18,16 @@ export const account = (
     const newState: Account = {
         jwt: state.jwt,
         username: state.username,
-        expired: state.expired
+        expired: state.expired,
+
+        errors: state.errors,
+        succMsg: state.succMsg,
     }
 
     switch (action.type) {
-        case AccountActions.Login:
-        case AccountActions.Logout:
-        case AccountActions.Register:
+        case ACCOUNT_ACTION_TYPES.LOGIN:
+        case ACCOUNT_ACTION_TYPES.LOGOUT:
+        case ACCOUNT_ACTION_TYPES.REGISTER:
         default: return state;
     }
 }

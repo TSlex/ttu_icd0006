@@ -1,6 +1,11 @@
 import React, { useEffect } from 'react';
 
+import { useSelector, useDispatch } from 'react-redux'
+import { AppState } from 'redux/types';
+
 export default function Login() {
+
+    const dispatch = useDispatch()
 
     return (
         <div className="text-center">
@@ -19,12 +24,12 @@ export default function Login() {
 
                             <div className="form-group">
                                 <label htmlFor="email">Email</label>
-                                <input className="form-control" type="email" id="email" name="email"/>
+                                <input className="form-control" type="email" id="email" name="email" />
                             </div>
 
                             <div className="form-group">
                                 <label htmlFor="password">Password</label>
-                                <input className="form-control" type="password" id="password" name="password"/>
+                                <input className="form-control" type="password" id="password" name="password" />
                             </div>
 
                             <div className="form-group">
