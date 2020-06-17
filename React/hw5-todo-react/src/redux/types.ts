@@ -66,15 +66,19 @@ type BaseAction = {
 // load system
 
 export type LoadingSystemSetGlobalLoadingAction = {
+    payload: boolean,
 } & BaseAction
 
 export type LoadingSystemSetGlobalLoadedAction = {
+    payload: boolean,
 } & BaseAction
 
 export type LoadingSystemSetLocalLoadingAction = {
+    payload: boolean,
 } & BaseAction
 
 export type LoadingSystemSetLocalLoadedAction = {
+    payload: boolean,
 } & BaseAction
 
 export type LoadingSystemAction =
@@ -89,9 +93,11 @@ export type NotificationCrearNotificationsAction = {
 } & BaseAction
 
 export type NotificationSetErrorsAction = {
+    errors: string[]
 } & BaseAction
 
 export type NotificationSetSuccMsgAction = {
+    msg: string | null
 } & BaseAction
 
 export type NotificationAction =
@@ -101,6 +107,7 @@ export type NotificationAction =
 
 // account
 export type AccountLoginAction = {
+    jwt: string | null
 } & BaseAction
 
 export type AccountLogoutAction = {
@@ -109,16 +116,22 @@ export type AccountLogoutAction = {
 export type AccountRegisterAction = {
 } & BaseAction
 
+export type AccountLoadUserAction = {
+} & BaseAction
+
 export type AccountSetLoadingAction = {
+    payload: boolean,
 } & BaseAction
 
 export type AccountSetAuthAction = {
+    payload: boolean,
 } & BaseAction
 
 export type AccountAction =
     AccountLoginAction |
     AccountLogoutAction |
     AccountRegisterAction |
+    AccountLoadUserAction |
     AccountSetLoadingAction |
     AccountSetAuthAction
 

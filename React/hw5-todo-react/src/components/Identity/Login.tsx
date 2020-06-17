@@ -3,9 +3,15 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { AppState } from 'redux/types';
 
+import { login } from 'redux/account/actions';
+
 export default function Login() {
 
     const dispatch = useDispatch()
+
+    const onLogin = () => {
+        dispatch(login({ email: "aleksi@ttu.ee", password: "Admin_123" }))
+    }
 
     return (
         <div className="text-center">
@@ -13,35 +19,35 @@ export default function Login() {
             <div className="row justify-content-center">
                 <div className="col-md-4">
                     <section>
-                        <form id="account" method="post">
-                            <hr />
-                            <div className="text-danger validation-summary-valid" data-valmsg-summary="true">
-                                <ul>
-                                    <li>
-                                    </li>
-                                </ul>
-                            </div>
+                        <hr />
+                        <div className="text-danger validation-summary-valid" data-valmsg-summary="true">
+                            <ul>
+                                <li>
+                                </li>
+                            </ul>
+                        </div>
 
-                            <div className="form-group">
-                                <label htmlFor="email">Email</label>
-                                <input className="form-control" type="email" id="email" name="email" />
-                            </div>
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
+                            <input className="form-control" type="email" id="email" name="email" />
+                        </div>
 
-                            <div className="form-group">
-                                <label htmlFor="password">Password</label>
-                                <input className="form-control" type="password" id="password" name="password" />
-                            </div>
+                        <div className="form-group">
+                            <label htmlFor="password">Password</label>
+                            <input className="form-control" type="password" id="password" name="password" />
+                        </div>
 
-                            <div className="form-group">
-                                <button type="submit" className="btn btn-primary">Log in</button>
-                            </div>
+                        <div className="form-group">
+                            <button type="submit" className="btn btn-primary" onClick={onLogin}>
+                                Log in
+                            </button>
+                        </div>
 
-                            <div className="form-group">
-                                <p>
-                                    <a route-href="route: account-register">Do not have an account yet? Register</a>
-                                </p>
-                            </div>
-                        </form>
+                        <div className="form-group">
+                            <p>
+                                <a route-href="route: account-register">Do not have an account yet? Register</a>
+                            </p>
+                        </div>
                     </section>
                 </div>
             </div>

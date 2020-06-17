@@ -13,17 +13,21 @@ export enum LOADING_SYSTEM_ACTION_TYPES {
 }
 
 export const setGlobalLoading = (payload: boolean): LoadingSystemSetGlobalLoadingAction => ({
-    type: LOADING_SYSTEM_ACTION_TYPES.SET_GLOBAL_LOADING
+    type: LOADING_SYSTEM_ACTION_TYPES.SET_GLOBAL_LOADING,
+    payload: payload,
 });
 
 export const setGlobalLoaded = (payload: boolean): LoadingSystemSetGlobalLoadedAction => ({
-    type: LOADING_SYSTEM_ACTION_TYPES.SET_GLOBAL_LOADED
+    type: LOADING_SYSTEM_ACTION_TYPES.SET_GLOBAL_LOADED,
+    payload: payload,
 });
 
 export const setLocalLoading = (payload: boolean): LoadingSystemSetLocalLoadingAction => ({
-    type: LOADING_SYSTEM_ACTION_TYPES.SET_LOCAL_LOADING
+    type: LOADING_SYSTEM_ACTION_TYPES.SET_LOCAL_LOADING,
+    payload: payload,
 });
 
 export const setLoacalLoaded = (payload: boolean): LoadingSystemSetLocalLoadedAction => ({
-    type: LOADING_SYSTEM_ACTION_TYPES.SET_LOCAL_LOADED
+    type: LOADING_SYSTEM_ACTION_TYPES.SET_LOCAL_LOADED,
+    payload: payload,
 });

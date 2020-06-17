@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import IdentityNav from "./IdentityNav"
+
 export default function () {
+
     return (
         <header>
             <nav className="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -15,24 +18,7 @@ export default function () {
 
                     <div className="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
 
-                        <ul className="navbar-nav">
-                            <li className="nav-item">
-                                <a href="#" className="nav-link text-dark">Hello,</a>
-                            </li>
-                            <li className="nav-item">
-                                <a href="#" className="nav-link text-dark">Logout</a>
-                            </li>
-
-                        </ul>
-
-                        <ul className="navbar-nav">
-                            <li className="nav-item">
-                                <Link to="/account/register" className="nav-link text-dark">Register</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link to="/account/login" className="nav-link text-dark">Login</Link>
-                            </li>
-                        </ul>
+                        <IdentityNav />
 
                         <ul className="navbar-nav flex-grow-1">
                             <li className="nav-item">

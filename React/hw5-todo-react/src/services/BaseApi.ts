@@ -1,13 +1,14 @@
 import Axios, { AxiosResponse } from 'axios';
 import { IFetchResponseDTO } from '../types/Response/IFetchResponseDTO';
 
+import store from 'redux/store';
+
 export default class BaseApi {
 
     protected static headers = {
         common: {
             'Content-Type': 'application/json'
         },
-        Authorization: 'Bearer ',
     }
 
     protected static readonly baseApiUrl: string = "https://taltech.akaver.com/api/"
@@ -17,7 +18,7 @@ export default class BaseApi {
         {
             validateStatus: () => true,
             baseURL: BaseApi.baseApiUrl,
-            headers: () => BaseApi.headers
+            headers: BaseApi.headers
         }
     )
 

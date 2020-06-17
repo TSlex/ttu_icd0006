@@ -14,10 +14,12 @@ export const crearNotifications = (): NotificationCrearNotificationsAction => ({
     type: NOTIFICATION_ACTION_TYPES.CLEAR_NOTIFICATION,
 });
 
-export const setErrors = (): NotificationSetErrorsAction => ({
+export const setErrors = (errors: string[]): NotificationSetErrorsAction => ({
     type: NOTIFICATION_ACTION_TYPES.SET_ERRORS,
+    errors: errors,
 });
 
-export const setSuccMsg = (): NotificationSetSuccMsgAction => ({
+export const setSuccMsg = (msg: string): NotificationSetSuccMsgAction => ({
     type: NOTIFICATION_ACTION_TYPES.SET_SUCC_MSG,
+    msg: msg,
 });
