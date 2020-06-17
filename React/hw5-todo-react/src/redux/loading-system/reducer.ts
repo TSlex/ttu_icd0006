@@ -5,8 +5,9 @@ export const initialState: Account = {
     jwt: null,
     username: null,
     expired: -1,
-    isAuthenticated: false,
-    isLoading: false
+
+    errors: [],
+    succMsg: null,
 }
 
 export const account = (
@@ -18,8 +19,9 @@ export const account = (
         jwt: state.jwt,
         username: state.username,
         expired: state.expired,
-        isAuthenticated: state.isAuthenticated,
-        isLoading: state.isLoading,
+
+        errors: state.errors,
+        succMsg: state.succMsg,
     }
 
     switch (action.type) {

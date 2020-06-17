@@ -4,41 +4,49 @@ import { ITodoPriorityGetDTO } from 'types/ITodoPriorityDTO';
 
 // -------------State-------------
 
+// notification
+
+export type Notifications = {
+    errors: string[];
+    succMsg: string | null;
+}
+
+// loading system
+
+export type LoadingSystem = {
+    isGlobalLoaded: boolean;
+    isGlobalLoading: boolean;
+
+    isLocalLoaded: boolean;
+    isLocalLoading: boolean;
+}
+
 // account
 export type Account = {
     jwt: string | null;
     username: string | null;
     expired: number;
 
-    errors: string[];
-    succMsg: string | null;
+    isAuthenticated: boolean;
+    isLoading: boolean;
 }
 
 // tasks
 export type TodoTasks = {
     tasks: ITodoTaskGetDTO[];
     selectedTask: ITodoTaskGetDTO | null;
-
-    errors: string[];
-    succMsg: string | null;
 }
 
 // categories
 export type TodoCategories = {
     categories: ITodoCategoryGetDTO[];
     selectedCategory: ITodoCategoryGetDTO | null;
-
-    errors: string[];
-    succMsg: string | null;
 }
 
 // priorities
 export type TodoPriorities = {
     priorities: ITodoPriorityGetDTO[];
     selectedPriority: ITodoPriorityGetDTO | null;
-
-    errors: string[];
-    succMsg: string | null;
 }
 
 export type AppState = {
@@ -55,18 +63,41 @@ type BaseAction = {
     type: string
 }
 
+// load system
+
+export type LoadingSystemSetGlobalLoadingAction = {
+} & BaseAction
+
+export type LoadingSystemSetGlobalLoadedAction = {
+} & BaseAction
+
+export type LoadingSystemSetLocalLoadingAction = {
+} & BaseAction
+
+export type LoadingSystemSetLocalLoadedAction = {
+} & BaseAction
+
+export type LoadingSystemAction =
+    LoadingSystemSetGlobalLoadingAction |
+    LoadingSystemSetGlobalLoadedAction |
+    LoadingSystemSetLocalLoadingAction |
+    LoadingSystemSetLocalLoadedAction
+
 // notification
 
-export type CrearNotificationsAction = {
+export type NotificationCrearNotificationsAction = {
 } & BaseAction
 
-export type SetErrorsAction = {
+export type NotificationSetErrorsAction = {
 } & BaseAction
 
-export type SetSuccMsgAction = {
+export type NotificationSetSuccMsgAction = {
 } & BaseAction
 
-export type NotificationAction = CrearNotificationsAction | SetErrorsAction | SetSuccMsgAction
+export type NotificationAction =
+    NotificationCrearNotificationsAction |
+    NotificationSetErrorsAction |
+    NotificationSetSuccMsgAction
 
 // account
 export type AccountLoginAction = {
@@ -78,11 +109,18 @@ export type AccountLogoutAction = {
 export type AccountRegisterAction = {
 } & BaseAction
 
+export type AccountSetLoadingAction = {
+} & BaseAction
+
+export type AccountSetAuthAction = {
+} & BaseAction
+
 export type AccountAction =
     AccountLoginAction |
     AccountLogoutAction |
     AccountRegisterAction |
-    NotificationAction
+    AccountSetLoadingAction |
+    AccountSetAuthAction
 
 
 // tasks
@@ -114,8 +152,7 @@ export type TodoTaskAction =
     TodoTaskUnselectTaskAction |
     TodoTaskCreateTaskAction |
     TodoTaskEditTaskAction |
-    TodoTaskDeleteTaskAction |
-    NotificationAction
+    TodoTaskDeleteTaskAction
 
 
 // categories
@@ -147,9 +184,7 @@ export type TodoCategoryAction =
     TodoCategoryUnselectCategoryAction |
     TodoCategoryCreateCategoryAction |
     TodoCategoryEditCategoryAction |
-    TodoCategoryDeleteCategoryAction |
-    NotificationAction
-
+    TodoCategoryDeleteCategoryAction
 
 // priorities
 export type TodoPriorityBaseAction = {
@@ -180,5 +215,4 @@ export type TodoPriorityAction =
     TodoPriorityUnselectPriorityAction |
     TodoPriorityCreatePriorityAction |
     TodoPriorityEditPriorityAction |
-    TodoPriorityDeletePriorityAction |
-    NotificationAction
+    TodoPriorityDeletePriorityAction

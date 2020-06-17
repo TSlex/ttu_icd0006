@@ -2,22 +2,19 @@ import {
     AccountLoginAction,
     AccountLogoutAction,
     AccountRegisterAction,
-    CrearNotificationsAction,
-    SetErrorsAction,
-    SetSuccMsgAction,
+    AccountSetAuthAction,
+    AccountSetLoadingAction,
 } from 'redux/types';
 
 export enum ACCOUNT_ACTION_TYPES {
     LOGIN = "ACCOUNT:LOGIN",
     LOGOUT = "ACCOUNT:LOGOUT",
     REGISTER = "ACCOUNT:REGISTER",
-
-    CLEAR_NOTIFICATION = "ACCOUNT:CLEAR_NOTIFICATION",
-    SET_ERRORS = "ACCOUNT:SET_ERRORS",
-    SET_SUCC_MSG = "ACCOUNT:SET_SUCC_MSG",
+    SET_AUTH = "ACCOUNT:SET_AUTH",
+    SET_LOADING = "ACCOUNT:SET_LOADING",
 }
 
-export const login = (): AccountLoginAction => ({
+export const login = (dispatch: any): AccountLoginAction => ({
     type: ACCOUNT_ACTION_TYPES.LOGIN
 });
 
@@ -29,16 +26,10 @@ export const register = (): AccountRegisterAction => ({
     type: ACCOUNT_ACTION_TYPES.REGISTER
 });
 
-// Notifications
-
-export const crearNotifications = (): CrearNotificationsAction => ({
-    type: ACCOUNT_ACTION_TYPES.CLEAR_NOTIFICATION,
+export const setAuthenticated = (payload: boolean): AccountSetAuthAction => ({
+    type: ACCOUNT_ACTION_TYPES.SET_AUTH
 });
 
-export const setErrors = (): SetErrorsAction => ({
-    type: ACCOUNT_ACTION_TYPES.SET_ERRORS,
-});
-
-export const setSuccMsg = (): SetSuccMsgAction => ({
-    type: ACCOUNT_ACTION_TYPES.SET_SUCC_MSG,
+export const setLoading = (payload: boolean): AccountSetLoadingAction => ({
+    type: ACCOUNT_ACTION_TYPES.SET_LOADING
 });

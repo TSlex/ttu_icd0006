@@ -4,9 +4,6 @@ import { TODO_PRIORITIES_ACTION_TYPES } from "./actions";
 export const initialState: TodoPriorities = {
     priorities: [],
     selectedPriority: null,
-
-    errors: [],
-    succMsg: null,
 }
 
 export const todoPriorities = (
@@ -17,9 +14,6 @@ export const todoPriorities = (
     const newState: TodoPriorities = {
         priorities: state.priorities,
         selectedPriority: state.selectedPriority,
-
-        errors: state.errors,
-        succMsg: state.succMsg,
     }
 
     switch (action.type) {

@@ -4,9 +4,6 @@ import { TODO_TASKS_ACTION_TYPES } from "./actions";
 export const initialState: TodoTasks = {
     tasks: [],
     selectedTask: null,
-
-    errors: [],
-    succMsg: null,
 }
 
 export const todoTasks = (
@@ -17,9 +14,6 @@ export const todoTasks = (
     const newState: TodoTasks = {
         tasks: state.tasks,
         selectedTask: state.selectedTask,
-
-        errors: state.errors,
-        succMsg: state.succMsg,
     }
 
     switch (action.type) {

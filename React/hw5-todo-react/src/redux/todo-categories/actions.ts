@@ -5,9 +5,6 @@ import {
     TodoCategoryCreateCategoryAction,
     TodoCategoryEditCategoryAction,
     TodoCategoryDeleteCategoryAction,
-    CrearNotificationsAction,
-    SetErrorsAction,
-    SetSuccMsgAction,
 } from 'redux/types';
 
 import { ITodoCategoryGetDTO } from "types/ITodoCategoryDTO";
@@ -21,10 +18,6 @@ export enum TODO_CATEGORIES_ACTION_TYPES {
     CREATE_CATEGORY = "TODO_CATEGORIES:CREATE_CATEGORY",
     EDIT_CATEGORY = "TODO_CATEGORIES:EDIT_CATEGORY",
     DELETE_CATEGORY = "TODO_CATEGORIES:DELETE_CATEGORY",
-
-    CLEAR_NOTIFICATION = "TODO_CATEGORIES:CLEAR_NOTIFICATION",
-    SET_ERRORS = "TODO_CATEGORIES:SET_ERRORS",
-    SET_SUCC_MSG = "TODO_CATEGORIES:SET_SUCC_MSG",
 }
 
 export const getCategories = (): TodoCategoryGetCategoriesAction => ({
@@ -53,18 +46,4 @@ export const editCategory = (category: ITodoCategoryGetDTO): TodoCategoryEditCat
 export const deleteCategory = (category: ITodoCategoryGetDTO): TodoCategoryDeleteCategoryAction => ({
     type: TODO_CATEGORIES_ACTION_TYPES.DELETE_CATEGORY,
     category: category,
-});
-
-// Notifications
-
-export const crearNotifications = (): CrearNotificationsAction => ({
-    type: TODO_CATEGORIES_ACTION_TYPES.CLEAR_NOTIFICATION,
-});
-
-export const setErrors = (): SetErrorsAction => ({
-    type: TODO_CATEGORIES_ACTION_TYPES.SET_ERRORS,
-});
-
-export const setSuccMsg = (): SetSuccMsgAction => ({
-    type: TODO_CATEGORIES_ACTION_TYPES.SET_SUCC_MSG,
 });
