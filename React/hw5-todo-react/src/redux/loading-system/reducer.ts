@@ -8,7 +8,7 @@ export const initialState: LoadingSystem = {
     isLocalLoaded: false,
 }
 
-export const account = (
+export const loadingSystem = (
     state: LoadingSystem = initialState,
     action: LoadingSystemAction
 ) => {

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -9,12 +9,17 @@ import { AppState } from "redux/types";
 export default function () {
     const dispatch = useDispatch()
 
-    useEffect(() => { dispatch(loadUser()) });
-
     const username = useSelector((store: AppState) => store.account.username);
     const isAuthenticated = useSelector((store: AppState) => store.account.isAuthenticated);
 
-    const onLogout = () => { dispatch(logout()) }
+    useEffect(() => { dispatch(loadUser()) });
+
+    const history = useHistory()
+
+    const onLogout = () => {
+        dispatch(logout());
+        history.replace("/")
+    }
 
     const getNavs = () => {
         if (isAuthenticated) {
@@ -33,10 +38,10 @@ export default function () {
             return (
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                        <Link to="/account/register" className="nav-link text-dark">Register</Link>
+                        <Link replace to="/account/register" className="nav-link text-dark">Register</Link>
                     </li>
                     <li className="nav-item">
-                        <Link to="/account/login" className="nav-link text-dark">Login</Link>
+                        <Link replace to="/account/login" className="nav-link text-dark">Login</Link>
                     </li>
                 </ul>
             )

@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { useSelector, useDispatch } from 'react-redux'
-import { AppState } from 'redux/types';
+import { useDispatch } from 'react-redux'
 
 import { login } from 'redux/account/actions';
+import { Link } from 'react-router-dom';
 
 export default function Login() {
 
@@ -45,7 +45,7 @@ export default function Login() {
 
                         <div className="form-group">
                             <p>
-                                <a route-href="route: account-register">Do not have an account yet? Register</a>
+                                <Link replace to="/account/register">Do not have an account yet? Register</Link>
                             </p>
                         </div>
                     </section>

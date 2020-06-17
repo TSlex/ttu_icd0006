@@ -1,8 +1,6 @@
 import Axios, { AxiosResponse } from 'axios';
 import { IFetchResponseDTO } from '../types/Response/IFetchResponseDTO';
 
-import store from 'redux/store';
-
 export default class BaseApi {
 
     protected static headers = {

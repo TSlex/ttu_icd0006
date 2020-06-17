@@ -50,6 +50,8 @@ export type TodoPriorities = {
 }
 
 export type AppState = {
+    notification: Notification,
+    loadingSystem: LoadingSystem,
     account: Account;
     todoTasks: TodoTasks;
     todoCategories: TodoCategories;

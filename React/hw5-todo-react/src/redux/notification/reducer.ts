@@ -6,7 +6,7 @@ export const initialState: Notification = {
     succMsg: null,
 }
 
-export const account = (
+export const notification = (
     state: Notification = initialState,
     action: NotificationAction
 ) => {
