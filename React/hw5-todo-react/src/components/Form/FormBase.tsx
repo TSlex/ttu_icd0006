@@ -1,7 +1,7 @@
 import React, { useState, CSSProperties } from "react";
 import { Label } from "./Label";
 
-export interface IProps {
+interface IProps {
     inputType?: FormInputTypes;
     data: InputData | TextAreaData | CheckboxData | RadioData | SelectData;
     bindFunction?: (value: any) => void;

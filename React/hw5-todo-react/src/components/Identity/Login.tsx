@@ -7,6 +7,7 @@ import { Link, useHistory } from 'react-router-dom';
 
 import { ILoginDTO } from 'types/Identity/ILoginDTO';
 import { FormInput, FormInputTypes } from 'components/Form/FormBase';
+import { AlertBox, AlertTypes } from 'components/Shared/Alert';
 
 export default function Login() {
 
@@ -36,6 +37,12 @@ export default function Login() {
                                 </li>
                             </ul>
                         </div>
+
+                        <AlertBox alertData={{ message: "test", type: AlertTypes.Success, dismissable: true }} />
+                        <AlertBox alertData={{ message: "test", type: AlertTypes.Success, dismissable: true }} />
+                        <AlertBox alertData={{ message: "test", type: AlertTypes.Success, dismissable: true }} />
+                        <AlertBox alertData={{ message: "test", type: AlertTypes.Success, dismissable: true }} />
+                        <AlertBox alertData={{ message: "test", type: AlertTypes.Success, dismissable: true }} />
 
                         <FormInput data={{
                             bindValue: loginModel.email,
