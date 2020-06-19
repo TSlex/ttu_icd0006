@@ -17,6 +17,14 @@ export enum FormInputTypes {
 
 export const FormInput = (props: IProps) => {
 
+    const [state, setState] = React.useState({
+        textAreaValue: (props.data as TextAreaData).bindValue,
+        checkBoxBalue: (props.data as CheckboxData).bindValue,
+        radioValues: (props.data as RadioData).bindValue,
+        selectValue: (props.data as SelectData).bindValue,
+        inputValue: (props.data as InputData).bindValue,
+    });
+
     const onChange = (target:
         EventTarget & (
             HTMLInputElement |
@@ -24,26 +32,32 @@ export const FormInput = (props: IProps) => {
             HTMLTextAreaElement
         )
     ) => {
-        const inputElement = target as HTMLInputElement & HTMLSelectElement & HTMLTextAreaElement;
+        const inputElement = target as HTMLInputElement & HTMLSelectElement & HTMLTextAreaElement
 
-        // console.log(inputElement.value);
+        switch (props.inputType) {
+            case FormInputTypes.TextArea:
+                setState({ ...state, textAreaValue: inputElement.value });
+                break;
+            case FormInputTypes.Checkbox:
+                setState({ ...state, checkBoxBalue: inputElement.checked });
+                break;
+            case FormInputTypes.Radio:
+                const newState = { ...state }
+                newState.radioValues.forEach((item, index, array) => array[index].value = false);
+                newState.radioValues[Number(inputElement.value)].value = true;
+                setState(newState);
+                break;
+            case FormInputTypes.Select:
+                setState({ ...state, selectValue: inputElement.value });
+                break;
+            default:
+                setState({ ...state, textAreaValue: inputElement.value });
+                break;
+        }
 
-        // if (target.type === 'text') {
-        //     setState({ ...state, [target.name]: target.value });
-        // }
-        // if (target.type === 'checkbox' && target instanceof HTMLInputElement) {
-        //     setState({ ...state, [target.name]: target.checked });
-        // }
-        // if (target.type === 'select-one' && target instanceof HTMLSelectElement) {
-        //     setState({ ...state, [target.name]: target.value });
-        // }
-        // if (target.type === "radio") {
-        //     const newState = { ...state };
-        //     newState.radioGroup1.forEach((item, index, array) => array[index] = false);
-        //     newState.radioGroup1[Number(target.value)] = true;
-        //     setState(newState);
-        // }
-
+        if (props.bindFunction) {
+            return props.bindFunction(inputElement.value)
+        }
     }
 
     const renderInput = () => {
@@ -54,11 +68,12 @@ export const FormInput = (props: IProps) => {
                         <Label data={props.data} />
                         <textarea
                             style={props.data.style}
-                            value={(props.data as TextAreaData).bindValue}
+                            value={state.textAreaValue}
                             name={props.data.name}
                             className={props.data.class}
                             id={props.data.id}
                             rows={(props.data as TextAreaData).rowsCount}
+                            disabled={props.data.disabled}
                             onChange={(e) => onChange(e.target)}
                         >
                         </textarea>
@@ -69,33 +84,37 @@ export const FormInput = (props: IProps) => {
                     <div className="form-check">
                         <input
                             style={props.data.style}
-                            checked={(props.data as CheckboxData).bindValue}
+                            checked={state.checkBoxBalue}
                             name={props.data.name}
                             type="checkbox"
-                            className={props.data.class ?? "" + " form-check-input"}
+                            className={("form-check-input " + props.data.class).trim()}
                             id={props.data.id}
+                            disabled={props.data.disabled}
                             onChange={(e) => onChange(e.target)}
                         />
-                        <Label data={props.data} className="form-check-label" slot={} />
+                        <Label data={props.data} className="form-check-label" />
                     </div>
                 )
+
             case FormInputTypes.Radio:
                 return (
                     <div className="form-group">
                         {
-                            (props.data as RadioData).bindValue.map((item, index) => (
-                                <>
-                                    <Label data={{ id: props.data.id + `:${index}`, label: item.label }} />
+                            state.radioValues.map((item, index) => (
+                                <div className="form-check-inline" key={index}>
                                     <input
                                         style={props.data.style}
                                         checked={item.value}
+                                        value={index}
                                         name={props.data.name}
                                         type="radio"
-                                        className={props.data.class}
-                                        id={props.data.id}
+                                        className={("form-check-input " + props.data.class).trim()}
+                                        id={props.data.id + `:${index}`}
+                                        disabled={item.disabled}
                                         onChange={(e) => onChange(e.target)}
                                     />
-                                </>
+                                    <Label data={{ id: props.data.id + `:${index}`, label: item.label }} className={"form-check-label"} />
+                                </div>
                             ))
                         }
                     </div>
@@ -106,9 +125,11 @@ export const FormInput = (props: IProps) => {
                         <Label data={props.data} />
                         <select
                             style={props.data.style}
+                            value={state.selectValue}
                             name={props.data.name}
-                            className={props.data.class}
+                            className={("form-control " + props.data.class).trim()}
                             id={props.data.id}
+                            disabled={props.data.disabled}
                             onChange={(e) => onChange(e.target)}
                         >
                             {
@@ -127,11 +148,12 @@ export const FormInput = (props: IProps) => {
                         <Label data={props.data} />
                         <input
                             style={props.data.style}
-                            value={(props.data as InputData).bindValue}
+                            value={state.inputValue}
                             name={props.data.name}
                             type={(props.data as InputData).type}
                             className={props.data.class}
                             id={props.data.id}
+                            disabled={props.data.disabled}
                             onChange={(e) => onChange(e.target)}
                         />
                     </div>
@@ -156,6 +178,7 @@ export interface BaseData {
     id?: string;
     label?: string;
     name?: string;
+    disabled?: boolean
 }
 
 export interface InputData extends BaseData {
@@ -173,10 +196,10 @@ export interface CheckboxData extends BaseData {
 }
 
 export interface RadioData extends BaseData {
-    bindValue: { value: boolean; label?: string }[]
+    bindValue: { value: boolean; label?: string; disabled?: boolean }[]
 }
 
 export interface SelectData extends BaseData {
     bindValue: string | number | string[];
-    options: { value: string; displayValue?: string }[]
+    options: { value: string; displayValue?: string; }[]
 }

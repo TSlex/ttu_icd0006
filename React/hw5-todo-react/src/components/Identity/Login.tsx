@@ -17,8 +17,10 @@ export default function Login() {
     const history = useHistory()
 
     const onLogin = () => {
-        dispatch(login({ email: "aleksi@ttu.ee", password: "Admin_123" }))
-        history.replace("/")
+
+        console.log(loginModel)
+        // dispatch(login({ email: "aleksi@ttu.ee", password: "Admin_123" }))
+        // history.replace("/")
     }
 
     return (
@@ -27,64 +29,78 @@ export default function Login() {
             <div className="row justify-content-center">
                 <div className="col-md-4">
                     <section>
-                        <form>
-                            <hr />
-                            <div className="text-danger validation-summary-valid" data-valmsg-summary="true">
-                                <ul>
-                                    <li>
-                                    </li>
-                                </ul>
-                            </div>
+                        <hr />
+                        <div className="text-danger validation-summary-valid" data-valmsg-summary="true">
+                            <ul>
+                                <li>
+                                </li>
+                            </ul>
+                        </div>
 
-                            <FormInput data={{
-                                bindValue: loginModel.email,
+                        <FormInput data={{
+                            bindValue: loginModel.email,
 
-                                name: "email",
-                                id: "email",
-                                type: "email",
-                                class: "form-control",
-                                label: "Email"
+                            name: "email",
+                            id: "email",
+                            type: "email",
+                            class: "form-control",
+                            label: "Email"
 
-                            }} bindFunction={(value: any) => { setLoginModel({ ...loginModel, email: value }) }} />
+                        }} bindFunction={(value: any) => {
+                            setLoginModel({ ...loginModel, email: value })
+                        }} />
 
-                            <FormInput data={{
-                                bindValue: loginModel.email,
+                        <FormInput data={{
+                            bindValue: loginModel.password,
 
-                                name: "test",
-                                id: "test",
-                                type: "test",
-                                label: "test"
+                            name: "password",
+                            id: "password",
+                            type: "password",
+                            class: "form-control",
+                            label: "Password"
 
-                            }} inputType={FormInputTypes.Checkbox} />
+                        }} bindFunction={(value: any) => {
+                            setLoginModel({ ...loginModel, password: value })
+                        }} />
 
-                            <FormInput data={{
-                                bindValue: loginModel.email,
+                        <FormInput
+                            data={{
+                                bindValue: '1',
+                                options: [{ value: "1", displayValue: "one", }, { value: "2", displayValue: "two", }]
+                            }}
 
-                                name: "test",
-                                id: "test",
-                                type: "test",
-                                label: "test"
+                            inputType={FormInputTypes.Select}
 
-                            }} inputType={FormInputTypes.Checkbox} />
+                            bindFunction={(value: any) => {
+                                console.log(value)
+                                setLoginModel({ ...loginModel, password: value })
+                            }}
+                        />
 
+                        <FormInput
+                            data={{
+                                bindValue: [{ value: false, label: "one", }, { value: false, label: "two", }]
+                            }}
 
-                            <div className="form-group">
-                                <label htmlFor="password">Password</label>
-                                <input className="form-control" type="password" id="password" name="password" />
-                            </div>
+                            inputType={FormInputTypes.Radio}
 
-                            <div className="form-group">
-                                <button type="submit" className="btn btn-primary" onClick={onLogin}>
-                                    Log in
+                            bindFunction={(value: any) => {
+                                console.log(value)
+                                setLoginModel({ ...loginModel, password: value })
+                            }}
+                        />
+
+                        <div className="form-group">
+                            <button type="submit" className="btn btn-primary" onClick={onLogin}>
+                                Log in
                             </button>
-                            </div>
+                        </div>
 
-                            <div className="form-group">
-                                <p>
-                                    <Link replace to="/account/register">Do not have an account yet? Register</Link>
-                                </p>
-                            </div>
-                        </form>
+                        <div className="form-group">
+                            <p>
+                                <Link replace to="/account/register">Do not have an account yet? Register</Link>
+                            </p>
+                        </div>
                     </section>
                 </div>
             </div>
