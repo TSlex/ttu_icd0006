@@ -14,19 +14,18 @@ import { IRegisterDTO } from 'types/Identity/IRegisterDTO';
 
 import AccountApi from 'services/AccountApi';
 
-import { setErrors, clearNotifications } from 'redux/notification/actions';
+import { setErrors } from 'redux/notification/actions';
 import BrowserHistory from 'router/History';
 
 export const login = (loginModel: ILoginDTO) =>
     async (dispatch: any) => {
 
-        dispatch(clearNotifications())
         dispatch(setLocalLoading(true))
 
         let result = await AccountApi.Login(loginModel);
 
         if (result.errors?.length > 0) {
-            dispatch(setErrors(["Authorisation fails"]));
+            dispatch(setErrors(["Authorisation fails."]));
             dispatch(setLocalLoading(false));
 
         } else {
@@ -45,12 +44,31 @@ export const login = (loginModel: ILoginDTO) =>
         }
     };
 
+export const register = (registerModel: IRegisterDTO) =>
+    async (dispatch: any) => {
+
+        dispatch(setLocalLoading(true))
+
+        let result = await AccountApi.Register(registerModel);
+
+        if (result.errors?.length > 0) {
+            dispatch(setErrors(result.errors));
+            dispatch(setLocalLoading(false));
+
+        } else {
+            let action: AccountRegisterAction = {
+                type: ACCOUNT_ACTION_TYPES.LOGIN,
+            }
+
+            dispatch(action);
+            dispatch(setLocalLoading(false));
+
+            BrowserHistory.replace("/account/login")
+        }
+    };
+
 export const logout = (): AccountLogoutAction => ({
     type: ACCOUNT_ACTION_TYPES.LOGOUT
-});
-
-export const register = (registerModel: IRegisterDTO): AccountRegisterAction => ({
-    type: ACCOUNT_ACTION_TYPES.REGISTER
 });
 
 export const loadUser = (): AccountRegisterAction => ({

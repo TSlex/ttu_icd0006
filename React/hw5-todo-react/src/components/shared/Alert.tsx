@@ -7,7 +7,7 @@ interface IProps {
 
 export const AlertBox = (props: IProps) => {
 
-    const [id] = useState("ran" + new Date().getMilliseconds() + randomBytes(4))
+    const [id] = useState("alert:" + new Date().getMilliseconds() + randomBytes(4))
 
     const onDismiss = () => {
         const element = document.getElementById(id)
@@ -51,12 +51,12 @@ export interface IAlertData {
     type: AlertTypes
 }
 
-export const renderErrors = (errors: string[]) => {
+export const renderErrors = (errors: string[], dismissable?: boolean) => {
     if (errors.length > 0) {
         return (
-            <div key={errors.toString()}>
+            <div key={randomBytes(5).toString()}>
                 {errors.map((item, index) => (
-                    <AlertBox key={index} alertData={{ message: item, type: AlertTypes.Danger, dismissable: true }} />
+                    <AlertBox key={index} alertData={{ message: item, type: AlertTypes.Danger, dismissable: dismissable ?? true }} />
                 ))}
             </div>
         )

@@ -1,5 +1,6 @@
 import Axios, { AxiosResponse } from 'axios';
 import { IFetchResponseDTO } from '../types/Response/IFetchResponseDTO';
+import { parseErrors } from 'helpers/responseParser';
 
 export default class BaseApi {
 
@@ -20,7 +21,7 @@ export default class BaseApi {
         }
     )
 
-    protected static handleFetchResponse<TData>(response: AxiosResponse): IFetchResponseDTO<TData> {
+    protected static async handleFetchResponse<TData>(response: AxiosResponse): Promise<IFetchResponseDTO<TData>> {
         switch (response.status) {
             case 200:
             case 201:
@@ -34,7 +35,7 @@ export default class BaseApi {
             default:
                 return {
                     status: response.status.toString(),
-                    errors: [response.data.errors],
+                    errors: await parseErrors([response.data.errors]),
                     data: null
                 }
         }

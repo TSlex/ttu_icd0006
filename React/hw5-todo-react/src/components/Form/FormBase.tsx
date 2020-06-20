@@ -147,11 +147,14 @@ export const FormInput = (props: IProps) => {
                     <div className="form-group">
                         <Label data={props.data} />
                         <input
+                            autoComplete={props.data.autoComplete}
+                            required={props.data.required}
+
                             style={props.data.style}
                             value={state.inputValue}
                             name={props.data.name}
                             type={(props.data as InputData).type}
-                            className={props.data.class}
+                            className={[props.data.class, (props.data.isValid === false ? 'is-invalid' : null)].join(" ")}
                             id={props.data.id}
                             disabled={props.data.disabled}
                             onChange={(e) => onChange(e.target)}
@@ -178,7 +181,11 @@ export interface BaseData {
     id?: string;
     label?: string;
     name?: string;
-    disabled?: boolean
+    disabled?: boolean;
+    autoComplete?: string;
+    required?: boolean;
+
+    isValid?: boolean;
 }
 
 export interface InputData extends BaseData {
