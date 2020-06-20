@@ -1,3 +1,4 @@
+import { LoadingSystemSetRedirectingAction } from './../types';
 import {
     LoadingSystemSetGlobalLoadingAction,
     LoadingSystemSetGlobalLoadedAction,
@@ -10,6 +11,7 @@ export enum LOADING_SYSTEM_ACTION_TYPES {
     SET_GLOBAL_LOADED = "LOADING_SYSTEM:SET_GLOBAL_LOADED",
     SET_LOCAL_LOADING = "LOADING_SYSTEM:SET_LOCAL_LOADING",
     SET_LOCAL_LOADED = "LOADING_SYSTEM:SET_LOCAL_LOADED",
+    SET_REDIRECTING = "LOADING_SYSTEM:SET_REDIRECTING",
 }
 
 export const setGlobalLoading = (payload: boolean): LoadingSystemSetGlobalLoadingAction => ({
@@ -29,5 +31,10 @@ export const setLocalLoading = (payload: boolean): LoadingSystemSetLocalLoadingA
 
 export const setLoacalLoaded = (payload: boolean): LoadingSystemSetLocalLoadedAction => ({
     type: LOADING_SYSTEM_ACTION_TYPES.SET_LOCAL_LOADED,
+    payload: payload,
+});
+
+export const setRedirecting = (payload: boolean): LoadingSystemSetRedirectingAction => ({
+    type: LOADING_SYSTEM_ACTION_TYPES.SET_REDIRECTING,
     payload: payload,
 });

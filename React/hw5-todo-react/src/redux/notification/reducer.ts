@@ -9,7 +9,7 @@ export const initialState: Notification = {
 export const notification = (
     state: Notification = initialState,
     action: NotificationAction
-) => {
+): Notification => {
 
     const newState: Notification = {
         errors: state.errors,
@@ -18,8 +18,11 @@ export const notification = (
 
     switch (action.type) {
         case NOTIFICATION_ACTION_TYPES.CLEAR_NOTIFICATION:
+            return { ...newState, errors: [], succMsg: null }
         case NOTIFICATION_ACTION_TYPES.SET_ERRORS:
+            return { ...newState, errors: (action as any).errors }
         case NOTIFICATION_ACTION_TYPES.SET_SUCC_MSG:
+            return { ...newState, succMsg: (action as any).msg }
         default: return state;
     }
 }

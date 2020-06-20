@@ -50,3 +50,15 @@ export interface IAlertData {
     dismissable?: boolean;
     type: AlertTypes
 }
+
+export const renderErrors = (errors: string[]) => {
+    if (errors.length > 0) {
+        return (
+            <div key={errors.toString()}>
+                {errors.map((item, index) => (
+                    <AlertBox key={index} alertData={{ message: item, type: AlertTypes.Danger, dismissable: true }} />
+                ))}
+            </div>
+        )
+    }
+}

@@ -1,3 +1,4 @@
+import { setLocalLoading } from './../loading-system/actions';
 import {
     AccountLoginAction,
     AccountLogoutAction,
@@ -13,15 +14,20 @@ import { IRegisterDTO } from 'types/Identity/IRegisterDTO';
 
 import AccountApi from 'services/AccountApi';
 
-import { setErrors } from 'redux/notification/actions';
+import { setErrors, clearNotifications } from 'redux/notification/actions';
+import BrowserHistory from 'router/History';
 
 export const login = (loginModel: ILoginDTO) =>
     async (dispatch: any) => {
 
+        dispatch(clearNotifications())
+        dispatch(setLocalLoading(true))
+
         let result = await AccountApi.Login(loginModel);
 
         if (result.errors?.length > 0) {
-            dispatch(setErrors(result.errors))
+            dispatch(setErrors(["Authorisation fails"]));
+            dispatch(setLocalLoading(false));
 
         } else {
             let action: AccountLoginAction = {
@@ -29,9 +35,13 @@ export const login = (loginModel: ILoginDTO) =>
                 jwt: result.data!.token,
             }
 
-            dispatch(action)
-            dispatch(setLoading(true))
-            dispatch(loadUser())
+            dispatch(action);
+            dispatch(setLocalLoading(false));
+
+            BrowserHistory.replace("/")
+
+            dispatch(setAccountLoading(true));
+            dispatch(loadUser());
         }
     };
 
@@ -52,7 +62,7 @@ export const setAuthenticated = (payload: boolean): AccountSetAuthAction => ({
     payload: payload,
 });
 
-export const setLoading = (payload: boolean): AccountSetLoadingAction => ({
+export const setAccountLoading = (payload: boolean): AccountSetLoadingAction => ({
     type: ACCOUNT_ACTION_TYPES.SET_LOADING,
     payload: payload,
 });

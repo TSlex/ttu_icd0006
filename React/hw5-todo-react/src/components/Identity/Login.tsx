@@ -1,27 +1,25 @@
 import React, { useState } from 'react';
 
-import { useDispatch } from 'react-redux'
-
-import { login } from 'redux/account/actions';
-import { Link, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, Redirect } from 'react-router-dom';
 
 import { ILoginDTO } from 'types/Identity/ILoginDTO';
-import { FormInput, FormInputTypes } from 'components/Form/FormBase';
-import { AlertBox, AlertTypes } from 'components/Shared/Alert';
+import { FormInput } from 'components/Form/FormBase';
+import { renderErrors } from 'components/Shared/Alert';
+import { AppState } from 'redux/types';
+import { login } from 'redux/account/actions';
+import { setRedirecting } from 'redux/loading-system/actions';
 
 export default function Login() {
 
     const [loginModel, setLoginModel] = useState({} as ILoginDTO)
 
+    const errors = useSelector((store: AppState) => store.notification.errors);
+
     const dispatch = useDispatch()
 
-    const history = useHistory()
-
     const onLogin = () => {
-
-        console.log(loginModel)
-        // dispatch(login({ email: "aleksi@ttu.ee", password: "Admin_123" }))
-        // history.replace("/")
+        dispatch(login(loginModel));
     }
 
     return (
@@ -31,18 +29,8 @@ export default function Login() {
                 <div className="col-md-4">
                     <section>
                         <hr />
-                        <div className="text-danger validation-summary-valid" data-valmsg-summary="true">
-                            <ul>
-                                <li>
-                                </li>
-                            </ul>
-                        </div>
 
-                        <AlertBox alertData={{ message: "test", type: AlertTypes.Success, dismissable: true }} />
-                        <AlertBox alertData={{ message: "test", type: AlertTypes.Success, dismissable: true }} />
-                        <AlertBox alertData={{ message: "test", type: AlertTypes.Success, dismissable: true }} />
-                        <AlertBox alertData={{ message: "test", type: AlertTypes.Success, dismissable: true }} />
-                        <AlertBox alertData={{ message: "test", type: AlertTypes.Success, dismissable: true }} />
+                        {renderErrors(errors)}
 
                         <FormInput data={{
                             bindValue: loginModel.email,
@@ -70,32 +58,6 @@ export default function Login() {
                             setLoginModel({ ...loginModel, password: value })
                         }} />
 
-                        <FormInput
-                            data={{
-                                bindValue: '1',
-                                options: [{ value: "1", displayValue: "one", }, { value: "2", displayValue: "two", }]
-                            }}
-
-                            inputType={FormInputTypes.Select}
-
-                            bindFunction={(value: any) => {
-                                console.log(value)
-                                setLoginModel({ ...loginModel, password: value })
-                            }}
-                        />
-
-                        <FormInput
-                            data={{
-                                bindValue: [{ value: false, label: "one", }, { value: false, label: "two", }]
-                            }}
-
-                            inputType={FormInputTypes.Radio}
-
-                            bindFunction={(value: any) => {
-                                console.log(value)
-                                setLoginModel({ ...loginModel, password: value })
-                            }}
-                        />
 
                         <div className="form-group">
                             <button type="submit" className="btn btn-primary" onClick={onLogin}>

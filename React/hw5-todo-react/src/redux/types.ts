@@ -19,6 +19,8 @@ export type LoadingSystem = {
 
     isLocalLoaded: boolean;
     isLocalLoading: boolean;
+
+    isRedirecting: boolean;
 }
 
 // account
@@ -83,11 +85,16 @@ export type LoadingSystemSetLocalLoadedAction = {
     payload: boolean,
 } & BaseAction
 
+export type LoadingSystemSetRedirectingAction = {
+    payload: boolean,
+} & BaseAction
+
 export type LoadingSystemAction =
     LoadingSystemSetGlobalLoadingAction |
     LoadingSystemSetGlobalLoadedAction |
     LoadingSystemSetLocalLoadingAction |
-    LoadingSystemSetLocalLoadedAction
+    LoadingSystemSetLocalLoadedAction |
+    LoadingSystemSetRedirectingAction
 
 // notification
 
