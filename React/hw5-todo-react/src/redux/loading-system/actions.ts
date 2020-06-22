@@ -1,10 +1,11 @@
-import { LoadingSystemSetRedirectingAction } from './../types';
+import { LoadingSystemSetRedirectingAction, AppState } from './../types';
 import {
     LoadingSystemSetGlobalLoadingAction,
     LoadingSystemSetGlobalLoadedAction,
     LoadingSystemSetLocalLoadingAction,
     LoadingSystemSetLocalLoadedAction
 } from 'redux/types';
+import { clearNotifications } from 'redux/notification/actions';
 
 export enum LOADING_SYSTEM_ACTION_TYPES {
     SET_GLOBAL_LOADING = "LOADING_SYSTEM:SET_GLOBAL_LOADING",
@@ -19,10 +20,21 @@ export const setGlobalLoading = (payload: boolean): LoadingSystemSetGlobalLoadin
     payload: payload,
 });
 
-export const setGlobalLoaded = (payload: boolean): LoadingSystemSetGlobalLoadedAction => ({
-    type: LOADING_SYSTEM_ACTION_TYPES.SET_GLOBAL_LOADED,
-    payload: payload,
-});
+export const setGlobalLoaded = (payload: boolean) => (dispatch: any, getState: any) => {
+
+    let state: AppState = getState();
+
+    if (payload === true && (state.notification.errors.length > 0 || state.notification.succMsg)) {
+        dispatch(clearNotifications())
+    }
+
+    let action: LoadingSystemSetGlobalLoadedAction = {
+        type: LOADING_SYSTEM_ACTION_TYPES.SET_GLOBAL_LOADED,
+        payload: payload,
+    }
+
+    dispatch(action)
+};
 
 export const setLocalLoading = (payload: boolean): LoadingSystemSetLocalLoadingAction => ({
     type: LOADING_SYSTEM_ACTION_TYPES.SET_LOCAL_LOADING,

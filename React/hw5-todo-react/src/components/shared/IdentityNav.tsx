@@ -12,7 +12,7 @@ export default function () {
     const username = useSelector((store: AppState) => store.account.username);
     const isAuthenticated = useSelector((store: AppState) => store.account.isAuthenticated);
 
-    useEffect(() => { dispatch(loadUser()) });
+    useEffect(() => { dispatch(loadUser()) }, []);
 
     const history = useHistory()
 

@@ -2,31 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { renderErrors } from 'components/Shared/Alert';
 import { IRegisterDTO } from 'types/Identity/IRegisterDTO';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from 'redux/types';
+import { useDispatch } from 'react-redux';
 import { register } from 'redux/account/actions';
 import { FormInput } from 'components/Form/FormBase';
 import { setErrors, clearNotifications } from 'redux/notification/actions';
+import { setGlobalLoaded } from 'redux/loading-system/actions';
 
 export default function Register() {
 
     const [registerModel, setRegisterModel] = useState({} as IRegisterDTO)
+
     const [formValid, setFormValid] = useState({ email: true, password: true, conf_password: true })
 
-    const [isLoaded, setLoaded] = useState(false)
-
     const [confPass, setConfPass] = useState()
-
-    const errors = useSelector((store: AppState) => store.notification.errors);
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(clearNotifications());
-        setLoaded(true)
-    }, [isLoaded === false])
+        dispatch(setGlobalLoaded(true));
+        return () => { dispatch(setGlobalLoaded(false)) };
+    }, [])
 
-    const onRegister = () => {
+    const onSubmit = () => {
 
         dispatch(clearNotifications())
 
@@ -71,19 +68,12 @@ export default function Register() {
             <div className="row align-items-center d-flex flex-column">
                 <div className="col-md-6">
                     <hr />
-
-                    {renderErrors(errors)}
-
+                    {renderErrors()}
                 </div>
                 <div className="col-md-4">
                     <FormInput data={{
-                        initialValue: registerModel.email,
-
-                        name: "email",
-                        id: "email",
-                        type: "email",
-                        label: "Email",
-                        required: true,
+                        name: "email", id: "email", type: "email", label: "Email",
+                        isValid: formValid.email
 
 
                     }} bindFunction={(value: any) => {
@@ -91,14 +81,8 @@ export default function Register() {
                     }} />
 
                     <FormInput data={{
-                        initialValue: registerModel.password,
-
-                        name: "password",
-                        id: "password",
-                        type: "password",
-                        label: "Password",
-                        required: true,
-                        autoComplete: "new-password",
+                        name: "password", id: "password", type: "password",
+                        label: "Password", autoComplete: "new-password", isValid: formValid.password
 
 
                     }} bindFunction={(value: any) => {
@@ -106,21 +90,15 @@ export default function Register() {
                     }} />
 
                     <FormInput data={{
-                        initialValue: confPass!,
-
-                        name: "conf_password",
-                        id: "conf_password",
-                        type: "password",
-                        class: "form-control",
-                        label: "Confirm password",
-                        required: true,
-                        autoComplete: "new-password",
+                        name: "conf_password", id: "conf_password",
+                        type: "password", label: "Confirm password", autoComplete: "new-password",
+                        isValid: formValid.conf_password
 
                     }} bindFunction={(value: any) => {
                         setConfPass(value)
                     }} />
 
-                    <button type="submit" className="btn btn-primary" onClick={onRegister}>Register</button>
+                    <button type="submit" className="btn btn-primary" onClick={onSubmit}>Register</button>
 
                     <p className="mt-3">
                         <Link replace to="/account/login">Already have an account? Login</Link>

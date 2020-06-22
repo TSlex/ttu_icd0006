@@ -1,67 +1,59 @@
 import React, { useState, useEffect } from 'react';
 
-import { useDispatch, useSelector } from 'react-redux'
-import { Link, Redirect } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom';
 
 import { ILoginDTO } from 'types/Identity/ILoginDTO';
 import { FormInput } from 'components/Form/FormBase';
 import { renderErrors } from 'components/Shared/Alert';
-import { AppState } from 'redux/types';
 import { login } from 'redux/account/actions';
 import { clearNotifications, setErrors } from 'redux/notification/actions';
+import { setGlobalLoaded } from 'redux/loading-system/actions';
 
 export default function Login() {
 
     const [loginModel, setLoginModel] = useState({} as ILoginDTO)
     const [formValid, setFormValid] = useState({ email: true, password: true })
 
-    const [validationSync, setValidationSync] = useState(new Date().toString())
-
-    const [isLoaded, setLoaded] = useState(false)
-
-    const errors = useSelector((store: AppState) => store.notification.errors);
-
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(clearNotifications());
-        setLoaded(true)
-    }, [isLoaded === false])
+        dispatch(setGlobalLoaded(true));
+        return () => { dispatch(setGlobalLoaded(false)) };
+    }, [])
 
-    const onLogin = () => {
+    const onSubmit = () => {
 
         dispatch(clearNotifications())
 
-        setValidationSync(new Date().toString())
+        console.log(loginModel.email)
 
-        // console.log(loginModel.email)
+        let validationErrors: string[] = []
+        let validation = { email: true, password: true, conf_password: true }
 
-        // let validationErrors: string[] = []
-        // let validation = { email: true, password: true, conf_password: true }
+        setFormValid({ ...formValid, ...validation })
 
-        // setFormValid({ ...formValid, ...validation })
+        if (loginModel.email?.indexOf("@") < 0 || !(loginModel.email?.length > 0)) {
+            validationErrors.push("The Email field is required.");
+            validation.email = false;
+        }
 
-        // if (loginModel.email?.indexOf("@") < 0 || !(loginModel.email?.length > 0)) {
-        //     validationErrors.push("The Email field is required.");
-        //     validation.email = false;
-        // }
+        if (!(loginModel.password?.length > 0)) {
+            validationErrors.push("The Password field is required.");
+            validation.password = false;
+        }
 
-        // if (!(loginModel.password?.length > 0)) {
-        //     validationErrors.push("The Password field is required.");
-        //     validation.password = false;
-        // }
+        else if (!(loginModel.password?.length >= 6)) {
+            validationErrors.push("The field Password must be a string or array type with a minimum length of '6'.");
+            validation.password = false;
+        }
 
-        // else if (!(loginModel.password?.length >= 6)) {
-        //     validationErrors.push("The field Password must be a string or array type with a minimum length of '6'.");
-        //     validation.password = false;
-        // }
-
-        // if (validationErrors.length > 0) {
-        //     dispatch(setErrors(validationErrors))
-        //     setFormValid({ ...formValid, ...validation })
-        // } else {
-        //     dispatch(login(loginModel));
-        // }
+        if (validationErrors.length > 0) {
+            dispatch(setErrors(validationErrors))
+            setFormValid({ ...formValid, ...validation })
+        } else {
+            dispatch(login(loginModel));
+        }
     }
 
     return (
@@ -71,8 +63,7 @@ export default function Login() {
             <div className="row align-items-center d-flex flex-column">
                 <div className="col-md-6">
                     <hr />
-
-                    {renderErrors(errors)}
+                    {renderErrors()}
                 </div>
                 <div className="col-md-4">
                     <FormInput
@@ -83,18 +74,12 @@ export default function Login() {
                             type: "email",
                             label: "Email",
 
-                            required: true,
+                            isValid: formValid.email
                         }}
 
                         bindFunction={(value: any) => {
                             setLoginModel({ ...loginModel, email: value })
                         }}
-
-                        validationCallback={
-                            (validation: { isValid: boolean, errors: string[] }) => { dispatch(setErrors(validation.errors)) }
-                        }
-
-                        validationSync={validationSync}
                     />
 
                     <FormInput data={{
@@ -105,7 +90,7 @@ export default function Login() {
                         type: "password",
                         label: "Password",
 
-                        required: true,
+                        isValid: formValid.password
 
                     }} bindFunction={(value: any) => {
                         setLoginModel({ ...loginModel, password: value })
@@ -113,7 +98,7 @@ export default function Login() {
 
 
                     <div className="form-group">
-                        <button type="submit" className="btn btn-primary" onClick={onLogin}>
+                        <button type="submit" className="btn btn-primary" onClick={onSubmit}>
                             Log in
                             </button>
                     </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import Header from 'components/Shared/Header';
@@ -19,6 +19,7 @@ import Login from 'components/Identity/Login';
 import Register from 'components/Identity/Register';
 
 export default function App() {
+
   return (
     <div className="App">
       <Header />

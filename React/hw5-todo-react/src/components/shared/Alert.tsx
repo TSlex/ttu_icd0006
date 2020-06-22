@@ -1,5 +1,8 @@
 import React, { useState } from "react"
 import { randomBytes } from "crypto"
+import { useSelector } from "react-redux"
+import { AppState } from "redux/types"
+import store from "redux/store"
 
 interface IProps {
     alertData: IAlertData;
@@ -51,7 +54,10 @@ export interface IAlertData {
     type: AlertTypes
 }
 
-export const renderErrors = (errors: string[], dismissable?: boolean) => {
+export const renderErrors = (dismissable?: boolean) => {
+
+    const errors = store.getState().notification.errors;
+
     if (errors.length > 0) {
         return (
             <div key={randomBytes(5).toString()}>
