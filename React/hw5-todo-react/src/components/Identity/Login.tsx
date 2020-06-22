@@ -15,6 +15,8 @@ export default function Login() {
     const [loginModel, setLoginModel] = useState({} as ILoginDTO)
     const [formValid, setFormValid] = useState({ email: true, password: true })
 
+    const [validationSync, setValidationSync] = useState(new Date().toString())
+
     const [isLoaded, setLoaded] = useState(false)
 
     const errors = useSelector((store: AppState) => store.notification.errors);
@@ -30,32 +32,36 @@ export default function Login() {
 
         dispatch(clearNotifications())
 
-        let validationErrors: string[] = []
-        let validation = { email: true, password: true, conf_password: true }
+        setValidationSync(new Date().toString())
 
-        setFormValid({ ...formValid, ...validation })
+        // console.log(loginModel.email)
 
-        if (loginModel.email?.indexOf("@") < 0 || !(loginModel.email?.length > 0)) {
-            validationErrors.push("The Email field is required.");
-            validation.email = false;
-        }
+        // let validationErrors: string[] = []
+        // let validation = { email: true, password: true, conf_password: true }
 
-        if (!(loginModel.password?.length > 0)) {
-            validationErrors.push("The Password field is required.");
-            validation.password = false;
-        }
+        // setFormValid({ ...formValid, ...validation })
 
-        else if (!(loginModel.password?.length >= 6)) {
-            validationErrors.push("The field Password must be a string or array type with a minimum length of '6'.");
-            validation.password = false;
-        }
+        // if (loginModel.email?.indexOf("@") < 0 || !(loginModel.email?.length > 0)) {
+        //     validationErrors.push("The Email field is required.");
+        //     validation.email = false;
+        // }
 
-        if (validationErrors.length > 0) {
-            dispatch(setErrors(validationErrors))
-            setFormValid({ ...formValid, ...validation })
-        } else {
-            dispatch(login(loginModel));
-        }
+        // if (!(loginModel.password?.length > 0)) {
+        //     validationErrors.push("The Password field is required.");
+        //     validation.password = false;
+        // }
+
+        // else if (!(loginModel.password?.length >= 6)) {
+        //     validationErrors.push("The field Password must be a string or array type with a minimum length of '6'.");
+        //     validation.password = false;
+        // }
+
+        // if (validationErrors.length > 0) {
+        //     dispatch(setErrors(validationErrors))
+        //     setFormValid({ ...formValid, ...validation })
+        // } else {
+        //     dispatch(login(loginModel));
+        // }
     }
 
     return (
@@ -69,27 +75,37 @@ export default function Login() {
                     {renderErrors(errors)}
                 </div>
                 <div className="col-md-4">
+                    <FormInput
+                        data={{
+
+                            name: "email",
+                            id: "email",
+                            type: "email",
+                            label: "Email",
+
+                            required: true,
+                        }}
+
+                        bindFunction={(value: any) => {
+                            setLoginModel({ ...loginModel, email: value })
+                        }}
+
+                        validationCallback={
+                            (validation: { isValid: boolean, errors: string[] }) => { dispatch(setErrors(validation.errors)) }
+                        }
+
+                        validationSync={validationSync}
+                    />
+
                     <FormInput data={{
-                        bindValue: loginModel.email,
-
-                        name: "email",
-                        id: "email",
-                        type: "email",
-                        class: "form-control",
-                        label: "Email"
-
-                    }} bindFunction={(value: any) => {
-                        setLoginModel({ ...loginModel, email: value })
-                    }} />
-
-                    <FormInput data={{
-                        bindValue: loginModel.password,
+                        initialValue: loginModel.password,
 
                         name: "password",
                         id: "password",
                         type: "password",
-                        class: "form-control",
-                        label: "Password"
+                        label: "Password",
+
+                        required: true,
 
                     }} bindFunction={(value: any) => {
                         setLoginModel({ ...loginModel, password: value })

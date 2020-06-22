@@ -1,10 +1,13 @@
-import React, { useState, CSSProperties } from "react";
+import React, { useState, CSSProperties, useEffect } from "react";
 import { Label } from "./Label";
 
 interface IProps {
     inputType?: FormInputTypes;
     data: InputData | TextAreaData | CheckboxData | RadioData | SelectData;
     bindFunction?: (value: any) => void;
+
+    validationCallback?: (validation: { isValid: boolean, errors: string[] }) => void;
+    validationSync?: string;
 }
 
 export enum FormInputTypes {
@@ -17,13 +20,14 @@ export enum FormInputTypes {
 
 export const FormInput = (props: IProps) => {
 
-    const [state, setState] = React.useState({
-        textAreaValue: (props.data as TextAreaData).bindValue,
-        checkBoxBalue: (props.data as CheckboxData).bindValue,
-        radioValues: (props.data as RadioData).bindValue,
-        selectValue: (props.data as SelectData).bindValue,
-        inputValue: (props.data as InputData).bindValue,
+    const [state, setState] = useState({
+        checkBoxBalue: (props.data as CheckboxData).initialValue ?? false,
+        radioValues: (props.data as RadioData).initialValue ?? [],
+        inputValue: (props.data as InputData).initialValue ?? "",
     });
+
+    const [isValid, setValid] = useState(true);
+    const [errors, setErrors] = useState([]);
 
     const onChange = (target:
         EventTarget & (
@@ -34,30 +38,69 @@ export const FormInput = (props: IProps) => {
     ) => {
         const inputElement = target as HTMLInputElement & HTMLSelectElement & HTMLTextAreaElement
 
+        if (props.inputType === FormInputTypes.Input || props.inputType === FormInputTypes.TextArea) {
+
+            if (!(props.data.max && props.data.max <= inputElement.value.length)) {
+                return
+            }
+
+            else if (!(props.data.range && props.data.range.max <= inputElement.value.length)) {
+                return
+            }
+        }
+
         switch (props.inputType) {
-            case FormInputTypes.TextArea:
-                setState({ ...state, textAreaValue: inputElement.value });
-                break;
             case FormInputTypes.Checkbox:
                 setState({ ...state, checkBoxBalue: inputElement.checked });
                 break;
             case FormInputTypes.Radio:
                 const newState = { ...state }
+
                 newState.radioValues.forEach((item, index, array) => array[index].value = false);
                 newState.radioValues[Number(inputElement.value)].value = true;
+
                 setState(newState);
                 break;
-            case FormInputTypes.Select:
-                setState({ ...state, selectValue: inputElement.value });
-                break;
             default:
-                setState({ ...state, textAreaValue: inputElement.value });
+                setState({ ...state, inputValue: inputElement.value });
                 break;
         }
 
         if (props.bindFunction) {
             return props.bindFunction(inputElement.value)
         }
+    }
+
+    useEffect(() => (validate), [props.validationSync])
+
+    const validate = () => {
+
+        console.log(state.inputValue)
+
+        let validation = onValidate();
+
+        setValid(validation);
+
+        if (props.validationCallback) {
+            props.validationCallback({ isValid: validation, errors: errors });
+        }
+    }
+
+    const onValidate = (): boolean => {
+        if (props.data.required && props.inputType === FormInputTypes.Input ||
+            props.inputType === FormInputTypes.Select || props.inputType === FormInputTypes.TextArea) {
+
+            if (props.data.min && state.inputValue.toString().length >= props.data.min) {
+                return true;
+            }
+            else if (props.data.range?.min && state.inputValue.toString().length >= props.data.range.min) {
+                return true;
+            } else {
+                return state.inputValue.toString().length > 0;
+            }
+        }
+
+        return true;
     }
 
     const renderInput = () => {
@@ -68,9 +111,10 @@ export const FormInput = (props: IProps) => {
                         <Label data={props.data} />
                         <textarea
                             style={props.data.style}
-                            value={state.textAreaValue}
+                            value={state.inputValue}
+                            // value={(props.data as TextAreaData).bindValue}
                             name={props.data.name}
-                            className={props.data.class}
+                            className={[props.data.class, "form-control", (isValid === false ? 'is-invalid' : null)].join(" ").trim()}
                             id={props.data.id}
                             rows={(props.data as TextAreaData).rowsCount}
                             disabled={props.data.disabled}
@@ -79,15 +123,17 @@ export const FormInput = (props: IProps) => {
                         </textarea>
                     </div>
                 )
+
             case FormInputTypes.Checkbox:
                 return (
                     <div className="form-check">
                         <input
                             style={props.data.style}
                             checked={state.checkBoxBalue}
+                            // checked={(props.data as CheckboxData).bindValue}
                             name={props.data.name}
                             type="checkbox"
-                            className={("form-check-input " + props.data.class).trim()}
+                            className={[props.data.class, "form-check-input", (isValid === false ? 'is-invalid' : null)].join(" ").trim()}
                             id={props.data.id}
                             disabled={props.data.disabled}
                             onChange={(e) => onChange(e.target)}
@@ -100,6 +146,7 @@ export const FormInput = (props: IProps) => {
                 return (
                     <div className="form-group">
                         {
+                            // (props.data as RadioData).bindValue.map((item, index) => (
                             state.radioValues.map((item, index) => (
                                 <div className="form-check-inline" key={index}>
                                     <input
@@ -108,7 +155,7 @@ export const FormInput = (props: IProps) => {
                                         value={index}
                                         name={props.data.name}
                                         type="radio"
-                                        className={("form-check-input " + props.data.class).trim()}
+                                        className={[props.data.class, "form-check-input", (isValid === false ? 'is-invalid' : null)].join(" ").trim()}
                                         id={props.data.id + `:${index}`}
                                         disabled={item.disabled}
                                         onChange={(e) => onChange(e.target)}
@@ -119,15 +166,17 @@ export const FormInput = (props: IProps) => {
                         }
                     </div>
                 )
+
             case FormInputTypes.Select:
                 return (
                     <div className="form-group">
                         <Label data={props.data} />
                         <select
                             style={props.data.style}
-                            value={state.selectValue}
+                            value={state.inputValue}
+                            // value={(props.data as SelectData).bindValue}
                             name={props.data.name}
-                            className={("form-control " + props.data.class).trim()}
+                            className={[props.data.class, "form-control", (isValid === false ? 'is-invalid' : null)].join(" ").trim()}
                             id={props.data.id}
                             disabled={props.data.disabled}
                             onChange={(e) => onChange(e.target)}
@@ -142,19 +191,20 @@ export const FormInput = (props: IProps) => {
                         </select>
                     </div>
                 )
+
             default:
                 return (
                     <div className="form-group">
                         <Label data={props.data} />
                         <input
                             autoComplete={props.data.autoComplete}
-                            required={props.data.required}
 
                             style={props.data.style}
                             value={state.inputValue}
+                            // value={(props.data as InputData).bindValue ?? ""}
                             name={props.data.name}
-                            type={(props.data as InputData).type}
-                            className={[props.data.class, (props.data.isValid === false ? 'is-invalid' : null)].join(" ")}
+                            type={(props.data as InputData).type ?? "text"}
+                            className={[props.data.class, "form-control", (isValid === false ? 'is-invalid' : null)].join(" ").trim()}
                             id={props.data.id}
                             disabled={props.data.disabled}
                             onChange={(e) => onChange(e.target)}
@@ -183,30 +233,35 @@ export interface BaseData {
     name?: string;
     disabled?: boolean;
     autoComplete?: string;
+
     required?: boolean;
 
-    isValid?: boolean;
+    max?: number;
+    min?: number;
+    range?: { max: number, min: number };
+
+    equalRequiredTo?: any;
 }
 
 export interface InputData extends BaseData {
-    bindValue: string | number | string[];
-    type: string;
+    initialValue?: string;
+    type?: string;
 }
 
 export interface TextAreaData extends BaseData {
-    bindValue: string | number | string[];
+    initialValue?: string;
     rowsCount?: number;
 }
 
 export interface CheckboxData extends BaseData {
-    bindValue: boolean;
+    initialValue?: boolean;
 }
 
 export interface RadioData extends BaseData {
-    bindValue: { value: boolean; label?: string; disabled?: boolean }[]
+    initialValue?: { value: boolean; label?: string; disabled?: boolean }[]
 }
 
 export interface SelectData extends BaseData {
-    bindValue: string | number | string[];
+    initialValue?: string;
     options: { value: string; displayValue?: string; }[]
 }

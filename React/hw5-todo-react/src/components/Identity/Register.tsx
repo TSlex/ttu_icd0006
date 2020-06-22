@@ -7,7 +7,6 @@ import { AppState } from 'redux/types';
 import { register } from 'redux/account/actions';
 import { FormInput } from 'components/Form/FormBase';
 import { setErrors, clearNotifications } from 'redux/notification/actions';
-import { randomBytes } from 'crypto';
 
 export default function Register() {
 
@@ -51,8 +50,8 @@ export default function Register() {
             validation.password = false;
         }
 
-        if (!(registerModel.password && confPass && registerModel.password === confPass)) {
-            validationErrors.push("The Password must match.");
+        else if (!(registerModel.password && confPass && registerModel.password === confPass)) {
+            validationErrors.push("The Passwords must match.");
             validation.password = false;
             validation.conf_password = false;
         }
@@ -78,15 +77,13 @@ export default function Register() {
                 </div>
                 <div className="col-md-4">
                     <FormInput data={{
-                        bindValue: registerModel.email,
+                        initialValue: registerModel.email,
 
                         name: "email",
                         id: "email",
                         type: "email",
-                        class: "form-control",
                         label: "Email",
                         required: true,
-                        isValid: formValid.email,
 
 
                     }} bindFunction={(value: any) => {
@@ -94,16 +91,14 @@ export default function Register() {
                     }} />
 
                     <FormInput data={{
-                        bindValue: registerModel.password,
+                        initialValue: registerModel.password,
 
                         name: "password",
                         id: "password",
                         type: "password",
-                        class: "form-control",
                         label: "Password",
                         required: true,
                         autoComplete: "new-password",
-                        isValid: formValid.password,
 
 
                     }} bindFunction={(value: any) => {
@@ -111,7 +106,7 @@ export default function Register() {
                     }} />
 
                     <FormInput data={{
-                        bindValue: confPass!,
+                        initialValue: confPass!,
 
                         name: "conf_password",
                         id: "conf_password",
@@ -120,7 +115,6 @@ export default function Register() {
                         label: "Confirm password",
                         required: true,
                         autoComplete: "new-password",
-                        isValid: formValid.conf_password,
 
                     }} bindFunction={(value: any) => {
                         setConfPass(value)
