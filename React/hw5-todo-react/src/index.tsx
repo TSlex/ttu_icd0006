@@ -9,6 +9,7 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import 'moment'
 
 import './static/site.css'
+import './static/custom.css'
 
 import React from 'react';
 import ReactDOM from 'react-dom';

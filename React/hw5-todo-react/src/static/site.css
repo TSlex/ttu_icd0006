@@ -89,7 +89,7 @@ html::-webkit-scrollbar {
     width: .5em;
 }
 
-span::-webkit-scrollbar, p::-webkit-scrollbar{
+span::-webkit-scrollbar, p::-webkit-scrollbar {
     width: 0;
 }
 
@@ -120,63 +120,4 @@ hr {
     -moz-transition: all 2s linear;
     -webkit-transition: all 2s linear;
     -o-transition: all 2s linear;
-}
-
-.index_controls {
-    height: 30px;
-    line-height: 30px;
-    width: 40px;
-    text-align: center;
-}
-
-.index_controls * {
-    vertical-align: super;
-    pointer-events: none;
-}
-
-/* Image ---------------------------------------- */
-
-.miniature-cover {
-    width: 100%;
-    height: 100%;
-    border: #ff5c6c 4px dashed;
-    position: absolute;
-}
-
-.miniature-control {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    /*border-radius: 10px;*/
-    background: #e0a800;
-}
-
-.miniature-control:hover {
-    background: #fdc400;
-}
-
-/* Post ----------------------------------------- */
-
-.post-title {
-    display: inline-block;
-    overflow: auto;
-    text-overflow: ellipsis;
-    max-height: 1.5em;
-    box-sizing: content-box;
-    margin-left: auto;
-    margin-right: auto;
-    word-break: break-all;
-}
-
-.post-description {
-    border: 1px solid gray;
-    border-radius: 5px;
-    display: inline-block;
-    padding: 10px;
-    justify-self: flex-end;
-    overflow-x: hidden;
-    overflow-y: auto;
-    text-overflow: ellipsis;
-    max-height: 3.2em;
-    box-sizing: content-box;
 }

@@ -21,16 +21,18 @@ export default function Index() {
     }, [])
 
     return (
-        <div>
+        <div className="tlist">
             {priorities.map((item: ITodoPriorityGetDTO) =>
-                <div key={item.id}>
-                    <div>
+                <div key={item.id} className="tlist-item">
+                    <div className="tlist-content">
                         <div><span>{item.todoPriorityName}</span></div>
                         |
                         <div><span>{item.todoPrioritySort}</span></div>
                     </div>
-                    <button className="alert-primaty"><span className="fas fa-pencil-alt" /></button>
-                    <button className="alert-danger"><span className="fas fa-times" /></button>
+                    <div className="tlist-controls">
+                        <button className="button-round button-primary"><span className="fas fa-pencil-alt" /></button>
+                        <button className="button-round button-danger"><span className="fas fa-times" /></button>
+                    </div>
                 </div>
             )}
         </div>
