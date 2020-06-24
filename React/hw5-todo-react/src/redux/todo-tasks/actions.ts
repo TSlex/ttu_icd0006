@@ -21,7 +21,8 @@ export enum TODO_TASKS_ACTION_TYPES {
 }
 
 export const getTasks = (): TodoTaskGetTasksAction => ({
-    type: TODO_TASKS_ACTION_TYPES.GET_TASKS
+    type: TODO_TASKS_ACTION_TYPES.GET_TASKS,
+    tasks: []
 });
 
 export const selectTask = (task: ITodoTaskGetDTO): TodoTaskSelectTaskAction => ({

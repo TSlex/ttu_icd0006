@@ -4,14 +4,13 @@ import { parseErrors } from 'helpers/responseParser';
 
 export default class BaseApi {
 
-    protected static headers = {
+    protected static readonly headers = {
         common: {
             'Content-Type': 'application/json'
         },
     }
 
     protected static readonly baseApiUrl: string = "https://taltech.akaver.com/api/"
-    protected static fetchUrl: string = ""
 
     protected static axios = Axios.create(
         {
@@ -49,19 +48,33 @@ export default class BaseApi {
         }
     }
 
-    // protected static async _index<TData>(url: string): Promise<IFetchResponseDTO<TData[]>> {
+    protected static async _index<TData>(url: string, headers: {}): Promise<IFetchResponseDTO<TData[]>> {
+        const response = await this.axios.get(url, { headers: headers });
 
-    // }
-    // protected static async _details<TData>(url: string): Promise<IFetchResponseDTO<TData>> {
+        return BaseApi.handleFetchResponse<TData[]>(response)
+    }
 
-    // }
-    // protected static async _create<TData>(url: string): Promise<IFetchResponseDTO<TData>> {
+    protected static async _details<TData>(url: string, headers: {}): Promise<IFetchResponseDTO<TData>> {
+        const response = await this.axios.get(url, { headers: headers });
 
-    // }
-    // protected static async _edit<TData>(url: string): Promise<IFetchResponseDTO<TData>> {
+        return BaseApi.handleFetchResponse<TData>(response)
+    }
 
-    // }
-    // protected static async _delete<TData>(url: string): Promise<IFetchResponseDTO<TData>> {
+    protected static async _create<TData>(url: string, data: {}, headers: {}): Promise<IFetchResponseDTO<TData>> {
+        const response = await this.axios.post(url, data, { headers: headers });
 
-    // }
+        return BaseApi.handleFetchResponse<TData>(response)
+    }
+
+    protected static async _edit<TData>(url: string, data: {}, headers: {}): Promise<IFetchResponseDTO<TData>> {
+        const response = await this.axios.put(url, data, { headers: headers });
+
+        return BaseApi.handleFetchResponse<TData>(response)
+    }
+
+    protected static async _delete<TData>(url: string, headers: {}): Promise<IFetchResponseDTO<TData>> {
+        const response = await this.axios.delete(url, { headers: headers });
+
+        return BaseApi.handleFetchResponse<TData>(response)
+    }
 }

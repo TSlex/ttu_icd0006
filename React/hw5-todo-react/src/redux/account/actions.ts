@@ -26,7 +26,6 @@ export const login = (loginModel: ILoginDTO) =>
 
         if (result.errors?.length > 0) {
             dispatch(setErrors(["Authorisation fails."]));
-            dispatch(setLocalLoading(false));
 
         } else {
             let action: AccountLoginAction = {
@@ -35,13 +34,14 @@ export const login = (loginModel: ILoginDTO) =>
             }
 
             dispatch(action);
-            dispatch(setLocalLoading(false));
 
             BrowserHistory.replace("/")
 
             dispatch(setAccountLoading(true));
             dispatch(loadUser());
         }
+
+        dispatch(setLocalLoading(false));
     };
 
 export const register = (registerModel: IRegisterDTO) =>
@@ -53,7 +53,6 @@ export const register = (registerModel: IRegisterDTO) =>
 
         if (result.errors?.length > 0) {
             dispatch(setErrors(result.errors));
-            dispatch(setLocalLoading(false));
 
         } else {
             let action: AccountRegisterAction = {
@@ -61,10 +60,11 @@ export const register = (registerModel: IRegisterDTO) =>
             }
 
             dispatch(action);
-            dispatch(setLocalLoading(false));
 
             BrowserHistory.replace("/account/login")
         }
+
+        dispatch(setLocalLoading(false));
     };
 
 export const logout = (): AccountLogoutAction => ({

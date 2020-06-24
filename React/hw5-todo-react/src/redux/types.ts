@@ -151,6 +151,7 @@ export type TodoTaskBaseAction = {
 }
 
 export type TodoTaskGetTasksAction = {
+    tasks: ITodoTaskGetDTO[]
 } & BaseAction
 
 export type TodoTaskSelectTaskAction = {
@@ -183,6 +184,7 @@ export type TodoCategoryBaseAction = {
 }
 
 export type TodoCategoryGetCategoriesAction = {
+    categories: ITodoCategoryGetDTO[]
 } & BaseAction
 
 export type TodoCategorySelectCategoryAction = {
@@ -214,6 +216,7 @@ export type TodoPriorityBaseAction = {
 }
 
 export type TodoPriorityGetPrioritiesAction = {
+    priorities: ITodoPriorityGetDTO[]
 } & BaseAction
 
 export type TodoPrioritySelectPriorityAction = {

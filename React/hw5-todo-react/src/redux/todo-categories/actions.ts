@@ -21,7 +21,8 @@ export enum TODO_CATEGORIES_ACTION_TYPES {
 }
 
 export const getCategories = (): TodoCategoryGetCategoriesAction => ({
-    type: TODO_CATEGORIES_ACTION_TYPES.GET_CATEGORIES
+    type: TODO_CATEGORIES_ACTION_TYPES.GET_CATEGORIES,
+    categories: []
 });
 
 export const selectCategory = (category: ITodoCategoryGetDTO): TodoCategorySelectCategoryAction => ({
