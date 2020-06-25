@@ -32,10 +32,22 @@ export const FormInput = (props: IProps) => {
     ) => {
         const inputElement = target as HTMLInputElement & HTMLSelectElement & HTMLTextAreaElement
 
-        if (props.inputType === FormInputTypes.Input || props.inputType === FormInputTypes.TextArea) {
+        if ((props.inputType === FormInputTypes.Input || !props.inputType) && (props.data as InputData).type === "number") {
+            inputElement.value = inputElement.value.replace(/(?<!\d)0+(?=[\d-+])/, '')
+        }
 
-            if (!(props.data.max && props.data.max <= inputElement.value.length)) {
+        if (props.data.max) {
+            if ((props.inputType === FormInputTypes.Input || !props.inputType) && (props.data as InputData).type === "number" && Number(inputElement.value) >= props.data.max) {
+                inputElement.value = props.data.max.toString()
+            }
+            else if (inputElement.value.toString().length > props.data.max) {
                 return
+            }
+        }
+
+        if (props.data.min !== undefined) {
+            if ((props.inputType === FormInputTypes.Input || !props.inputType) && (props.data as InputData).type === "number" && Number(inputElement.value) < props.data.min) {
+                inputElement.value = props.data.min.toString()
             }
         }
 
@@ -61,11 +73,25 @@ export const FormInput = (props: IProps) => {
         }
     }
 
+    const wrapInput = (input: any) => {
+        if (props.data.wrapInput === false) {
+            return input;
+
+        } else {
+            switch (props.inputType) {
+                case FormInputTypes.Checkbox:
+                    return (<div className="form-check">{input}</div>)
+                default:
+                    return (<div className="form-group">{input}</div>)
+            }
+        }
+    }
+
     const renderInput = () => {
         switch (props.inputType) {
             case FormInputTypes.TextArea:
-                return (
-                    <div className="form-group">
+                return wrapInput(
+                    <>
                         <Label data={props.data} />
                         <textarea
                             style={props.data.style}
@@ -78,12 +104,12 @@ export const FormInput = (props: IProps) => {
                             onChange={(e) => onChange(e.target)}
                         >
                         </textarea>
-                    </div>
+                    </>
                 )
 
             case FormInputTypes.Checkbox:
-                return (
-                    <div className="form-check">
+                return wrapInput(
+                    <>
                         <input
                             style={props.data.style}
                             checked={state.checkBoxBalue}
@@ -95,12 +121,12 @@ export const FormInput = (props: IProps) => {
                             onChange={(e) => onChange(e.target)}
                         />
                         <Label data={props.data} className="form-check-label" />
-                    </div>
+                    </>
                 )
 
             case FormInputTypes.Radio:
-                return (
-                    <div className="form-group">
+                return wrapInput(
+                    <>
                         {
                             state.radioValues.map((item, index) => (
                                 <div className="form-check-inline" key={index}>
@@ -119,12 +145,12 @@ export const FormInput = (props: IProps) => {
                                 </div>
                             ))
                         }
-                    </div>
+                    </>
                 )
 
             case FormInputTypes.Select:
-                return (
-                    <div className="form-group">
+                return wrapInput(
+                    <>
                         <Label data={props.data} />
                         <select
                             style={props.data.style}
@@ -143,12 +169,12 @@ export const FormInput = (props: IProps) => {
                                 ))
                             }
                         </select>
-                    </div>
+                    </>
                 )
 
             default:
-                return (
-                    <div className="form-group">
+                return wrapInput(
+                    <>
                         <Label data={props.data} />
                         <input
                             autoComplete={props.data.autoComplete}
@@ -157,12 +183,12 @@ export const FormInput = (props: IProps) => {
                             value={state.inputValue}
                             name={props.data.name}
                             type={(props.data as InputData).type ?? "text"}
-                            className={[props.data.class, "form-control", (props.data.isValid === false ? 'is-invalid' : null)].join(" ").trim()}
+                            className={[props.data.class, (props.data.ignoreClasses ? null : "form-control"), (props.data.isValid === false ? 'is-invalid' : null)].join(" ").trim()}
                             id={props.data.id}
                             disabled={props.data.disabled}
                             onChange={(e) => onChange(e.target)}
                         />
-                    </div>
+                    </>
                 )
         }
     }
@@ -191,6 +217,10 @@ export interface BaseData {
     autoComplete?: string;
 
     max?: number;
+    min?: number;
+
+    ignoreClasses?: boolean;
+    wrapInput?: boolean;
 }
 
 export interface InputData extends BaseData {

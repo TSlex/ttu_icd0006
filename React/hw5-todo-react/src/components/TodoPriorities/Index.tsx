@@ -1,13 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPriorities } from 'redux/todo-priorities/actions';
+import { getPriorities, selectPriority, unselectPriority, deletePriority, editPriority, createPriority } from 'redux/todo-priorities/actions';
 import { AppState } from 'redux/types';
-import { ITodoPriorityGetDTO } from 'types/ITodoPriorityDTO';
+import { ITodoPriorityGetDTO, ITodoPriorityPostDTO, ITodoPriorityPutDTO } from 'types/ITodoPriorityDTO';
 import { setGlobalLoaded } from 'redux/loading-system/actions';
+import { FormInput } from 'components/Form/FormInput';
 
 export default function Index() {
 
+    const [isCreating, setCreating] = useState(false)
+
+    const [createModel, setCreateModel] = useState(null as ITodoPriorityPostDTO | null)
+    const [editModel, setEditModel] = useState({} as ITodoPriorityPutDTO)
+
     const priorities = useSelector((state: AppState) => state.todoPriorities.priorities)
+    const sPriority = useSelector((state: AppState) => state.todoPriorities.selectedPriority)
 
     const dispatch = useDispatch()
 
@@ -20,21 +27,143 @@ export default function Index() {
         return () => { dispatch(setGlobalLoaded(false)) };
     }, [])
 
-    return (
-        <div className="tlist">
-            {priorities.map((item: ITodoPriorityGetDTO) =>
-                <div key={item.id} className="tlist-item">
-                    <div className="tlist-content">
-                        <div><span>{item.todoPriorityName}</span></div>
-                        |
-                        <div><span>{item.todoPrioritySort}</span></div>
-                    </div>
-                    <div className="tlist-controls">
-                        <button className="button-round button-primary"><span className="fas fa-pencil-alt" /></button>
-                        <button className="button-round button-danger"><span className="fas fa-times" /></button>
+    const onAdd = () => {
+        if (isCreating) {
+            return
+        }
+
+        setCreateModel({ todoPriorityName: "", todoPrioritySort: 0 })
+        setCreating(true)
+    }
+
+    const onAddConfirm = () => {
+        dispatch(createPriority(createModel!))
+        setCreating(false)
+    }
+
+    const onAddReject = () => {
+        setCreating(false)
+    }
+
+    const onEdit = (item: ITodoPriorityGetDTO) => {
+        dispatch(selectPriority(item))
+    }
+
+    const onEditConfirm = () => {
+        dispatch(editPriority(sPriority!))
+        dispatch(unselectPriority())
+    }
+
+    const onEditReject = () => {
+        dispatch(unselectPriority())
+    }
+
+    const onDelete = (item: ITodoPriorityGetDTO) => {
+        dispatch(deletePriority(item))
+    }
+
+    const renderCreatingModel = () => {
+        if (isCreating) {
+            return (
+                <div className="tlist">
+                    <div className="tlist-item">
+                        <div className="tlist-content">
+                            <div className="tlist-content-name">
+                                <FormInput
+                                    data={
+                                        {
+                                            type: "text", initialValue: createModel!.todoPriorityName,
+                                            ignoreClasses: false, wrapInput: false, max: 40
+                                        }
+                                    }
+                                /></div>
+                            <div className="tlist-content-value">
+                                <FormInput
+                                    data={
+                                        {
+                                            type: "number", initialValue: createModel!.todoPrioritySort.toString(),
+                                            ignoreClasses: false, wrapInput: false, max: 100, min: 0
+                                        }
+                                    }
+                                /></div>
+                        </div>
+                        <div className="tlist-controls">
+                            <button className="btn btn-success button-round" onClick={onAddConfirm}><span className="fas fa-check" /></button>
+                            <button className="btn btn-danger button-round" onClick={onAddReject}><span className="fas fa-times" /></button>
+                        </div>
                     </div>
                 </div>
-            )}
-        </div>
+            )
+        }
+        else {
+            return (
+                <div className="text-center">
+                    <button className="btn btn-success button-round" onClick={onAdd}><span className="fas fa-plus" /></button>
+                </div>
+            )
+        }
+    }
+
+    const renderItem = (item: ITodoPriorityGetDTO) => {
+        if (item.id === sPriority?.id) {
+            return (
+                <div key={item.id} className="tlist-item">
+                    <div className="tlist-content">
+                        <div className="tlist-content-name">
+                            <FormInput
+                                data={
+                                    {
+                                        type: "text", initialValue: item.todoPriorityName,
+                                        ignoreClasses: false, wrapInput: false, max: 40
+                                    }
+                                }
+                            /></div>
+                        <div className="tlist-content-value">
+                            <FormInput
+                                data={
+                                    {
+                                        type: "number", initialValue: item.todoPrioritySort.toString(),
+                                        ignoreClasses: false, wrapInput: false, max: 100, min: 0
+                                    }
+                                }
+                            /></div>
+                    </div>
+                    <div className="tlist-controls">
+                        <button className="btn btn-primary button-round" onClick={onEditConfirm}><span className="fas fa-check" /></button>
+                        <button className="btn btn-danger button-round" onClick={onEditReject}><span className="fas fa-times" /></button>
+                    </div>
+                </div>
+            )
+        }
+        else {
+            return (
+                <div key={item.id} className="tlist-item">
+                    <div className="tlist-content">
+                        <div className="tlist-content-name"><span>{item.todoPriorityName}</span></div>
+                        <div className="tlist-content-value"><span>{item.todoPrioritySort}</span></div>
+                    </div>
+                    <div className="tlist-controls">
+                        <button className="btn btn-primary button-round" onClick={() => onEdit(item)}><span className="fas fa-pencil-alt" /></button>
+                        <button className="btn btn-danger button-round" onClick={() => onDelete(item)}><span className="fas fa-trash" /></button>
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    return (
+        <>
+            <div className="text-center">
+                <h4>Priorities</h4>
+                <hr />
+            </div>
+
+            {/* creating model */}
+            {renderCreatingModel()}
+
+            <div className="tlist mt-2">
+                {priorities.map((item: ITodoPriorityGetDTO) => renderItem(item))}
+            </div>
+        </>
     )
 }

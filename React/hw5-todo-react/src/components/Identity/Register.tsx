@@ -4,7 +4,7 @@ import { renderErrors } from 'components/Shared/Alert';
 import { IRegisterDTO } from 'types/Identity/IRegisterDTO';
 import { useDispatch } from 'react-redux';
 import { register } from 'redux/account/actions';
-import { FormInput } from 'components/Form/FormBase';
+import { FormInput } from 'components/Form/FormInput';
 import { setErrors, clearNotifications } from 'redux/notification/actions';
 import { setGlobalLoaded } from 'redux/loading-system/actions';
 

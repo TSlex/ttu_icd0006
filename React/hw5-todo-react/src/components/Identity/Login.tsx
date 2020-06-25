@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom';
 
 import { ILoginDTO } from 'types/Identity/ILoginDTO';
-import { FormInput } from 'components/Form/FormBase';
+import { FormInput } from 'components/Form/FormInput';
 import { renderErrors } from 'components/Shared/Alert';
 import { login } from 'redux/account/actions';
 import { clearNotifications, setErrors } from 'redux/notification/actions';

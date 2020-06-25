@@ -1,4 +1,4 @@
-import { BaseData } from "./FormBase";
+import { BaseData } from "./FormInput";
 import React from "react";
 
 export interface IProps {

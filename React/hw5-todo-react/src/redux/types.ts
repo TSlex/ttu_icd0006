@@ -1,6 +1,7 @@
+import { ITodoTaskPutDTO } from './../types/ITodoTaskDTO';
 import { ITodoCategoryGetDTO } from 'types/ITodoCategoryDTO';
 import { ITodoTaskGetDTO } from 'types/ITodoTaskDTO';
-import { ITodoPriorityGetDTO } from 'types/ITodoPriorityDTO';
+import { ITodoPriorityGetDTO, ITodoPriorityPutDTO, ITodoPriorityPostDTO } from 'types/ITodoPriorityDTO';
 
 // -------------State-------------
 
@@ -212,7 +213,7 @@ export type TodoCategoryAction =
 
 // priorities
 export type TodoPriorityBaseAction = {
-    priority: ITodoPriorityGetDTO
+    priority: ITodoPriorityGetDTO | ITodoPriorityPostDTO | ITodoPriorityPutDTO
 }
 
 export type TodoPriorityGetPrioritiesAction = {

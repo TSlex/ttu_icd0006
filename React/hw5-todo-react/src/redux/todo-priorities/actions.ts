@@ -7,7 +7,7 @@ import {
     TodoPriorityDeletePriorityAction,
 } from 'redux/types';
 
-import { ITodoPriorityGetDTO } from "types/ITodoPriorityDTO";
+import { ITodoPriorityGetDTO, ITodoPriorityPutDTO, ITodoPriorityPostDTO } from "types/ITodoPriorityDTO";
 import { setLocalLoading } from 'redux/loading-system/actions';
 import TodoPrioritiesApi from 'services/TodoPrioritiesApi';
 import { setErrors } from 'redux/notification/actions';
@@ -53,12 +53,12 @@ export const unselectPriority = (): TodoPriorityUnselectPriorityAction => ({
     type: TODO_PRIORITIES_ACTION_TYPES.SELECT_PRIORITY
 });
 
-export const createPriority = (priority: ITodoPriorityGetDTO): TodoPriorityCreatePriorityAction => ({
+export const createPriority = (priority: ITodoPriorityPostDTO): TodoPriorityCreatePriorityAction => ({
     type: TODO_PRIORITIES_ACTION_TYPES.CREATE_PRIORITY,
     priority: priority,
 });
 
-export const editPriority = (priority: ITodoPriorityGetDTO): TodoPriorityEditPriorityAction => ({
+export const editPriority = (priority: ITodoPriorityPutDTO): TodoPriorityEditPriorityAction => ({
     type: TODO_PRIORITIES_ACTION_TYPES.EDIT_PRIORITY,
     priority: priority,
 });

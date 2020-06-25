@@ -1,11 +1,12 @@
 /* Buttons */
 
 .button-round {
-    border: 2px solid #330000;
+    border: 1px solid #330000;
     border-radius: 50%;
     width: 40px;
     height: 40px;
     font-size: large;
+    padding: unset;
 }
 
 .button-round:focus {
@@ -25,10 +26,82 @@
 .tlist {
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
-.tlist-item {}
+.tlist-item {
+    margin: 10px;
+    display: flex;
+    width: 600px;
+}
 
-.tlist-controls {}
+.tlist-controls, .tlist-controls>* {
+    margin-left: 6px;
+}
 
-.tlist-content {}
+.tlist-content {
+    display: flex;
+    width: 500px;
+    border: 1px solid #330000;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.tlist-content>* {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.tlist-content-name {
+    justify-content: center;
+    flex-grow: 1;
+    border-right: 1px solid #330000;
+    /* padding-left: 5px; */
+    /* padding-right: 5px; */
+    padding: 6px;
+}
+
+.tlist-content-name span, .tlist-content-name input {
+    height: 30px !important;
+    line-height: 30px !important;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+.tlist-content-value {
+    justify-content: center;
+    width: 70px;
+    font-weight: bold !important;
+    /* padding-left: 5px; */
+    /* padding-right: 5px; */
+    padding: 6px;
+}
+
+.tlist-content-value span, .tlist-content-value input {
+    height: 30px !important;
+    line-height: 30px !important;
+    font-weight: bold !important;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+.tlist-content-value input, .tlist-content-name input {
+    border: unset;
+    /* border-bottom: 1px solid #330000; */
+    background-color: #00000011;
+    border-radius: 5px;
+    overflow: hidden;
+    -webkit-appearance: textfield !important;
+    margin: 0;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0;
+    /* <-- Apparently some margin are still there even though it's hidden */
+}
