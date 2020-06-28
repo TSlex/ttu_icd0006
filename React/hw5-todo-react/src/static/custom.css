@@ -46,6 +46,7 @@
     border-radius: 10px;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 }
 
 .tlist-content>* {
@@ -58,8 +59,6 @@
     justify-content: center;
     flex-grow: 1;
     border-right: 1px solid #330000;
-    /* padding-left: 5px; */
-    /* padding-right: 5px; */
     padding: 6px;
 }
 
@@ -75,9 +74,11 @@
     justify-content: center;
     width: 70px;
     font-weight: bold !important;
-    /* padding-left: 5px; */
-    /* padding-right: 5px; */
     padding: 6px;
+}
+
+.tlist-content-value>span {
+    color: #000000AA
 }
 
 .tlist-content-value>span, .tlist-content-value input {

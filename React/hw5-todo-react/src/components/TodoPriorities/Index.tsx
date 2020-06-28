@@ -9,6 +9,7 @@ import { styled } from '@material-ui/core/styles';
 import ReactTooltip from 'react-tooltip';
 import { red } from '@material-ui/core/colors';
 import Errors from 'components/Shared/Errors';
+import { getColor, numberToColorHsl } from 'helpers/numberToColor';
 
 export default function Index() {
     const [createModel, setCreateModel] = useState(null as ITodoPriorityPostDTO | null)
@@ -165,8 +166,12 @@ export default function Index() {
             return (
                 <div key={item.id} className="tlist-item">
                     <div className="tlist-content">
-                        <div className="tlist-content-name"><span>{item.todoPriorityName}</span></div>
-                        <div className="tlist-content-value"><span>{item.todoPrioritySort}</span></div>
+                        <div className="tlist-content-name">
+                            <span>{item.todoPriorityName}</span>
+                        </div>
+                        <div className="tlist-content-value" style={{ background: numberToColorHsl(item.todoPrioritySort, 0, 100) }}>
+                            <span>{item.todoPrioritySort}</span>
+                        </div>
                     </div>
                     <div className="tlist-controls">
                         <button className="btn btn-primary button-round" onClick={() => onEdit(item)}><span className="fas fa-pencil-alt" /></button>
