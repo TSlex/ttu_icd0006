@@ -5,9 +5,11 @@ import { AppState } from 'redux/types';
 import { ITodoPriorityGetDTO, ITodoPriorityPostDTO, ITodoPriorityPutDTO } from 'types/ITodoPriorityDTO';
 import { setGlobalLoaded } from 'redux/loading-system/actions';
 import { FormInput } from 'components/Form/FormInput';
+import { styled } from '@material-ui/core/styles';
+import ReactTooltip from 'react-tooltip';
+import { red } from '@material-ui/core/colors';
 
 export default function Index() {
-
     const [isCreating, setCreating] = useState(false)
 
     const [createModel, setCreateModel] = useState(null as ITodoPriorityPostDTO | null)
@@ -17,6 +19,20 @@ export default function Index() {
     const sPriority = useSelector((state: AppState) => state.todoPriorities.selectedPriority)
 
     const dispatch = useDispatch()
+
+    const InfoTooltip = styled(ReactTooltip)({
+        fontFamily: 'Roboto',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '10px',
+        alignItems: 'center',
+        marginTop: '-5px !important',
+        boxShadow: '0 0 10px lightgray',
+        opacity: '1 !important',
+        '& span': {
+            fontWeight: 'bold'
+        }
+    })
 
     useEffect(() => {
         dispatch(getPriorities())
@@ -68,7 +84,7 @@ export default function Index() {
                 <div className="tlist">
                     <div className="tlist-item">
                         <div className="tlist-content">
-                            <div className="tlist-content-name">
+                            <div className="tlist-content-name" data-tip data-for="priority-name">
                                 <FormInput
                                     data={
                                         {
@@ -77,7 +93,7 @@ export default function Index() {
                                         }
                                     }
                                 /></div>
-                            <div className="tlist-content-value">
+                            <div className="tlist-content-value" data-tip data-for="priority-value">
                                 <FormInput
                                     data={
                                         {
@@ -85,7 +101,8 @@ export default function Index() {
                                             ignoreClasses: false, wrapInput: false, max: 100, min: 0
                                         }
                                     }
-                                /></div>
+                                />
+                            </div>
                         </div>
                         <div className="tlist-controls">
                             <button className="btn btn-success button-round" onClick={onAddConfirm}><span className="fas fa-check" /></button>
@@ -109,7 +126,7 @@ export default function Index() {
             return (
                 <div key={item.id} className="tlist-item">
                     <div className="tlist-content">
-                        <div className="tlist-content-name">
+                        <div className="tlist-content-name" data-tip data-for="priority-name">
                             <FormInput
                                 data={
                                     {
@@ -118,7 +135,7 @@ export default function Index() {
                                     }
                                 }
                             /></div>
-                        <div className="tlist-content-value">
+                        <div className="tlist-content-value" data-tip data-for="priority-value">
                             <FormInput
                                 data={
                                     {
@@ -153,6 +170,16 @@ export default function Index() {
 
     return (
         <>
+            {/* tooltips */}
+            <InfoTooltip id="priority-value" type="light" effect="solid">
+                <span>0 - 100</span>
+                <small>(Lower - Higher)</small>
+            </InfoTooltip>
+
+            <InfoTooltip id="priority-name" type="light" effect="solid">
+                <span>Priority name</span>
+            </InfoTooltip>
+
             <div className="text-center">
                 <h4>Priorities</h4>
                 <hr />

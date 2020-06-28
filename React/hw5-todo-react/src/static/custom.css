@@ -80,7 +80,7 @@
     padding: 6px;
 }
 
-.tlist-content-value span, .tlist-content-value input {
+.tlist-content-value>span, .tlist-content-value input {
     height: 30px !important;
     line-height: 30px !important;
     font-weight: bold !important;

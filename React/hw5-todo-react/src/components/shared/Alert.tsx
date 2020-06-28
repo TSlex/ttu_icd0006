@@ -2,10 +2,10 @@ import React, { useState } from "react"
 import { randomBytes } from "crypto"
 import { useSelector } from "react-redux"
 import { AppState } from "redux/types"
-import store from "redux/store"
 
 interface IProps {
     alertData: IAlertData;
+    dismissFunction?: () => void;
 }
 
 export const AlertBox = (props: IProps) => {
@@ -15,6 +15,10 @@ export const AlertBox = (props: IProps) => {
     const onDismiss = () => {
         const element = document.getElementById(id)
         element?.remove()
+
+        if (props.dismissFunction) {
+            props.dismissFunction()
+        }
     }
 
     const renderButton = () => {
@@ -52,19 +56,4 @@ export interface IAlertData {
     message: string;
     dismissable?: boolean;
     type: AlertTypes
-}
-
-export const renderErrors = (dismissable?: boolean) => {
-
-    const errors = store.getState().notification.errors;
-
-    if (errors.length > 0) {
-        return (
-            <div key={randomBytes(5).toString()}>
-                {errors.map((item, index) => (
-                    <AlertBox key={index} alertData={{ message: item, type: AlertTypes.Danger, dismissable: dismissable ?? true }} />
-                ))}
-            </div>
-        )
-    }
 }

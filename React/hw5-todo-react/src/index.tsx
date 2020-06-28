@@ -4,7 +4,11 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import 'font-awesome/css/font-awesome.min.css';
-import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/css/all.css';
+
+import 'fontsource-roboto';
+import '@material-ui/core';
+import 'react-tooltip'
 
 import 'moment'
 

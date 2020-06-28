@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 
 import { ILoginDTO } from 'types/Identity/ILoginDTO';
 import { FormInput } from 'components/Form/FormInput';
-import { renderErrors } from 'components/Shared/Alert';
 import { login } from 'redux/account/actions';
 import { clearNotifications, setErrors } from 'redux/notification/actions';
 import { setGlobalLoaded } from 'redux/loading-system/actions';
+import Errors from 'components/Shared/Errors';
 
 export default function Login() {
 
@@ -63,7 +63,7 @@ export default function Login() {
             <div className="row align-items-center d-flex flex-column">
                 <div className="col-md-6">
                     <hr />
-                    {renderErrors()}
+                    <Errors />
                 </div>
                 <div className="col-md-4">
                     <FormInput
@@ -76,6 +76,8 @@ export default function Login() {
 
                             isValid: formValid.email
                         }}
+
+                        validationControl={(value: boolean) => setFormValid({ ...formValid, email: value })}
 
                         bindFunction={(value: any) => {
                             setLoginModel({ ...loginModel, email: value })
@@ -91,10 +93,13 @@ export default function Login() {
                         label: "Password",
 
                         isValid: formValid.password
+                    }}
 
-                    }} bindFunction={(value: any) => {
-                        setLoginModel({ ...loginModel, password: value })
-                    }} />
+                        validationControl={(value: boolean) => setFormValid({ ...formValid, password: value })}
+
+                        bindFunction={(value: any) => {
+                            setLoginModel({ ...loginModel, password: value })
+                        }} />
 
 
                     <div className="form-group">

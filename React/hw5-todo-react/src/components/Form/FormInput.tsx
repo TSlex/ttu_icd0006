@@ -5,6 +5,7 @@ interface IProps {
     inputType?: FormInputTypes;
     data: InputData | TextAreaData | CheckboxData | RadioData | SelectData;
     bindFunction?: (value: any) => void;
+    validationControl?: (value: boolean) => void
 }
 
 export enum FormInputTypes {
@@ -30,6 +31,11 @@ export const FormInput = (props: IProps) => {
             HTMLTextAreaElement
         )
     ) => {
+
+        if (props.validationControl) {
+            props.validationControl(true)
+        }
+
         const inputElement = target as HTMLInputElement & HTMLSelectElement & HTMLTextAreaElement
 
         if ((props.inputType === FormInputTypes.Input || !props.inputType) && (props.data as InputData).type === "number") {

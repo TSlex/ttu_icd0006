@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "esnext",
+      "es6"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -26,6 +27,7 @@
     ]
   },
   "include": [
-    "src", "src/types/Response/.ts"
+    "src",
+    "src/types/Response/.ts"
   ]
 }
