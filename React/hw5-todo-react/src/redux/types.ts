@@ -38,18 +38,24 @@ export type Account = {
 export type TodoTasks = {
     tasks: ITodoTaskGetDTO[];
     selectedTask: ITodoTaskGetDTO | null;
+    taskCreatingMode: boolean;
+    taskEditingMode: boolean;
 }
 
 // categories
 export type TodoCategories = {
     categories: ITodoCategoryGetDTO[];
     selectedCategory: ITodoCategoryGetDTO | null;
+    categoryCreatingMode: boolean;
+    categoryEditingMode: boolean;
 }
 
 // priorities
 export type TodoPriorities = {
     priorities: ITodoPriorityGetDTO[];
     selectedPriority: ITodoPriorityGetDTO | null;
+    priorityCreatingMode: boolean;
+    priorityEditingMode: boolean;
 }
 
 export type AppState = {

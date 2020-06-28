@@ -4,6 +4,8 @@ import { TODO_CATEGORIES_ACTION_TYPES } from "./actions";
 export const initialState: TodoCategories = {
     categories: [],
     selectedCategory: null,
+    categoryCreatingMode: false,
+    categoryEditingMode: false,
 }
 
 export const todoCategories = (
@@ -11,10 +13,7 @@ export const todoCategories = (
     action: TodoCategoryAction
 ) => {
 
-    const newState: TodoCategories = {
-        categories: state.categories,
-        selectedCategory: state.selectedCategory,
-    }
+    const newState: TodoCategories = { ...state }
 
     switch (action.type) {
         case TODO_CATEGORIES_ACTION_TYPES.GET_CATEGORIES:

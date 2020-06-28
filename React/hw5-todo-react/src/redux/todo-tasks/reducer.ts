@@ -4,6 +4,8 @@ import { TODO_TASKS_ACTION_TYPES } from "./actions";
 export const initialState: TodoTasks = {
     tasks: [],
     selectedTask: null,
+    taskCreatingMode: false,
+    taskEditingMode: false,
 }
 
 export const todoTasks = (
@@ -11,11 +13,7 @@ export const todoTasks = (
     action: TodoTaskAction
 ) => {
 
-    const newState: TodoTasks = {
-        tasks: state.tasks,
-        selectedTask: state.selectedTask,
-    }
-
+    const newState: TodoTasks = { ...state }
     switch (action.type) {
         case TODO_TASKS_ACTION_TYPES.GET_TASKS:
         case TODO_TASKS_ACTION_TYPES.SELECT_TASK:

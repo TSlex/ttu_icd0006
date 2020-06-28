@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPriorities, selectPriority, unselectPriority, deletePriority, editPriority, createPriority } from 'redux/todo-priorities/actions';
+import { getPriorities, selectPriority, unselectPriority, deletePriority, editPriority, createPriority, setPrioritiesCreating } from 'redux/todo-priorities/actions';
 import { AppState } from 'redux/types';
 import { ITodoPriorityGetDTO, ITodoPriorityPostDTO, ITodoPriorityPutDTO } from 'types/ITodoPriorityDTO';
 import { setGlobalLoaded } from 'redux/loading-system/actions';
@@ -8,15 +8,16 @@ import { FormInput } from 'components/Form/FormInput';
 import { styled } from '@material-ui/core/styles';
 import ReactTooltip from 'react-tooltip';
 import { red } from '@material-ui/core/colors';
+import Errors from 'components/Shared/Errors';
 
 export default function Index() {
-    const [isCreating, setCreating] = useState(false)
-
     const [createModel, setCreateModel] = useState(null as ITodoPriorityPostDTO | null)
     const [editModel, setEditModel] = useState({} as ITodoPriorityPutDTO)
 
     const priorities = useSelector((state: AppState) => state.todoPriorities.priorities)
     const sPriority = useSelector((state: AppState) => state.todoPriorities.selectedPriority)
+
+    const isCreating = useSelector((state: AppState) => state.todoPriorities.priorityCreatingMode)
 
     const dispatch = useDispatch()
 
@@ -49,25 +50,25 @@ export default function Index() {
         }
 
         setCreateModel({ todoPriorityName: "", todoPrioritySort: 0 })
-        setCreating(true)
+        dispatch(setPrioritiesCreating(true))
     }
 
     const onAddConfirm = () => {
         dispatch(createPriority(createModel!))
-        setCreating(false)
     }
 
     const onAddReject = () => {
-        setCreating(false)
+        dispatch(setPrioritiesCreating(false))
     }
 
     const onEdit = (item: ITodoPriorityGetDTO) => {
         dispatch(selectPriority(item))
+
+        setEditModel({ ...item })
     }
 
     const onEditConfirm = () => {
-        dispatch(editPriority(sPriority!))
-        dispatch(unselectPriority())
+        dispatch(editPriority(editModel!))
     }
 
     const onEditReject = () => {
@@ -92,6 +93,8 @@ export default function Index() {
                                             ignoreClasses: false, wrapInput: false, max: 40
                                         }
                                     }
+
+                                    bindFunction={(value: string) => { setCreateModel({ ...createModel!, todoPriorityName: value }) }}
                                 /></div>
                             <div className="tlist-content-value" data-tip data-for="priority-value">
                                 <FormInput
@@ -101,6 +104,8 @@ export default function Index() {
                                             ignoreClasses: false, wrapInput: false, max: 100, min: 0
                                         }
                                     }
+
+                                    bindFunction={(value: number) => { setCreateModel({ ...createModel!, todoPrioritySort: Number(value) }) }}
                                 />
                             </div>
                         </div>
@@ -134,6 +139,8 @@ export default function Index() {
                                         ignoreClasses: false, wrapInput: false, max: 40
                                     }
                                 }
+
+                                bindFunction={(value: any) => { setEditModel({ ...editModel!, todoPriorityName: value }) }}
                             /></div>
                         <div className="tlist-content-value" data-tip data-for="priority-value">
                             <FormInput
@@ -143,6 +150,8 @@ export default function Index() {
                                         ignoreClasses: false, wrapInput: false, max: 100, min: 0
                                     }
                                 }
+
+                                bindFunction={(value: number) => { setEditModel({ ...editModel!, todoPrioritySort: Number(value) }) }}
                             /></div>
                     </div>
                     <div className="tlist-controls">
@@ -183,13 +192,20 @@ export default function Index() {
             <div className="text-center">
                 <h4>Priorities</h4>
                 <hr />
+                <div className="row align-items-center d-flex flex-column">
+                    <div className="col-md-6">
+                        <Errors />
+                    </div>
+                </div>
             </div>
 
             {/* creating model */}
             {renderCreatingModel()}
 
             <div className="tlist mt-2">
-                {priorities.map((item: ITodoPriorityGetDTO) => renderItem(item))}
+                {priorities
+                    .sort((item1, item2) => item1.todoPrioritySort <= item2.todoPrioritySort ? 1 : -1)
+                    .map((item: ITodoPriorityGetDTO) => renderItem(item))}
             </div>
         </>
     )
