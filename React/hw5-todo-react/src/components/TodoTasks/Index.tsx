@@ -16,7 +16,19 @@ export default function Index() {
             </InfoTooltip> */}
 
             <div className="text-center">
-                <h4>Priorities</h4>
+                <span>
+                    <button className="btn btn-primary">BY DAY</button>
+                    <button className="btn btn-primary ml-1">BY MONTH</button>
+                    <button className="btn btn-primary ml-1 mr-1">BY YEAR</button>
+                    |
+                    <button className="btn btn-primary ml-1">
+                        <i className="fas fa-sort-up"></i>
+                        <i className="fas fa-sort-down"></i>
+                    </button>
+                    <button className="btn btn-primary ml-1">
+                        <i className="fas fa-filter"></i>
+                    </button>
+                </span>
                 <hr />
                 <div className="row align-items-center d-flex flex-column">
                     <div className="col-md-6">

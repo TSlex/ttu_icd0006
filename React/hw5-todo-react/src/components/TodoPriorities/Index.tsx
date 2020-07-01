@@ -7,7 +7,6 @@ import { setGlobalLoaded } from 'redux/loading-system/actions';
 import { FormInput } from 'components/Form/FormInput';
 import { styled } from '@material-ui/core/styles';
 import ReactTooltip from 'react-tooltip';
-import { red } from '@material-ui/core/colors';
 import Errors from 'components/Shared/Errors';
 import { getColor, numberToColorHsl } from 'helpers/numberToColor';
 
