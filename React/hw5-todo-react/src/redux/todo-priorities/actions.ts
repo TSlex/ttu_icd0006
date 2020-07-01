@@ -130,7 +130,7 @@ export const deletePriority = (priority: ITodoPriorityGetDTO) => async (dispatch
     dispatch(setLocalLoading(false))
 }
 
-const deletePriorityResult = (priority: ITodoPriorityGetDTO): any => ({
+const deletePriorityResult = (priority: ITodoPriorityGetDTO): TodoPriorityDeletePriorityAction => ({
     type: TODO_PRIORITIES_ACTION_TYPES.DELETE_PRIORITY,
     priority: priority,
 })

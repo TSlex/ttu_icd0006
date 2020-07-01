@@ -127,7 +127,7 @@ export const deleteCategory = (category: ITodoCategoryGetDTO) => async (dispatch
     dispatch(setLocalLoading(false))
 }
 
-const deleteCategoryResult = (category: ITodoCategoryGetDTO): any => ({
+const deleteCategoryResult = (category: ITodoCategoryGetDTO): TodoCategoryDeleteCategoryAction => ({
     type: TODO_CATEGORIES_ACTION_TYPES.DELETE_CATEGORY,
     category: category,
 })

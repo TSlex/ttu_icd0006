@@ -1,4 +1,4 @@
-import { ITodoTaskPutDTO } from './../types/ITodoTaskDTO';
+import { ITodoTaskPutDTO, ITodoTaskPostDTO } from './../types/ITodoTaskDTO';
 import { ITodoCategoryGetDTO, ITodoCategoryPostDTO, ITodoCategoryPutDTO } from 'types/ITodoCategoryDTO';
 import { ITodoTaskGetDTO } from 'types/ITodoTaskDTO';
 import { ITodoPriorityGetDTO, ITodoPriorityPutDTO, ITodoPriorityPostDTO } from 'types/ITodoPriorityDTO';
@@ -154,7 +154,7 @@ export type AccountAction =
 
 // tasks
 export type TodoTaskBaseAction = {
-    task: ITodoTaskGetDTO
+    task: ITodoTaskGetDTO | ITodoTaskPostDTO | ITodoTaskPutDTO
 }
 
 export type TodoTaskGetTasksAction = {

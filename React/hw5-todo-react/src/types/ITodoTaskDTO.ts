@@ -1,4 +1,4 @@
-export interface ITodoTaskGetDTO extends ITodoTaskPostDTO{
+export interface ITodoTaskGetDTO extends ITodoTaskPostDTO {
     id: number;
 }
 
@@ -7,7 +7,7 @@ export interface ITodoTaskPostDTO {
     todoTaskSort: number;
 
     createdDT: Date;
-    dueDT: string | null;
+    dueDT: Date | null;
 
     isCompleted: boolean;
     isArchived: boolean;
@@ -16,5 +16,5 @@ export interface ITodoTaskPostDTO {
     todoPriorityId: number;
 }
 
-export interface ITodoTaskPutDTO extends ITodoTaskGetDTO{
+export interface ITodoTaskPutDTO extends ITodoTaskGetDTO {
 }
