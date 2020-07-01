@@ -186,6 +186,7 @@ export default function Index() {
         <>
             {/* tooltips */}
             <InfoTooltip id="priority-value" type="light" effect="solid">
+                <span>Priority value</span>
                 <span>0 - 100</span>
                 <small>(Lower - Higher)</small>
             </InfoTooltip>

@@ -185,6 +185,7 @@ export default function Index() {
         <>
             {/* tooltips */}
             <InfoTooltip id="category-value" type="light" effect="solid">
+                <span>Category priority</span>
                 <span>0 - 100</span>
                 <small>(Lower - Higher)</small>
             </InfoTooltip>
