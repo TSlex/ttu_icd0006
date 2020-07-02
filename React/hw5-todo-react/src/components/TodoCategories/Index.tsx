@@ -208,7 +208,7 @@ export default function Index() {
             {renderCreatingModel()}
 
             <div className="tlist mt-2">
-                {categories
+                {Object.values(categories)
                     .sort((item1, item2) => item1.todoCategorySort <= item2.todoCategorySort ? 1 : -1)
                     .map((item: ITodoCategoryGetDTO) => renderItem(item))}
             </div>

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Errors from 'components/Shared/Errors';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTasks } from 'redux/todo-tasks/actions';
+import { getTasks, setTasksCreating, createTask, selectTask, editTask, unselectTask, deleteTask } from 'redux/todo-tasks/actions';
 import { setGlobalLoaded } from 'redux/loading-system/actions';
 import { AppState } from 'redux/types';
-import { ITodoTaskGetDTO } from 'types/ITodoTaskDTO';
+import { ITodoTaskGetDTO, ITodoTaskPutDTO, ITodoTaskPostDTO } from 'types/ITodoTaskDTO';
 import { numberToColorHsl } from 'helpers/numberToColor';
-import styled from '@material-ui/core/styles/styled';
 
 enum renderOptions {
     ARCHIVED,
@@ -21,7 +20,14 @@ export default function Index() {
     const [sortingReversed, setSortingReversed] = useState(false)
     const [renderMode, setRenderMode] = useState(renderOptions.DAY)
 
+    const [createModel, setCreateModel] = useState(null as ITodoTaskPostDTO | null)
+    const [editModel, setEditModel] = useState({} as ITodoTaskPutDTO)
+
     const tasks = useSelector((state: AppState) => state.todoTasks.tasks)
+    const categories = useSelector((state: AppState) => state.todoCategories.categories)
+    const priorities = useSelector((state: AppState) => state.todoPriorities.priorities)
+
+    const isCreating = useSelector((state: AppState) => state.todoCategories.categoryCreatingMode)
 
     const dispatch = useDispatch()
 
@@ -33,6 +39,41 @@ export default function Index() {
         dispatch(setGlobalLoaded(true));
         return () => { dispatch(setGlobalLoaded(false)) };
     }, [])
+
+    const onAdd = () => {
+        if (isCreating) {
+            return
+        }
+
+        setCreateModel({ todoTaskName: "", todoTaskSort: 0, todoCategoryId: -1, todoPriorityId: -1 } as ITodoTaskPostDTO)
+        dispatch(setTasksCreating(true))
+    }
+
+    const onAddConfirm = () => {
+        dispatch(createTask(createModel!))
+    }
+
+    const onAddReject = () => {
+        dispatch(setTasksCreating(false))
+    }
+
+    const onEdit = (item: ITodoTaskGetDTO) => {
+        dispatch(selectTask(item))
+
+        setEditModel({ ...item })
+    }
+
+    const onEditConfirm = () => {
+        dispatch(editTask(editModel!))
+    }
+
+    const onEditReject = () => {
+        dispatch(unselectTask())
+    }
+
+    const onDelete = (item: ITodoTaskGetDTO) => {
+        dispatch(deleteTask(item))
+    }
 
     const render = () => {
         switch (renderMode) {
@@ -53,28 +94,38 @@ export default function Index() {
         return (
             <>
                 <div className="tlist mt-2">
-                    {tasks.map((item: ITodoTaskGetDTO) => (
-                        <div key={item.id} className="task-container">
-                            <div className="task-body">
-                                <div className="task-headers">
-                                    <span>{item.todoCategoryId}</span>
-                                    <span>{item.todoPriorityId}</span>
+                    {Object.values(tasks)
+                        .map((item: ITodoTaskGetDTO) => (
+                            <div key={item.id} className="task-container">
+                                <div className="task-body">
+                                    <div className="task-headers">
+                                        <span style={{
+                                            background: numberToColorHsl(categories[item.todoCategoryId]?.todoCategorySort ?? 0, 0, 100)
+                                        }}>
+                                            {categories[item.todoCategoryId]?.todoCategoryName ?? ""}
+                                        </span>
+                                        <span style={{
+                                            background: "gray", fontWeight: "bold",
+                                            color: numberToColorHsl(priorities[item.todoPriorityId]?.todoPrioritySort ?? 0, 0, 100)
+                                        }}>
+                                            {priorities[item.todoPriorityId]?.todoPriorityName ?? ""}
+                                        </span>
+                                    </div>
+                                    <div className="task-content">
+                                        <div className="task-name">
+                                            <span>{item.todoTaskName}</span>
+                                        </div>
+                                        <div className="task-deadline">
+                                            <span>{new Date().toLocaleString()}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="task-content">
-                                    <div className="task-name">
-                                        <span>{item.todoTaskName}</span>
-                                    </div>
-                                    <div className="task-deadline">
-                                        <span>{new Date().toLocaleString()}</span>
-                                    </div>
+                                <div className="tlist-controls">
+                                    <button className="btn btn-primary button-round"><span className="fas fa-pencil-alt" /></button>
+                                    <button className="btn btn-danger button-round"><span className="fas fa-trash" /></button>
                                 </div>
                             </div>
-                            <div className="tlist-controls">
-                                <button className="btn btn-primary button-round"><span className="fas fa-pencil-alt" /></button>
-                                <button className="btn btn-danger button-round"><span className="fas fa-trash" /></button>
-                            </div>
-                        </div>
-                    ))}
+                        ))}
                 </div>
             </>
         )

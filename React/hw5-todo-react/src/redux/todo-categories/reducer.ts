@@ -1,9 +1,10 @@
+import { ITodoCategoryGetDTO } from './../../types/ITodoCategoryDTO';
 import { TodoCategories, TodoCategoryAction } from "redux/types";
 import { TODO_CATEGORIES_ACTION_TYPES } from "./actions";
 
 export const initialState: TodoCategories = {
-    categories: [],
-    categoriesById: {},
+    // categories: [],
+    categories: {},
     selectedCategory: null,
     categoryCreatingMode: false,
     categoryEditingMode: false,
@@ -18,7 +19,13 @@ export const todoCategories = (
 
     switch (action.type) {
         case TODO_CATEGORIES_ACTION_TYPES.GET_CATEGORIES:
-            return { ...newState, categories: (action as any).categories }
+            const categories: Record<string, ITodoCategoryGetDTO> = {};
+
+            ((action as any).categories as ITodoCategoryGetDTO[]).forEach(
+                (item) => { categories[item.id] = item }
+            )
+
+            return { ...newState, categories: categories }
 
         case TODO_CATEGORIES_ACTION_TYPES.SELECT_CATEGORY:
             return { ...newState, selectedCategory: (action as any).category }
@@ -30,7 +37,11 @@ export const todoCategories = (
             return { ...newState, categoryCreatingMode: (action as any).payload }
 
         case TODO_CATEGORIES_ACTION_TYPES.CREATE_CATEGORY:
-            newState.categories.push((action as any).category)
+            // newState.categories.push((action as any).category)
+
+            const categoryToCreate = (action as any).category
+
+            newState.categories[categoryToCreate.id] = categoryToCreate
 
             return { ...newState }
 
@@ -51,23 +62,30 @@ export const todoCategories = (
         case TODO_CATEGORIES_ACTION_TYPES.DELETE_CATEGORY:
 
             const categoryToDelete = (action as any).category
-            let categoryToDeleteIndex = -1;
 
-            newState.categories.forEach((item, index) => {
-                if (item.id === categoryToDelete.id) {
-                    categoryToDeleteIndex = index;
-                }
-            })
+            delete newState.categories[categoryToDelete.id]
 
-            if (categoryToDeleteIndex < 0) return state;
+            return { ...newState, categories: { ...newState.categories } }
 
-            return {
-                ...newState,
-                categories: [
-                    ...newState.categories.slice(0, categoryToDeleteIndex),
-                    ...newState.categories.slice(categoryToDeleteIndex + 1)
-                ]
-            }
+        // let categoryToDeleteIndex = -1;
+
+        // newState.categories.forEach((item, index) => {
+        //     if (item.id === categoryToDelete.id) {
+        //         categoryToDeleteIndex = index;
+        //     }
+        // })
+
+        // if (categoryToDeleteIndex < 0) return state;
+
+        // return {
+        //     ...newState,
+        //     categories: [
+        //         ...newState.categories.slice(0, categoryToDeleteIndex),
+        //         ...newState.categories.slice(categoryToDeleteIndex + 1)
+        //     ]
+        // }
+
+
 
         default: return state;
     }

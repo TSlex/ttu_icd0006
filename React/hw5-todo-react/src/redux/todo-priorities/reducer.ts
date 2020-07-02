@@ -1,9 +1,10 @@
+import { ITodoPriorityGetDTO } from './../../types/ITodoPriorityDTO';
 import { TodoPriorities, TodoPriorityAction } from "redux/types";
 import { TODO_PRIORITIES_ACTION_TYPES } from "./actions";
 
 export const initialState: TodoPriorities = {
-    priorities: [],
-    prioritiesById: {},
+    // priorities: [],
+    priorities: {},
     selectedPriority: null,
     priorityCreatingMode: false,
     priorityEditingMode: false,
@@ -18,7 +19,13 @@ export const todoPriorities = (
 
     switch (action.type) {
         case TODO_PRIORITIES_ACTION_TYPES.GET_PRIORITIES:
-            return { ...newState, priorities: (action as any).priorities }
+            const priorities: Record<string, ITodoPriorityGetDTO> = {};
+
+            ((action as any).priorities as ITodoPriorityGetDTO[]).forEach(
+                (item) => { priorities[item.id] = item }
+            )
+
+            return { ...newState, priorities: priorities }
 
         case TODO_PRIORITIES_ACTION_TYPES.SELECT_PRIORITY:
             return { ...newState, selectedPriority: (action as any).priority }
@@ -30,7 +37,11 @@ export const todoPriorities = (
             return { ...newState, priorityCreatingMode: (action as any).payload }
 
         case TODO_PRIORITIES_ACTION_TYPES.CREATE_PRIORITY:
-            newState.priorities.push((action as any).priority)
+            // newState.priorities.push((action as any).priority)
+
+            const priorityToCreate = (action as any).priority
+
+            newState.priorities[priorityToCreate.id] = priorityToCreate
 
             return { ...newState }
 
@@ -51,23 +62,28 @@ export const todoPriorities = (
         case TODO_PRIORITIES_ACTION_TYPES.DELETE_PRIORITY:
 
             const priorityToDelete = (action as any).priority
-            let priorityToDeleteIndex = -1;
 
-            newState.priorities.forEach((item, index) => {
-                if (item.id === priorityToDelete.id) {
-                    priorityToDeleteIndex = index;
-                }
-            })
+            delete newState.priorities[priorityToDelete.id]
 
-            if (priorityToDeleteIndex < 0) return state;
+            return { ...newState, priorities: { ...newState.priorities } }
 
-            return {
-                ...newState,
-                priorities: [
-                    ...newState.priorities.slice(0, priorityToDeleteIndex),
-                    ...newState.priorities.slice(priorityToDeleteIndex + 1)
-                ]
-            }
+        // let priorityToDeleteIndex = -1;
+
+        // newState.priorities.forEach((item, index) => {
+        //     if (item.id === priorityToDelete.id) {
+        //         priorityToDeleteIndex = index;
+        //     }
+        // })
+
+        // if (priorityToDeleteIndex < 0) return state;
+
+        // return {
+        //     ...newState,
+        //     priorities: [
+        //         ...newState.priorities.slice(0, priorityToDeleteIndex),
+        //         ...newState.priorities.slice(priorityToDeleteIndex + 1)
+        //     ]
+        // }
 
         default: return state;
     }

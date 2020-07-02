@@ -208,7 +208,7 @@ export default function Index() {
             {renderCreatingModel()}
 
             <div className="tlist mt-2">
-                {priorities
+                {Object.values(priorities)
                     .sort((item1, item2) => item1.todoPrioritySort <= item2.todoPrioritySort ? 1 : -1)
                     .map((item: ITodoPriorityGetDTO) => renderItem(item))}
             </div>

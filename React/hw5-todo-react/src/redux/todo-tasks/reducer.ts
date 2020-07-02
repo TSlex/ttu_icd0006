@@ -3,8 +3,8 @@ import { TODO_TASKS_ACTION_TYPES } from "./actions";
 import { ITodoTaskGetDTO } from "types/ITodoTaskDTO";
 
 export const initialState: TodoTasks = {
-    tasks: [],
-    tasksById: {},
+    // tasks: [],
+    tasks: {},
     selectedTask: null,
     taskCreatingMode: false,
     taskEditingMode: false,
@@ -20,14 +20,13 @@ export const todoTasks = (
     switch (action.type) {
         case TODO_TASKS_ACTION_TYPES.GET_TASKS:
 
-            const idTasks: Record<string, ITodoTaskGetDTO> = {};
+            const tasks: Record<string, ITodoTaskGetDTO> = {};
 
-            ((action as any).tasks as ITodoTaskGetDTO[]).forEach((item) => idTasks[item.id] = item)
+            ((action as any).tasks as ITodoTaskGetDTO[]).forEach(
+                (item) => { tasks[item.id] = item }
+            )
 
-            return {
-                ...newState, tasks: (action as any).tasks,
-                tasksById: idTasks
-            }
+            return { ...newState, tasks: tasks }
 
         case TODO_TASKS_ACTION_TYPES.SELECT_TASK:
             return { ...newState, selectedTask: (action as any).task }
@@ -40,7 +39,9 @@ export const todoTasks = (
 
         case TODO_TASKS_ACTION_TYPES.CREATE_TASK:
 
-            newState.tasks[(action as any).task.id] = (action as any).task
+            const taskToCreate = (action as any).task
+
+            newState.tasks[taskToCreate.id] = taskToCreate
 
             return { ...newState }
 
@@ -65,23 +66,29 @@ export const todoTasks = (
         case TODO_TASKS_ACTION_TYPES.DELETE_TASK:
 
             const taskToDelete = (action as any).task
-            let taskToDeleteIndex = -1;
 
-            newState.tasks.forEach((item, index) => {
-                if (item.id === taskToDelete.id) {
-                    taskToDeleteIndex = index;
-                }
-            })
+            delete newState.tasks[taskToDelete.id]
 
-            if (taskToDeleteIndex < 0) return state;
+            return { ...newState, tasks: { ...newState.tasks } }
 
-            return {
-                ...newState,
-                tasks: [
-                    ...newState.tasks.slice(0, taskToDeleteIndex),
-                    ...newState.tasks.slice(taskToDeleteIndex + 1)
-                ]
-            }
+
+        // let taskToDeleteIndex = -1;
+
+        // newState.tasks.forEach((item, index) => {
+        //     if (item.id === taskToDelete.id) {
+        //         taskToDeleteIndex = index;
+        //     }
+        // })
+
+        // if (taskToDeleteIndex < 0) return state;
+
+        // return {
+        //     ...newState,
+        //     tasks: [
+        //         ...newState.tasks.slice(0, taskToDeleteIndex),
+        //         ...newState.tasks.slice(taskToDeleteIndex + 1)
+        //     ]
+        // }
 
         default: return state;
     }
