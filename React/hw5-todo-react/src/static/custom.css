@@ -144,3 +144,26 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     border-radius: 10px 10px 0 0;
     padding: 3px 20px;
 }
+
+.selector {
+    background: white;
+    border: 1px solid #330000;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.selector-section {
+    padding: 5px;
+}
+
+.selector-section-options {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 400px;
+    min-width: 300px;
+}
+
+.selector-section-options>* {
+    margin: 3px;
+    box-shadow: 0 0 4px gray;
+}

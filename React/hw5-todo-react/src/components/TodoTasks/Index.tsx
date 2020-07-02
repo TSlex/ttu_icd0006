@@ -6,6 +6,8 @@ import { setGlobalLoaded } from 'redux/loading-system/actions';
 import { AppState } from 'redux/types';
 import { ITodoTaskGetDTO, ITodoTaskPutDTO, ITodoTaskPostDTO } from 'types/ITodoTaskDTO';
 import { numberToColorHsl } from 'helpers/numberToColor';
+import ModalBlock from 'components/Shared/ModalBlock';
+import Selector from 'components/Form/Selector';
 
 enum renderOptions {
     ARCHIVED,
@@ -16,6 +18,8 @@ enum renderOptions {
 }
 
 export default function Index() {
+
+    const [isSelectorOpen, setSelectorOpen] = useState(true)
 
     const [sortingReversed, setSortingReversed] = useState(false)
     const [renderMode, setRenderMode] = useState(renderOptions.DAY)
@@ -172,7 +176,7 @@ export default function Index() {
                     <button className="btn btn-primary ml-1" onClick={() => setSortingReversed(!sortingReversed)}>
                         {sortingReversed ? <i className="fas fa-sort-up"></i> : <i className="fas fa-sort-down"></i>}
                     </button>
-                    <button className="btn btn-primary ml-1 mr-1">
+                    <button className="btn btn-primary ml-1 mr-1" onClick={() => setSelectorOpen(true)}>
                         <i className="fas fa-filter"></i>
                     </button>
                     |
@@ -188,6 +192,28 @@ export default function Index() {
 
             {/* creating model */}
             {/* {renderCreatingModel()} */}
+
+            {isSelectorOpen &&
+                <ModalBlock closeCallBack={() => setSelectorOpen(false)}>
+                    <Selector
+                        closeCallBack={() => setSelectorOpen(false)}
+                        selectData={[
+                            {
+                                sectionName: "Categories",
+                                data: [{ name: "test", selected: true }]
+                            },
+                            {
+                                sectionName: "Priorities",
+                                data: [{ name: "test", selected: false }]
+                            },
+                            {
+                                sectionName: "Other",
+                                data: [{ name: "test", selected: false }]
+                            }
+                        ]}
+                    />
+                </ModalBlock>
+            }
 
             {render()}
         </>
