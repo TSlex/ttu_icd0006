@@ -112,6 +112,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     display: flex;
     width: 700px;
     padding: 10px;
+    align-items: center;
 }
 
 /* .task-body {} */

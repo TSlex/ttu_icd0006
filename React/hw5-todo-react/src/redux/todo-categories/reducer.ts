@@ -3,6 +3,7 @@ import { TODO_CATEGORIES_ACTION_TYPES } from "./actions";
 
 export const initialState: TodoCategories = {
     categories: [],
+    categoriesById: {},
     selectedCategory: null,
     categoryCreatingMode: false,
     categoryEditingMode: false,

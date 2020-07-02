@@ -69,6 +69,10 @@ export default function Index() {
                                     </div>
                                 </div>
                             </div>
+                            <div className="tlist-controls">
+                                <button className="btn btn-primary button-round"><span className="fas fa-pencil-alt" /></button>
+                                <button className="btn btn-danger button-round"><span className="fas fa-trash" /></button>
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -117,9 +121,11 @@ export default function Index() {
                     <button className="btn btn-primary ml-1" onClick={() => setSortingReversed(!sortingReversed)}>
                         {sortingReversed ? <i className="fas fa-sort-up"></i> : <i className="fas fa-sort-down"></i>}
                     </button>
-                    <button className="btn btn-primary ml-1">
+                    <button className="btn btn-primary ml-1 mr-1">
                         <i className="fas fa-filter"></i>
                     </button>
+                    |
+                    <button className="btn btn-primary ml-1"><i className="fas fa-plus"></i></button>
                 </span>
                 <hr />
                 <div className="row align-items-center d-flex flex-column">

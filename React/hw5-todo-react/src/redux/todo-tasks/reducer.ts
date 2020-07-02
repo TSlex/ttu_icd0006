@@ -1,8 +1,10 @@
 import { TodoTasks, TodoTaskAction } from "redux/types";
 import { TODO_TASKS_ACTION_TYPES } from "./actions";
+import { ITodoTaskGetDTO } from "types/ITodoTaskDTO";
 
 export const initialState: TodoTasks = {
     tasks: [],
+    tasksById: {},
     selectedTask: null,
     taskCreatingMode: false,
     taskEditingMode: false,
@@ -11,13 +13,21 @@ export const initialState: TodoTasks = {
 export const todoTasks = (
     state: TodoTasks = initialState,
     action: TodoTaskAction
-) => {
+): TodoTasks => {
 
     const newState: TodoTasks = { ...state }
 
     switch (action.type) {
         case TODO_TASKS_ACTION_TYPES.GET_TASKS:
-            return { ...newState, tasks: (action as any).tasks }
+
+            const idTasks: Record<string, ITodoTaskGetDTO> = {};
+
+            ((action as any).tasks as ITodoTaskGetDTO[]).forEach((item) => idTasks[item.id] = item)
+
+            return {
+                ...newState, tasks: (action as any).tasks,
+                tasksById: idTasks
+            }
 
         case TODO_TASKS_ACTION_TYPES.SELECT_TASK:
             return { ...newState, selectedTask: (action as any).task }
@@ -29,7 +39,8 @@ export const todoTasks = (
             return { ...newState, taskCreatingMode: (action as any).payload }
 
         case TODO_TASKS_ACTION_TYPES.CREATE_TASK:
-            newState.tasks.push((action as any).task)
+
+            newState.tasks[(action as any).task.id] = (action as any).task
 
             return { ...newState }
 

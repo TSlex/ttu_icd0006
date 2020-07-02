@@ -37,6 +37,7 @@ export type Account = {
 // tasks
 export type TodoTasks = {
     tasks: ITodoTaskGetDTO[];
+    tasksById: Record<string, ITodoTaskGetDTO>;
     selectedTask: ITodoTaskGetDTO | null;
     taskCreatingMode: boolean;
     taskEditingMode: boolean;
@@ -45,6 +46,7 @@ export type TodoTasks = {
 // categories
 export type TodoCategories = {
     categories: ITodoCategoryGetDTO[];
+    categoriesById: Record<string, ITodoCategoryGetDTO>;
     selectedCategory: ITodoCategoryGetDTO | null;
     categoryCreatingMode: boolean;
     categoryEditingMode: boolean;
@@ -53,6 +55,7 @@ export type TodoCategories = {
 // priorities
 export type TodoPriorities = {
     priorities: ITodoPriorityGetDTO[];
+    prioritiesById: Record<string, ITodoPriorityGetDTO>;
     selectedPriority: ITodoPriorityGetDTO | null;
     priorityCreatingMode: boolean;
     priorityEditingMode: boolean;

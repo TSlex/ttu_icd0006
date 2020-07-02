@@ -3,6 +3,7 @@ import { TODO_PRIORITIES_ACTION_TYPES } from "./actions";
 
 export const initialState: TodoPriorities = {
     priorities: [],
+    prioritiesById: {},
     selectedPriority: null,
     priorityCreatingMode: false,
     priorityEditingMode: false,

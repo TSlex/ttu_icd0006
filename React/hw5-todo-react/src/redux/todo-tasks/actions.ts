@@ -1,3 +1,4 @@
+import { getCategories } from './../todo-categories/actions';
 import {
     TodoTaskGetTasksAction,
     TodoTaskSelectTaskAction,
@@ -11,6 +12,7 @@ import { ITodoTaskGetDTO, ITodoTaskPostDTO, ITodoTaskPutDTO } from "types/ITodoT
 import { setLocalLoading } from 'redux/loading-system/actions';
 import TodoTasksApi from 'services/TodoTasksApi';
 import { setErrors } from 'redux/notification/actions';
+import { getPriorities } from 'redux/todo-priorities/actions';
 
 export enum TODO_TASKS_ACTION_TYPES {
     GET_TASKS = "TODO_TASKS:GET_TASKS",
@@ -29,6 +31,8 @@ export enum TODO_TASKS_ACTION_TYPES {
 export const getTasks = () => async (dispatch: any) => {
 
     dispatch(setLocalLoading(true))
+    dispatch(getCategories())
+    dispatch(getPriorities())
 
     let result = await TodoTasksApi.Index()
 
