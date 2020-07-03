@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Errors from 'components/Shared/Errors';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTasks, setTasksCreating, createTask, selectTask, editTask, unselectTask, deleteTask } from 'redux/todo-tasks/actions';
+import { getTasks, setTasksCreating, createTask, selectTask, editTask, unselectTask, deleteTask, setArchived, setCompleted } from 'redux/todo-tasks/actions';
 import { setGlobalLoaded } from 'redux/loading-system/actions';
 import { AppState } from 'redux/types';
 import { ITodoTaskGetDTO, ITodoTaskPutDTO, ITodoTaskPostDTO } from 'types/ITodoTaskDTO';
@@ -30,12 +30,14 @@ export default function Index() {
     const [createModelDue, setCreateModelDue] = useState(null as Date | null)
 
     const [editModel, setEditModel] = useState({} as ITodoTaskPutDTO)
+    const [editModelDue, setEditModelDue] = useState(null as Date | null)
 
     const tasks = useSelector((state: AppState) => state.todoTasks.tasks)
     const categories = useSelector((state: AppState) => state.todoCategories.categories)
     const priorities = useSelector((state: AppState) => state.todoPriorities.priorities)
 
     const isCreating = useSelector((state: AppState) => state.todoTasks.taskCreatingMode)
+    const sTask = useSelector((state: AppState) => state.todoTasks.selectedTask)
 
     const dispatch = useDispatch()
 
@@ -78,11 +80,20 @@ export default function Index() {
     }
 
     const onEditConfirm = () => {
-        dispatch(editTask(editModel!))
+        let model = { ...editModel!, dueDT: editModelDue } as ITodoTaskPutDTO
+        dispatch(editTask(model))
     }
 
     const onEditReject = () => {
         dispatch(unselectTask())
+    }
+
+    const onSetArchived = (item: ITodoTaskGetDTO) => {
+        dispatch(setArchived(item))
+    }
+
+    const onSetCompleted = (item: ITodoTaskGetDTO) => {
+        dispatch(setCompleted(item))
     }
 
     const onDelete = (item: ITodoTaskGetDTO) => {
@@ -104,45 +115,67 @@ export default function Index() {
         }
     }
 
+    const renderTask = (task: ITodoTaskGetDTO) => {
+        return (
+            <>
+                {task.id === sTask?.id
+                    && renderEditModel()
+                    || (
+                        <div key={task.id} className="task-container">
+                            <div className="task-body">
+                                <div className="task-headers">
+                                    <span style={{
+                                        background: numberToColorHsl(categories[task.todoCategoryId]?.todoCategorySort ?? 0, 0, 100)
+                                    }}>
+                                        {categories[task.todoCategoryId]?.todoCategoryName ?? ""}
+                                    </span>
+                                    <span style={{
+                                        background: "gray", fontWeight: "bold",
+                                        color: numberToColorHsl(priorities[task.todoPriorityId]?.todoPrioritySort ?? 0, 0, 100)
+                                    }}>
+                                        {priorities[task.todoPriorityId]?.todoPriorityName ?? ""}
+                                    </span>
+                                </div>
+                                <div className="task-content">
+                                    <div className="task-name">
+                                        <span>{task.todoTaskName}</span>
+                                    </div>
+                                    {
+                                        task.dueDT &&
+                                        <div className="task-deadline">
+                                            <span>{moment(task.dueDT).format("YYYY-MM-DD, H:mm")}</span>
+                                        </div>
+                                    }
+                                    <span>{task.isArchived ? " archived" : " not archived"}</span>
+                                    <span>{task.isCompleted ? " completed" : " not completed  "}</span>
+                                </div>
+                            </div>
+                            <div className="tlist-controls">
+                                <button className="btn btn-primary button-round" onClick={() => onEdit(task)}>
+                                    <i className="fas fa-pencil-alt"></i>
+                                </button>
+                                <button className="btn btn-danger button-round" onClick={() => onDelete(task)}>
+                                    <i className="fas fa-trash"></i>
+                                </button>
+                                <button className="btn btn-primary button-round" onClick={() => onSetCompleted(task)}>
+                                    <i className="fas fa-check-double"></i>
+                                </button>
+                                <button className="btn btn-danger button-round" onClick={() => onSetArchived(task)}>
+                                    <i className="fas fa-archive"></i>
+                                </button>
+                            </div>
+                        </div>
+                    )}
+            </>
+        )
+    }
+
     const renderByDay = () => {
         return (
             <>
                 <div className="tlist mt-2">
                     {Object.values(tasks)
-                        .map((item: ITodoTaskGetDTO) => (
-                            <div key={item.id} className="task-container">
-                                <div className="task-body">
-                                    <div className="task-headers">
-                                        <span style={{
-                                            background: numberToColorHsl(categories[item.todoCategoryId]?.todoCategorySort ?? 0, 0, 100)
-                                        }}>
-                                            {categories[item.todoCategoryId]?.todoCategoryName ?? ""}
-                                        </span>
-                                        <span style={{
-                                            background: "gray", fontWeight: "bold",
-                                            color: numberToColorHsl(priorities[item.todoPriorityId]?.todoPrioritySort ?? 0, 0, 100)
-                                        }}>
-                                            {priorities[item.todoPriorityId]?.todoPriorityName ?? ""}
-                                        </span>
-                                    </div>
-                                    <div className="task-content">
-                                        <div className="task-name">
-                                            <span>{item.todoTaskName}</span>
-                                        </div>
-                                        {
-                                            item.dueDT &&
-                                            <div className="task-deadline">
-                                                <span>{moment(item.dueDT).format("YYYY-MM-DD, H:mm")}</span>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                                <div className="tlist-controls">
-                                    <button className="btn btn-primary button-round"><span className="fas fa-pencil-alt" /></button>
-                                    <button className="btn btn-danger button-round"><span className="fas fa-trash" /></button>
-                                </div>
-                            </div>
-                        ))}
+                        .map((task: ITodoTaskGetDTO) => <React.Fragment key={task.id}>{renderTask(task)}</React.Fragment>)}
                 </div>
             </>
         )
@@ -162,6 +195,66 @@ export default function Index() {
 
     const renderArchived = () => {
         return (<><span>archive</span></>)
+    }
+
+    const renderEditModel = () => {
+        return (
+            <div className="text-center">
+                <FormInput
+                    inputType={FormInputTypes.Input}
+                    data={{
+                        type: "text", initialValue: sTask!.todoTaskName, max: 40,
+                        label: "Task name"
+                    }}
+
+                    bindFunction={(value: string) => { setEditModel({ ...editModel!, todoTaskName: value }) }}
+                />
+                <FormInput
+                    inputType={FormInputTypes.Select}
+                    data={{
+                        name: "category-id",
+                        id: "category-id",
+                        initialValue: sTask!.todoCategoryId.toString(),
+                        options: Object.values(categories)
+                            .sort((item1, item2) => item1.todoCategorySort <= item2.todoCategorySort ? 1 : -1)
+                            .map((item) => ({ value: item.id.toString(), displayValue: item.todoCategoryName })),
+                        label: "Category"
+                    }}
+
+                    bindFunction={(value: string) => { setEditModel({ ...editModel!, todoCategoryId: Number(value) }) }}
+                />
+                <FormInput
+                    inputType={FormInputTypes.Select}
+                    data={{
+                        name: "priority-id",
+                        id: "priority-id",
+                        initialValue: sTask!.todoPriorityId.toString(),
+                        options: Object.values(priorities)
+                            .sort((item1, item2) => item1.todoPrioritySort <= item2.todoPrioritySort ? 1 : -1)
+                            .map((item) => ({ value: item.id.toString(), displayValue: item.todoPriorityName })),
+                        label: "Priority"
+                    }}
+
+                    bindFunction={(value: string) => { setEditModel({ ...editModel!, todoPriorityId: Number(value) }) }}
+                />
+                <FormInput
+                    inputType={FormInputTypes.Datetime}
+                    data={{
+                        name: "deadline",
+                        id: "deadline",
+                        label: "Deadline",
+                        initialValue: sTask!.dueDT?.toString() ?? ""
+                    }}
+
+                    bindFunction={(value: Date) => { setEditModelDue(value) }}
+                />
+
+                <div className="form-group">
+                    <button type="submit" className="btn btn-success mr-1" onClick={onEditConfirm}>Confirm</button>
+                    <button type="submit" className="btn btn-secondary" onClick={onEditReject}>Cancel</button>
+                </div>
+            </div>
+        )
     }
 
     const renderCreatingModel = () => {

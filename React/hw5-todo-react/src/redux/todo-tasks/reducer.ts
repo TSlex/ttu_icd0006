@@ -51,17 +51,19 @@ export const todoTasks = (
         case TODO_TASKS_ACTION_TYPES.EDIT_TASK:
             const taskToUpdate = (action as any).task
 
-            if (newState.selectedTask) {
-                newState.selectedTask.isArchived = taskToUpdate.isArchived
-                newState.selectedTask.isCompleted = taskToUpdate.isCompleted
-                newState.selectedTask.todoCategoryId = taskToUpdate.todoCategoryId
-                newState.selectedTask.todoPriorityId = taskToUpdate.todoPriorityId
-                newState.selectedTask.todoTaskName = taskToUpdate.todoTaskName
-                newState.selectedTask.todoTaskSort = taskToUpdate.todoTaskSort
-                newState.selectedTask.dueDT = taskToUpdate.dueDT
-            }
+            // if (newState.selectedTask) {
+            //     newState.selectedTask.isArchived = taskToUpdate.isArchived
+            //     newState.selectedTask.isCompleted = taskToUpdate.isCompleted
+            //     newState.selectedTask.todoCategoryId = taskToUpdate.todoCategoryId
+            //     newState.selectedTask.todoPriorityId = taskToUpdate.todoPriorityId
+            //     newState.selectedTask.todoTaskName = taskToUpdate.todoTaskName
+            //     newState.selectedTask.todoTaskSort = taskToUpdate.todoTaskSort
+            //     newState.selectedTask.dueDT = taskToUpdate.dueDT
+            // }
 
-            return { ...newState }
+            newState.tasks[taskToUpdate.id] = { ...newState.tasks[taskToUpdate.id] ?? null, ...taskToUpdate }
+
+            return { ...newState, tasks: { ...newState.tasks } }
 
         case TODO_TASKS_ACTION_TYPES.DELETE_TASK:
 

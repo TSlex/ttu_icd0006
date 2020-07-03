@@ -212,6 +212,7 @@ export const FormInput = (props: IProps) => {
                         <input
                             ref={datetimeInput}
                             style={props.data.style}
+                            defaultValue={state.inputValue}
                             name={props.data.name ?? randomBytes(10).toString()}
                             id={props.data.id ?? randomBytes(10).toString()}
                             type="text"

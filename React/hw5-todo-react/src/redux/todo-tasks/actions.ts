@@ -133,3 +133,37 @@ const deleteTaskResult = (task: ITodoTaskGetDTO): TodoTaskDeleteTaskAction => ({
     type: TODO_TASKS_ACTION_TYPES.DELETE_TASK,
     task: task,
 })
+
+export const setCompleted = (task: ITodoTaskGetDTO) => async (dispatch: any) => {
+    dispatch(setLocalLoading(true))
+
+    task.isCompleted = !task.isCompleted
+
+    let result = await TodoTasksApi.Edit(task)
+
+    if (result.errors?.length > 0) {
+        dispatch(setErrors(result.errors));
+
+    } else {
+        dispatch(editTaskResult(task))
+    }
+
+    dispatch(setLocalLoading(false))
+}
+
+export const setArchived = (task: ITodoTaskGetDTO) => async (dispatch: any) => {
+    dispatch(setLocalLoading(true))
+
+    task.isArchived = !task.isArchived
+
+    let result = await TodoTasksApi.Edit(task)
+
+    if (result.errors?.length > 0) {
+        dispatch(setErrors(result.errors));
+
+    } else {
+        dispatch(editTaskResult(task))
+    }
+
+    dispatch(setLocalLoading(false))
+}
