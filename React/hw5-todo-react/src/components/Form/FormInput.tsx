@@ -1,5 +1,8 @@
-import React, { useState, CSSProperties, useEffect } from "react";
+import React, { useState, CSSProperties, useEffect, useRef } from "react";
 import { Label } from "./Label";
+import flatpickr from "flatpickr";
+import moment from "moment";
+import { randomBytes } from "crypto";
 
 interface IProps {
     inputType?: FormInputTypes;
@@ -13,16 +16,39 @@ export enum FormInputTypes {
     TextArea,
     Checkbox,
     Radio,
-    Select
+    Select,
+    Datetime
 }
 
 export const FormInput = (props: IProps) => {
+
+    const datetimeInput = useRef(null)
+
+    useEffect(() => {
+        if (datetimeInput.current) {
+            flatpickr.l10ns.default.firstDayOfWeek = 1
+            flatpickr(".flatpickr-datetime", {
+                enableTime: true,
+                time_24hr: true,
+                dateFormat: "Y-m-d H:i",
+                onChange: (value) => {
+                    onDateChange(value[0])
+                }
+            });
+        }
+    }, [])
 
     const [state, setState] = useState({
         checkBoxBalue: (props.data as CheckboxData).initialValue ?? false,
         radioValues: (props.data as RadioData).initialValue ?? [],
         inputValue: (props.data as InputData).initialValue ?? "",
     });
+
+    const onDateChange = (value: Date) => {
+        if (props.bindFunction) {
+            return props.bindFunction(value)
+        }
+    }
 
     const onChange = (target:
         EventTarget & (
@@ -102,9 +128,9 @@ export const FormInput = (props: IProps) => {
                         <textarea
                             style={props.data.style}
                             value={state.inputValue}
-                            name={props.data.name}
+                            name={props.data.name ?? randomBytes(10).toString()}
+                            id={props.data.id ?? randomBytes(10).toString()}
                             className={[props.data.class, "form-control", (props.data.isValid === false ? 'is-invalid' : null)].join(" ").trim()}
-                            id={props.data.id}
                             rows={(props.data as TextAreaData).rowsCount}
                             disabled={props.data.disabled}
                             onChange={(e) => onChange(e.target)}
@@ -119,10 +145,10 @@ export const FormInput = (props: IProps) => {
                         <input
                             style={props.data.style}
                             checked={state.checkBoxBalue}
-                            name={props.data.name}
+                            name={props.data.name ?? randomBytes(10).toString()}
+                            id={props.data.id ?? randomBytes(10).toString()}
                             type="checkbox"
                             className={[props.data.class, "form-check-input", (props.data.isValid === false ? 'is-invalid' : null)].join(" ").trim()}
-                            id={props.data.id}
                             disabled={props.data.disabled}
                             onChange={(e) => onChange(e.target)}
                         />
@@ -140,10 +166,10 @@ export const FormInput = (props: IProps) => {
                                         style={props.data.style}
                                         checked={item.value}
                                         value={index}
-                                        name={props.data.name}
+                                        name={props.data.name ?? randomBytes(10).toString()}
                                         type="radio"
                                         className={[props.data.class, "form-check-input", (props.data.isValid === false ? 'is-invalid' : null)].join(" ").trim()}
-                                        id={props.data.id + `:${index}`}
+                                        id={props.data.id ? randomBytes(10).toString() : props.data.id + `:${index}`}
                                         disabled={item.disabled}
                                         onChange={(e) => onChange(e.target)}
                                     />
@@ -161,12 +187,13 @@ export const FormInput = (props: IProps) => {
                         <select
                             style={props.data.style}
                             value={state.inputValue}
-                            name={props.data.name}
+                            name={props.data.name ?? randomBytes(10).toString()}
+                            id={props.data.id ?? randomBytes(10).toString()}
                             className={[props.data.class, "form-control", (props.data.isValid === false ? 'is-invalid' : null)].join(" ").trim()}
-                            id={props.data.id}
                             disabled={props.data.disabled}
                             onChange={(e) => onChange(e.target)}
                         >
+                            {state.inputValue === "" && <option>...</option>}
                             {
                                 (props.data as SelectData).options.map((item, index) => (
                                     <option value={item.value} key={index}>
@@ -175,6 +202,22 @@ export const FormInput = (props: IProps) => {
                                 ))
                             }
                         </select>
+                    </>
+                )
+
+            case FormInputTypes.Datetime:
+                return wrapInput(
+                    <>
+                        <Label data={props.data} />
+                        <input
+                            ref={datetimeInput}
+                            style={props.data.style}
+                            name={props.data.name ?? randomBytes(10).toString()}
+                            id={props.data.id ?? randomBytes(10).toString()}
+                            type="text"
+                            className={[props.data.class, (props.data.ignoreClasses ? null : "form-control flatpickr-datetime"), (props.data.isValid === false ? 'is-invalid' : null)].join(" ").trim()}
+                            disabled={props.data.disabled}
+                        />
                     </>
                 )
 
@@ -187,10 +230,10 @@ export const FormInput = (props: IProps) => {
 
                             style={props.data.style}
                             value={state.inputValue}
-                            name={props.data.name}
+                            name={props.data.name ?? randomBytes(10).toString()}
+                            id={props.data.id ?? randomBytes(10).toString()}
                             type={(props.data as InputData).type ?? "text"}
                             className={[props.data.class, (props.data.ignoreClasses ? null : "form-control"), (props.data.isValid === false ? 'is-invalid' : null)].join(" ").trim()}
-                            id={props.data.id}
                             disabled={props.data.disabled}
                             onChange={(e) => onChange(e.target)}
                         />
@@ -250,4 +293,8 @@ export interface RadioData extends BaseData {
 export interface SelectData extends BaseData {
     initialValue?: string;
     options: { value: string; displayValue?: string; }[]
+}
+
+export interface DatetimeData extends BaseData {
+    initialValue?: string;
 }

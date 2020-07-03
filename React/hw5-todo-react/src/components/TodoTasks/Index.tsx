@@ -8,6 +8,8 @@ import { ITodoTaskGetDTO, ITodoTaskPutDTO, ITodoTaskPostDTO } from 'types/ITodoT
 import { numberToColorHsl } from 'helpers/numberToColor';
 import ModalBlock from 'components/Shared/ModalBlock';
 import Selector from 'components/Form/Selector';
+import { FormInput, FormInputTypes } from 'components/Form/FormInput';
+import moment from 'moment';
 
 enum renderOptions {
     ARCHIVED,
@@ -19,19 +21,21 @@ enum renderOptions {
 
 export default function Index() {
 
-    const [isSelectorOpen, setSelectorOpen] = useState(true)
+    const [isSelectorOpen, setSelectorOpen] = useState(false)
 
     const [sortingReversed, setSortingReversed] = useState(false)
     const [renderMode, setRenderMode] = useState(renderOptions.DAY)
 
     const [createModel, setCreateModel] = useState(null as ITodoTaskPostDTO | null)
+    const [createModelDue, setCreateModelDue] = useState(null as Date | null)
+
     const [editModel, setEditModel] = useState({} as ITodoTaskPutDTO)
 
     const tasks = useSelector((state: AppState) => state.todoTasks.tasks)
     const categories = useSelector((state: AppState) => state.todoCategories.categories)
     const priorities = useSelector((state: AppState) => state.todoPriorities.priorities)
 
-    const isCreating = useSelector((state: AppState) => state.todoCategories.categoryCreatingMode)
+    const isCreating = useSelector((state: AppState) => state.todoTasks.taskCreatingMode)
 
     const dispatch = useDispatch()
 
@@ -41,7 +45,11 @@ export default function Index() {
 
     useEffect(() => {
         dispatch(setGlobalLoaded(true));
-        return () => { dispatch(setGlobalLoaded(false)) };
+        return () => {
+            dispatch(setGlobalLoaded(false));
+            dispatch(setTasksCreating(false));
+            dispatch(unselectTask())
+        };
     }, [])
 
     const onAdd = () => {
@@ -49,12 +57,14 @@ export default function Index() {
             return
         }
 
-        setCreateModel({ todoTaskName: "", todoTaskSort: 0, todoCategoryId: -1, todoPriorityId: -1 } as ITodoTaskPostDTO)
+        setCreateModel({ todoTaskName: "", todoCategoryId: -1, todoPriorityId: -1, dueDT: null } as ITodoTaskPostDTO)
+        setCreateModelDue(null)
         dispatch(setTasksCreating(true))
     }
 
     const onAddConfirm = () => {
-        dispatch(createTask(createModel!))
+        let model = { ...createModel!, dueDT: createModelDue } as ITodoTaskPostDTO
+        dispatch(createTask(model))
     }
 
     const onAddReject = () => {
@@ -119,9 +129,12 @@ export default function Index() {
                                         <div className="task-name">
                                             <span>{item.todoTaskName}</span>
                                         </div>
-                                        <div className="task-deadline">
-                                            <span>{new Date().toLocaleString()}</span>
-                                        </div>
+                                        {
+                                            item.dueDT &&
+                                            <div className="task-deadline">
+                                                <span>{moment(item.dueDT).format("YYYY-MM-DD, H:mm")}</span>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                                 <div className="tlist-controls">
@@ -149,6 +162,67 @@ export default function Index() {
 
     const renderArchived = () => {
         return (<><span>archive</span></>)
+    }
+
+    const renderCreatingModel = () => {
+        if (isCreating) {
+            return (
+                <div className="text-center">
+                    <FormInput
+                        inputType={FormInputTypes.Input}
+                        data={{
+                            type: "text", initialValue: createModel!.todoTaskName, max: 40,
+                            label: "Task name"
+                        }}
+
+                        bindFunction={(value: string) => { setCreateModel({ ...createModel!, todoTaskName: value }) }}
+                    />
+                    <FormInput
+                        inputType={FormInputTypes.Select}
+                        data={{
+                            name: "category-id",
+                            id: "category-id",
+                            initialValue: "",
+                            options: Object.values(categories)
+                                .sort((item1, item2) => item1.todoCategorySort <= item2.todoCategorySort ? 1 : -1)
+                                .map((item) => ({ value: item.id.toString(), displayValue: item.todoCategoryName })),
+                            label: "Category"
+                        }}
+
+                        bindFunction={(value: string) => { setCreateModel({ ...createModel!, todoCategoryId: Number(value) }) }}
+                    />
+                    <FormInput
+                        inputType={FormInputTypes.Select}
+                        data={{
+                            name: "priority-id",
+                            id: "priority-id",
+                            initialValue: "",
+                            options: Object.values(priorities)
+                                .sort((item1, item2) => item1.todoPrioritySort <= item2.todoPrioritySort ? 1 : -1)
+                                .map((item) => ({ value: item.id.toString(), displayValue: item.todoPriorityName })),
+                            label: "Priority"
+                        }}
+
+                        bindFunction={(value: string) => { setCreateModel({ ...createModel!, todoPriorityId: Number(value) }) }}
+                    />
+                    <FormInput
+                        inputType={FormInputTypes.Datetime}
+                        data={{
+                            name: "deadline",
+                            id: "deadline",
+                            label: "Deadline"
+                        }}
+
+                        bindFunction={(value: Date) => { setCreateModelDue(value) }}
+                    />
+
+                    <div className="form-group">
+                        <button type="submit" className="btn btn-success mr-1" onClick={onAddConfirm}>Create</button>
+                        <button type="submit" className="btn btn-secondary" onClick={onAddReject}>Cancel</button>
+                    </div>
+                </div>
+            )
+        }
     }
 
     return (
@@ -180,7 +254,9 @@ export default function Index() {
                         <i className="fas fa-filter"></i>
                     </button>
                     |
-                    <button className="btn btn-primary ml-1"><i className="fas fa-plus"></i></button>
+                    <button className="btn btn-primary ml-1" onClick={onAdd}>
+                        <i className="fas fa-plus"></i>
+                    </button>
                 </span>
                 <hr />
                 <div className="row align-items-center d-flex flex-column">
@@ -191,7 +267,7 @@ export default function Index() {
             </div>
 
             {/* creating model */}
-            {/* {renderCreatingModel()} */}
+            {renderCreatingModel()}
 
             {isSelectorOpen &&
                 <ModalBlock closeCallBack={() => setSelectorOpen(false)}>

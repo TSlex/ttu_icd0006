@@ -41,7 +41,11 @@ export default function Index() {
 
     useEffect(() => {
         dispatch(setGlobalLoaded(true));
-        return () => { dispatch(setGlobalLoaded(false)) };
+        return () => {
+            dispatch(setGlobalLoaded(false));
+            dispatch(setCategoriesCreating(false));
+            dispatch(unselectCategory());
+        };
     }, [])
 
     const onAdd = () => {
@@ -111,7 +115,7 @@ export default function Index() {
                         </div>
                         <div className="tlist-controls">
                             <button className="btn btn-success button-round" onClick={onAddConfirm}><span className="fas fa-check" /></button>
-                            <button className="btn btn-danger button-round" onClick={onAddReject}><span className="fas fa-times" /></button>
+                            <button className="btn btn-secondary button-round" onClick={onAddReject}><span className="fas fa-times" /></button>
                         </div>
                     </div>
                 </div>

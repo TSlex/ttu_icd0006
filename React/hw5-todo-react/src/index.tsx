@@ -10,6 +10,8 @@ import 'fontsource-roboto';
 import '@material-ui/core';
 import 'react-tooltip'
 
+import '../node_modules/flatpickr/dist/flatpickr.min.css';
+
 import 'moment'
 
 import './static/site.css'
