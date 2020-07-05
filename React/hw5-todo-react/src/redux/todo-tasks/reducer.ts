@@ -1,6 +1,7 @@
 import { TodoTasks, TodoTaskAction } from "redux/types";
 import { TODO_TASKS_ACTION_TYPES } from "./actions";
 import { ITodoTaskGetDTO } from "types/ITodoTaskDTO";
+import moment from "moment-timezone";
 
 export const initialState: TodoTasks = {
     // tasks: [],
@@ -23,7 +24,14 @@ export const todoTasks = (
             const tasks: Record<string, ITodoTaskGetDTO> = {};
 
             ((action as any).tasks as ITodoTaskGetDTO[]).forEach(
-                (item) => { tasks[item.id] = item }
+                (item) => {
+
+                    if (item.dueDT) {
+                        item.dueDT = moment.tz(item.dueDT, "UTC").toDate()
+                    }
+
+                    tasks[item.id] = item
+                }
             )
 
             return { ...newState, tasks: tasks }

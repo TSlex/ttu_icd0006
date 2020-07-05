@@ -3,6 +3,7 @@ import { Label } from "./Label";
 import flatpickr from "flatpickr";
 import moment from "moment";
 import { randomBytes } from "crypto";
+import { parseTimeZone, changeToUTC } from "helpers/dateParser";
 
 interface IProps {
     inputType?: FormInputTypes;
@@ -212,7 +213,7 @@ export const FormInput = (props: IProps) => {
                         <input
                             ref={datetimeInput}
                             style={props.data.style}
-                            defaultValue={state.inputValue}
+                            defaultValue={state.inputValue === "" ? "" : moment(state.inputValue).format("YYYY-MM-DD H:mm")}
                             name={props.data.name ?? randomBytes(10).toString()}
                             id={props.data.id ?? randomBytes(10).toString()}
                             type="text"
