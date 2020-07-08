@@ -113,9 +113,13 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     width: 700px;
     padding: 10px;
     align-items: center;
+    position: relative;
+    justify-content: center;
 }
 
-/* .task-body {} */
+/* .task-body {
+    position: relative;
+} */
 
 .task-content {
     width: 550px;
@@ -128,9 +132,9 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     align-items: center;
 }
 
-.task-name {}
+/* .task-name {} */
 
-.task-deadline {}
+/* .task-deadline {} */
 
 .task-headers {
     display: flex;
@@ -159,11 +163,15 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 .selector-section-options {
     display: flex;
     flex-wrap: wrap;
-    max-width: 400px;
+    max-width: 500px;
     min-width: 300px;
 }
 
 .selector-section-options>* {
-    margin: 3px;
+    margin: 4px;
     box-shadow: 0 0 4px gray;
+}
+
+.buttons-with-margin>* {
+    margin-left: 6px;
 }

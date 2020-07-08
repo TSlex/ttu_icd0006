@@ -6,6 +6,7 @@ import { AppState } from "redux/types";
 import moment from "moment";
 import { selectTask, deleteTask, setArchived, setCompleted, createTask, setTasksCreating, editTask, unselectTask } from "redux/todo-tasks/actions";
 import { FormInput, FormInputTypes } from "components/Form/FormInput";
+import { ReactComponent as Times } from "static/assets/close.svg"
 
 interface IProps {
     mode?: TodoTaskModes
@@ -239,56 +240,68 @@ export function TodoTask(props: IProps) {
                                 {priorities[taskRead.todoPriorityId]?.todoPriorityName ?? ""}
                             </span>
                         </div>
-                        <div className="task-content">
-                            <div className="task-name">
-                                <span>{taskRead.todoTaskName}</span>
-                            </div>
-                            {
-                                taskRead.dueDT &&
-                                <div className="task-deadline">
-                                    <span>{moment(taskRead.dueDT).format("YYYY-MM-DD, H:mm")}</span>
+                        <div style={{ position: "relative" }}>
+                            {!taskRead.isArchived &&
+                                <div style={{ position: "absolute", top: "50%", left: -30, transform: "translate(-50%, -50%)" }}>
+                                    {!taskRead.isCompleted ?
+                                        <button className="btn btn-success button-round" onClick={() => onSetCompleted(taskRead)}>
+                                            <i className="fas fa-check-double"></i>
+                                        </button>
+                                        :
+                                        <div style={{ position: "relative" }}>
+                                            <button className="btn btn-secondary button-round" onClick={() => onSetCompleted(taskRead)}>
+                                                <Times style={{ position: "absolute", zIndex: 100, top: 0, left: 0 }} />
+                                                <i className="fas fa-check-double"></i>
+                                            </button>
+                                        </div>
+                                    }
                                 </div>
                             }
-                            <span>{taskRead.isArchived ? " archived" : " not archived"}</span>
-                            <span>{taskRead.isCompleted ? " completed" : " not completed  "}</span>
+                            <div className="buttons-with-margin" style={{ position: "absolute", top: "50%", right: -50, transform: "translate(50%, -50%)" }}>
+                                {!taskRead.isArchived &&
+                                    <button className="btn btn-primary button-round" onClick={() => onEdit(taskRead)}>
+                                        <i className="fas fa-pencil-alt"></i>
+                                    </button>
+                                }
+
+                                {taskRead.isArchived ?
+                                    <button className={"btn btn-primary button-round"}
+                                        onClick={() => onSetArchived(taskRead)} style={{ position: "relative" }}>
+                                        <i className="fas fa-sort-up text-primary"
+                                            style={{ position: "absolute", transform: "translate(-50%, -20%)", zIndex: 100, fontSize: "1em" }}></i>
+                                        <i className="fas fa-archive"
+                                            style={{ position: "absolute", transform: "translate(-50%, -50%)" }}></i>
+                                    </button>
+                                    :
+                                    <button className={"btn btn-secondary button-round"}
+                                        onClick={() => onSetArchived(taskRead)} style={{ position: "relative" }}>
+                                        <i className="fas fa-sort-down text-secondary"
+                                            style={{ position: "absolute", transform: "translate(-50%, -60%)", zIndex: 100, fontSize: "1em" }}></i>
+                                        <i className="fas fa-archive"
+                                            style={{ position: "absolute", transform: "translate(-50%, -50%)" }}></i>
+                                    </button>
+                                }
+
+                                {taskRead.isArchived &&
+                                    <button className="btn btn-danger button-round" onClick={() => onDelete(taskRead)}>
+                                        <i className="fas fa-trash"></i>
+                                    </button>
+                                }
+                            </div>
+                            <div className="task-content">
+                                <div className="task-name">
+                                    <span>{taskRead.todoTaskName}</span>
+                                </div>
+                                {
+                                    taskRead.dueDT &&
+                                    <div className="task-deadline">
+                                        <span>{moment(taskRead.dueDT).format("YYYY-MM-DD, H:mm")}</span>
+                                    </div>
+                                }
+                                {/* <span>{taskRead.isArchived ? " archived" : " not archived"}</span> */}
+                                {/* <span>{taskRead.isCompleted ? " completed" : " not completed  "}</span> */}
+                            </div>
                         </div>
-                    </div>
-                    <div className="tlist-controls">
-                        {!taskRead.isArchived &&
-                            <button className="btn btn-primary button-round" onClick={() => onEdit(taskRead)}>
-                                <i className="fas fa-pencil-alt"></i>
-                            </button>
-                        }
-
-                        {!taskRead.isArchived &&
-                            <button className="btn btn-primary button-round" onClick={() => onSetCompleted(taskRead)}>
-                                <i className="fas fa-check-double"></i>
-                            </button>
-                        }
-
-                        {taskRead.isArchived ?
-                            <button className={"btn btn-primary button-round"}
-                                onClick={() => onSetArchived(taskRead)} style={{ position: "relative" }}>
-                                <i className="fas fa-sort-up text-primary"
-                                    style={{ position: "absolute", transform: "translate(-50%, -20%)", zIndex: 100, fontSize: "1em" }}></i>
-                                <i className="fas fa-archive"
-                                    style={{ position: "absolute", transform: "translate(-50%, -50%)" }}></i>
-                            </button>
-                            :
-                            <button className={"btn btn-secondary button-round"}
-                                onClick={() => onSetArchived(taskRead)} style={{ position: "relative" }}>
-                                <i className="fas fa-sort-down text-secondary"
-                                    style={{ position: "absolute", transform: "translate(-50%, -60%)", zIndex: 100, fontSize: "1em" }}></i>
-                                <i className="fas fa-archive"
-                                    style={{ position: "absolute", transform: "translate(-50%, -50%)" }}></i>
-                            </button>
-                        }
-
-                        {taskRead.isArchived &&
-                            <button className="btn btn-danger button-round" onClick={() => onDelete(taskRead)}>
-                                <i className="fas fa-trash"></i>
-                            </button>
-                        }
                     </div>
                 </div>
             )

@@ -19,7 +19,7 @@ export default function ModalBlock(props: IProps) {
 
     return (
         <div id="modal-block" style={{
-            position: "absolute", left: "0px", top: "0px",
+            position: "fixed", left: "0px", top: "0px",
             height: "100%", width: "100%", background: "rgba(0, 0, 0, 0.133)", zIndex: 100
         }} onClick={onClose}>
             <div style={{

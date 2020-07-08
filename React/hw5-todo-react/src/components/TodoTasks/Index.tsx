@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Errors from 'components/Shared/Errors';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTasks, setTasksCreating, createTask, selectTask, editTask, unselectTask, deleteTask, setArchived, setCompleted } from 'redux/todo-tasks/actions';
+import { getTasks, setTasksCreating, unselectTask } from 'redux/todo-tasks/actions';
 import { setGlobalLoaded } from 'redux/loading-system/actions';
 import { AppState } from 'redux/types';
 import { ITodoTaskGetDTO, ITodoTaskPutDTO, ITodoTaskPostDTO } from 'types/ITodoTaskDTO';
-import { numberToColorHsl } from 'helpers/numberToColor';
 import ModalBlock from 'components/Shared/ModalBlock';
 import Selector from 'components/Form/Selector';
-import { FormInput, FormInputTypes } from 'components/Form/FormInput';
 import moment from 'moment';
 import { TodoTask, TodoTaskModes } from './TodoTask';
+import { ITodoCategoryGetDTO } from 'types/ITodoCategoryDTO';
+import { ITodoPriorityGetDTO } from 'types/ITodoPriorityDTO';
 
 enum renderOptions {
     ARCHIVED,
@@ -21,8 +21,10 @@ enum renderOptions {
 }
 
 export default function Index() {
-
     const [isSelectorOpen, setSelectorOpen] = useState(false)
+    const [filterOptions, setFilterOptions] = useState(
+        [] as { sectionName?: string, data: { name: string, selected: boolean }[], multiChoise?: boolean }[]
+    )
 
     const [sortingReversed, setSortingReversed] = useState(false)
     const [renderMode, setRenderMode] = useState(renderOptions.DAY)
@@ -52,6 +54,35 @@ export default function Index() {
     }, [])
 
     useEffect(() => {
+        setFilterOptions([
+            {
+                sectionName: "Categories",
+                data: Object.values(categories).sort((item1, item2) => item1.todoCategorySort > item2.todoCategorySort ? 1 : -1).map((item) => (
+                    { name: item.todoCategoryName, selected: true }
+                )),
+                multiChoise: true
+            },
+            {
+                sectionName: "Priorities",
+                data: Object.values(priorities).sort((item1, item2) => item1.todoPrioritySort > item2.todoPrioritySort ? 1 : -1).map((item) => (
+                    { name: item.todoPriorityName, selected: true }
+                )),
+                multiChoise: true
+            },
+            {
+                sectionName: "Other",
+                data: [
+                    { name: "EXPIRED", selected: true },
+                    { name: "COMPLETED", selected: true },
+                    { name: "NOT COMPLETED", selected: true },
+                    { name: "NOT EXPIRED", selected: true },
+                ],
+                multiChoise: true
+            }
+        ])
+    }, [categories, priorities])
+
+    useEffect(() => {
         dispatch(setGlobalLoaded(true));
         return () => {
             dispatch(setGlobalLoaded(false));
@@ -79,20 +110,70 @@ export default function Index() {
             const priority_1 = priorities[task_1.todoPriorityId]
             const priority_2 = priorities[task_2.todoPriorityId]
 
-            if (priority_1.todoPrioritySort > priority_2.todoPrioritySort) {
-                return -1
-            } else if (priority_1.todoPrioritySort < priority_2.todoPrioritySort) {
-                return 1
+            const result = _sortByPriorities(priority_1, priority_2)
+
+            if (result != 0) {
+                return result
             } else {
-                if (category_1.todoCategorySort > category_2.todoCategorySort) {
-                    return -1
-                } else if (category_1.todoCategorySort < category_2.todoCategorySort) {
-                    return 1
-                } else {
-                    return 0
-                }
+                return _sortByCategories(category_1, category_2)
             }
         })
+    }
+
+    const _sortByCategories = (category_1: ITodoCategoryGetDTO, category_2: ITodoCategoryGetDTO): 1 | 0 | -1 => {
+        if (category_1.todoCategorySort > category_2.todoCategorySort) {
+            return -1
+        } else if (category_1.todoCategorySort < category_2.todoCategorySort) {
+            return 1
+        } else {
+            return 0
+        }
+    }
+
+    const _sortByPriorities = (priority_1: ITodoPriorityGetDTO, priority_2: ITodoPriorityGetDTO): 1 | 0 | -1 => {
+        if (priority_1.todoPrioritySort > priority_2.todoPrioritySort) {
+            return -1
+        } else if (priority_1.todoPrioritySort < priority_2.todoPrioritySort) {
+            return 1
+        } else {
+            return 0
+        }
+    }
+
+    const filterTask = (task: ITodoTaskGetDTO): boolean => {
+
+        const categoriesSection = filterOptions.filter(section => section.sectionName?.toLocaleLowerCase() === "categories")[0]
+        const prioritiesSection = filterOptions.filter(section => section.sectionName?.toLocaleLowerCase() === "priorities")[0]
+        const otherSection = filterOptions.filter(section => section.sectionName?.toLocaleLowerCase() === "other")[0]
+
+        if (otherSection) {
+            const expiredOption = otherSection.data.filter(option => option.name.toLocaleLowerCase() === "expired")[0]
+            const notExpiredOption = otherSection.data.filter(option => option.name.toLocaleLowerCase() === "not expired")[0]
+            const completedOption = otherSection.data.filter(option => option.name.toLocaleLowerCase() === "completed")[0]
+            const notCompletedOption = otherSection.data.filter(option => option.name.toLocaleLowerCase() === "not completed")[0]
+
+            if (!completedOption.selected && task.isCompleted) return false
+            if (!notCompletedOption.selected && !task.isCompleted) return false
+
+            if (!expiredOption.selected && moment(task.dueDT) < moment()) return false
+            if (!notExpiredOption.selected && moment(task.dueDT) >= moment()) return false
+        }
+
+        if (categoriesSection) {
+            const categoryName = categories[task.todoCategoryId].todoCategoryName
+            const categoryOption = categoriesSection.data.filter(option => option.name.toLocaleLowerCase() === categoryName.toLocaleLowerCase())[0]
+
+            if (!categoryOption?.selected) return false
+        }
+
+        if (prioritiesSection) {
+            const priorityName = priorities[task.todoPriorityId].todoPriorityName
+            const priorityOption = prioritiesSection.data.filter(option => option.name.toLocaleLowerCase() === priorityName.toLocaleLowerCase())[0]
+
+            if (!priorityOption?.selected) return false
+        }
+
+        return (renderMode === renderOptions.ARCHIVED) === task.isArchived
     }
 
     const render = () => {
@@ -120,11 +201,15 @@ export default function Index() {
                     .sort((key1, key2) => daySections[key1].sort > daySections[key2].sort ? 1 : -1)
                     .map((key: keyof typeof daySections) => (
                         <React.Fragment key={key}>
-                            <h3>{key.toLocaleUpperCase()}</h3>
+                            <h3 className='mt'>{key.toLocaleUpperCase()}</h3>
+                            {/* <hr /> */}
                             <div className="tlist mt-2">
                                 {daySections[key].tasks
                                     .map((task: ITodoTaskGetDTO) => <React.Fragment key={task.id}>{renderTask(task)}</React.Fragment>)}
                             </div>
+                            <br />
+                            <br />
+                            <br />
                         </React.Fragment>
                     ))}
             </>
@@ -141,7 +226,7 @@ export default function Index() {
 
         let diffDays = 0;
 
-        sortTasks(Object.values(tasks)).filter((tasks) => !tasks.isArchived).forEach((item) => {
+        sortTasks(Object.values(tasks)).filter(filterTask).forEach((item) => {
             sectionName = ""
             sort = -1;
 
@@ -191,7 +276,7 @@ export default function Index() {
 
         let diffDays = 0;
 
-        sortTasks(Object.values(tasks)).filter((tasks) => !tasks.isArchived).forEach((item) => {
+        sortTasks(Object.values(tasks)).filter(filterTask).forEach((item) => {
             sectionName = ""
             sort = -1;
 
@@ -245,7 +330,7 @@ export default function Index() {
 
         let diffDays = 0;
 
-        sortTasks(Object.values(tasks)).filter((tasks) => !tasks.isArchived).forEach((item) => {
+        sortTasks(Object.values(tasks)).filter(filterTask).forEach((item) => {
             sectionName = ""
             sort = -1;
 
@@ -293,7 +378,7 @@ export default function Index() {
 
         let diffDays = 0;
 
-        sortTasks(Object.values(tasks)).filter((tasks) => !tasks.isArchived).forEach((item) => {
+        sortTasks(Object.values(tasks)).filter(filterTask).forEach((item) => {
             sectionName = ""
             sort = -1;
 
@@ -334,7 +419,7 @@ export default function Index() {
         return (
             <>
                 <div className="tlist mt-2">
-                    {sortTasks(Object.values(tasks))
+                    {sortTasks(Object.values(tasks).filter(filterTask))
                         .filter((tasks) => tasks.isArchived)
                         .map((task) => (
                             <React.Fragment key={task.id}>
@@ -417,22 +502,10 @@ export default function Index() {
 
             {isSelectorOpen &&
                 <ModalBlock closeCallBack={() => setSelectorOpen(false)}>
-                    <Selector
+                    <Selector key={JSON.stringify(filterOptions)}
                         closeCallBack={() => setSelectorOpen(false)}
-                        selectData={[
-                            {
-                                sectionName: "Categories",
-                                data: [{ name: "test", selected: true }]
-                            },
-                            {
-                                sectionName: "Priorities",
-                                data: [{ name: "test", selected: false }]
-                            },
-                            {
-                                sectionName: "Other",
-                                data: [{ name: "test", selected: false }]
-                            }
-                        ]}
+                        confirmCallBack={(data) => setFilterOptions(data)}
+                        selectData={filterOptions}
                     />
                 </ModalBlock>
             }
