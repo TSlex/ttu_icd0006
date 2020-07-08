@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Errors from 'components/Shared/Errors';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTasks, setTasksCreating, unselectTask } from 'redux/todo-tasks/actions';
+import { getTasks, setTasksCreating, unselectTask, deleteTask, setArchived } from 'redux/todo-tasks/actions';
 import { setGlobalLoaded } from 'redux/loading-system/actions';
 import { AppState } from 'redux/types';
 import { ITodoTaskGetDTO, ITodoTaskPutDTO, ITodoTaskPostDTO } from 'types/ITodoTaskDTO';
@@ -26,7 +26,27 @@ export default function Index() {
         [] as { sectionName?: string, data: { name: string, selected: boolean }[], multiChoise?: boolean }[]
     )
 
-    const [sortingReversed, setSortingReversed] = useState(false)
+    const [isSortingOpen, setSortingOpen] = useState(false)
+    const [sortingOptions, setSortingOptions] = useState(
+        [
+            {
+                sectionName: "Sort by",
+                data: [
+                    { name: "PRIORITY", selected: true },
+                    { name: "CATEGORY", selected: false },
+                    { name: "DEADLINE", selected: false }
+                ]
+            },
+            {
+                sectionName: "Reversed?",
+                data: [
+                    { name: "YES", selected: false },
+                    { name: "NO", selected: true },
+                ]
+            }
+        ] as { sectionName?: string, data: { name: string, selected: boolean }[], multiChoise?: boolean }[]
+    )
+
     const [renderMode, setRenderMode] = useState(renderOptions.DAY)
 
     const [createModel, setCreateModel] = useState(null as ITodoTaskPostDTO | null)
@@ -101,7 +121,31 @@ export default function Index() {
         dispatch(setTasksCreating(true))
     }
 
+    const onArchiveCompleted = () => {
+        Object.values(tasks).forEach((task) => {
+            if (task.isCompleted === true && task.isArchived === false) {
+                dispatch(setArchived(task))
+            }
+        })
+    }
+
+    const onDeleteArchived = () => {
+        Object.values(tasks).forEach((task) => {
+            if (task.isArchived === true) {
+                dispatch(deleteTask(task))
+            }
+        })
+    }
+
     const sortTasks = (tasks: ITodoTaskGetDTO[]): ITodoTaskGetDTO[] => {
+
+        const sortSection = sortingOptions.filter(section => section.sectionName?.toLocaleLowerCase() === "sort by")[0]
+        const reversedSection = sortingOptions.filter(section => section.sectionName?.toLocaleLowerCase() === "reversed?")[0]
+
+        const categoriesOption = sortSection?.data.filter(option => option.name.toLocaleLowerCase() === "category")[0]
+        const deadlineOption = sortSection?.data.filter(option => option.name.toLocaleLowerCase() === "deadline")[0]
+
+        const reversedOption = reversedSection?.data[0]
 
         return tasks.sort((task_1, task_2) => {
             const category_1 = categories[task_1.todoCategoryId]
@@ -110,13 +154,43 @@ export default function Index() {
             const priority_1 = priorities[task_1.todoPriorityId]
             const priority_2 = priorities[task_2.todoPriorityId]
 
-            const result = _sortByPriorities(priority_1, priority_2)
+            let result: number
 
-            if (result != 0) {
-                return result
-            } else {
-                return _sortByCategories(category_1, category_2)
+            if (categoriesOption?.selected) {
+                result = _sortByCategories(category_1, category_2) * (reversedOption?.selected ? -1 : 1)
+
+                if (result === 0) {
+                    result = _sortByPriorities(priority_1, priority_2)
+
+                    if (result === 0) {
+                        result = _sortByDeadline(task_1.dueDT ?? new Date("0"), task_2.dueDT ?? new Date("0"))
+                    }
+                }
             }
+            else if ((deadlineOption?.selected)) {
+                result = _sortByDeadline(task_1.dueDT ?? new Date("0"), task_2.dueDT ?? new Date("0")) * (reversedOption?.selected ? -1 : 1)
+
+                if (result === 0) {
+                    result = _sortByPriorities(priority_1, priority_2)
+
+                    if (result === 0) {
+                        result = _sortByCategories(category_1, category_2)
+                    }
+                }
+            }
+            else {
+                result = _sortByPriorities(priority_1, priority_2) * (reversedOption?.selected ? -1 : 1)
+
+                if (result === 0) {
+                    result = _sortByCategories(category_1, category_2)
+
+                    if (result === 0) {
+                        result = _sortByDeadline(task_1.dueDT ?? new Date("0"), task_2.dueDT ?? new Date("0"))
+                    }
+                }
+            }
+
+            return result!;
         })
     }
 
@@ -134,6 +208,16 @@ export default function Index() {
         if (priority_1.todoPrioritySort > priority_2.todoPrioritySort) {
             return -1
         } else if (priority_1.todoPrioritySort < priority_2.todoPrioritySort) {
+            return 1
+        } else {
+            return 0
+        }
+    }
+
+    const _sortByDeadline = (time1: Date, time2: Date): 1 | 0 | -1 => {
+        if (moment(time1) < moment(time2)) {
+            return -1
+        } else if (moment(time1) > moment(time2)) {
             return 1
         } else {
             return 0
@@ -478,16 +562,22 @@ export default function Index() {
                     |
                     <button className="btn btn-secondary ml-1 mr-1" onClick={() => setRenderMode(renderOptions.ARCHIVED)}>ARCHIVED</button>
                     |
-                    <button className="btn btn-primary ml-1" onClick={() => setSortingReversed(!sortingReversed)}>
-                        {sortingReversed ? <i className="fas fa-sort-up"></i> : <i className="fas fa-sort-down"></i>}
+                    <button className="btn btn-primary ml-1" onClick={() => setSortingOpen(true)}>
+                        <i className="fas fa-sort-alpha-down"></i>
                     </button>
                     <button className="btn btn-primary ml-1 mr-1" onClick={() => setSelectorOpen(true)}>
                         <i className="fas fa-filter"></i>
                     </button>
                     |
-                    <button className="btn btn-primary ml-1" onClick={onAdd}>
+                    <button className="btn btn-primary ml-1 mr-1" onClick={onAdd}>
                         <i className="fas fa-plus"></i>
                     </button>
+                    |
+                    {renderMode !== renderOptions.ARCHIVED ?
+                        <button className="btn btn-success ml-1" onClick={onArchiveCompleted}>ARCHIVE COMPLETED</button>
+                        :
+                        <button className="btn btn-danger ml-1" onClick={onDeleteArchived}>DELETE ALL</button>
+                    }
                 </span>
                 <hr />
                 <div className="row align-items-center d-flex flex-column">
@@ -506,6 +596,16 @@ export default function Index() {
                         closeCallBack={() => setSelectorOpen(false)}
                         confirmCallBack={(data) => setFilterOptions(data)}
                         selectData={filterOptions}
+                    />
+                </ModalBlock>
+            }
+
+            {isSortingOpen &&
+                <ModalBlock closeCallBack={() => setSortingOpen(false)}>
+                    <Selector key={JSON.stringify(sortingOptions)}
+                        closeCallBack={() => setSortingOpen(false)}
+                        confirmCallBack={(data) => setSortingOptions(data)}
+                        selectData={sortingOptions}
                     />
                 </ModalBlock>
             }

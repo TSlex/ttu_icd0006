@@ -66,12 +66,15 @@ export default function Selector(props: IProps) {
                                 {option.name.toLocaleUpperCase()}
                             </button>
                         ))}
-                        <button onClick={() => setAllSelected(sectionIndex, true)} className={"btn btn-info"}>
-                            <i className="fas fa-check"></i>
-                        </button>
-                        <button onClick={() => setAllSelected(sectionIndex, false)} className={"btn btn-info"}>
-                            <i className="fas fa-times"></i>
-                        </button>
+                        {item.multiChoise === true &&
+                            <>
+                                <button onClick={() => setAllSelected(sectionIndex, true)} className={"btn btn-info"}>
+                                    <i className="fas fa-check"></i>
+                                </button>
+                                <button onClick={() => setAllSelected(sectionIndex, false)} className={"btn btn-info"}>
+                                    <i className="fas fa-times"></i>
+                                </button>
+                            </>}
                     </div>
                 </div>
             ))}
