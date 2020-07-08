@@ -7,6 +7,7 @@ import moment from "moment";
 import { selectTask, deleteTask, setArchived, setCompleted, createTask, setTasksCreating, editTask, unselectTask } from "redux/todo-tasks/actions";
 import { FormInput, FormInputTypes } from "components/Form/FormInput";
 import { ReactComponent as Times } from "static/assets/close.svg"
+import ModalBlock from "components/Shared/ModalBlock";
 
 interface IProps {
     mode?: TodoTaskModes
@@ -93,60 +94,62 @@ export function TodoTask(props: IProps) {
             const setCreateModelDue = (props.data as CreateData).setCreateModelDue
 
             return (
-                <div className="text-center">
-                    <FormInput
-                        inputType={FormInputTypes.Input}
-                        data={{
-                            type: "text", initialValue: createModel!.todoTaskName, max: 40,
-                            label: "Task name"
-                        }}
+                <ModalBlock closeCallBack={onAddReject}>
+                    <div className="selector text-center" style={{ width: 500 }}>
+                        <FormInput
+                            inputType={FormInputTypes.Input}
+                            data={{
+                                type: "text", initialValue: createModel!.todoTaskName, max: 40,
+                                label: "Task name"
+                            }}
 
-                        bindFunction={(value: string) => { setCreateModel({ ...createModel!, todoTaskName: value }) }}
-                    />
-                    <FormInput
-                        inputType={FormInputTypes.Select}
-                        data={{
-                            name: "category-id",
-                            id: "category-id",
-                            initialValue: "",
-                            options: Object.values(categories)
-                                .sort((item1, item2) => item1.todoCategorySort <= item2.todoCategorySort ? 1 : -1)
-                                .map((item) => ({ value: item.id.toString(), displayValue: item.todoCategoryName })),
-                            label: "Category"
-                        }}
+                            bindFunction={(value: string) => { setCreateModel({ ...createModel!, todoTaskName: value }) }}
+                        />
+                        <FormInput
+                            inputType={FormInputTypes.Select}
+                            data={{
+                                name: "category-id",
+                                id: "category-id",
+                                initialValue: "",
+                                options: Object.values(categories)
+                                    .sort((item1, item2) => item1.todoCategorySort <= item2.todoCategorySort ? 1 : -1)
+                                    .map((item) => ({ value: item.id.toString(), displayValue: item.todoCategoryName })),
+                                label: "Category"
+                            }}
 
-                        bindFunction={(value: string) => { setCreateModel({ ...createModel!, todoCategoryId: Number(value) }) }}
-                    />
-                    <FormInput
-                        inputType={FormInputTypes.Select}
-                        data={{
-                            name: "priority-id",
-                            id: "priority-id",
-                            initialValue: "",
-                            options: Object.values(priorities)
-                                .sort((item1, item2) => item1.todoPrioritySort <= item2.todoPrioritySort ? 1 : -1)
-                                .map((item) => ({ value: item.id.toString(), displayValue: item.todoPriorityName })),
-                            label: "Priority"
-                        }}
+                            bindFunction={(value: string) => { setCreateModel({ ...createModel!, todoCategoryId: Number(value) }) }}
+                        />
+                        <FormInput
+                            inputType={FormInputTypes.Select}
+                            data={{
+                                name: "priority-id",
+                                id: "priority-id",
+                                initialValue: "",
+                                options: Object.values(priorities)
+                                    .sort((item1, item2) => item1.todoPrioritySort <= item2.todoPrioritySort ? 1 : -1)
+                                    .map((item) => ({ value: item.id.toString(), displayValue: item.todoPriorityName })),
+                                label: "Priority"
+                            }}
 
-                        bindFunction={(value: string) => { setCreateModel({ ...createModel!, todoPriorityId: Number(value) }) }}
-                    />
-                    <FormInput
-                        inputType={FormInputTypes.Datetime}
-                        data={{
-                            name: "deadline",
-                            id: "deadline",
-                            label: "Deadline"
-                        }}
+                            bindFunction={(value: string) => { setCreateModel({ ...createModel!, todoPriorityId: Number(value) }) }}
+                        />
+                        <FormInput
+                            inputType={FormInputTypes.Datetime}
+                            data={{
+                                name: "deadline",
+                                id: "deadline",
+                                label: "Deadline"
+                            }}
 
-                        bindFunction={(value: Date) => { setCreateModelDue(value) }}
-                    />
+                            bindFunction={(value: Date) => { setCreateModelDue(value) }}
+                        />
 
-                    <div className="form-group">
-                        <button type="submit" className="btn btn-success mr-1" onClick={onAddConfirm}>Create</button>
-                        <button type="submit" className="btn btn-secondary" onClick={onAddReject}>Cancel</button>
+                        <div className="">
+                            <button type="submit" className="btn btn-success mr-1" onClick={onAddConfirm}>Create</button>
+                            <button type="submit" className="btn btn-secondary" onClick={onAddReject}>Cancel</button>
+                        </div>
                     </div>
-                </div>
+                </ModalBlock>
             )
 
         case TodoTaskModes.EDIT:
@@ -157,67 +160,69 @@ export function TodoTask(props: IProps) {
             const setEditModelDue = (props.data as EditData).setEditModelDue
 
             return (
-                <div className="text-center">
-                    <FormInput
-                        inputType={FormInputTypes.Input}
-                        data={{
-                            type: "text", initialValue: selectedTask!.todoTaskName, max: 40,
-                            label: "Task name"
-                        }}
+                <ModalBlock closeCallBack={onEditReject}>
+                    <div className="selector text-center" style={{ width: 500 }}>
+                        <FormInput
+                            inputType={FormInputTypes.Input}
+                            data={{
+                                type: "text", initialValue: selectedTask!.todoTaskName, max: 40,
+                                label: "Task name"
+                            }}
 
-                        bindFunction={(value: string) => { setEditModel({ ...editModel!, todoTaskName: value }) }}
-                    />
-                    <FormInput
-                        inputType={FormInputTypes.Select}
-                        data={{
-                            name: "category-id",
-                            id: "category-id",
-                            initialValue: selectedTask!.todoCategoryId.toString(),
-                            options: Object.values(categories)
-                                .sort((item1, item2) => item1.todoCategorySort <= item2.todoCategorySort ? 1 : -1)
-                                .map((item) => ({ value: item.id.toString(), displayValue: item.todoCategoryName })),
-                            label: "Category"
-                        }}
+                            bindFunction={(value: string) => { setEditModel({ ...editModel!, todoTaskName: value }) }}
+                        />
+                        <FormInput
+                            inputType={FormInputTypes.Select}
+                            data={{
+                                name: "category-id",
+                                id: "category-id",
+                                initialValue: selectedTask!.todoCategoryId.toString(),
+                                options: Object.values(categories)
+                                    .sort((item1, item2) => item1.todoCategorySort <= item2.todoCategorySort ? 1 : -1)
+                                    .map((item) => ({ value: item.id.toString(), displayValue: item.todoCategoryName })),
+                                label: "Category"
+                            }}
 
-                        bindFunction={(value: string) => { setEditModel({ ...editModel!, todoCategoryId: Number(value) }) }}
-                    />
-                    <FormInput
-                        inputType={FormInputTypes.Select}
-                        data={{
-                            name: "priority-id",
-                            id: "priority-id",
-                            initialValue: selectedTask!.todoPriorityId.toString(),
-                            options: Object.values(priorities)
-                                .sort((item1, item2) => item1.todoPrioritySort <= item2.todoPrioritySort ? 1 : -1)
-                                .map((item) => ({ value: item.id.toString(), displayValue: item.todoPriorityName })),
-                            label: "Priority"
-                        }}
+                            bindFunction={(value: string) => { setEditModel({ ...editModel!, todoCategoryId: Number(value) }) }}
+                        />
+                        <FormInput
+                            inputType={FormInputTypes.Select}
+                            data={{
+                                name: "priority-id",
+                                id: "priority-id",
+                                initialValue: selectedTask!.todoPriorityId.toString(),
+                                options: Object.values(priorities)
+                                    .sort((item1, item2) => item1.todoPrioritySort <= item2.todoPrioritySort ? 1 : -1)
+                                    .map((item) => ({ value: item.id.toString(), displayValue: item.todoPriorityName })),
+                                label: "Priority"
+                            }}
 
-                        bindFunction={(value: string) => { setEditModel({ ...editModel!, todoPriorityId: Number(value) }) }}
-                    />
-                    <FormInput
-                        inputType={FormInputTypes.Datetime}
-                        data={{
-                            name: "deadline",
-                            id: "deadline",
-                            label: "Deadline",
-                            initialValue: selectedTask!.dueDT?.toString() ?? ""
-                        }}
+                            bindFunction={(value: string) => { setEditModel({ ...editModel!, todoPriorityId: Number(value) }) }}
+                        />
+                        <FormInput
+                            inputType={FormInputTypes.Datetime}
+                            data={{
+                                name: "deadline",
+                                id: "deadline",
+                                label: "Deadline",
+                                initialValue: selectedTask!.dueDT?.toString() ?? ""
+                            }}
 
-                        bindFunction={(value: Date) => {
+                            bindFunction={(value: Date) => {
 
-                            console.log(value);
-                            console.log(editModelDue);
-                            setEditModelDue(new Date(value.toISOString()));
-                            console.log(editModelDue);
-                        }}
-                    />
+                                console.log(value);
+                                console.log(editModelDue);
+                                setEditModelDue(new Date(value.toISOString()));
+                                console.log(editModelDue);
+                            }}
+                        />
 
-                    <div className="form-group">
-                        <button type="submit" className="btn btn-success mr-1" onClick={onEditConfirm}>Confirm</button>
-                        <button type="submit" className="btn btn-secondary" onClick={onEditReject}>Cancel</button>
+                        <div className="form-group">
+                            <button type="submit" className="btn btn-success mr-1" onClick={onEditConfirm}>Confirm</button>
+                            <button type="submit" className="btn btn-secondary" onClick={onEditReject}>Cancel</button>
+                        </div>
                     </div>
-                </div>
+                </ModalBlock>
             )
 
         default:

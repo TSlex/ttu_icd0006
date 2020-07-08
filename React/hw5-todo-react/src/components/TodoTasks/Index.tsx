@@ -74,6 +74,16 @@ export default function Index() {
     }, [])
 
     useEffect(() => {
+        function watchScroll() {
+            window.addEventListener("scroll", onScroll);
+        }
+        watchScroll();
+        return () => {
+            window.removeEventListener("scroll", onScroll);
+        };
+    });
+
+    useEffect(() => {
         setFilterOptions([
             {
                 sectionName: "Categories",
@@ -110,6 +120,23 @@ export default function Index() {
             dispatch(unselectTask())
         };
     }, [])
+
+    const onScroll = () => {
+        let button = document.getElementById("toUpButton") as HTMLButtonElement
+
+        if (document.documentElement.scrollTop > 200) {
+            button.style.opacity = "1";
+            button.style.cursor = "pointer"
+        } else {
+            button.style.opacity = "0";
+            button.style.cursor = "unset"
+        }
+    }
+
+    const onScrollToUp = () => {
+        if (Number((document.getElementById("toUpButton") as HTMLButtonElement)?.style.opacity) < .1) return
+        document.documentElement.scrollTop = 0
+    }
 
     const onAdd = () => {
         if (isCreating) {
@@ -163,12 +190,12 @@ export default function Index() {
                     result = _sortByPriorities(priority_1, priority_2)
 
                     if (result === 0) {
-                        result = _sortByDeadline(task_1.dueDT ?? new Date("0"), task_2.dueDT ?? new Date("0"))
+                        result = _sortByDeadline(task_1.dueDT, task_2.dueDT)
                     }
                 }
             }
             else if ((deadlineOption?.selected)) {
-                result = _sortByDeadline(task_1.dueDT ?? new Date("0"), task_2.dueDT ?? new Date("0")) * (reversedOption?.selected ? -1 : 1)
+                result = _sortByDeadline(task_1.dueDT, task_2.dueDT) * (reversedOption?.selected ? -1 : 1)
 
                 if (result === 0) {
                     result = _sortByPriorities(priority_1, priority_2)
@@ -185,7 +212,7 @@ export default function Index() {
                     result = _sortByCategories(category_1, category_2)
 
                     if (result === 0) {
-                        result = _sortByDeadline(task_1.dueDT ?? new Date("0"), task_2.dueDT ?? new Date("0"))
+                        result = _sortByDeadline(task_1.dueDT, task_2.dueDT)
                     }
                 }
             }
@@ -214,7 +241,14 @@ export default function Index() {
         }
     }
 
-    const _sortByDeadline = (time1: Date, time2: Date): 1 | 0 | -1 => {
+    const _sortByDeadline = (time1: Date | null, time2: Date | null): 1 | 0 | -1 => {
+        if (time1 === null) {
+            time1 = new Date("01.01.3999")
+        }
+        if (time2 === null) {
+            time2 = new Date("01.01.3999")
+        }
+
         if (moment(time1) < moment(time2)) {
             return -1
         } else if (moment(time1) > moment(time2)) {
@@ -611,6 +645,14 @@ export default function Index() {
             }
 
             {render()}
+
+            {/* toUp button */}
+            <div style={{ position: "fixed", top: "100px", left: 30 }}>
+                <button id="toUpButton" className="btn btn-primary" onClick={onScrollToUp}
+                    style={{ transition: "all ease-in .5s", opacity: 0, cursor: "unset" }}>
+                    <i className="fas fa-arrow-up"></i>
+                </button>
+            </div>
         </>
     )
 }
