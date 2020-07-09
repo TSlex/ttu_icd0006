@@ -17,14 +17,21 @@ import PrioritiesIndex from 'components/TodoPriorities/Index';
 // Account
 import Login from 'components/Identity/Login';
 import Register from 'components/Identity/Register';
+import { useSelector } from 'react-redux';
+
+import { AppState } from 'redux/types';
+import LoadingOverlay from 'components/Shared/LoadingOverlay';
 
 export default function App() {
+
+  const isGlobalLoading = useSelector((state: AppState) => state.loadingSystem.isGlobalLoading)
 
   return (
     <div className="App">
       <Header />
       <div className="container">
         <main role="main">
+          {isGlobalLoading && <LoadingOverlay />}
           <Switch>
 
             {/* Account */}

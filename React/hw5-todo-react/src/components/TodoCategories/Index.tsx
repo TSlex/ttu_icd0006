@@ -11,6 +11,9 @@ import { numberToColorHsl } from 'helpers/numberToColor';
 import Errors from 'components/Shared/Errors';
 
 export default function Index() {
+    const [formValid, setFormValid] = useState({ name: true })
+    const [formErrors, setFormErrors] = useState({ name: '' })
+
     const [createModel, setCreateModel] = useState(null as ITodoCategoryPostDTO | null)
     const [editModel, setEditModel] = useState({} as ITodoCategoryPutDTO)
 
@@ -49,16 +52,27 @@ export default function Index() {
     }, [])
 
     const onAdd = () => {
-        if (isCreating) {
+        if (isCreating || sCategory) {
             return
         }
+
+        setFormValid({ name: true })
+        setFormErrors({ name: "" })
 
         setCreateModel({ todoCategoryName: "", todoCategorySort: 0 })
         dispatch(setCategoriesCreating(true))
     }
 
     const onAddConfirm = () => {
-        dispatch(createCategory(createModel!))
+        setFormValid({ name: true })
+        setFormErrors({ name: "" })
+
+        if (createModel!.todoCategoryName === "") {
+            setFormValid({ name: false })
+            setFormErrors({ name: "This field is required" })
+        } else {
+            dispatch(createCategory(createModel!))
+        }
     }
 
     const onAddReject = () => {
@@ -66,13 +80,28 @@ export default function Index() {
     }
 
     const onEdit = (item: ITodoCategoryGetDTO) => {
+        if (isCreating) {
+            dispatch(setCategoriesCreating(false))
+        }
+
+        setFormValid({ name: true })
+        setFormErrors({ name: "" })
+
         dispatch(selectCategory(item))
 
         setEditModel({ ...item })
     }
 
     const onEditConfirm = () => {
-        dispatch(editCategory(editModel!))
+        setFormValid({ name: true })
+        setFormErrors({ name: "" })
+
+        if (editModel!.todoCategoryName === "") {
+            setFormValid({ name: false })
+            setFormErrors({ name: "This field is required" })
+        } else {
+            dispatch(editCategory(editModel!))
+        }
     }
 
     const onEditReject = () => {
@@ -93,10 +122,15 @@ export default function Index() {
                                 <FormInput
                                     data={
                                         {
-                                            type: "text", initialValue: createModel!.todoCategoryName,
-                                            ignoreClasses: false, wrapInput: false, max: 40
+                                            type: "text", initialValue: "",
+                                            ignoreClasses: false, wrapInput: false, max: 40,
+
+                                            isValid: formValid.name,
+                                            prompt: formErrors.name
                                         }
                                     }
+
+                                    validationControl={(bool: boolean) => { setFormValid({ name: bool }) }}
 
                                     bindFunction={(value: string) => { setCreateModel({ ...createModel!, todoCategoryName: value }) }}
                                 /></div>
@@ -140,9 +174,14 @@ export default function Index() {
                                 data={
                                     {
                                         type: "text", initialValue: item.todoCategoryName,
-                                        ignoreClasses: false, wrapInput: false, max: 40
+                                        ignoreClasses: false, wrapInput: false, max: 40,
+
+                                        isValid: formValid.name,
+                                        prompt: formErrors.name
                                     }
                                 }
+
+                                validationControl={(bool: boolean) => { setFormValid({ name: bool }) }}
 
                                 bindFunction={(value: any) => { setEditModel({ ...editModel!, todoCategoryName: value }) }}
                             /></div>

@@ -8,9 +8,12 @@ import { FormInput } from 'components/Form/FormInput';
 import { styled } from '@material-ui/core/styles';
 import ReactTooltip from 'react-tooltip';
 import Errors from 'components/Shared/Errors';
-import { getColor, numberToColorHsl } from 'helpers/numberToColor';
+import { numberToColorHsl } from 'helpers/numberToColor';
 
 export default function Index() {
+    const [formValid, setFormValid] = useState({ name: true })
+    const [formErrors, setFormErrors] = useState({ name: '' })
+
     const [createModel, setCreateModel] = useState(null as ITodoPriorityPostDTO | null)
     const [editModel, setEditModel] = useState({} as ITodoPriorityPutDTO)
 
@@ -49,16 +52,27 @@ export default function Index() {
     }, [])
 
     const onAdd = () => {
-        if (isCreating) {
+        if (isCreating || sPriority) {
             return
         }
+
+        setFormValid({ name: true })
+        setFormErrors({ name: "" })
 
         setCreateModel({ todoPriorityName: "", todoPrioritySort: 0 })
         dispatch(setPrioritiesCreating(true))
     }
 
     const onAddConfirm = () => {
-        dispatch(createPriority(createModel!))
+        setFormValid({ name: true })
+        setFormErrors({ name: "" })
+
+        if (createModel!.todoPriorityName === "") {
+            setFormValid({ name: false })
+            setFormErrors({ name: "This field is required" })
+        } else {
+            dispatch(createPriority(createModel!))
+        }
     }
 
     const onAddReject = () => {
@@ -66,13 +80,28 @@ export default function Index() {
     }
 
     const onEdit = (item: ITodoPriorityGetDTO) => {
+        if (isCreating) {
+            dispatch(setPrioritiesCreating(false))
+        }
+
+        setFormValid({ name: true })
+        setFormErrors({ name: "" })
+
         dispatch(selectPriority(item))
 
         setEditModel({ ...item })
     }
 
     const onEditConfirm = () => {
-        dispatch(editPriority(editModel!))
+        setFormValid({ name: true })
+        setFormErrors({ name: "" })
+
+        if (editModel!.todoPriorityName === "") {
+            setFormValid({ name: false })
+            setFormErrors({ name: "This field is required" })
+        } else {
+            dispatch(editPriority(editModel!))
+        }
     }
 
     const onEditReject = () => {
@@ -93,10 +122,15 @@ export default function Index() {
                                 <FormInput
                                     data={
                                         {
-                                            type: "text", initialValue: createModel!.todoPriorityName,
-                                            ignoreClasses: false, wrapInput: false, max: 40
+                                            type: "text", initialValue: "",
+                                            ignoreClasses: false, wrapInput: false, max: 40,
+
+                                            isValid: formValid.name,
+                                            prompt: formErrors.name
                                         }
                                     }
+
+                                    validationControl={(bool: boolean) => { setFormValid({ name: bool }) }}
 
                                     bindFunction={(value: string) => { setCreateModel({ ...createModel!, todoPriorityName: value }) }}
                                 /></div>
@@ -140,9 +174,14 @@ export default function Index() {
                                 data={
                                     {
                                         type: "text", initialValue: item.todoPriorityName,
-                                        ignoreClasses: false, wrapInput: false, max: 40
+                                        ignoreClasses: false, wrapInput: false, max: 40,
+
+                                        isValid: formValid.name,
+                                        prompt: formErrors.name
                                     }
                                 }
+
+                                validationControl={(bool: boolean) => { setFormValid({ name: bool }) }}
 
                                 bindFunction={(value: any) => { setEditModel({ ...editModel!, todoPriorityName: value }) }}
                             /></div>
