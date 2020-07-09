@@ -42,7 +42,7 @@ export const FormInput = (props: IProps) => {
     const [state, setState] = useState({
         checkBoxBalue: (props.data as CheckboxData).initialValue ?? false,
         radioValues: (props.data as RadioData).initialValue ?? [],
-        inputValue: (props.data as InputData).initialValue ?? "",
+        inputValue: (props.data as InputData).initialValue ?? ""
     });
 
     const onDateChange = (value: Date) => {
@@ -194,7 +194,14 @@ export const FormInput = (props: IProps) => {
                             disabled={props.data.disabled}
                             onChange={(e) => onChange(e.target)}
                         >
-                            {state.inputValue === "" && <option>...</option>}
+                            {state.inputValue === "" && <option>
+                                {
+                                    props.data.initialValue && props.data.initialValue.toString().length > 0 ?
+                                        props.data.initialValue
+                                        :
+                                        "..."
+                                }
+                            </option>}
                             {
                                 (props.data as SelectData).options.map((item, index) => (
                                     <option value={item.value} key={index}>
@@ -230,6 +237,8 @@ export const FormInput = (props: IProps) => {
                         <input
                             autoComplete={props.data.autoComplete}
 
+                            placeholder={props.data.prompt}
+
                             style={props.data.style}
                             value={state.inputValue}
                             name={props.data.name ?? randomBytes(10).toString()}
@@ -262,6 +271,8 @@ export interface BaseData {
     label?: string;
     name?: string;
     disabled?: boolean;
+
+    prompt?: string;
 
     isValid?: boolean;
 

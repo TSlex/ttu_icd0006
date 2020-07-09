@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { ITodoTaskGetDTO, ITodoTaskPostDTO, ITodoTaskPutDTO } from "types/ITodoTaskDTO";
 import { numberToColorHsl } from "helpers/numberToColor";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,6 +8,9 @@ import { selectTask, deleteTask, setArchived, setCompleted, createTask, setTasks
 import { FormInput, FormInputTypes } from "components/Form/FormInput";
 import { ReactComponent as Times } from "static/assets/close.svg"
 import ModalBlock from "components/Shared/ModalBlock";
+import { styled } from "@material-ui/core";
+import ReactTooltip from "react-tooltip";
+import { findDOMNode } from "react-dom";
 
 interface IProps {
     mode?: TodoTaskModes
@@ -46,11 +49,46 @@ export function TodoTask(props: IProps) {
 
     const selectedTask = useSelector((state: AppState) => state.todoTasks.selectedTask)
 
+    const [formValid, setFormValid] = useState({ name: true, category: true, priority: true })
+    const [formErrors, setFormErrors] = useState({ name: '', category: '', priority: '' })
+
     const dispatch = useDispatch()
 
     const onAddConfirm = () => {
         let model = { ...(props.data as CreateData).createModel!, dueDT: (props.data as CreateData).createModelDue } as ITodoTaskPostDTO
-        dispatch(createTask(model))
+
+        let validationControl = true;
+        let validation = { name: true, category: true, priority: true }
+        let validationErrors = { name: '', category: '', priority: '' }
+
+        setFormValid({ ...validation })
+        setFormErrors({ ...validationErrors })
+
+        if (model.todoTaskName === "") {
+            validation.name = false
+            validationErrors.name = "This field is required"
+            validationControl = false
+        }
+
+        if (model.todoCategoryId < 0) {
+            validation.category = false
+            validationErrors.category = "This field is required"
+            validationControl = false
+        }
+
+        if (model.todoPriorityId < 0) {
+            validation.priority = false
+            validationErrors.priority = "This field is required"
+            validationControl = false
+        }
+
+        if (validationControl) {
+            dispatch(createTask(model))
+        }
+        else {
+            setFormValid({ ...validation })
+            setFormErrors({ ...validationErrors })
+        }
     }
 
     const onAddReject = () => {
@@ -67,7 +105,38 @@ export function TodoTask(props: IProps) {
     const onEditConfirm = () => {
         let model = { ...(props.data as EditData).editModel!, dueDT: (props.data as EditData).editModelDue } as ITodoTaskPutDTO
 
-        dispatch(editTask(model))
+        let validationControl = true;
+        let validation = { name: true, category: true, priority: true }
+        let validationErrors = { name: '', category: '', priority: '' }
+
+        setFormValid({ ...validation })
+        setFormErrors({ ...validationErrors })
+
+        if (model.todoTaskName === "") {
+            validation.name = false
+            validationErrors.name = "This field is required"
+            validationControl = false
+        }
+
+        if (model.todoCategoryId < 0) {
+            validation.category = false
+            validationErrors.category = "This field is required"
+            validationControl = false
+        }
+
+        if (model.todoPriorityId < 0) {
+            validation.priority = false
+            validationErrors.priority = "This field is required"
+            validationControl = false
+        }
+
+        if (validationControl) {
+            dispatch(editTask(model))
+        }
+        else {
+            setFormValid({ ...validation })
+            setFormErrors({ ...validationErrors })
+        }
     }
 
     const onEditReject = () => {
@@ -86,6 +155,93 @@ export function TodoTask(props: IProps) {
         dispatch(deleteTask(task))
     }
 
+    // const renderForm = (model: any, setModel: any, setModelDue: any) => {
+    //     return (
+    //         <>
+    //             <ModalBlock closeCallBack={onAddReject}>
+    //                 <div className="selector text-center" style={{ width: 500 }}>
+    //                     <FormInput
+    //                         inputType={FormInputTypes.Input}
+    //                         data={{
+    //                             type: "text", initialValue: (
+    //                                 props.mode === TodoTaskModes.EDIT ? selectedTask?.todoTaskName : ""
+    //                             ), max: 40,
+    //                             label: "Task name",
+
+    //                             prompt: formErrors.name,
+    //                             isValid: formValid.name
+    //                         }}
+
+    //                         validationControl={(bool: boolean) => { setFormValid({ ...formValid, name: bool }) }}
+
+    //                         bindFunction={(value: string) => { setModel({ ...model!, todoTaskName: value }) }}
+    //                     />
+    //                     <FormInput
+    //                         inputType={FormInputTypes.Select}
+    //                         data={{
+    //                             name: "category-id",
+    //                             id: "category-id",
+    //                             initialValue: (
+    //                                 props.mode === TodoTaskModes.EDIT ? selectedTask?.todoTaskName : formErrors.category
+    //                                 ),
+    //                             options: Object.values(categories)
+    //                                 .sort((item1, item2) => item1.todoCategorySort <= item2.todoCategorySort ? 1 : -1)
+    //                                 .map((item) => ({ value: item.id.toString(), displayValue: item.todoCategoryName })),
+    //                             label: "Category",
+
+    //                             isValid: formValid.category
+    //                         }}
+
+    //                         validationControl={(bool: boolean) => { setFormValid({ ...formValid, category: bool }) }}
+
+    //                         bindFunction={(value: string) => { setModel({ ...model!, todoCategoryId: Number(value) }) }}
+    //                     />
+    //                     <FormInput
+    //                         inputType={FormInputTypes.Select}
+    //                         data={{
+    //                             name: "priority-id",
+    //                             id: "priority-id",
+    //                             initialValue: formErrors.priority,
+    //                             options: Object.values(priorities)
+    //                                 .sort((item1, item2) => item1.todoPrioritySort <= item2.todoPrioritySort ? 1 : -1)
+    //                                 .map((item) => ({ value: item.id.toString(), displayValue: item.todoPriorityName })),
+    //                             label: "Priority",
+
+    //                             isValid: formValid.priority
+    //                         }}
+
+    //                         validationControl={(bool: boolean) => { setFormValid({ ...formValid, priority: bool }) }}
+
+    //                         bindFunction={(value: string) => { setModel({ ...model!, todoPriorityId: Number(value) }) }}
+    //                     />
+    //                     <FormInput
+    //                         inputType={FormInputTypes.Datetime}
+    //                         data={{
+    //                             name: "deadline",
+    //                             id: "deadline",
+    //                             label: "Deadline"
+    //                         }}
+
+    //                         bindFunction={(value: Date) => { setModelDue(value) }}
+    //                     />
+
+    //                     {props.mode === TodoTaskModes.CREATE ?
+    //                         <div className="">
+    //                             <button type="submit" className="btn btn-success mr-1" onClick={onAddConfirm}>Create</button>
+    //                             <button type="submit" className="btn btn-secondary" onClick={onAddReject}>Cancel</button>
+    //                         </div>
+    //                         :
+    //                         <div className="">
+    //                             <button type="submit" className="btn btn-success mr-1" onClick={onEditConfirm}>Confirm</button>
+    //                             <button type="submit" className="btn btn-secondary" onClick={onEditReject}>Cancel</button>
+    //                         </div>
+    //                     }
+    //                 </div>
+    //             </ModalBlock>
+    //         </>
+    //     )
+    // }
+
     switch (props.mode) {
         case TodoTaskModes.CREATE:
 
@@ -100,8 +256,13 @@ export function TodoTask(props: IProps) {
                             inputType={FormInputTypes.Input}
                             data={{
                                 type: "text", initialValue: createModel!.todoTaskName, max: 40,
-                                label: "Task name"
+                                label: "Task name",
+
+                                prompt: formErrors.name,
+                                isValid: formValid.name
                             }}
+
+                            validationControl={(bool: boolean) => { setFormValid({ ...formValid, name: bool }) }}
 
                             bindFunction={(value: string) => { setCreateModel({ ...createModel!, todoTaskName: value }) }}
                         />
@@ -110,12 +271,16 @@ export function TodoTask(props: IProps) {
                             data={{
                                 name: "category-id",
                                 id: "category-id",
-                                initialValue: "",
+                                initialValue: formErrors.category,
                                 options: Object.values(categories)
                                     .sort((item1, item2) => item1.todoCategorySort <= item2.todoCategorySort ? 1 : -1)
                                     .map((item) => ({ value: item.id.toString(), displayValue: item.todoCategoryName })),
-                                label: "Category"
+                                label: "Category",
+
+                                isValid: formValid.category
                             }}
+
+                            validationControl={(bool: boolean) => { setFormValid({ ...formValid, category: bool }) }}
 
                             bindFunction={(value: string) => { setCreateModel({ ...createModel!, todoCategoryId: Number(value) }) }}
                         />
@@ -124,12 +289,16 @@ export function TodoTask(props: IProps) {
                             data={{
                                 name: "priority-id",
                                 id: "priority-id",
-                                initialValue: "",
+                                initialValue: formErrors.priority,
                                 options: Object.values(priorities)
                                     .sort((item1, item2) => item1.todoPrioritySort <= item2.todoPrioritySort ? 1 : -1)
                                     .map((item) => ({ value: item.id.toString(), displayValue: item.todoPriorityName })),
-                                label: "Priority"
+                                label: "Priority",
+
+                                isValid: formValid.priority
                             }}
+
+                            validationControl={(bool: boolean) => { setFormValid({ ...formValid, priority: bool }) }}
 
                             bindFunction={(value: string) => { setCreateModel({ ...createModel!, todoPriorityId: Number(value) }) }}
                         />
@@ -155,7 +324,6 @@ export function TodoTask(props: IProps) {
         case TodoTaskModes.EDIT:
 
             const editModel = (props.data as EditData).editModel
-            const editModelDue = (props.data as EditData).editModelDue
             const setEditModel = (props.data as EditData).setEditModel
             const setEditModelDue = (props.data as EditData).setEditModelDue
 
@@ -166,8 +334,13 @@ export function TodoTask(props: IProps) {
                             inputType={FormInputTypes.Input}
                             data={{
                                 type: "text", initialValue: selectedTask!.todoTaskName, max: 40,
-                                label: "Task name"
+                                label: "Task name",
+
+                                prompt: formErrors.name,
+                                isValid: formValid.name
                             }}
+
+                            validationControl={(bool: boolean) => { setFormValid({ ...formValid, name: bool }) }}
 
                             bindFunction={(value: string) => { setEditModel({ ...editModel!, todoTaskName: value }) }}
                         />
@@ -180,8 +353,13 @@ export function TodoTask(props: IProps) {
                                 options: Object.values(categories)
                                     .sort((item1, item2) => item1.todoCategorySort <= item2.todoCategorySort ? 1 : -1)
                                     .map((item) => ({ value: item.id.toString(), displayValue: item.todoCategoryName })),
-                                label: "Category"
+                                label: "Category",
+
+                                prompt: formErrors.category,
+                                isValid: formValid.category
                             }}
+
+                            validationControl={(bool: boolean) => { setFormValid({ ...formValid, category: bool }) }}
 
                             bindFunction={(value: string) => { setEditModel({ ...editModel!, todoCategoryId: Number(value) }) }}
                         />
@@ -194,8 +372,13 @@ export function TodoTask(props: IProps) {
                                 options: Object.values(priorities)
                                     .sort((item1, item2) => item1.todoPrioritySort <= item2.todoPrioritySort ? 1 : -1)
                                     .map((item) => ({ value: item.id.toString(), displayValue: item.todoPriorityName })),
-                                label: "Priority"
+                                label: "Priority",
+
+                                prompt: formErrors.priority,
+                                isValid: formValid.priority
                             }}
+
+                            validationControl={(bool: boolean) => { setFormValid({ ...formValid, priority: bool }) }}
 
                             bindFunction={(value: string) => { setEditModel({ ...editModel!, todoPriorityId: Number(value) }) }}
                         />
@@ -210,10 +393,7 @@ export function TodoTask(props: IProps) {
 
                             bindFunction={(value: Date) => {
 
-                                console.log(value);
-                                console.log(editModelDue);
                                 setEditModelDue(new Date(value.toISOString()));
-                                console.log(editModelDue);
                             }}
                         />
 

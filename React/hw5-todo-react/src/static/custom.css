@@ -175,3 +175,15 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 .buttons-with-margin>* {
     margin-left: 6px;
 }
+
+/* form validation */
+
+.is-invalid::placeholder, select.is-invalid {
+    color: #dc3545 !important;
+    opacity: 1 !important;
+    font-weight: bold;
+}
+
+select.is-invalid option {
+    color: initial !important;
+}
