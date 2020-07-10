@@ -318,14 +318,13 @@ export default function Index() {
     }
 
     const renderSection = (daySections: Record<string, { sort: number, tasks: ITodoTaskGetDTO[] }>) => {
-
         return (
             <>
                 {Object.keys(daySections)
                     .sort((key1, key2) => daySections[key1].sort > daySections[key2].sort ? 1 : -1)
                     .map((key: keyof typeof daySections) => (
                         <React.Fragment key={key}>
-                            <h3 className='mt'>{key.toLocaleUpperCase()}</h3>
+                            <h3 className='task-section mt'>{key.toLocaleUpperCase()}</h3>
                             {/* <hr /> */}
                             <div className="tlist mt-2">
                                 {daySections[key].tasks

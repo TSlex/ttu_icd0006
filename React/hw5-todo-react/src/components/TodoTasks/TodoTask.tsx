@@ -152,92 +152,21 @@ export function TodoTask(props: IProps) {
         dispatch(deleteTask(task))
     }
 
-    // const renderForm = (model: any, setModel: any, setModelDue: any) => {
-    //     return (
-    //         <>
-    //             <ModalBlock closeCallBack={onAddReject}>
-    //                 <div className="selector text-center" style={{ width: 500 }}>
-    //                     <FormInput
-    //                         inputType={FormInputTypes.Input}
-    //                         data={{
-    //                             type: "text", initialValue: (
-    //                                 props.mode === TodoTaskModes.EDIT ? selectedTask?.todoTaskName : ""
-    //                             ), max: 40,
-    //                             label: "Task name",
+    const getTaskClassName = (task: ITodoTaskGetDTO) => {
+        let classes = ["task-content"]
 
-    //                             prompt: formErrors.name,
-    //                             isValid: formValid.name
-    //                         }}
+        if (task.isArchived) {
+            classes.push("task-archived")
+        }
 
-    //                         validationControl={(bool: boolean) => { setFormValid({ ...formValid, name: bool }) }}
+        if (task.isCompleted) {
+            classes.push("task-completed")
+        } else if (!task.isArchived && task.dueDT && moment(task.dueDT) < moment()) {
+            classes.push("task-expired")
+        }
 
-    //                         bindFunction={(value: string) => { setModel({ ...model!, todoTaskName: value }) }}
-    //                     />
-    //                     <FormInput
-    //                         inputType={FormInputTypes.Select}
-    //                         data={{
-    //                             name: "category-id",
-    //                             id: "category-id",
-    //                             initialValue: (
-    //                                 props.mode === TodoTaskModes.EDIT ? selectedTask?.todoTaskName : formErrors.category
-    //                                 ),
-    //                             options: Object.values(categories)
-    //                                 .sort((item1, item2) => item1.todoCategorySort <= item2.todoCategorySort ? 1 : -1)
-    //                                 .map((item) => ({ value: item.id.toString(), displayValue: item.todoCategoryName })),
-    //                             label: "Category",
-
-    //                             isValid: formValid.category
-    //                         }}
-
-    //                         validationControl={(bool: boolean) => { setFormValid({ ...formValid, category: bool }) }}
-
-    //                         bindFunction={(value: string) => { setModel({ ...model!, todoCategoryId: Number(value) }) }}
-    //                     />
-    //                     <FormInput
-    //                         inputType={FormInputTypes.Select}
-    //                         data={{
-    //                             name: "priority-id",
-    //                             id: "priority-id",
-    //                             initialValue: formErrors.priority,
-    //                             options: Object.values(priorities)
-    //                                 .sort((item1, item2) => item1.todoPrioritySort <= item2.todoPrioritySort ? 1 : -1)
-    //                                 .map((item) => ({ value: item.id.toString(), displayValue: item.todoPriorityName })),
-    //                             label: "Priority",
-
-    //                             isValid: formValid.priority
-    //                         }}
-
-    //                         validationControl={(bool: boolean) => { setFormValid({ ...formValid, priority: bool }) }}
-
-    //                         bindFunction={(value: string) => { setModel({ ...model!, todoPriorityId: Number(value) }) }}
-    //                     />
-    //                     <FormInput
-    //                         inputType={FormInputTypes.Datetime}
-    //                         data={{
-    //                             name: "deadline",
-    //                             id: "deadline",
-    //                             label: "Deadline"
-    //                         }}
-
-    //                         bindFunction={(value: Date) => { setModelDue(value) }}
-    //                     />
-
-    //                     {props.mode === TodoTaskModes.CREATE ?
-    //                         <div className="">
-    //                             <button type="submit" className="btn btn-success mr-1" onClick={onAddConfirm}>Create</button>
-    //                             <button type="submit" className="btn btn-secondary" onClick={onAddReject}>Cancel</button>
-    //                         </div>
-    //                         :
-    //                         <div className="">
-    //                             <button type="submit" className="btn btn-success mr-1" onClick={onEditConfirm}>Confirm</button>
-    //                             <button type="submit" className="btn btn-secondary" onClick={onEditReject}>Cancel</button>
-    //                         </div>
-    //                     }
-    //                 </div>
-    //             </ModalBlock>
-    //         </>
-    //     )
-    // }
+        return classes.join(" ")
+    }
 
     switch (props.mode) {
         case TodoTaskModes.CREATE:
@@ -410,13 +339,14 @@ export function TodoTask(props: IProps) {
                     <div className="task-body">
                         <div className="task-headers">
                             <span style={{
+                                fontWeight: "bold", color: "#000000AA",
                                 background: numberToColorHsl(categories[
                                     taskRead.todoCategoryId]?.todoCategorySort ?? 0, 0, 100)
                             }}>
                                 {categories[taskRead.todoCategoryId]?.todoCategoryName ?? ""}
                             </span>
                             <span style={{
-                                background: "gray", fontWeight: "bold",
+                                background: "#585858", fontWeight: "bold",
                                 color: numberToColorHsl(priorities[taskRead.todoPriorityId]?.todoPrioritySort ?? 0, 0, 100)
                             }}>
                                 {priorities[taskRead.todoPriorityId]?.todoPriorityName ?? ""}
@@ -470,7 +400,7 @@ export function TodoTask(props: IProps) {
                                     </button>
                                 }
                             </div>
-                            <div className="task-content">
+                            <div className={getTaskClassName(taskRead)}>
                                 <div className="task-name">
                                     <span>{taskRead.todoTaskName}</span>
                                 </div>
@@ -480,12 +410,11 @@ export function TodoTask(props: IProps) {
                                         <span>{moment(taskRead.dueDT).format("YYYY-MM-DD, H:mm")}</span>
                                     </div>
                                 }
-                                {/* <span>{taskRead.isArchived ? " archived" : " not archived"}</span> */}
-                                {/* <span>{taskRead.isCompleted ? " completed" : " not completed  "}</span> */}
                             </div>
                         </div>
                     </div>
                 </div>
             )
+
     }
 }
