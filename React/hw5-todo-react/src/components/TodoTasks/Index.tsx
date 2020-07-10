@@ -110,6 +110,7 @@ export default function Index() {
                     { name: "COMPLETED", selected: true },
                     { name: "NOT COMPLETED", selected: true },
                     { name: "NOT EXPIRED", selected: true },
+                    { name: "NO DEADLINE", selected: true },
                 ],
                 multiChoise: true
             }
@@ -275,6 +276,9 @@ export default function Index() {
             const notExpiredOption = otherSection.data.filter(option => option.name.toLocaleLowerCase() === "not expired")[0]
             const completedOption = otherSection.data.filter(option => option.name.toLocaleLowerCase() === "completed")[0]
             const notCompletedOption = otherSection.data.filter(option => option.name.toLocaleLowerCase() === "not completed")[0]
+            const noDeadlineOption = otherSection.data.filter(option => option.name.toLocaleLowerCase() === "no deadline")[0]
+
+            if (!noDeadlineOption.selected && !task.dueDT) return false
 
             if (!completedOption.selected && task.isCompleted) return false
             if (!notCompletedOption.selected && !task.isCompleted) return false

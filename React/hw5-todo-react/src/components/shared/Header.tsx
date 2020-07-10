@@ -9,7 +9,7 @@ export default function () {
         <header>
             <nav className="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                 <div className="container">
-                    <Link replace to="/" className="navbar-brand fas fa-clipboard-list"> Todo</Link>
+                    <Link replace to="/" className="navbar-brand fas fa-clipboard-list"> TODO</Link>
 
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
