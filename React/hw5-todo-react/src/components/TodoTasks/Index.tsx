@@ -66,11 +66,13 @@ export default function Index() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        moment.locale('en', { week: { dow: 1 } });
+        moment.updateLocale('en', { week: { dow: 1 } })
     }, [])
 
     useEffect(() => {
         dispatch(getTasks())
+
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -81,6 +83,8 @@ export default function Index() {
         return () => {
             window.removeEventListener("scroll", onScroll);
         };
+
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     });
 
     useEffect(() => {
@@ -119,6 +123,8 @@ export default function Index() {
             dispatch(setTasksCreating(false));
             dispatch(unselectTask())
         };
+
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const onScroll = () => {
@@ -552,15 +558,15 @@ export default function Index() {
     const renderTask = (task: ITodoTaskGetDTO) => {
         return (
             <>
-                {task.id === sTask?.id
-                    && renderEditModel()
-                    || (
-                        <TodoTask mode={TodoTaskModes.READ} data={{
-                            task: task,
-                            setEditModel: setEditModel,
-                            setEditModelDue: setEditModelDue
-                        }} />
-                    )}
+                {task.id === sTask?.id ?
+                    renderEditModel()
+                    :
+                    <TodoTask mode={TodoTaskModes.READ} data={{
+                        task: task,
+                        setEditModel: setEditModel,
+                        setEditModelDue: setEditModelDue
+                    }} />
+                }
             </>
         )
     }

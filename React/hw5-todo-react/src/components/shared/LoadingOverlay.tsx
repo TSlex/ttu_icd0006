@@ -7,10 +7,6 @@ interface IProps {
 
 export default function LoadingOverlay(props: IProps) {
 
-    useEffect(() => {
-        back.current!.setAttribute('style', getStyle());
-    }, [])
-
     const back = useRef(null as HTMLDivElement | null)
 
     const getStyle = () => {
@@ -28,6 +24,12 @@ export default function LoadingOverlay(props: IProps) {
 
         return style;
     }
+
+    useEffect(() => {
+        back.current!.setAttribute('style', getStyle());
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <>

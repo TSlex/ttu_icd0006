@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { ITodoTaskGetDTO, ITodoTaskPostDTO, ITodoTaskPutDTO } from "types/ITodoTaskDTO";
 import { numberToColorHsl } from "helpers/numberToColor";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,9 +8,6 @@ import { selectTask, deleteTask, setArchived, setCompleted, createTask, setTasks
 import { FormInput, FormInputTypes } from "components/Form/FormInput";
 import { ReactComponent as Times } from "static/assets/close.svg"
 import ModalBlock from "components/Shared/ModalBlock";
-import { styled } from "@material-ui/core";
-import ReactTooltip from "react-tooltip";
-import { findDOMNode } from "react-dom";
 
 interface IProps {
     mode?: TodoTaskModes

@@ -20,6 +20,8 @@ export default function Login() {
     useEffect(() => {
         dispatch(setGlobalLoaded(true));
         return () => { dispatch(setGlobalLoaded(false)) };
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const onSubmit = () => {

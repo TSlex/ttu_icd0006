@@ -1,7 +1,5 @@
 import React, { useState } from "react"
 import { randomBytes } from "crypto"
-import { useSelector } from "react-redux"
-import { AppState } from "redux/types"
 
 interface IProps {
     alertData: IAlertData;

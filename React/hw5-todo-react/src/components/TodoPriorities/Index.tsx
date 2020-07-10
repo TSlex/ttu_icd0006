@@ -40,6 +40,8 @@ export default function Index() {
 
     useEffect(() => {
         dispatch(getPriorities())
+
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -49,6 +51,8 @@ export default function Index() {
             dispatch(setPrioritiesCreating(false));
             dispatch(unselectPriority());
         };
+
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const onAdd = () => {

@@ -10,6 +10,8 @@ export default function Home() {
         return () => {
             dispatch(setGlobalLoaded(false));
         };
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

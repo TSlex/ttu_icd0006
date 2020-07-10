@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, useHistory } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { loadUser, logout } from "redux/account/actions";
+import { logout } from "redux/account/actions";
 import { AppState } from "redux/types";
 
 export default function () {

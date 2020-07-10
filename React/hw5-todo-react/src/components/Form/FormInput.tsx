@@ -3,7 +3,6 @@ import { Label } from "./Label";
 import flatpickr from "flatpickr";
 import moment from "moment";
 import { randomBytes } from "crypto";
-import { parseTimeZone, changeToUTC } from "helpers/dateParser";
 
 interface IProps {
     inputType?: FormInputTypes;
@@ -37,6 +36,8 @@ export const FormInput = (props: IProps) => {
                 }
             });
         }
+
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const [state, setState] = useState({

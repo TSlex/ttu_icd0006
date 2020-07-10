@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux"
 import { AppState } from "redux/types"
-import React, { useEffect } from "react"
+import React from "react"
 import { randomBytes } from "crypto"
 import { AlertBox, AlertTypes } from "./Alert"
 import { setErrors } from "redux/notification/actions"

@@ -24,11 +24,9 @@ export const setGlobalLoaded = (payload: boolean, clearUp: boolean = true) => (d
 
     let state: AppState = getState();
 
-    // console.log(payload)
-
     if (clearUp === true && payload === false) {
         if (state.notification.errors.length > 0 || state.notification.succMsg) {
-            // dispatch(clearNotifications())
+            dispatch(clearNotifications())
         }
     }
 

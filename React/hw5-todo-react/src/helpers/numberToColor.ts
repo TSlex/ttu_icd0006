@@ -31,7 +31,7 @@ export const getColor = (value: number, min: number, max: number) => {
 function hslToRgb(h: number, s: number, l: number) {
     let r, g, b;
 
-    if (s == 0) {
+    if (s === 0) {
         r = g = b = l; // achromatic
 
     } else {

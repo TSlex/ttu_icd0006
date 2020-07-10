@@ -21,6 +21,8 @@ export default function Register() {
     useEffect(() => {
         dispatch(setGlobalLoaded(true));
         return () => { dispatch(setGlobalLoaded(false)) };
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const onSubmit = () => {

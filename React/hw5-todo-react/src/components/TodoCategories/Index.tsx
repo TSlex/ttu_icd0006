@@ -40,6 +40,8 @@ export default function Index() {
 
     useEffect(() => {
         dispatch(getCategories())
+
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -49,6 +51,8 @@ export default function Index() {
             dispatch(setCategoriesCreating(false));
             dispatch(unselectCategory());
         };
+
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const onAdd = () => {

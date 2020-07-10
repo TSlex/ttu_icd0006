@@ -1,5 +1,5 @@
-import React, { useEffect, ReactElement } from 'react';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Switch } from 'react-router-dom';
 
 import Header from 'components/Shared/Header';
 
@@ -22,7 +22,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'redux/types';
 import LoadingOverlay from 'components/Shared/LoadingOverlay';
 import { loadUser } from 'redux/account/actions';
-import { setErrors } from 'redux/notification/actions';
 import AuthRedirect from 'components/AuthRedirect';
 
 export default function App() {
@@ -34,7 +33,11 @@ export default function App() {
 
   const dispatch = useDispatch()
 
-  useEffect(() => { dispatch(loadUser()) }, []);
+  useEffect(() => {
+    dispatch(loadUser())
+
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
