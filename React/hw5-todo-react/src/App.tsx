@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, { useEffect, ReactElement } from 'react';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 
 import Header from 'components/Shared/Header';
 
@@ -17,55 +17,68 @@ import PrioritiesIndex from 'components/TodoPriorities/Index';
 // Account
 import Login from 'components/Identity/Login';
 import Register from 'components/Identity/Register';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { AppState } from 'redux/types';
 import LoadingOverlay from 'components/Shared/LoadingOverlay';
+import { loadUser } from 'redux/account/actions';
+import { setErrors } from 'redux/notification/actions';
+import AuthRedirect from 'components/AuthRedirect';
 
 export default function App() {
 
   const isGlobalLoading = useSelector((state: AppState) => state.loadingSystem.isGlobalLoading)
+  const isAuthenticated = useSelector((state: AppState) => state.account.isAuthenticated)
+
+  const isAccountLoading = useSelector((state: AppState) => state.account.isLoading)
+
+  const dispatch = useDispatch()
+
+  useEffect(() => { dispatch(loadUser()) }, []);
 
   return (
-    <div className="App">
-      <Header />
-      <div className="container">
-        <main role="main">
-          {isGlobalLoading && <LoadingOverlay />}
-          <Switch>
+    <>
+      {!isAccountLoading &&
+        <div className="App">
+          <Header />
+          <div className="container">
+            <main role="main">
+              {isGlobalLoading && <LoadingOverlay />}
+              <Switch>
 
-            {/* Account */}
-            <Route path="/account/register">
-              <Register />
-            </Route>
+                {/* Account */}
+                <Route path="/account/register">
+                  <Register />
+                </Route>
 
-            <Route path="/account/login">
-              <Login />
-            </Route>
+                <Route path="/account/login">
+                  <Login />
+                </Route>
 
-            {/* Tasks */}
-            <Route path="/tasks">
-              <TasksIndex />
-            </Route>
 
-            {/* Categories */}
-            <Route path="/categories">
-              <CategoriesIndex />
-            </Route>
+                <Route path="/tasks">
+                  {isAuthenticated ? <TasksIndex /> : <AuthRedirect />}
+                </Route>
 
-            {/* Priorities */}
-            <Route path="/priorities">
-              <PrioritiesIndex />
-            </Route>
+                {/* Categories */}
+                <Route path="/categories">
+                  {isAuthenticated ? <CategoriesIndex /> : <AuthRedirect />}
+                </Route>
 
-            {/* Default */}
-            <Route path="/">
-              <Home />
-            </Route>
+                {/* Priorities */}
+                <Route path="/priorities">
+                  {isAuthenticated ? <PrioritiesIndex /> : <AuthRedirect />}
+                </Route>
 
-          </Switch>
-        </main>
-      </div>
-    </div>
+                {/* Default */}
+                <Route path="/">
+                  <Home />
+                </Route>
+
+              </Switch>
+            </main>
+          </div>
+        </div>}
+    </>
   );
 }

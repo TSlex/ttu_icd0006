@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux"
 import { AppState } from "redux/types"
-import React from "react"
+import React, { useEffect } from "react"
 import { randomBytes } from "crypto"
 import { AlertBox, AlertTypes } from "./Alert"
 import { setErrors } from "redux/notification/actions"
@@ -30,7 +30,7 @@ export default function Errors(props: IProps) {
     if (errors.length > 0) {
         return (
             <div key={randomBytes(5).toString()}>
-                {errors.map((item, index) => (
+                {errors.map((item: string, index) => (
                     <AlertBox
                         key={index}
                         dismissFunction={() => removeError(item)}

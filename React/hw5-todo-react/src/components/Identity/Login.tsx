@@ -26,8 +26,6 @@ export default function Login() {
 
         dispatch(clearNotifications())
 
-        console.log(loginModel.email)
-
         let validationErrors: string[] = []
         let validation = { email: true, password: true, conf_password: true }
 

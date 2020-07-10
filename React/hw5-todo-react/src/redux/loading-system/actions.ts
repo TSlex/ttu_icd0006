@@ -20,12 +20,16 @@ export const setGlobalLoading = (payload: boolean): LoadingSystemSetGlobalLoadin
     payload: payload,
 });
 
-export const setGlobalLoaded = (payload: boolean) => (dispatch: any, getState: any) => {
+export const setGlobalLoaded = (payload: boolean, clearUp: boolean = true) => (dispatch: any, getState: any) => {
 
     let state: AppState = getState();
 
-    if (payload === true && (state.notification.errors.length > 0 || state.notification.succMsg)) {
-        dispatch(clearNotifications())
+    // console.log(payload)
+
+    if (clearUp === true && payload === false) {
+        if (state.notification.errors.length > 0 || state.notification.succMsg) {
+            // dispatch(clearNotifications())
+        }
     }
 
     let action: LoadingSystemSetGlobalLoadedAction = {
@@ -36,7 +40,16 @@ export const setGlobalLoaded = (payload: boolean) => (dispatch: any, getState: a
     dispatch(action)
 };
 
-export const setLocalLoading = (payload: boolean): LoadingSystemSetLocalLoadingAction => ({
+export const setLocalLoading = (payload: boolean) => (dispatch: any, getState: any) => {
+
+    let state: AppState = getState();
+
+    if (state.loadingSystem.isLocalLoading !== payload) {
+        dispatch(setLocalLoadingResult(payload))
+    }
+}
+
+export const setLocalLoadingResult = (payload: boolean): LoadingSystemSetLocalLoadingAction => ({
     type: LOADING_SYSTEM_ACTION_TYPES.SET_LOCAL_LOADING,
     payload: payload,
 });

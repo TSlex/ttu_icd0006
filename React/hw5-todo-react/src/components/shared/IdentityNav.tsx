@@ -9,16 +9,14 @@ import { AppState } from "redux/types";
 export default function () {
     const dispatch = useDispatch()
 
-    const username = useSelector((store: AppState) => store.account.username);
-    const isAuthenticated = useSelector((store: AppState) => store.account.isAuthenticated);
-
-    useEffect(() => { dispatch(loadUser()) }, []);
+    const username = useSelector((store: AppState) => store.account?.username);
+    const isAuthenticated = useSelector((store: AppState) => store.account?.isAuthenticated);
 
     const history = useHistory()
 
     const onLogout = () => {
         dispatch(logout());
-        history.replace("/")
+        history.replace("/account/login")
     }
 
     const getNavs = () => {

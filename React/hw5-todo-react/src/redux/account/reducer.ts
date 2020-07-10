@@ -8,7 +8,7 @@ export const initialState: Account = {
     username: null,
     expired: -1,
     isAuthenticated: false,
-    isLoading: false
+    isLoading: true
 }
 
 export const account = (
@@ -70,7 +70,7 @@ export const account = (
                     }
                 }
             } else {
-                return state;
+                return { ...newState, isLoading: false };
             }
 
         case ACCOUNT_ACTION_TYPES.SET_LOADING:
@@ -85,5 +85,5 @@ export const account = (
 
 const logout = (): Account => {
     localStorage.removeItem('token')
-    return { ...initialState };
+    return { ...initialState, isLoading: false };
 }

@@ -1,3 +1,4 @@
+import { AccountLoadUserAction } from './../types';
 import { setLocalLoading } from './../loading-system/actions';
 import {
     AccountLoginAction,
@@ -28,21 +29,20 @@ export const login = (loginModel: ILoginDTO) =>
             dispatch(setErrors(["Authorisation fails."]));
 
         } else {
-            let action: AccountLoginAction = {
-                type: ACCOUNT_ACTION_TYPES.LOGIN,
-                jwt: result.data!.token,
-            }
-
-            dispatch(action);
+            dispatch(loginResult(result.data!.token));
 
             BrowserHistory.replace("/")
 
-            dispatch(setAccountLoading(true));
             dispatch(loadUser());
         }
 
         dispatch(setLocalLoading(false));
     };
+
+const loginResult = (jwt: string): AccountLoginAction => ({
+    type: ACCOUNT_ACTION_TYPES.LOGIN,
+    jwt: jwt
+})
 
 export const register = (registerModel: IRegisterDTO) =>
     async (dispatch: any) => {
@@ -55,11 +55,7 @@ export const register = (registerModel: IRegisterDTO) =>
             dispatch(setErrors(result.errors));
 
         } else {
-            let action: AccountRegisterAction = {
-                type: ACCOUNT_ACTION_TYPES.LOGIN,
-            }
-
-            dispatch(action);
+            dispatch(registerResult());
 
             BrowserHistory.replace("/account/login")
         }
@@ -67,11 +63,24 @@ export const register = (registerModel: IRegisterDTO) =>
         dispatch(setLocalLoading(false));
     };
 
-export const logout = (): AccountLogoutAction => ({
+const registerResult = (): AccountRegisterAction => ({
+    type: ACCOUNT_ACTION_TYPES.REGISTER,
+})
+
+export const logout = () => (dispatch: any) => {
+    dispatch(logoutResult())
+};
+
+const logoutResult = (): AccountLogoutAction => ({
     type: ACCOUNT_ACTION_TYPES.LOGOUT
 });
 
-export const loadUser = (): AccountRegisterAction => ({
+export const loadUser = () => (dispatch: any) => {
+    dispatch(setAccountLoading(true))
+    dispatch(loadUserResult())
+};
+
+const loadUserResult = (): AccountLoadUserAction => ({
     type: ACCOUNT_ACTION_TYPES.LOAD_USER
 });
 
