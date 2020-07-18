@@ -38,7 +38,7 @@ import { IFavoriteAdminDTO } from "@/types/IFavoriteDTO";
 
 import { FavoritesApi } from "@/services/admin/FavoritesApi";
 
-import IndexControls from "@/views/admin/components/IndexControls.vue";
+import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 import router from "../../../../router";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
@@ -65,21 +65,17 @@ export default class FavoritesIndexA extends Vue {
   onDelete(id: string) {
     FavoritesApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
-        FavoritesApi.index(this.jwt).then(
-          (response: IFavoriteAdminDTO[]) => {
-            this.Model = response;
-          }
-        );
+        FavoritesApi.index(this.jwt).then((response: IFavoriteAdminDTO[]) => {
+          this.Model = response;
+        });
       }
     });
   }
 
   mounted() {
-    FavoritesApi.index(this.jwt).then(
-      (response: IFavoriteAdminDTO[]) => {
-        this.Model = response;
-      }
-    );
+    FavoritesApi.index(this.jwt).then((response: IFavoriteAdminDTO[]) => {
+      this.Model = response;
+    });
   }
 }
 </script>

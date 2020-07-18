@@ -48,7 +48,7 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 
 import { CommentsApi } from "@/services/admin/CommentsApi";
 
-import IndexControls from "@/views/admin/components/IndexControls.vue";
+import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 
 @Component({
   components: {

@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <h1>Index</h1>
-    <p>
-      <a href="#" @click="onCreate" @click.prevent>Create New</a>
-    </p>
+  <AdminIndex v-on:onCreate="onCreate()">
     <table class="table">
       <thead>
         <tr>
@@ -33,7 +29,7 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </AdminIndex>
 </template>
 
 <script lang="ts">
@@ -46,36 +42,25 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 
 import { RanksApi } from "@/services/admin/RanksApi";
 
-import IndexControls from "@/views/admin/components/IndexControls.vue";
+import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
+import AdminIndex from "@/views/admin/components/shared/AdminIndex.vue";
 
 @Component({
   components: {
     IndexControls
   }
 })
-export default class RanksIndexA extends Vue {
+export default class RanksIndexA extends AdminIndex {
   private Model: IRankAdminDTO[] = [];
 
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  onCreate() {
-    router.push({ name: "RanksCreateA" });
+  created() {
+    this.modelName = "Rank";
   }
 
   onHistory(id: string) {
     RanksApi.history(id, this.jwt).then((response: IRankAdminDTO[]) => {
       this.Model = response;
     });
-  }
-
-  onEdit(id: string) {
-    router.push({ name: "RanksEditA", params: { id } });
-  }
-
-  onDetails(id: string) {
-    router.push({ name: "RanksDetailsA", params: { id } });
   }
 
   onDelete(id: string) {

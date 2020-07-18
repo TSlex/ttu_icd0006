@@ -44,7 +44,7 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 
 import { ProfileGiftsApi } from "@/services/admin/ProfileGiftsApi";
 
-import IndexControls from "@/views/admin/components/IndexControls.vue";
+import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 
 @Component({
   components: {
@@ -73,9 +73,11 @@ export default class ProfileGiftsIndexA extends Vue {
   onDelete(id: string) {
     ProfileGiftsApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
-        ProfileGiftsApi.index(this.jwt).then((response: IProfileGiftAdminDTO[]) => {
-          this.Model = response;
-        });
+        ProfileGiftsApi.index(this.jwt).then(
+          (response: IProfileGiftAdminDTO[]) => {
+            this.Model = response;
+          }
+        );
       }
     });
   }
@@ -83,9 +85,11 @@ export default class ProfileGiftsIndexA extends Vue {
   onRestore(id: string) {
     ProfileGiftsApi.restore(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
-        ProfileGiftsApi.index(this.jwt).then((response: IProfileGiftAdminDTO[]) => {
-          this.Model = response;
-        });
+        ProfileGiftsApi.index(this.jwt).then(
+          (response: IProfileGiftAdminDTO[]) => {
+            this.Model = response;
+          }
+        );
       }
     });
   }

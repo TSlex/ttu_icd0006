@@ -44,7 +44,7 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 
 import { ProfilesApi } from "@/services/admin/ProfilesApi";
 
-import IndexControls from "@/views/admin/components/IndexControls.vue";
+import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 
 @Component({
   components: {

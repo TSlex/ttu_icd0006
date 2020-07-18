@@ -44,7 +44,7 @@ import { IChatRoleAdminDTO } from "@/types/IChatRoleDTO";
 
 import { ChatRolesApi } from "@/services/admin/ChatRolesApi";
 
-import IndexControls from "@/views/admin/components/IndexControls.vue";
+import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 import router from "../../../../router";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 

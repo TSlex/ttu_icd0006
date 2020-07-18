@@ -44,7 +44,7 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 
 import { ProfileRanksApi } from "@/services/admin/ProfileRanksApi";
 
-import IndexControls from "@/views/admin/components/IndexControls.vue";
+import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 
 @Component({
   components: {
@@ -63,9 +63,11 @@ export default class ProfileRanksIndexA extends Vue {
   }
 
   onHistory(id: string) {
-    ProfileRanksApi.history(id, this.jwt).then((response: IProfileRankAdminDTO[]) => {
-      this.Model = response;
-    });
+    ProfileRanksApi.history(id, this.jwt).then(
+      (response: IProfileRankAdminDTO[]) => {
+        this.Model = response;
+      }
+    );
   }
 
   onEdit(id: string) {
@@ -79,9 +81,11 @@ export default class ProfileRanksIndexA extends Vue {
   onDelete(id: string) {
     ProfileRanksApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
-        ProfileRanksApi.index(this.jwt).then((response: IProfileRankAdminDTO[]) => {
-          this.Model = response;
-        });
+        ProfileRanksApi.index(this.jwt).then(
+          (response: IProfileRankAdminDTO[]) => {
+            this.Model = response;
+          }
+        );
       }
     });
   }
@@ -89,9 +93,11 @@ export default class ProfileRanksIndexA extends Vue {
   onRestore(id: string) {
     ProfileRanksApi.restore(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
-        ProfileRanksApi.index(this.jwt).then((response: IProfileRankAdminDTO[]) => {
-          this.Model = response;
-        });
+        ProfileRanksApi.index(this.jwt).then(
+          (response: IProfileRankAdminDTO[]) => {
+            this.Model = response;
+          }
+        );
       }
     });
   }

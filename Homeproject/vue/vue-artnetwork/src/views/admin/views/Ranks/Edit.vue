@@ -4,11 +4,7 @@
     <hr />
     <div class="row text-center align-items-center d-flex flex-column">
       <div class="col-md-4">
-        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-          <ul>
-            <li v-for="(error, index) in errors" :key="index">{{error}}</li>
-          </ul>
-        </div>
+        <ErrorsList :errors="errors"></ErrorsList>
 
         <div class="form-group mt-3">
           <label class="control-label" for="rankCode">Code</label>
@@ -66,7 +62,14 @@
 
         <div class="form-group mt-3">
           <label class="control-label" for="previousRankId">Previous Rank (ID)</label>
-          <input class="form-control" type="text" required id="previousRankId" name="previousRankId" v-model="Model.previousRankId" />
+          <input
+            class="form-control"
+            type="text"
+            required
+            id="previousRankId"
+            name="previousRankId"
+            v-model="Model.previousRankId"
+          />
           <span class="text-danger field-validation-valid" data-valmsg-for="RankId" data-valmsg-replace="true"></span>
         </div>
 
@@ -91,7 +94,13 @@ import { RanksApi } from "@/services/admin/RanksApi";
 import { ImagesApi } from "@/services/ImagesApi";
 import { ImageType } from "@/types/Enums/ImageType";
 
-@Component
+import ErrorsList from "@/views/admin/components/shared/ErrorsList.vue";
+
+@Component({
+  components: {
+    ErrorsList
+  }
+})
 export default class RanksEditA extends Vue {
   @Prop()
   private id!: string;

@@ -40,7 +40,7 @@ import { IFollowerAdminDTO } from "@/types/IFollowerDTO";
 
 import { FollowersApi } from "@/services/admin/FollowersApi";
 
-import IndexControls from "@/views/admin/components/IndexControls.vue";
+import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 import router from "../../../../router";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
@@ -67,21 +67,17 @@ export default class FollowersIndexA extends Vue {
   onDelete(id: string) {
     FollowersApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
-        FollowersApi.index(this.jwt).then(
-          (response: IFollowerAdminDTO[]) => {
-            this.Model = response;
-          }
-        );
+        FollowersApi.index(this.jwt).then((response: IFollowerAdminDTO[]) => {
+          this.Model = response;
+        });
       }
     });
   }
 
   mounted() {
-    FollowersApi.index(this.jwt).then(
-      (response: IFollowerAdminDTO[]) => {
-        this.Model = response;
-      }
-    );
+    FollowersApi.index(this.jwt).then((response: IFollowerAdminDTO[]) => {
+      this.Model = response;
+    });
   }
 }
 </script>

@@ -40,7 +40,7 @@ import { IBlockedProfileAdminDTO } from "@/types/IBlockedProfileDTO";
 
 import { BlockedProfilesApi } from "@/services/admin/BlockedProfilesApi";
 
-import IndexControls from "@/views/admin/components/IndexControls.vue";
+import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 import router from "../../../../router";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 

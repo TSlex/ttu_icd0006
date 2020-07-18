@@ -42,7 +42,7 @@ import { IChatMemberAdminDTO } from "@/types/IChatMemberDTO";
 
 import { ChatMembersApi } from "@/services/admin/ChatMembersApi";
 
-import IndexControls from "@/views/admin/components/IndexControls.vue";
+import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 import router from "../../../../router";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
