@@ -19,7 +19,7 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    "no-multiple-empty-lines": [2, {"max": 99999, "maxEOF": 0}],
+    "no-multiple-empty-lines": [2, { "max": 99999, "maxEOF": 0 }],
     'quotes': 'off',
     'semi': 'off',
     'space-before-function-paren': 'off',
@@ -28,6 +28,7 @@ module.exports = {
     'comma-dangle': 'off',
     'eol-last': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',
     '@typescript-eslint/interface-name-prefix': [

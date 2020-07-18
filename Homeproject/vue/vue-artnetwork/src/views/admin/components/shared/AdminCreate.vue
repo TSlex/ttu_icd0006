@@ -1,0 +1,38 @@
+<template>
+  <div>
+    <h1 class="text-center">Create</h1>
+    <hr />
+    <div class="row text-center align-items-center d-flex flex-column">
+      <div class="col-md-4">
+        <ErrorsList :errors="errors"></ErrorsList>
+        <slot></slot>
+        <CreateControls v-on:onSubmit="$emit('onSubmit')" />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Vue, Component, Prop } from "vue-property-decorator";
+
+import store from "@/store";
+import router from "@/router";
+import { RanksApi } from "@/services/RanksApi";
+
+import CreateControls from "@/views/admin/components/shared/CreateControls.vue";
+import ErrorsList from "@/views/admin/components/shared/ErrorsList.vue";
+
+@Component({
+  components: {
+    CreateControls,
+    ErrorsList
+  }
+})
+export default class AdminCreate extends Vue {
+  protected errors: string[] = [];
+
+  get jwt() {
+    return store.getters.getJwt;
+  }
+}
+</script>
