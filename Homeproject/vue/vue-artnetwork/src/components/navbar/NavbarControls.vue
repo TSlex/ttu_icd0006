@@ -16,17 +16,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import store from "../store";
-import router from "../router";
+import IdentityStore from "@/components/shared/IdentityStore.vue";
 
 @Component
-export default class NavbarControls extends Vue {
-  get isAuthenticated(): boolean {
-    return store.getters.isAuthenticated;
-  }
-
-  get userName(): string {
-    return store.getters.getUserName;
-  }
-}
+export default class NavbarControls extends IdentityStore {}
 </script>

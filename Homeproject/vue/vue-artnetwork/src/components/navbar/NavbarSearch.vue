@@ -8,8 +8,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import store from "../store";
-import router from "../router";
+import store from "@/store";
+import router from "@/router";
 
 @Component
 export default class NavbarSearch extends Vue {

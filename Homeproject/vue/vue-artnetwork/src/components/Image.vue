@@ -4,8 +4,9 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { ImagesApi } from "../services/ImagesApi";
-import store from "../store";
+import { ImagesApi } from "@/services/ImagesApi";
+
+import store from "@/store";
 
 @Component
 export default class ImageComponent extends Vue {

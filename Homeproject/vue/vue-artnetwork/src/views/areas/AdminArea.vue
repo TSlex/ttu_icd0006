@@ -37,8 +37,9 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import Identity from "@/components/Identity.vue";
-import NavbarSearch from "@/components/NavbarSearch.vue";
+
+import Identity from "@/components/navbar/Identity.vue";
+import NavbarSearch from "@/components/navbar/NavbarSearch.vue";
 import NavbarControls from "@/views/admin/components/NavbarControls.vue";
 
 @Component({

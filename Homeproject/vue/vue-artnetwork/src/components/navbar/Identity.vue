@@ -23,19 +23,11 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import IdentityStore from "@/components/shared/IdentityStore.vue";
 
-import store from "../store";
-import router from "../router";
+import store from "@/store";
+import router from "@/router";
 
 @Component
 export default class Identity extends IdentityStore {
-  get isAuthenticated(): boolean {
-    return store.getters.isAuthenticated;
-  }
-
-  get userName(): string {
-    return store.getters.getUserName;
-  }
-
   logoutOnClick(): void {
     store.dispatch("clearJwt");
     router.push("/account/login");
