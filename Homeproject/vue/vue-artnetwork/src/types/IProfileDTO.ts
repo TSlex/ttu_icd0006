@@ -40,12 +40,12 @@ export interface IProfileAdminDTO {
   password: string;
   id: string;
   registrationDateTime: Date;
-  createdBy: string;
+  createdBy: string | null;
   createdAt: Date;
-  changedBy: string;
+  changedBy: string | null;
   changedAt: Date;
-  deletedBy: string;
-  deletedAt: Date;
+  deletedBy: string | null;
+  deletedAt: Date | null;
   userName: string;
   normalizedUserName: string;
   email: string;

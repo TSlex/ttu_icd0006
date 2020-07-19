@@ -12,26 +12,12 @@
 
         <div class="form-group">
           <label class="control-label" for="ProfileId">Профиль (ID)</label>
-          <input
-            class="form-control"
-            type="text"
-            required
-            id="ProfileId"
-            name="ProfileId"
-            v-model="Model.profileId"
-          />
+          <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="Model.profileId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
         </div>
         <div class="form-group">
           <label class="control-label" for="ChatRoomId">Комната (ID)</label>
-          <input
-            class="form-control"
-            type="text"
-            required
-            id="ChatRoomId"
-            name="ChatRoomId"
-            v-model="Model.chatRoomId"
-          />
+          <input class="form-control" type="text" required id="ChatRoomId" name="ChatRoomId" v-model="Model.chatRoomId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ChatRoomId" data-valmsg-replace="true"></span>
         </div>
         <div class="form-group">
@@ -79,7 +65,7 @@ import { MessagesApi } from "@/services/admin/MessagesApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 @Component
-export default class MessagesCreateA extends Vue {
+export default class MessagesCreateA extends AdminCreate {
   private Model: IMessageAdminDTO = {
     id: "",
     masterId: null,
@@ -92,7 +78,7 @@ export default class MessagesCreateA extends Vue {
     profileId: "",
     chatRoomId: "",
     messageValue: "",
-    messageDateTime: new Date(),
+    messageDateTime: new Date()
   };
 
   private errors: string[] = [];

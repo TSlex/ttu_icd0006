@@ -72,8 +72,7 @@ import AdminDetails from "@/views/admin/components/shared/AdminDetails.vue";
   }
 })
 export default class RanksDetailsA extends AdminDetails {
-  @Prop()
-  private id!: string;
+  @Prop() protected id!: string;
 
   private Model: IRankAdminDTO | null = null;
 

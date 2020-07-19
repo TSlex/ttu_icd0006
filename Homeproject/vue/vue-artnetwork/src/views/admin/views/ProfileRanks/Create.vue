@@ -48,7 +48,7 @@ import { ImageType } from "@/types/Enums/ImageType";
     ImageComponent
   }
 })
-export default class ProfileRanksCreateA extends Vue {
+export default class ProfileRanksCreateA extends AdminCreate {
   private Model: IProfileRankAdminDTO = {
     id: "",
     createdBy: null,

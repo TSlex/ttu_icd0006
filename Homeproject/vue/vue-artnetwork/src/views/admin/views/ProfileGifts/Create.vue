@@ -93,7 +93,7 @@ import { ImageType } from "@/types/Enums/ImageType";
     ImageComponent
   }
 })
-export default class ProfileGiftsCreateA extends Vue {
+export default class ProfileGiftsCreateA extends AdminCreate {
   private imageModel: IImageProfileGiftDTO = {
     paddingTop: 0,
     paddingRight: 0,
@@ -186,13 +186,15 @@ export default class ProfileGiftsCreateA extends Vue {
 
   submit() {
     if (this.Model.profileId.length > 0 && this.Model.postTitle.length > 0) {
-      ProfileGiftsApi.create(this.Model, this.jwt).then((response: ResponseDTO) => {
-        if (response?.errors) {
-          this.errors = response.errors;
-        } else {
-          this.$router.go(-1);
+      ProfileGiftsApi.create(this.Model, this.jwt).then(
+        (response: ResponseDTO) => {
+          if (response?.errors) {
+            this.errors = response.errors;
+          } else {
+            this.$router.go(-1);
+          }
         }
-      });
+      );
     }
   }
 

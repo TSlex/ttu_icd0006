@@ -68,7 +68,7 @@ import { CommentsApi } from "@/services/admin/CommentsApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 @Component
-export default class CommentsCreateA extends Vue {
+export default class CommentsCreateA extends AdminCreate {
   private Model: ICommentAdminDTO = {
     id: "",
     masterId: null,

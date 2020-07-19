@@ -42,7 +42,7 @@ import { ChatRoomsApi } from "@/services/admin/ChatRoomsApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 @Component
-export default class ChatRoomsCreateA extends Vue {
+export default class ChatRoomsCreateA extends AdminCreate {
   private Model: IChatRoomAdminDTO = {
     id: "",
     masterId: null,

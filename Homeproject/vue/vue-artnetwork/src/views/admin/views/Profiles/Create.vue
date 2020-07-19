@@ -88,49 +88,32 @@ import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 import { IImageProfileDTO } from "@/types/IImageDTO";
 import { ImageType } from "@/types/Enums/ImageType";
 
+import AdminCreate from "@/views/admin/components/shared/AdminCreate.vue";
+
+import CreateEdit from "./CreateEdit.vue";
+
 @Component({
   components: {
-    ImageComponent
+    ImageComponent,
+    AdminCreate,
+    CreateEdit
   }
 })
-export default class ProfilesCreateA extends Vue {
+export default class ProfilesCreateA extends AdminCreate {
   private imageModel: IImageProfileDTO = {
     paddingTop: 0,
     paddingRight: 0,
     paddingBottom: 0,
     paddingLeft: 0,
     imageFile: null,
-    imageType: ImageType.Profile,
+    imageType: ImageType.ProfileAvatar,
     imageFor: "",
     heightPx: 0,
     widthPx: 0
   };
 
-  private Model: IProfileAdminDTO = {
-    id: "",
-    masterId: null,
-    createdBy: null,
-    createdAt: new Date(),
-    changedBy: null,
-    changedAt: new Date(),
-    deletedBy: null,
-    deletedAt: null,
-    postTitle: "",
-    postImageId: "",
-    postDescription: "",
-    postPublicationDateTime: new Date(),
-    postFavoritesCount: 0,
-    postCommentsCount: 0,
-    profileId: ""
-  };
-
+  private Model: IProfileAdminDTO = {} as IProfileAdminDTO;
   private isImageLoaded: boolean = false;
-
-  private errors: string[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
 
   get fileName() {
     return this.imageModel?.imageFile?.name;
@@ -185,15 +168,15 @@ export default class ProfilesCreateA extends Vue {
   }
 
   submit() {
-    if (this.Model.profileId.length > 0 && this.Model.postTitle.length > 0) {
-      ProfilesApi.create(this.Model, this.jwt).then((response: ResponseDTO) => {
-        if (response?.errors) {
-          this.errors = response.errors;
-        } else {
-          this.$router.go(-1);
-        }
-      });
-    }
+    // if (true) {
+    ProfilesApi.create(this.Model, this.jwt).then((response: ResponseDTO) => {
+      if (response?.errors) {
+        this.errors = response.errors;
+      } else {
+        this.$router.go(-1);
+      }
+    });
+    // }
   }
 
   beforeDestroy() {

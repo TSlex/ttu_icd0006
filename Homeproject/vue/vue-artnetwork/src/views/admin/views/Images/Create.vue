@@ -74,7 +74,7 @@ import { ImageType } from "@/types/Enums/ImageType";
     ImageComponent
   }
 })
-export default class ImagesCreateA extends Vue {
+export default class ImagesCreateA extends AdminCreate {
   private Model: IImageAdminDTO = {
     id: "",
     masterId: null,

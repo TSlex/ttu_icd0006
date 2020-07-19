@@ -93,7 +93,7 @@ import { ImageType } from "@/types/Enums/ImageType";
     ImageComponent
   }
 })
-export default class PostsCreateA extends Vue {
+export default class PostsCreateA extends AdminCreate {
   private imageModel: IImagePostDTO = {
     paddingTop: 0,
     paddingRight: 0,

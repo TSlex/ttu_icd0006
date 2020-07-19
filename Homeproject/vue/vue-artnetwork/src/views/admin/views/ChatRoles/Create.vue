@@ -126,7 +126,7 @@ import { ChatRolesApi } from "@/services/admin/ChatRolesApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 @Component
-export default class ChatRolesCreateA extends Vue {
+export default class ChatRolesCreateA extends AdminCreate {
   private Model: IChatRoleAdminDTO = {
     roleTitle: "",
     roleTitleValueId: "",

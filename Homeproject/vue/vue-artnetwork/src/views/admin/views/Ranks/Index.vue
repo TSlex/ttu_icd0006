@@ -57,6 +57,12 @@ export default class RanksIndexA extends AdminIndex {
     this.modelName = "Rank";
   }
 
+  mounted() {
+    RanksApi.index(this.jwt).then((response: IRankAdminDTO[]) => {
+      this.Model = response;
+    });
+  }
+
   onHistory(id: string) {
     RanksApi.history(id, this.jwt).then((response: IRankAdminDTO[]) => {
       this.Model = response;
@@ -80,12 +86,6 @@ export default class RanksIndexA extends AdminIndex {
           this.Model = response;
         });
       }
-    });
-  }
-
-  mounted() {
-    RanksApi.index(this.jwt).then((response: IRankAdminDTO[]) => {
-      this.Model = response;
     });
   }
 }
