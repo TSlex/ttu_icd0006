@@ -88,6 +88,10 @@ import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 import { IImagePostDTO } from "@/types/IImageDTO";
 import { ImageType } from "@/types/Enums/ImageType";
 
+import AdminCreate from "@/views/admin/components/shared/AdminCreate.vue";
+
+import CreateEdit from "./CreateEdit.vue";
+
 @Component({
   components: {
     ImageComponent
@@ -125,12 +129,6 @@ export default class PostsCreateA extends AdminCreate {
   };
 
   private isImageLoaded: boolean = false;
-
-  private errors: string[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
 
   get fileName() {
     return this.imageModel?.imageFile?.name;

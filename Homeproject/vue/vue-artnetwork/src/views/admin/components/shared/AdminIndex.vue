@@ -10,22 +10,19 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import IdentityStore from "@/components/shared/IdentityStore.vue";
 
-import store from "@/store";
-import router from "@/router";
 import { RanksApi } from "@/services/RanksApi";
+
+import router from "@/router";
 
 @Component({
   components: {}
 })
-export default class AdminIndex extends Vue {
+export default class AdminIndex extends IdentityStore {
   protected modelName?: string;
 
   @Prop() protected canCreate?: boolean;
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
 
   get CanCreate() {
     return this.canCreate ?? true;

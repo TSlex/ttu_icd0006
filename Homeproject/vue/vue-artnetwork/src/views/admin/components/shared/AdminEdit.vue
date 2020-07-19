@@ -14,9 +14,8 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import ErrorListContainer from "@/components/shared/ErrorListContainer.vue";
 
-import store from "@/store";
-import router from "@/router";
 import { RanksApi } from "@/services/RanksApi";
 
 import EditControls from "@/views/admin/components/shared/EditControls.vue";
@@ -28,11 +27,5 @@ import ErrorsList from "@/views/admin/components/shared/ErrorsList.vue";
     ErrorsList
   }
 })
-export default class AdminEdit extends Vue {
-  protected errors: string[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-}
+export default class AdminEdit extends ErrorListContainer {}
 </script>

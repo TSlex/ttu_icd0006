@@ -21,11 +21,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import IdentityStore from "@/components/shared/IdentityStore.vue";
+
 import store from "../store";
 import router from "../router";
 
 @Component
-export default class Identity extends Vue {
+export default class Identity extends IdentityStore {
   get isAuthenticated(): boolean {
     return store.getters.isAuthenticated;
   }

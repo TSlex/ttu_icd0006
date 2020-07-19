@@ -14,12 +14,12 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import ErrorListContainer from "@/components/shared/ErrorListContainer.vue";
 
-import store from "@/store";
-import router from "@/router";
 import { RanksApi } from "@/services/RanksApi";
 
 import CreateControls from "@/views/admin/components/shared/CreateControls.vue";
+
 import ErrorsList from "@/views/admin/components/shared/ErrorsList.vue";
 
 @Component({
@@ -28,11 +28,5 @@ import ErrorsList from "@/views/admin/components/shared/ErrorsList.vue";
     ErrorsList
   }
 })
-export default class AdminCreate extends Vue {
-  protected errors: string[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-}
+export default class AdminCreate extends ErrorListContainer {}
 </script>

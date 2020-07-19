@@ -67,6 +67,10 @@ import { ICommentAdminDTO } from "@/types/ICommentDTO";
 import { CommentsApi } from "@/services/admin/CommentsApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
+import AdminCreate from "@/views/admin/components/shared/AdminCreate.vue";
+
+import CreateEdit from "./CreateEdit.vue";
+
 @Component
 export default class CommentsCreateA extends AdminCreate {
   private Model: ICommentAdminDTO = {
@@ -83,12 +87,6 @@ export default class CommentsCreateA extends AdminCreate {
     profileId: "",
     postId: ""
   };
-
-  private errors: string[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
 
   submit() {
     if (

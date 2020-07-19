@@ -125,6 +125,10 @@ import { IChatRoleAdminDTO } from "@/types/IChatRoleDTO";
 import { ChatRolesApi } from "@/services/admin/ChatRolesApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
+import AdminCreate from "@/views/admin/components/shared/AdminCreate.vue";
+
+import CreateEdit from "./CreateEdit.vue";
+
 @Component
 export default class ChatRolesCreateA extends AdminCreate {
   private Model: IChatRoleAdminDTO = {
@@ -144,8 +148,6 @@ export default class ChatRolesCreateA extends AdminCreate {
     deletedBy: null,
     deletedAt: null
   };
-
-  private errors: string[] = [];
 
   get jwt() {
     return store.getters.getJwt;

@@ -13,10 +13,10 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import IdentityStore from "@/components/shared/IdentityStore.vue";
 
-import store from "@/store";
-import router from "@/router";
 import { RanksApi } from "@/services/RanksApi";
+import router from "@/router";
 
 import DetailsControls from "@/views/admin/components/shared/DetailsControls.vue";
 
@@ -25,13 +25,9 @@ import DetailsControls from "@/views/admin/components/shared/DetailsControls.vue
     DetailsControls
   }
 })
-export default class AdminIndex extends Vue {
+export default class AdminDetails extends IdentityStore {
   protected id?: string;
   protected modelName?: string;
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
 
   onEdit() {
     if (this.modelName && this.id) {

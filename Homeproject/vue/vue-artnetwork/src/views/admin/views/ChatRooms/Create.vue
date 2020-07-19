@@ -41,6 +41,10 @@ import { IChatRoomAdminDTO } from "@/types/IChatRoomDTO";
 import { ChatRoomsApi } from "@/services/admin/ChatRoomsApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
+import AdminCreate from "@/views/admin/components/shared/AdminCreate.vue";
+
+import CreateEdit from "./CreateEdit.vue";
+
 @Component
 export default class ChatRoomsCreateA extends AdminCreate {
   private Model: IChatRoomAdminDTO = {
@@ -56,12 +60,6 @@ export default class ChatRoomsCreateA extends AdminCreate {
     chatRoomImageUrl: null,
     chatRoomImageId: null
   };
-
-  private errors: string[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
 
   submit() {
     if (this.Model.chatRoomTitle.length > 0) {

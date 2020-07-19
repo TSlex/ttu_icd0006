@@ -64,6 +64,10 @@ import { IMessageAdminDTO } from "@/types/IMessageDTO";
 import { MessagesApi } from "@/services/admin/MessagesApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
+import AdminCreate from "@/views/admin/components/shared/AdminCreate.vue";
+
+import CreateEdit from "./CreateEdit.vue";
+
 @Component
 export default class MessagesCreateA extends AdminCreate {
   private Model: IMessageAdminDTO = {
@@ -80,12 +84,6 @@ export default class MessagesCreateA extends AdminCreate {
     messageValue: "",
     messageDateTime: new Date()
   };
-
-  private errors: string[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
 
   submit() {
     if (
