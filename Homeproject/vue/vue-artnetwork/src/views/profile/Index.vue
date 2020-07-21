@@ -42,34 +42,7 @@
         >{{rank.rankDescription}}</span>
       </div>
     </Modal>
-    <Modal v-if="isGiftDetails" v-on:closeModal="closeGiftDetails">
-      <div class="d-flex flex-column align-items-center" style="position: relative">
-        <button
-          v-if="isCurrentUser"
-          class="item_controls btn-link"
-          style="position: absolute; right: 0"
-          @click="deleteProfileGift(gift)"
-          @click.prevent
-        >
-          <i class="fas fa-times-circle"></i>
-        </button>
-        <div>
-          <ImageComponent :id="gift.imageId" :key="gift.imageId" height="300px" width="300px" />
-        </div>
-        <span class="font-weight-bold">{{gift.giftName}}</span>
-
-        <span v-if="gift.fromUsername" class="font-weight-bold mt-2">From "{{gift.fromUsername}}"</span>
-        <span v-else class="font-weight-bold mt-2">Anonymous</span>
-        <template v-if="gift.message">
-          <span class="font-weight-bold mt-2">Message:</span>
-          <div
-            style="color: black !important; margin: auto; max-width: 400px; overflow: hidden; text-overflow: ellipsis; word-break: break-word"
-          >{{gift.message}}</div>
-        </template>
-        <hr />
-        <span>[{{gift.giftDateTime | formatDate}}]</span>
-      </div>
-    </Modal>
+    <GiftDetails v-if="isGiftDetails" :username="username" :gift="gift" v-on:onCloseGiftDetails="closeGiftDetails" />
     <div v-if="profile && rank" class="profile_conainer">
       <div class="profile_section">
         <div class="col-3 d-flex justify-content-center">
@@ -203,13 +176,16 @@ import { IFollowerDTO } from "@/types/IFollowerDTO";
 import { IBlockedProfileDTO } from "@/types/IBlockedProfileDTO";
 import { IGiftDTO } from "@/types/IGiftDTO";
 
+import GiftDetails from "@/views/gifts/GiftDetails.vue";
+
 @Component({
   components: {
     ImageComponent,
     PostDetails,
     ProfilesModal,
     Modal,
-    GiftSelection
+    GiftSelection,
+    GiftDetails
   }
 })
 export default class ProfileIndex extends Vue {
@@ -296,14 +272,15 @@ export default class ProfileIndex extends Vue {
     return url !== null && url.search(reg) === 0;
   }
 
-  deleteProfileGift(gift: IProfileGiftDTO) {
-    if (this.isCurrentUser) {
-      store.dispatch("deleteProfileGift", gift).then(() => {
-        this.closeGiftDetails()
-      });
-    }
-  }
+  // deleteProfileGift(gift: IProfileGiftDTO) {
+  //   if (this.isCurrentUser) {
+  //     store.dispatch("deleteProfileGift", gift).then(() => {
+  //       this.closeGiftDetails()
+  //     });
+  //   }
+  // }
 
+  // Gift details
   openGiftDetails(gift: IProfileGiftDTO) {
     this.gift = gift;
     this.isGiftDetails = true;
@@ -314,6 +291,7 @@ export default class ProfileIndex extends Vue {
     this.gift = null;
   }
 
+  // Rank details
   openRankDetails() {
     if (this.rank && this.isCurrentUser) {
       this.isRankDetails = true;

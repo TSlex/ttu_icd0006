@@ -18,6 +18,7 @@ import '@/static/custom.css'
 
 import moment from 'moment'
 
+// date and time formating for display
 Vue.filter('formatDate', function (value: any) {
   if (value) {
     return moment(String(value)).format('MM/DD/YYYY hh:mm')
