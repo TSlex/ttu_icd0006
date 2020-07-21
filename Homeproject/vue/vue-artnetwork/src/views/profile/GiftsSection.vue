@@ -1,6 +1,11 @@
 <template>
   <div class="profile_gift_section">
-    <div v-for="(gift, index) in profileGifts" :key="index" class="profile_gift btn-link" @click="$emit('openGiftDetails', gift)">
+    <div
+      v-for="(gift, index) in profileGifts"
+      :key="index"
+      class="profile_gift btn-link"
+      @click="$emit('onOpenGiftDetails', gift)"
+    >
       <ImageComponent :id="gift.imageId" :key="gift.imageId" />
     </div>
     <span v-if="profileGifts.length <= 0">This user has no gifts yet. Give? :)</span>

@@ -8,25 +8,32 @@
     />
 
     <PostDetails v-if="post" :post="post" v-on:closePost="closePost" />
-
     <RanksDetails v-if="isRankDetails" :rank="rank" :rankPercent="rankPercent" v-on:onCloseRankDetails="closeRankDetails" />
-
     <GiftSelection v-if="gifts" :gifts="gifts" :username="username" v-on:closeGifts="closeGiftsSelector" />
-
     <GiftDetails v-if="isGiftDetails" :username="username" :gift="gift" v-on:onCloseGiftDetails="closeGiftDetails" />
 
     <div v-if="profile && rank" class="profile_container">
-      <ProfileSection :rankPercent="rankPercent" />
+      <ProfileSection
+        :rankPercent="rankPercent"
+        v-on:onOpenChatWithUser="openChatWithUser"
+        v-on:onFollowProfile="followProfile"
+        v-on:onUnfollowProfile="unfollowProfile"
+        v-on:onBlockProfile="blockProfile"
+        v-on:onUnblockProfile="unblockProfile"
+        v-on:onOpenRankDetails="openRankDetails"
+        v-on:onOpenFollowers="openFollowers"
+        v-on:onOpenFollowed="openFollowed"
+      />
 
       <template v-if="!(isCurrentUser && profileGifts.length <= 0)">
         <hr />
 
-        <GiftsSection />
+        <GiftsSection v-on:onOpenGiftDetails="openGiftDetails" v-on:onOpenGiftsSelector="openGiftsSelector" />
       </template>
 
       <hr />
 
-      <PostsSection />
+      <PostsSection v-on:onSelectPost="selectPost" v-on:onLoadMore="loadMore" />
     </div>
   </div>
 </template>
@@ -64,14 +71,13 @@ import PostsSection from "./PostsSection.vue";
 
 @Component({
   components: {
-    ImageComponent,
-    PostDetails,
-    ProfilesModal,
-    Modal,
     GiftSelection,
+
+    PostDetails,
     GiftDetails,
     RanksDetails,
     FollowersDetails,
+
     ProfileSection,
     GiftsSection,
     PostsSection
