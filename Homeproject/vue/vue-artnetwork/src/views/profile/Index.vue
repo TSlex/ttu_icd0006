@@ -22,26 +22,7 @@
     </Modal>
     <GiftSelection v-if="gifts" :gifts="gifts" :username="username" v-on:closeGifts="closeGiftsSelector" />
     <PostDetails v-if="post" :post="post" v-on:closePost="closePost" />
-    <Modal v-if="isRankDetails" v-on:closeModal="closeRankDetails">
-      <div class="d-flex flex-column align-items-center text-center" style="position: relative; padding: 20px">
-        <div
-          class="progress_container"
-          :style="`background: conic-gradient(${rank.rankColor} ${rankPercent}%, #FFFFFF ${rankPercent + 5}%) 50% 50% / 100% 100% no-repeat;`"
-        >
-          <div class="progress_container_front">
-            <span class="progress_value">{{rankPercent}}%</span>
-          </div>
-        </div>
-        <span
-          class="mt-4"
-          :style="`color: ${rank.rankTextColor}; font-size: 24px; font-family: Consolas, serif`"
-        >{{rank.rankTitle}}</span>
-        <hr style="width: 400px" />
-        <span
-          style="display: inline-block; max-width: 600px; word-break: break-all; word-break: break-word;"
-        >{{rank.rankDescription}}</span>
-      </div>
-    </Modal>
+    <RanksDetails v-if="isRankDetails" :rank="rank" :rankPercent="rankPercent" v-on:onCloseRankDetails="closeRankDetails" />
     <GiftDetails v-if="isGiftDetails" :username="username" :gift="gift" v-on:onCloseGiftDetails="closeGiftDetails" />
     <div v-if="profile && rank" class="profile_conainer">
       <div class="profile_section">
@@ -177,6 +158,7 @@ import { IBlockedProfileDTO } from "@/types/IBlockedProfileDTO";
 import { IGiftDTO } from "@/types/IGiftDTO";
 
 import GiftDetails from "@/views/gifts/GiftDetails.vue";
+import RanksDetails from "@/views/ranks/RanksDetails.vue";
 
 @Component({
   components: {
@@ -185,7 +167,8 @@ import GiftDetails from "@/views/gifts/GiftDetails.vue";
     ProfilesModal,
     Modal,
     GiftSelection,
-    GiftDetails
+    GiftDetails,
+    RanksDetails
   }
 })
 export default class ProfileIndex extends Vue {
@@ -246,9 +229,12 @@ export default class ProfileIndex extends Vue {
       let minExperience = rank.minExperience >= 0 ? rank.minExperience : 0;
 
       return (
-        ((profile.experience - minExperience) /
-          (rank.maxExperience - minExperience)) *
-        100
+        Math.round(
+          ((profile.experience - minExperience) /
+            (rank.maxExperience - minExperience)) *
+            100 *
+            100
+        ) / 100
       );
     }
     return 0;
