@@ -63,13 +63,14 @@ import { IProfileGiftPostDTO } from "../../types/IProfileGiftDTO";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
 
 import { GiftsApi } from "@/services/GiftsApi";
+import IdentityStore from "../../components/shared/IdentityStore.vue";
 
 @Component({
   components: {
     ImageComponent
   }
 })
-export default class GiftCreate extends Vue {
+export default class GiftCreate extends IdentityStore {
   @Prop()
   private gift!: IGiftDTO;
 
@@ -78,20 +79,16 @@ export default class GiftCreate extends Vue {
 
   private isAnonymous: boolean = false;
 
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  get fromUsername() {
-    return store.getters.getUserName;
-  }
-
   private profileGiftModel: IProfileGiftPostDTO = {
     username: this.username,
     fromUsername: null,
     giftCode: this.gift.giftCode,
     message: ""
   };
+
+  get fromUsername() {
+    return store.getters.getUserName;
+  }
 
   submit() {
     if (!this.isAnonymous && this.fromUsername) {
