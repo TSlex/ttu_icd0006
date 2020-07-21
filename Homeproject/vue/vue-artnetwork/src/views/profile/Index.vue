@@ -1,29 +1,14 @@
 <template>
   <div id="profileIndex">
-    <Modal v-if="followers" v-on:closeModal="closeFollowers">
-      <router-link
-        v-for="follower in followers"
-        :key="follower.userName"
-        :to="`/profiles/${follower.userName}`"
-        class="gallery_item"
-      >
-        <button
-          v-if="isCurrentUser && isFollowedOpen"
-          class="item_controls btn-link"
-          @click="deleteFollowed(follower)"
-          @click.prevent
-        >
-          <i class="fas fa-times-circle"></i>
-        </button>
-        <ImageComponent :id="follower.profileAvatarId" :key="follower.profileAvatarId" height="100px" width="100px" />
+    <FollowersDetails v-if="isFollowersDetails" v-on:onCloseFollowers="closeFollowers" :username="username" :isFollowedOpen="isFollowedOpen" />
 
-        <span class="item_name">{{follower.userName}}</span>
-      </router-link>
-    </Modal>
-    <GiftSelection v-if="gifts" :gifts="gifts" :username="username" v-on:closeGifts="closeGiftsSelector" />
     <PostDetails v-if="post" :post="post" v-on:closePost="closePost" />
+
     <RanksDetails v-if="isRankDetails" :rank="rank" :rankPercent="rankPercent" v-on:onCloseRankDetails="closeRankDetails" />
+
+    <GiftSelection v-if="gifts" :gifts="gifts" :username="username" v-on:closeGifts="closeGiftsSelector" />
     <GiftDetails v-if="isGiftDetails" :username="username" :gift="gift" v-on:onCloseGiftDetails="closeGiftDetails" />
+
     <div v-if="profile && rank" class="profile_conainer">
       <div class="profile_section">
         <div class="col-3 d-flex justify-content-center">
@@ -141,7 +126,7 @@ import store from "@/store";
 import router from "@/router";
 import { Component, Prop, Vue } from "vue-property-decorator";
 import ImageComponent from "@/components/Image.vue";
-import PostDetails from "@/views/posts/PostDetails.vue";
+
 import ProfilesModal from "@/components/ProfilesModal.vue";
 import Modal from "@/components/Modal.vue";
 import GiftSelection from "@/views/gifts/GiftSelection.vue";
@@ -157,8 +142,10 @@ import { IFollowerDTO } from "@/types/IFollowerDTO";
 import { IBlockedProfileDTO } from "@/types/IBlockedProfileDTO";
 import { IGiftDTO } from "@/types/IGiftDTO";
 
+import PostDetails from "@/views/posts/PostDetails.vue";
 import GiftDetails from "@/views/gifts/GiftDetails.vue";
 import RanksDetails from "@/views/ranks/RanksDetails.vue";
+import FollowersDetails from "@/views/followers/FollowersDetails.vue";
 
 @Component({
   components: {
@@ -168,7 +155,8 @@ import RanksDetails from "@/views/ranks/RanksDetails.vue";
     Modal,
     GiftSelection,
     GiftDetails,
-    RanksDetails
+    RanksDetails,
+    FollowersDetails
   }
 })
 export default class ProfileIndex extends Vue {
@@ -185,6 +173,7 @@ export default class ProfileIndex extends Vue {
 
   private isRankDetails: boolean = false;
   private isGiftDetails: boolean = false;
+  private isFollowersDetails: boolean = false;
 
   @Prop()
   private username!: string;
@@ -302,6 +291,8 @@ export default class ProfileIndex extends Vue {
     store
       .dispatch("getFollowers", { userName: this.username, pageNumber: 1 })
       .then((response: IFollowerDTO[]) => {
+        this.isFollowedOpen = false;
+        this.isFollowersDetails = true;
         this.followers = response;
       });
   }
@@ -311,31 +302,33 @@ export default class ProfileIndex extends Vue {
       .dispatch("getFollowed", { userName: this.username, pageNumber: 1 })
       .then((response: IFollowerDTO[]) => {
         this.isFollowedOpen = true;
+        this.isFollowersDetails = true;
         this.followers = response;
       });
   }
 
   closeFollowers() {
+    this.isFollowersDetails = false;
     this.isFollowedOpen = false;
     this.followers = null;
   }
 
-  deleteFollowed(followed: IFollowerDTO) {
-    if (this.isCurrentUser) {
-      store
-        .dispatch("profileUnfollow", followed.userName)
-        .then((response: ResponseDTO) => {
-          this.profile!.followedCount -= 1;
-          if (this.followers) {
-            this.followers!.forEach((element: IFollowerDTO, index) => {
-              if (element.userName === followed.userName) {
-                this.followers!.splice(index, 1);
-              }
-            });
-          }
-        });
-    }
-  }
+  // deleteFollowed(followed: IFollowerDTO) {
+  //   if (this.isCurrentUser) {
+  //     store
+  //       .dispatch("profileUnfollow", followed.userName)
+  //       .then((response: ResponseDTO) => {
+  //         this.profile!.followedCount -= 1;
+  //         if (this.followers) {
+  //           this.followers!.forEach((element: IFollowerDTO, index) => {
+  //             if (element.userName === followed.userName) {
+  //               this.followers!.splice(index, 1);
+  //             }
+  //           });
+  //         }
+  //       });
+  //   }
+  // }
 
   selectPost(post: IPostDTO) {
     this.post = post;

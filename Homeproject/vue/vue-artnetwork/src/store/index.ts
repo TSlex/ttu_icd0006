@@ -1,3 +1,4 @@
+import { IImageDTO } from './../types/IImageDTO';
 import { IFavoriteDTO } from './../types/IFavoriteDTO';
 import { IChatRoleDTO } from './../types/IChatRoleDTO';
 import Vue from 'vue'
@@ -46,6 +47,15 @@ export default new Vuex.Store({
     feed: [] as IPostDTO[],
     feedCount: 0 as number,
     feedLoadedCount: -1,
+
+    // Followers
+    followers: [] as IFollowerDTO[],
+
+    // Favorites
+    favorites: [] as IFavoriteDTO[],
+
+    // Images
+    images: {} as Record<string, { images: IImageDTO; exp: number }>,
 
     // Profile
     profile: null as IProfileDTO | null,
@@ -150,6 +160,23 @@ export default new Vuex.Store({
       state.profile = profile;
     },
 
+    profileUnfollow(state, username: string) {
+      state.followers.forEach((element: IFollowerDTO, index) => {
+        if (element.userName === username) {
+          state.followers.splice(index, 1);
+        }
+      });
+
+      if (state.profile) {
+        state.profile.followedCount -= 1;
+      }
+    },
+
+    // Followers
+    setFollowers(state, followers: IFollowerDTO[]) {
+      state.followers = followers;
+    },
+
     // Posts
     getPosts(state, posts: IPostDTO[]) {
       posts.forEach(post => state.posts.push(post))
@@ -177,7 +204,7 @@ export default new Vuex.Store({
     setProfileGifts(state, gifts: IProfileGiftDTO[]) {
       state.profileGifts = gifts;
     },
-    async deleteProfileGift(state, profileGift: IProfileGiftDTO) {
+    deleteProfileGift(state, profileGift: IProfileGiftDTO) {
       state.profileGifts.forEach((element: IProfileGiftDTO, index) => {
         if (element.id === profileGift.id) {
           state.profileGifts.splice(index, 1)
@@ -277,6 +304,7 @@ export default new Vuex.Store({
 
     async profileUnfollow(context, username: string): Promise<ResponseDTO> {
       const response = await ProfilesApi.unfollow(username, context.state.jwt);
+      context.commit('profileUnfollow', username)
       return response;
     },
 
@@ -293,10 +321,12 @@ export default new Vuex.Store({
     // Followers
     async getFollowers(context, params: { userName: string; pageNumber: number }): Promise<IFollowerDTO[]> {
       const response = await FollowersApi.getFollowers(params.userName, params.pageNumber, context.state.jwt);
+      context.commit('setFollowers', response)
       return response;
     },
     async getFollowed(context, params: { userName: string; pageNumber: number }): Promise<IFollowerDTO[]> {
       const response = await FollowersApi.getFollowed(params.userName, params.pageNumber, context.state.jwt);
+      context.commit('setFollowers', response)
       return response;
     },
 

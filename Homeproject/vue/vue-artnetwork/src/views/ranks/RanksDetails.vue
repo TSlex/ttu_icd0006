@@ -29,7 +29,7 @@ import { IRankDTO } from "../../types/IRankDTO";
     Modal
   }
 })
-export default class GiftDetails extends Vue {
+export default class RanksDetails extends Vue {
   @Prop() private rank!: IRankDTO;
   @Prop() private rankPercent!: number;
 }
