@@ -53,6 +53,7 @@ import { IPostDTO } from "@/types/IPostDTO";
 import { IRankDTO } from "@/types/IRankDTO";
 
 import { ChatRoomsApi } from "@/services/ChatRoomsApi";
+import { IFollowerDTO } from "@/types/IFollowerDTO";
 
 @Component({
   components: {
