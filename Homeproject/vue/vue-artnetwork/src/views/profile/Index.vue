@@ -12,116 +12,21 @@
     <RanksDetails v-if="isRankDetails" :rank="rank" :rankPercent="rankPercent" v-on:onCloseRankDetails="closeRankDetails" />
 
     <GiftSelection v-if="gifts" :gifts="gifts" :username="username" v-on:closeGifts="closeGiftsSelector" />
+
     <GiftDetails v-if="isGiftDetails" :username="username" :gift="gift" v-on:onCloseGiftDetails="closeGiftDetails" />
 
     <div v-if="profile && rank" class="profile_container">
-      <div class="profile_section">
-        <div class="col-3 d-flex justify-content-center">
-          <router-link v-if="isCurrentUser" :to="`/account/manage/avatar`">
-            <div class="profile_image" :style="`background-color: ${rank.rankColor} !important;`">
-              <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId" />
-            </div>
-          </router-link>
-          <div v-else class="profile_image" :style="`background-color: ${rank.rankColor} !important;`">
-            <ImageComponent :id="profile.profileAvatarId" :key="profile.profileAvatarId" />
-          </div>
-        </div>
-        <div class="profile_description col-9">
-          <ul class="profile_meta_section">
-            <li class="profile_name">{{ profile.userName }}</li>
-            <li v-if="!isCurrentUser" class="profile_controls dropdown">
-              <a class="btn fa fa-bars" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
-              <div
-                class="dropdown-menu"
-                aria-labelledby="profile_more"
-                x-placement="bottom-start"
-                style="position: absolute; will-change: transform; top: 0px; left:
-              20px; transform: translate3d(0px, 38px, 0px);"
-              >
-                <button class="dropdown-item text-center" @click="openChatWithUser">Write a Message</button>
-                <button v-if="!profile.isUserFollows" type="submit" class="dropdown-item" @click="followProfile">
-                  <i class="far fa-bell"></i> Follow
-                </button>
-                <button v-else type="submit" class="dropdown-item" @click="unfollowProfile">
-                  <i class="fas fa-bell"></i> Unfollow
-                </button>
-                <button v-if="!profile.isUserBlocks" type="submit" class="dropdown-item" @click="blockProfile">
-                  <i class="far fa-user"></i> Block
-                </button>
-                <button v-else type="submit" class="dropdown-item" @click="unblockProfile">
-                  <i class="fas fa-user"></i> Unblock
-                </button>
-              </div>
-            </li>
-          </ul>
-          <div v-if="rank" class="profile_rank" @click="openRankDetails" style="cursor: pointer;">
-            <span class="rank_title" :style="`color: ${rank.textColor}`">{{rank.rankTitle}}</span>
-            <div class="rank_bar_back"></div>
-            <div class="rank_bar" :style="`width: ${rankPercent}%; background-color: ${rank.rankColor}`"></div>
-            <span v-if="!isExpMax" class="rank_score">{{profile.experience}}/{{rank.maxExperience}}</span>
-            <span v-else class="rank_score">MAX</span>
-            <div class="rank_icons">
-              <i v-for="(icon, i) in rankIcons" :key="i" :class="'fa fa-' + icon" />
-            </div>
-          </div>
+      <ProfileSection :rankPercent="rankPercent" />
 
-          <ul class="profile_meta_section">
-            <li class="profile_meta">
-              <span class="meta_counter">{{ profile.postsCount }}</span>&nbsp;
-              <span class="meta_title">posts</span>
-            </li>
-            <li class="profile_meta" @click="openFollowers">
-              <a class="btn-link">
-                <span class="meta_counter">{{ profile.followersCount }}</span>&nbsp;
-                <span class="meta_title">followers</span>
-              </a>
-            </li>
-            <li class="profile_meta" @click="openFollowed">
-              <a class="btn-link">
-                <span class="meta_counter">{{ profile.followedCount }}</span>&nbsp;
-                <span class="meta_title">followed</span>
-              </a>
-            </li>
-          </ul>
-
-          <div class="profile_about">
-            <h1>{{ profile.profileFullName }}</h1>
-            <span>{{ profile.profileAbout }}</span>
-            <br />
-            <a
-              v-if="isLink(profile.profileWorkPlace)"
-              :href="profile.profileWorkPlace"
-              target="_blank"
-            >{{profile.profileWorkPlace}}</a>
-            <span v-else>{{profile.profileWorkPlace}}</span>
-          </div>
-        </div>
-      </div>
       <template v-if="!(isCurrentUser && profileGifts.length <= 0)">
         <hr />
-        <div class="profile_gift_section">
-          <div v-for="(gift, index) in profileGifts" :key="index" class="profile_gift btn-link" @click="openGiftDetails(gift)">
-            <ImageComponent :id="gift.imageId" :key="gift.imageId" />
-          </div>
-          <span v-if="profileGifts.length <= 0">This user has no gifts yet. Give? :)</span>
 
-          <a v-if="!isCurrentUser" class="fa fa-gift btn btn-primary profile_gift_controls" @click="openGiftsSelector" href="#"></a>
-        </div>
+        <GiftsSection />
       </template>
+
       <hr />
-      <div class="posts_section align-content-center d-flex flex-column">
-        <div v-if="posts.length > 0" class="post_row card-columns">
-          <a v-for="post in posts" :key="post.id" @click="selectPost(post)">
-            <div class="post_item card mb-3">
-              <ImageComponent :id="post.postImageId" :key="post.postImageId" height="unset" width="unset" htmlClass="card-img" />
-            </div>
-          </a>
-        </div>
-        <div class="text-center" v-if="posts.length > 0">
-          <button @click="loadMore" class="btn_circle fa fa-download"></button>
-        </div>
-        <span v-else class="text-center">Nothing here yet</span>
-      </div>
+
+      <PostsSection />
     </div>
   </div>
 </template>
@@ -130,6 +35,7 @@
 import store from "@/store";
 import router from "@/router";
 import { Component, Prop, Vue } from "vue-property-decorator";
+
 import ImageComponent from "@/components/Image.vue";
 
 import ProfilesModal from "@/components/ProfilesModal.vue";
@@ -152,6 +58,10 @@ import GiftDetails from "@/views/gifts/GiftDetails.vue";
 import RanksDetails from "@/views/ranks/RanksDetails.vue";
 import FollowersDetails from "@/views/followers/FollowersDetails.vue";
 
+import ProfileSection from "./ProfileSection.vue";
+import GiftsSection from "./GiftsSection.vue";
+import PostsSection from "./PostsSection.vue";
+
 @Component({
   components: {
     ImageComponent,
@@ -161,7 +71,10 @@ import FollowersDetails from "@/views/followers/FollowersDetails.vue";
     GiftSelection,
     GiftDetails,
     RanksDetails,
-    FollowersDetails
+    FollowersDetails,
+    ProfileSection,
+    GiftsSection,
+    PostsSection
   }
 })
 export default class ProfileIndex extends Vue {

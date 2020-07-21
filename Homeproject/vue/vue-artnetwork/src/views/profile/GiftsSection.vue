@@ -26,7 +26,7 @@ import ProfileContainer from "@/components/shared/ProfileContainer.vue";
     ImageComponent
   }
 })
-export default class FollowersDetails extends ProfileContainer {
+export default class GiftSection extends ProfileContainer {
   get profileGifts(): IProfileGiftDTO[] {
     return store.state.profileGifts;
   }

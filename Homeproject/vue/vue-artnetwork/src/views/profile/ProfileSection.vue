@@ -85,14 +85,15 @@ import store from "@/store";
 import { IProfileDTO } from "@/types/IProfileDTO";
 import { IRankDTO } from "@/types/IRankDTO";
 import ProfileContainer from "@/components/shared/ProfileContainer.vue";
+import ImageComponent from "@/components/Image.vue";
 
 @Component({
-  components: {}
-})
-export default class FollowersDetails extends ProfileContainer {
-  get profile(): IProfileDTO | null {
-    return store.state.profile!;
+  components: {
+    ImageComponent
   }
+})
+export default class ProfileSection extends ProfileContainer {
+  @Prop() private rankPercent!: number;
 
   get rank(): IRankDTO | null {
     return store.state.profileRank!;
@@ -103,6 +104,21 @@ export default class FollowersDetails extends ProfileContainer {
       return this.profile.experience === this.rank.maxExperience;
     }
     return false;
+  }
+
+  get rankIcons(): string[] {
+    if (store.state.profileRank?.rankIcon) {
+      return store.state.profileRank.rankIcon
+        .split(";")
+        .filter(value => value !== "");
+    }
+    return [];
+  }
+
+  isLink(url: string): boolean {
+    let reg = new RegExp("(?:http(?:s)?:[/]{2})?[A-z]*[.][A-z]*(?:[/].*)?");
+
+    return url !== null && url.search(reg) === 0;
   }
 }
 </script>

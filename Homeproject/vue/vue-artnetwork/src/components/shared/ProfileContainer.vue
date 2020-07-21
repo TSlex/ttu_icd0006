@@ -2,11 +2,20 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import store from "@/store";
+import { IProfileDTO } from "@/types/IProfileDTO";
 
 @Component({
   components: {}
 })
 export default class ProfileContainer extends Vue {
+  get profile(): IProfileDTO | null {
+    return store.state.profile!;
+  }
+
+  get username(): string | null {
+    return this.profile?.userName ?? null;
+  }
+
   get isCurrentUser(): boolean {
     return store.getters.getUserName === store.state.profile?.userName;
   }

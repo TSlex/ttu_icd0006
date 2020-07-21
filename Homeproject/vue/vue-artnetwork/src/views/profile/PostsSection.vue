@@ -25,7 +25,7 @@ import ImageComponent from "@/components/Image.vue";
     ImageComponent
   }
 })
-export default class FollowersDetails extends Vue {
+export default class PostsSection extends Vue {
   get posts(): IPostDTO[] {
     return store.state.posts;
   }
