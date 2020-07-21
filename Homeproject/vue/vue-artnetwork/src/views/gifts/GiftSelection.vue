@@ -1,7 +1,7 @@
 <template>
   <div class="modal_back" @click="$emit('closeGifts')">
     <Modal v-if="isGiftSendModal && gift" v-on:closeModal="closeGiftSend">
-      <GiftCreate :gift="gift" :username="username" v-on:closeModal="closeGiftSend"/>
+      <GiftCreate :gift="gift" :username="username" v-on:closeModal="closeGiftSend" />
     </Modal>
     <div class="gift_gallery_modal" @click.stop>
       <div v-for="(gift, index) in gifts" :key="index" class="profile_gift" @click="selectGift(gift)">
@@ -25,6 +25,7 @@ import { GiftsApi } from "@/services/GiftsApi";
 
 import { IGiftDTO } from "@/types/IGiftDTO";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
+import ProfileContainer from "@/components/shared/ProfileContainer.vue";
 
 @Component({
   components: {
@@ -33,12 +34,9 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
     Modal
   }
 })
-export default class GiftSelection extends Vue {
+export default class GiftSelection extends ProfileContainer {
   @Prop()
   private gifts!: IGiftDTO[];
-
-  @Prop()
-  private username!: string;
 
   private isGiftSendModal: boolean = false;
 

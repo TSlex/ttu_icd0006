@@ -35,6 +35,7 @@ import { IProfileGiftDTO } from "@/types/IProfileGiftDTO";
 import store from "@/store";
 import ImageComponent from "@/components/Image.vue";
 import Modal from "@/components/Modal.vue";
+import ProfileContainer from "@/components/shared/ProfileContainer.vue";
 
 @Component({
   components: {
@@ -42,13 +43,8 @@ import Modal from "@/components/Modal.vue";
     ImageComponent
   }
 })
-export default class GiftDetails extends Vue {
-  @Prop() private username!: string;
+export default class GiftDetails extends ProfileContainer {
   @Prop() private gift!: IProfileGiftDTO;
-
-  get isCurrentUser(): boolean {
-    return store.getters.getUserName === this.username;
-  }
 
   deleteProfileGift() {
     if (this.isCurrentUser) {

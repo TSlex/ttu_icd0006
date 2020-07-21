@@ -1,6 +1,11 @@
 <template>
   <div id="profileIndex">
-    <FollowersDetails v-if="isFollowersDetails" v-on:onCloseFollowers="closeFollowers" :username="username" :isFollowedOpen="isFollowedOpen" />
+    <FollowersDetails
+      v-if="isFollowersDetails"
+      v-on:onCloseFollowers="closeFollowers"
+      :username="username"
+      :isFollowedOpen="isFollowedOpen"
+    />
 
     <PostDetails v-if="post" :post="post" v-on:closePost="closePost" />
 
@@ -9,7 +14,7 @@
     <GiftSelection v-if="gifts" :gifts="gifts" :username="username" v-on:closeGifts="closeGiftsSelector" />
     <GiftDetails v-if="isGiftDetails" :username="username" :gift="gift" v-on:onCloseGiftDetails="closeGiftDetails" />
 
-    <div v-if="profile && rank" class="profile_conainer">
+    <div v-if="profile && rank" class="profile_container">
       <div class="profile_section">
         <div class="col-3 d-flex justify-content-center">
           <router-link v-if="isCurrentUser" :to="`/account/manage/avatar`">
@@ -414,12 +419,7 @@ export default class ProfileIndex extends Vue {
     }
   }
 
-  beforeCreate(): void {
-    console.log("beforeCreate");
-  }
-
   created(): void {
-    console.log("created");
     store.dispatch("getProfile", this.username);
     store.dispatch("getProfileRank", this.username);
     store.dispatch("setPosts", { userName: this.username, pageNumber: 1 });
@@ -427,31 +427,6 @@ export default class ProfileIndex extends Vue {
       userName: this.username,
       pageNumber: 1
     });
-  }
-
-  beforeMount(): void {
-    console.log("beforeMount");
-  }
-
-  mounted(): void {
-    console.log("mounted");
-  }
-
-  beforeUpdate(): void {
-    console.log("beforeUpdate");
-  }
-
-  updated(): void {
-    console.log("updated");
-    console.log(this.username);
-  }
-
-  beforeDestroy(): void {
-    console.log("beforeDestroy");
-  }
-
-  destroyed(): void {
-    console.log("destroyed");
   }
 }
 </script>

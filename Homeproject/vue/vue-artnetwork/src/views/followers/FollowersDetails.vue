@@ -29,6 +29,7 @@ import ImageComponent from "@/components/Image.vue";
 import { IRankDTO } from "../../types/IRankDTO";
 import { IFollowerDTO } from "@/types/IFollowerDTO";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
+import ProfileContainer from "@/components/shared/ProfileContainer.vue";
 
 @Component({
   components: {
@@ -36,13 +37,8 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
     ImageComponent
   }
 })
-export default class FollowersDetails extends Vue {
-  @Prop() private username!: string;
+export default class FollowersDetails extends ProfileContainer {
   @Prop({ default: false }) private isFollowedOpen!: boolean;
-
-  get isCurrentUser(): boolean {
-    return store.getters.getUserName === this.username;
-  }
 
   get followers(): IFollowerDTO[] {
     return store.state.followers;
