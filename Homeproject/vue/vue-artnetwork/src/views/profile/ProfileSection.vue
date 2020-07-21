@@ -93,7 +93,13 @@ import ImageComponent from "@/components/Image.vue";
   }
 })
 export default class ProfileSection extends ProfileContainer {
-  @Prop() private rankPercent!: number;
+  get profile(): IProfileDTO | null {
+    return store.state.profile;
+  }
+
+  get rankPercent(): number {
+    return store.getters.getRankPercent;
+  }
 
   get rank(): IRankDTO | null {
     return store.state.profileRank!;

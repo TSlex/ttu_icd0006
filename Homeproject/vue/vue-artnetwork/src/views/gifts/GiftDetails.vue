@@ -44,7 +44,9 @@ import ProfileContainer from "@/components/shared/ProfileContainer.vue";
   }
 })
 export default class GiftDetails extends ProfileContainer {
-  @Prop() private gift!: IProfileGiftDTO;
+  get gift(): IProfileGiftDTO | null {
+    return store.state.profileGift;
+  }
 
   deleteProfileGift() {
     if (this.isCurrentUser) {

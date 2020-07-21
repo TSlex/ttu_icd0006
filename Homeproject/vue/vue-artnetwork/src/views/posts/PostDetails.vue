@@ -2,7 +2,7 @@
   <div class="modal_back" @click="closeModal">
     <ProfilesModal v-if="favorites" :profilesData="favorites" v-on:closeProfiles="closeFavorites" />
     <Modal v-if="imageEditing" v-on:closeModal="closeImageEdit">
-      <PostsEditImage :id="post.postImageId" v-on:closeModal="closeImageEdit"/>
+      <PostsEditImage :id="post.postImageId" v-on:closeModal="closeImageEdit" />
     </Modal>
     <div class="post_details" @click.stop>
       <div class="post_details_post">
@@ -127,15 +127,12 @@ import { IFavoriteDTO } from "../../types/IFavoriteDTO";
   }
 })
 export default class PostDetails extends Vue {
-  @Prop()
-  private post!: IPostDTO;
-
   private comment: ICommentDTO | null = null;
 
   private postPutModel: IPostPutDTO = {
-    id: this.post.id,
-    postTitle: this.post.postTitle,
-    postDescription: this.post.postDescription
+    id: this.post!.id,
+    postTitle: this.post!.postTitle,
+    postDescription: this.post!.postDescription
   };
 
   private commentPutModel: ICommentPutDTO = {
@@ -164,7 +161,7 @@ export default class PostDetails extends Vue {
 
   openFavorites() {
     store
-      .dispatch("getFavorites", { postId: this.post.id, pageNumber: 1 })
+      .dispatch("getFavorites", { postId: this.post!.id, pageNumber: 1 })
       .then((response: IFavoriteDTO[]) => {
         this.favorites = response;
       });
@@ -172,6 +169,10 @@ export default class PostDetails extends Vue {
 
   closeFavorites() {
     this.favorites = null;
+  }
+
+  get post(): IPostDTO | null {
+    return store.state.selectedPost;
   }
 
   get editedComment() {
@@ -229,7 +230,7 @@ export default class PostDetails extends Vue {
 
   deleteComment(comment: ICommentDTO) {
     store.dispatch("deleteComment", comment);
-    this.post.postCommentsCount -= 1;
+    this.post!.postCommentsCount -= 1;
   }
 
   editPost(mode: boolean) {
@@ -247,8 +248,8 @@ export default class PostDetails extends Vue {
       PostsApi.putPost(this.post.id, this.postPutModel, this.jwt).then(
         (response: ResponseDTO) => {
           if (!response.errors) {
-            this.post.postTitle = this.postPutModel.postTitle;
-            this.post.postDescription = this.postPutModel.postDescription;
+            this.post!.postTitle = this.postPutModel.postTitle;
+            this.post!.postDescription = this.postPutModel.postDescription;
           }
         }
       );
@@ -256,7 +257,7 @@ export default class PostDetails extends Vue {
   }
 
   deletePost() {
-    PostsApi.deletePost(this.post.id, this.jwt).then(
+    PostsApi.deletePost(this.post!.id, this.jwt).then(
       (response: ResponseDTO) => {
         this.$emit("closePost");
       }
@@ -296,7 +297,7 @@ export default class PostDetails extends Vue {
   private pageToLoad = 2;
   private isFetching = false;
   private commentModel: ICommentPostDTO = {
-    postId: this.post.id,
+    postId: this.post!.id,
     commentValue: ""
   };
 
@@ -304,7 +305,7 @@ export default class PostDetails extends Vue {
     if (this.commentModel.commentValue !== "") {
       store.dispatch("postComment", this.commentModel).then(() => {
         this.commentModel.commentValue = "";
-        this.post.postCommentsCount += 1;
+        this.post!.postCommentsCount += 1;
       });
     }
 

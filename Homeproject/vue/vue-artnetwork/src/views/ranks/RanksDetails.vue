@@ -30,8 +30,13 @@ import { IRankDTO } from "../../types/IRankDTO";
   }
 })
 export default class RanksDetails extends Vue {
-  @Prop() private rank!: IRankDTO;
-  @Prop() private rankPercent!: number;
+  get rankPercent(): number {
+    return store.getters.getRankPercent;
+  }
+
+  get rank(): IRankDTO | null {
+    return store.state.profileRank!;
+  }
 }
 </script>
 

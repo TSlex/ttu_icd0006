@@ -4,7 +4,7 @@
       <GiftCreate :gift="gift" :username="username" v-on:closeModal="closeGiftSend" />
     </Modal>
     <div class="gift_gallery_modal" @click.stop>
-      <div v-for="(gift, index) in gifts" :key="index" class="profile_gift" @click="selectGift(gift)">
+      <div v-for="(gift, index) in gifts" :key="index" class="profile_gift mr-3" @click="selectGift(gift)">
         <ImageComponent :id="gift.giftImageId" :key="gift.imageId" height="unset" width="unset" />
       </div>
     </div>
@@ -35,12 +35,9 @@ import ProfileContainer from "@/components/shared/ProfileContainer.vue";
   }
 })
 export default class GiftSelection extends ProfileContainer {
-  @Prop()
-  private gifts!: IGiftDTO[];
-
-  private isGiftSendModal: boolean = false;
-
+  private gifts: IGiftDTO[] = [];
   private gift: IGiftDTO | null = null;
+  private isGiftSendModal: boolean = false;
 
   openGiftSend() {
     this.isGiftSendModal = true;
@@ -54,6 +51,12 @@ export default class GiftSelection extends ProfileContainer {
   selectGift(gift: IGiftDTO) {
     this.gift = gift;
     this.openGiftSend();
+  }
+
+  mounted() {
+    store.dispatch("getGifts", 1).then((response: IGiftDTO[]) => {
+      this.gifts = response;
+    });
   }
 }
 </script>

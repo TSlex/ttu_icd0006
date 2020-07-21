@@ -61,6 +61,7 @@ export default new Vuex.Store({
     profile: null as IProfileDTO | null,
 
     // Posts
+    selectedPost: null as IPostDTO | null,
     posts: [] as IPostDTO[],
     postsLoadedCount: -1,
 
@@ -69,6 +70,7 @@ export default new Vuex.Store({
     commentsLoadedCount: -1,
 
     // Gifts
+    profileGift: null as IProfileGiftDTO | null,
     profileGifts: [] as IProfileGiftDTO[],
     giftsLoadedCount: -1,
 
@@ -130,6 +132,24 @@ export default new Vuex.Store({
       }
 
       return context.jwt;
+    },
+    getRankPercent(context): number {
+      let profile = context.profile;
+      let rank = context.profileRank;
+
+      if (profile && rank && rank.maxExperience - rank.minExperience !== 0) {
+        let minExperience = rank.minExperience >= 0 ? rank.minExperience : 0;
+
+        return (
+          Math.round(
+            ((profile.experience - minExperience) /
+              (rank.maxExperience - minExperience)) *
+            100 *
+            100
+          ) / 100
+        );
+      }
+      return 0;
     }
   },
 
@@ -178,6 +198,9 @@ export default new Vuex.Store({
     },
 
     // Posts
+    setPost(state, post: IPostDTO | null) {
+      state.selectedPost = post
+    },
     getPosts(state, posts: IPostDTO[]) {
       posts.forEach(post => state.posts.push(post))
     },
@@ -201,6 +224,10 @@ export default new Vuex.Store({
     },
 
     // ProfileGifts
+    setProfileGift(state, gift: IProfileGiftDTO | null) {
+      state.profileGift = gift
+    },
+
     setProfileGifts(state, gifts: IProfileGiftDTO[]) {
       state.profileGifts = gifts;
     },
@@ -299,22 +326,43 @@ export default new Vuex.Store({
 
     async profileFollow(context, username: string): Promise<ResponseDTO> {
       const response = await ProfilesApi.follow(username, context.state.jwt);
+
+      if (!response.errors && context.state.profile) {
+        context.dispatch("getProfile", username);
+      }
+
       return response;
     },
 
     async profileUnfollow(context, username: string): Promise<ResponseDTO> {
       const response = await ProfilesApi.unfollow(username, context.state.jwt);
+
       context.commit('profileUnfollow', username)
+
+      if (!response.errors && context.state.profile) {
+        context.dispatch("getProfile", username);
+      }
+
       return response;
     },
 
     async profileBlock(context, username: string): Promise<ResponseDTO> {
       const response = await ProfilesApi.block(username, context.state.jwt);
+
+      if (!response.errors && context.state.profile) {
+        context.dispatch("getProfile", username);
+      }
+
       return response;
     },
 
     async profileUnblock(context, username: string): Promise<ResponseDTO> {
       const response = await ProfilesApi.unblock(username, context.state.jwt);
+
+      if (!response.errors && context.state.profile) {
+        context.dispatch("getProfile", username);
+      }
+
       return response;
     },
 
