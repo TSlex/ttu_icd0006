@@ -78,6 +78,8 @@ export default new Vuex.Store({
     profileRank: null as IRankDTO | null,
 
     //Messages
+    selectedChatMember: null as IChatMemberDTO | null,
+    selectedChatRoom: null as IChatRoomDTO | null,
     chatRooms: [] as IChatRoomDTO[],
     messages: [] as IMessageDTO[],
     messagesLoadedCount: -1,
@@ -116,7 +118,7 @@ export default new Vuex.Store({
       }
       return [];
     },
-    getJwt(context, actions): string | null {
+    getJwt(context): string | null {
       if (!context.jwt) {
         context.jwt = localStorage.getItem('jwt')
       }
@@ -150,7 +152,18 @@ export default new Vuex.Store({
         );
       }
       return 0;
-    }
+    },
+    getCurrentChatMember(context, getters): IChatMemberDTO | null {
+      let current: IChatMemberDTO | null = null;
+
+      context.members.forEach((member: IChatMemberDTO) => {
+        if (member.userName === getters.getUserName) {
+          current = member;
+        }
+      });
+
+      return current;
+    },
   },
 
   mutations: {
@@ -240,6 +253,12 @@ export default new Vuex.Store({
     },
 
     // Messages
+    selectChatMember(state, chatMember: IChatMemberDTO) {
+      state.selectedChatMember = chatMember;
+    },
+    selectChatRoom(state, chatRoom: IChatRoomDTO) {
+      state.selectedChatRoom = chatRoom;
+    },
     setChatRooms(state, chatRooms: IChatRoomDTO[]) {
       state.chatRooms = chatRooms;
     },
@@ -385,6 +404,16 @@ export default new Vuex.Store({
     },
 
     // Messages
+    async selectChatRoom(context, chatRoom: IChatRoomDTO) {
+      context.dispatch("selectChatRoom", chatRoom)
+
+      context.dispatch("getMessages", {
+        chatRoomId: chatRoom.id,
+        pageNumber: 1
+      });
+
+      context.dispatch("getChatMembers", chatRoom.id);
+    },
     async getChatRooms(context): Promise<IChatRoomDTO[]> {
       const response = await ChatRoomsApi.getChatRooms(context.state.jwt);
       context.commit('setChatRooms', response)

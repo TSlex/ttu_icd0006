@@ -77,6 +77,7 @@
         </li>
       </ul>
     </div>
+
     <div class="col-md-8" style="padding: unset">
       <div class="chat_wall">
         <template v-if="selectedChatRoom">
@@ -230,15 +231,16 @@ export default class ChatRoom extends Vue {
   }
 
   get currentMember(): IChatMemberDTO | null {
-    let current: IChatMemberDTO | null = null;
+    // let current: IChatMemberDTO | null = null;
 
-    this.members.forEach((member: IChatMemberDTO) => {
-      if (member.userName === this.userName) {
-        current = member;
-      }
-    });
+    // this.members.forEach((member: IChatMemberDTO) => {
+    //   if (member.userName === this.userName) {
+    //     current = member;
+    //   }
+    // });
 
-    return current;
+    // return current;
+    return store.getters.getCurrentChatMember;
   }
 
   get members() {
@@ -326,13 +328,14 @@ export default class ChatRoom extends Vue {
 
   changeRole(member: IChatMemberDTO) {
     this.isRolesModal = true;
-    this.selectedChatMember = member;
 
-    this.chatRoles.forEach((chatRole: IChatRoleDTO) => {
-      if (member.chatRole === chatRole.roleTitle) {
-        this.selectedMemberRole = chatRole;
-      }
-    });
+    store.commit("selectChatMember", member);
+
+    // this.chatRoles.forEach((chatRole: IChatRoleDTO) => {
+    //   if (member.chatRole === chatRole.roleTitle) {
+    //     this.selectedMemberRole = chatRole;
+    //   }
+    // });
   }
 
   commitRole() {
@@ -387,49 +390,50 @@ export default class ChatRoom extends Vue {
     e.preventDefault();
   }
 
-  selectChatRoom(chatRoom: IChatRoomDTO) {
-    store.dispatch("getMessages", {
-      chatRoomId: chatRoom.id,
-      pageNumber: 1
-    });
+  // selectChatRoom(chatRoom: IChatRoomDTO) {
+  //   // store.dispatch("getMessages", {
+  //   //   chatRoomId: chatRoom.id,
+  //   //   pageNumber: 1
+  //   // });
+  //   store.dispatch("selectChatRoom", chatRoom)
 
-    this.selectedChatRoom = chatRoom;
-    this.messageModel.chatRoomId = chatRoom.id;
+  //   // this.selectedChatRoom = chatRoom;
+  //   this.messageModel.chatRoomId = chatRoom.id;
 
-    store.dispatch("getChatMembers", chatRoom.id);
-  }
+  //   // store.dispatch("getChatMembers", chatRoom.id);
+  // }
 
   loadData() {
     store.dispatch("getChatRooms");
     store.dispatch("getChatRoles");
   }
 
-  scroll() {
-    window.onscroll = (e: Event) => {
-      let bottomOfWindow =
-        Math.max(
-          window.pageYOffset,
-          document.documentElement.scrollTop,
-          document.body.scrollTop
-        ) +
-          window.innerHeight >
-        document.documentElement.offsetHeight - 1400;
+  // scroll() {
+  //   window.onscroll = (e: Event) => {
+  //     let bottomOfWindow =
+  //       Math.max(
+  //         window.pageYOffset,
+  //         document.documentElement.scrollTop,
+  //         document.body.scrollTop
+  //       ) +
+  //         window.innerHeight >
+  //       document.documentElement.offsetHeight - 1400;
 
-      let toUpButton = document.getElementById("toUpButton")!;
+  //     let toUpButton = document.getElementById("toUpButton")!;
 
-      if (document.documentElement.scrollTop > 100) {
-        toUpButton.style.display = "initial";
-      } else {
-        toUpButton.style.display = "none";
-      }
+  //     if (document.documentElement.scrollTop > 100) {
+  //       toUpButton.style.display = "initial";
+  //     } else {
+  //       toUpButton.style.display = "none";
+  //     }
 
-      if (bottomOfWindow && this.canLoadMore && !this.isFetching) {
-        this.isFetching = true;
-        store.dispatch("getFeed", this.pageToLoad);
-        this.pageToLoad += 1;
-      }
-    };
-  }
+  //     if (bottomOfWindow && this.canLoadMore && !this.isFetching) {
+  //       this.isFetching = true;
+  //       store.dispatch("getFeed", this.pageToLoad);
+  //       this.pageToLoad += 1;
+  //     }
+  //   };
+  // }
 
   get canLoadMore(): boolean {
     return store.state.feedLoadedCount === 10;
