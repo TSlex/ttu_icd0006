@@ -3,7 +3,7 @@
     <div class="col-md-5 text-center" style="padding: 50px;">
       <div class="form-group d-flex flex-column">
         <label class="control-label" for="ChatMember_ChatRoleId">Chat role</label>
-        <select class="form-control valid" v-model="selectedMemberRole">
+        <select class="form-control valid" v-model="rolePutModel">
           <option v-for="(chatRole, index) in chatRoles" :key="index" :value="chatRole">{{chatRole.roleTitleValue}}</option>
         </select>
       </div>
@@ -24,12 +24,19 @@ import { IChatRoleDTO } from "@/types/IChatRoleDTO";
 import { ChatMembersApi } from "@/services/ChatMembersApi";
 import IdentityStore from "../../components/shared/IdentityStore.vue";
 import { IChatRoomDTO } from "@/types/IChatRoomDTO";
+import Modal from "@/components/Modal.vue";
 
 @Component({
-  components: {}
+  components: {
+    Modal
+  }
 })
-export default class CommentsSection extends IdentityStore {
-  private selectedMemberRole: IChatRoleDTO | null = null;
+export default class RolesDetails extends IdentityStore {
+  private rolePutModel?: IChatRoleDTO;
+
+  get selectedMemberRole(): IChatRoleDTO | null {
+    return store.state.selectedMemberRole;
+  }
 
   get chatRoles() {
     return store.state.chatRoles;
@@ -50,12 +57,12 @@ export default class CommentsSection extends IdentityStore {
   commitRole() {
     if (
       this.currentMember?.canEditMembers &&
-      !this.selectedMemberRole?.canEditMembers &&
-      this.selectedMemberRole
+      !this.rolePutModel?.canEditMembers &&
+      this.rolePutModel
     ) {
       ChatMembersApi.setMemberRole(
         this.selectedChatMember!.id,
-        this.selectedMemberRole.roleTitle,
+        this.rolePutModel.roleTitle,
         this.jwt
       ).then(() => store.dispatch("getChatMembers", this.selectedChatRoom!.id));
     }
@@ -65,6 +72,10 @@ export default class CommentsSection extends IdentityStore {
 
   closeRoles() {
     this.$emit("onCloseModal");
+  }
+
+  created() {
+    this.rolePutModel = this.selectedMemberRole ?? ({} as IChatRoleDTO);
   }
 }
 </script>

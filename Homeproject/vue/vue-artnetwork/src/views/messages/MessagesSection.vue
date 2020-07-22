@@ -1,74 +1,80 @@
 <template>
   <div class="chat_wall">
-    <div class="chat_header d-flex align-items-center">
-      <div style="flex-grow: 1; display: flex; justify-content: center">
-        <div>&lt;--</div>
-        <div
-          style="max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-        >{{selectedChatRoom.chatRoomTitle}}</div>
-        <div>--&gt;</div>
-      </div>
+    <template v-if="selectedChatRoom">
+      <div class="chat_header d-flex align-items-center">
+        <div style="flex-grow: 1; display: flex; justify-content: center">
+          <div>&lt;--</div>
+          <div
+            style="max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+          >{{selectedChatRoom.chatRoomTitle}}</div>
+          <div>--&gt;</div>
+        </div>
 
-      <div class="profile_controls dropdown dropright show">
-        <a
-          class="btn fa fa-bars"
-          href="#"
-          role="button"
-          id="profile_more"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        ></a>
+        <div class="profile_controls dropdown dropright show">
+          <a
+            class="btn fa fa-bars"
+            href="#"
+            role="button"
+            id="profile_more"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          ></a>
 
-        <div class="dropdown-menu" aria-labelledby="profile_more">
-          <div class="text-center d-flex flex-column">
-            <a class="btn-link" @click="openMembers">Members</a>
-            <a class="btn-link" @click="renameRoom">Change Title</a>
-            <a class="btn-link" @click="leaveRoom">Leave</a>
+          <div class="dropdown-menu" aria-labelledby="profile_more">
+            <div class="text-center d-flex flex-column">
+              <a class="btn-link" @click="$emit('onOpenMembers')">Members</a>
+              <a class="btn-link" @click="$emit('onRenameRoom')">Change Title</a>
+              <a class="btn-link" @click="$emit('onLeaveRoom')">Leave</a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="messages">
-      <div
-        v-for="(message, index) in messages"
-        :key="index"
-        :class="'message ' + (message.userName === userName ? 'active' : '')"
-      >
+      <div class="messages">
         <div
-          v-if="currentMember.canEditMessages &&
+          v-for="(message, index) in messages"
+          :key="index"
+          :class="'message ' + (message.userName === userName ? 'active' : '')"
+        >
+          <div
+            v-if="currentMember.canEditMessages &&
               currentMember.userName == message.userName ||
               currentMember.canEditAllMessages"
-          class="message_controls"
-        >
-          <button class="btn-link fa fa-edit" @click="editMessage(message)"></button>
-          <button class="btn-link fa fa-times-circle" @click="deleteMessage(message)"></button>
-        </div>
-
-        <a class="message_profile" asp-controller="Profiles" asp-action="Index" asp-route-username="@item.Profile.UserName">
-          <div class="message_avatar">
-            <ImageComponent :id="message.profileAvatarId" :key="message.profileAvatarId" height="50px" width="50px" />
+            class="message_controls"
+          >
+            <button class="btn-link fa fa-edit" @click="onEditMessage(message)"></button>
+            <button class="btn-link fa fa-times-circle" @click="onDeleteMessage(message)"></button>
           </div>
-          <span class="profile_name" style="color: black !important;">{{message.userName}}</span>
-        </a>
-        <a v-if="checkURL(message.messageValue)" :href="message.messageValue">
-          <img :src="message.messageValue" alt="profile" height="auto" width="200px" style="border-radius: 5px" />
-        </a>
-        <span v-else class="message_value">{{message.messageValue}}</span>
-        <span class="message_datetime">{{message.messageDateTime | formatDate}}</span>
+
+          <a class="message_profile" asp-controller="Profiles" asp-action="Index" asp-route-username="@item.Profile.UserName">
+            <div class="message_avatar">
+              <ImageComponent :id="message.profileAvatarId" :key="message.profileAvatarId" height="50px" width="50px" />
+            </div>
+            <span class="profile_name" style="color: black !important;">{{message.userName}}</span>
+          </a>
+          <a v-if="checkURL(message.messageValue)" :href="message.messageValue">
+            <img :src="message.messageValue" alt="profile" height="auto" width="200px" style="border-radius: 5px" />
+          </a>
+          <span v-else class="message_value">{{message.messageValue}}</span>
+          <span class="message_datetime">{{message.messageDateTime | formatDate}}</span>
+        </div>
       </div>
-    </div>
-    <template v-if="!messageEditing">
-      <form v-if="currentMember && currentMember.canWriteMessages" class="chat_input">
-        <textarea rows="2" type="text" id="messageValue" v-model="messagePostModel.messageValue" />
-        <button type="submit" class="far fa-paper-plane" @click="sendMessage"></button>
+      <template v-if="!messageEditing">
+        <form v-if="currentMember && currentMember.canWriteMessages" class="chat_input">
+          <textarea rows="2" type="text" id="messageValue" v-model="messagePostModel.messageValue" />
+          <button type="submit" class="far fa-paper-plane" @click="onSendMessage"></button>
+        </form>
+        <span
+          v-else
+          class="text-center p-3 text-danger"
+          style="border-top: solid 1px gray;"
+        >You cannot send messages to this chat!</span>
+      </template>
+      <form v-else class="chat_input">
+        <textarea rows="2" type="text" id="messageValue" v-model="messagePutModel.messageValue" />
+        <button type="submit" class="far fa-paper-plane" @click="onPutMessage"></button>
       </form>
-      <span v-else class="text-center p-3 text-danger" style="border-top: solid 1px gray;">You cannot send messages to this chat!</span>
     </template>
-    <form v-else class="chat_input">
-      <textarea rows="2" type="text" id="messageValue" v-model="messagePutModel.messageValue" />
-      <button type="submit" class="far fa-paper-plane" @click="putMessage"></button>
-    </form>
   </div>
 </template>
 
@@ -96,7 +102,7 @@ import { IChatMemberDTO } from "@/types/IChatMemberDTO";
     ImageComponent
   }
 })
-export default class CommentsSection extends IdentityStore {
+export default class MessagesSection extends IdentityStore {
   private messageEditing: boolean = false;
   private selectedMessage: IMessageDTO | null = null;
 

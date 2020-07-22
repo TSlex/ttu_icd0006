@@ -1,7 +1,7 @@
 <template>
   <ul class="nav nav-pills flex-column chat_rooms text-center">
     <li v-for="chatRoom in chatRooms" :key="chatRoom.id" class="nav-item">
-      <a class="chat_room btn-link" @click="$emit('onSelectChatRoom', chatRoom)">
+      <a class="chat_room btn-link" @click="onSellectChatRoom(chatRoom)">
         <div v-if="chatRoom.lastMessageValue" :key="chatRoom.lastMessageValue" class="message">
           <div class="message_profile" style="width: 240px;">
             <div class="message_avatar">
@@ -34,13 +34,20 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import ImageComponent from "@/components/Image.vue";
 import store from "@/store";
+import { IChatRoomDTO } from "@/types/IChatRoomDTO";
 
 @Component({
-  components: {}
+  components: {
+    ImageComponent
+  }
 })
-export default class CommentsSection extends Vue {
+export default class ChatRoomsSection extends Vue {
   get chatRooms() {
     return store.state.chatRooms;
+  }
+
+  onSellectChatRoom(chatRoom: IChatRoomDTO) {
+    store.dispatch("selectChatRoom", chatRoom);
   }
 }
 </script>

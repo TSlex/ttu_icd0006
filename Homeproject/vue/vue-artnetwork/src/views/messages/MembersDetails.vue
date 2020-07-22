@@ -32,16 +32,22 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import ImageComponent from "@/components/Image.vue";
+
+import IdentityStore from "../../components/shared/IdentityStore.vue";
 import store from "@/store";
+
+import ImageComponent from "@/components/Image.vue";
+import Modal from "@/components/Modal.vue";
+
 import { IChatMemberDTO } from "@/types/IChatMemberDTO";
 
 @Component({
   components: {
-    ImageComponent
+    ImageComponent,
+    Modal
   }
 })
-export default class CommentsSection extends Vue {
+export default class MembersDetails extends IdentityStore {
   get currentMember(): IChatMemberDTO | null {
     return store.getters.getCurrentChatMember;
   }

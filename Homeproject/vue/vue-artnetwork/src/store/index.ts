@@ -78,6 +78,7 @@ export default new Vuex.Store({
     profileRank: null as IRankDTO | null,
 
     //Messages
+    selectedMemberRole: null as IChatRoleDTO | null,
     selectedChatMember: null as IChatMemberDTO | null,
     selectedChatRoom: null as IChatRoomDTO | null,
     chatRooms: [] as IChatRoomDTO[],
@@ -253,10 +254,18 @@ export default new Vuex.Store({
     },
 
     // Messages
-    selectChatMember(state, chatMember: IChatMemberDTO) {
+    selectChatMember(state, chatMember: IChatMemberDTO | null) {
       state.selectedChatMember = chatMember;
+
+      if (!chatMember) return;
+
+      state.chatRoles.forEach((chatRole: IChatRoleDTO) => {
+        if (chatMember.chatRole === chatRole.roleTitle) {
+          state.selectedMemberRole = chatRole;
+        }
+      });
     },
-    selectChatRoom(state, chatRoom: IChatRoomDTO) {
+    selectChatRoom(state, chatRoom: IChatRoomDTO | null) {
       state.selectedChatRoom = chatRoom;
     },
     setChatRooms(state, chatRooms: IChatRoomDTO[]) {
@@ -405,7 +414,7 @@ export default new Vuex.Store({
 
     // Messages
     async selectChatRoom(context, chatRoom: IChatRoomDTO) {
-      context.dispatch("selectChatRoom", chatRoom)
+      context.commit("selectChatRoom", chatRoom)
 
       context.dispatch("getMessages", {
         chatRoomId: chatRoom.id,
