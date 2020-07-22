@@ -16,6 +16,7 @@
         <router-link to="/account/login" class="nav-link text-dark">Login</router-link>
       </li>
     </template>
+    <LanguageSelection />
   </ul>
 </template>
 
@@ -23,10 +24,16 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import IdentityStore from "@/components/shared/IdentityStore.vue";
 
+import LanguageSelection from "@/components/navbar/LanguageSelection.vue";
+
 import store from "@/store";
 import router from "@/router";
 
-@Component
+@Component({
+  components: {
+    LanguageSelection
+  }
+})
 export default class Identity extends IdentityStore {
   logoutOnClick(): void {
     store.dispatch("clearJwt");

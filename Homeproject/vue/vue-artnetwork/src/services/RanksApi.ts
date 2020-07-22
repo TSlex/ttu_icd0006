@@ -34,7 +34,7 @@ export abstract class RanksApi {
 
   static async getProfileRank(userName: string, jwt: string | null): Promise<IRankDTO> {
     const url = `${userName}/active`;
-    const response = await this.axios.get<IRankDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IRankDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': 'et-EE' } });
 
     switch (response.status) {
       case 200:

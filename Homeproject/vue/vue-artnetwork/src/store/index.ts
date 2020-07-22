@@ -36,12 +36,15 @@ import { FavoritesApi } from '@/services/FavoritesApi';
 import { ChatRolesApi } from '@/services/ChatRolesApi';
 import { IProfileGiftDTO } from '@/types/IProfileGiftDTO';
 
+import { LanguageExtensions } from '@/types/Enums/LanguageExtensions';
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   // strict: process.env.NODE_ENV !== 'production',
   state: {
     jwt: null as string | null,
+    culture: null as LanguageExtensions | null,
 
     // Feed
     feed: [] as IPostDTO[],
@@ -136,6 +139,24 @@ export default new Vuex.Store({
 
       return context.jwt;
     },
+    getCurrentCulture(context): LanguageExtensions {
+      if (!context.culture) {
+        let cultureCode = localStorage.getItem('culture')
+
+        for (let key in LanguageExtensions) {
+          let value: string = LanguageExtensions[key as keyof typeof LanguageExtensions];
+          if (value === cultureCode) {
+            context.culture = value as LanguageExtensions;
+          }
+        }
+
+        if (!context.culture) {
+          context.culture = LanguageExtensions.en;
+        }
+      }
+
+      return context.culture;
+    },
     getRankPercent(context): number {
       let profile = context.profile;
       let rank = context.profileRank;
@@ -175,6 +196,10 @@ export default new Vuex.Store({
       } else {
         localStorage.removeItem('jwt')
       }
+    },
+    setCulture(state, culture: LanguageExtensions) {
+      localStorage.setItem('culture', culture)
+      state.culture = culture;
     },
 
     // Feed
