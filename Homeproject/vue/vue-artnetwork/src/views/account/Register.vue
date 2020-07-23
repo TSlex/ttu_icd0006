@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <h1>Create a new account</h1>
+    <h1>{{$t('views.identity.RegisterHeader')}}</h1>
 
     <div class="row justify-content-center">
       <div class="col-md-4">
@@ -12,28 +12,28 @@
             </ul>
           </div>
           <div class="form-group">
-            <label for="Input_Username">Username</label>
+            <label for="Input_Username">{{$t('bll.profiles.UserName')}}</label>
             <input class="form-control" type="text" v-model="registerModel.username" />
             <span class="text-danger field-validation-valid" data-valmsg-for="Input.Username" data-valmsg-replace="true"></span>
           </div>
           <div class="form-group">
-            <label for="Input_Email">Email</label>
+            <label for="Input_Email">{{$t('bll.profiles.Email')}}</label>
             <input class="form-control" type="email" v-model="registerModel.email" />
             <span class="text-danger field-validation-valid" data-valmsg-for="Input.Email" data-valmsg-replace="true"></span>
           </div>
           <div class="form-group">
-            <label for="Input_Password">Password</label>
+            <label for="Input_Password">{{$t('bll.profiles.Password')}}</label>
             <input class="form-control" type="password" v-model="registerModel.password" />
             <span class="text-danger field-validation-valid" data-valmsg-for="Input.Password" data-valmsg-replace="true"></span>
           </div>
           <div class="form-group">
-            <label for="Input_ConfirmPassword">Confirm password</label>
+            <label for="Input_ConfirmPassword">{{$t('bll.profiles.PasswordConfirm')}}</label>
             <input class="form-control" type="password" v-model="passwordConfirmation" />
             <span class="text-danger field-validation-valid" data-valmsg-for="Input.ConfirmPassword" data-valmsg-replace="true"></span>
           </div>
-          <button type="submit" class="btn btn-primary" @click="onSubmit">Register</button>
+          <button type="submit" class="btn btn-primary" @click="onSubmit">{{$t('views._layout.RegisterButton')}}</button>
           <p class="mt-3">
-            <router-link to="login">Already have an account? Login</router-link>
+            <router-link to="login">{{$t('views.identity.AlreadyHave')}}</router-link>
           </p>
         </form>
       </div>

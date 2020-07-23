@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <h1>Log in</h1>
+    <h1>{{$t('views.identity.LoginHeader')}}</h1>
     <div class="row justify-content-center">
       <div class="col-md-4">
         <section>
@@ -12,21 +12,26 @@
               </ul>
             </div>
             <div class="form-group">
-              <label for="Input_Email">Email</label>
+              <label for="Input_Email">{{$t('bll.profiles.Email')}}</label>
               <input class="form-control" type="email" v-model="loginModel.email" />
               <span class="text-danger field-validation-valid"></span>
             </div>
             <div class="form-group">
-              <label for="Input_Password">Password</label>
+              <label for="Input_Password">{{$t('bll.profiles.Password')}}</label>
               <input class="form-control" type="password" v-model="loginModel.password" />
               <span class="text-danger field-validation-valid" data-valmsg-for="Input.Password" data-valmsg-replace="true"></span>
             </div>
             <div class="form-group">
-              <button type="submit" class="btn btn-primary" @click="onSubmit" v-on:keyup.enter="onSubmit">Log in</button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                @click="onSubmit"
+                v-on:keyup.enter="onSubmit"
+              >{{$t('views._layout.LoginButton')}}</button>
             </div>
             <div class="form-group">
               <p>
-                <router-link to="register">Do not have an account yet? Register</router-link>
+                <router-link to="register">{{$t('views.identity.RegisterNew')}}</router-link>
               </p>
             </div>
           </form>
