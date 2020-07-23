@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-center">Edit</h1>
+    <h1 class="text-center">{{$t('views.common.EditHeader')}}</h1>
     <hr />
     <div class="row text-center align-items-center d-flex flex-column">
       <div class="col-md-4">

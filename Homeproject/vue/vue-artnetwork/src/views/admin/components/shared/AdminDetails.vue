@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Details</h1>
+    <h1>{{$t('views.common.DetailsHeader')}}</h1>
 
     <div>
       <h4>Rank</h4>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Index</h1>
+    <h1>{{$t('views.common.IndexHeader')}}</h1>
     <p v-if="CanCreate">
       <a href="#" @click="$emit('onCreate')" @click.prevent>Create New</a>
     </p>
