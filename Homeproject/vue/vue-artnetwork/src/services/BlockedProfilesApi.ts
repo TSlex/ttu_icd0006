@@ -1,10 +1,11 @@
 import Axios from 'axios';
 import { IBlockedProfileDTO } from './../types/IBlockedProfileDTO';
 import { CountResponseDTO } from '@/types/Response/CountResponseDTO';
+import { LanguageService } from './shared/LanguageService';
 
 
 
-export abstract class BlockedProfilesApi {
+export abstract class BlockedProfilesApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
@@ -19,7 +20,7 @@ export abstract class BlockedProfilesApi {
 
   static async getBlockedProfilesCount(jwt: string | null): Promise<CountResponseDTO> {
     const url = "count";
-    const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -34,7 +35,7 @@ export abstract class BlockedProfilesApi {
 
   static async getBlockedProfiles(pageNUmber: number, jwt: string | null): Promise<IBlockedProfileDTO[]> {
     const url = pageNUmber.toString();
-    const response = await this.axios.get<IBlockedProfileDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IBlockedProfileDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:

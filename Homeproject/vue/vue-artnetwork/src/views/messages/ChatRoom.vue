@@ -72,13 +72,15 @@ export default class ChatRoom extends IdentityStore {
   renameRoom() {
     if (this.currentMember?.canEditMembers) {
       this.$swal({
-        title: "Enter a new room title",
+        title: this.$t("views.chatrooms.RenameTitle"),
         input: "text",
         inputValue: this.selectedChatRoom!.chatRoomTitle,
         showCancelButton: true,
+        confirmButtonText: this.$t("views.common.SaveButton"),
+        cancelButtonText: this.$t("views.common.CancelButton"),
         inputValidator: (value: string) => {
           if (!value) {
-            return "Room title cannot be empty!";
+            return this.$t("views.chatrooms.ErrorTitleEmpty");
           } else {
             ChatRoomsApi.putChatTitle(
               this.selectedChatRoom!.id,
@@ -86,9 +88,11 @@ export default class ChatRoom extends IdentityStore {
               this.jwt
             ).then((response: ResponseDTO) => {
               if (!response.errors) {
-                this.$swal("Room title was changed").then(() => {
-                  this.$emit("closeGifts");
-                });
+                this.$swal(this.$t("views.chatrooms.TitleWasUpdated")).then(
+                  () => {
+                    this.$emit("closeGifts");
+                  }
+                );
               }
             });
           }
@@ -121,33 +125,6 @@ export default class ChatRoom extends IdentityStore {
     store.dispatch("getChatRooms");
     store.dispatch("getChatRoles");
   }
-
-  // scroll() {
-  //   window.onscroll = (e: Event) => {
-  //     let bottomOfWindow =
-  //       Math.max(
-  //         window.pageYOffset,
-  //         document.documentElement.scrollTop,
-  //         document.body.scrollTop
-  //       ) +
-  //         window.innerHeight >
-  //       document.documentElement.offsetHeight - 1400;
-
-  //     let toUpButton = document.getElementById("toUpButton")!;
-
-  //     if (document.documentElement.scrollTop > 100) {
-  //       toUpButton.style.display = "initial";
-  //     } else {
-  //       toUpButton.style.display = "none";
-  //     }
-
-  //     if (bottomOfWindow && this.canLoadMore && !this.isFetching) {
-  //       this.isFetching = true;
-  //       store.dispatch("getFeed", this.pageToLoad);
-  //       this.pageToLoad += 1;
-  //     }
-  //   };
-  // }
 
   get canLoadMore(): boolean {
     return store.state.feedLoadedCount === 10;

@@ -1,10 +1,11 @@
 import { IProfileAdminDTO } from '@/types/IProfileDTO';
 import { ResponseDTO } from '@/types/Response/ResponseDTO';
 import Axios from 'axios';
+import { LanguageService } from '../shared/LanguageService';
 
 
 
-export abstract class ProfilesApi {
+export abstract class ProfilesApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
@@ -19,7 +20,7 @@ export abstract class ProfilesApi {
 
   static async index(jwt: string | null): Promise<IProfileAdminDTO[]> {
     const url = "";
-    const response = await this.axios.get<IProfileAdminDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IProfileAdminDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -32,7 +33,7 @@ export abstract class ProfilesApi {
 
   static async details(id: string, jwt: string | null): Promise<IProfileAdminDTO> {
     const url = id;
-    const response = await this.axios.get<IProfileAdminDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IProfileAdminDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -45,7 +46,7 @@ export abstract class ProfilesApi {
 
   static async create(model: IProfileAdminDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = "";
-    const response = await this.axios.post<ResponseDTO>(url, model, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.post<ResponseDTO>(url, model, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -58,7 +59,7 @@ export abstract class ProfilesApi {
 
   static async edit(id: string, model: IProfileAdminDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = id;
-    const response = await this.axios.put<ResponseDTO>(url, model, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.put<ResponseDTO>(url, model, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -71,7 +72,7 @@ export abstract class ProfilesApi {
 
   static async delete(id: string, jwt: string | null): Promise<ResponseDTO> {
     const url = id;
-    const response = await this.axios.delete<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.delete<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -84,7 +85,7 @@ export abstract class ProfilesApi {
 
   static async restore(id: string, jwt: string | null): Promise<ResponseDTO> {
     const url = "restore/" + id;
-    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:

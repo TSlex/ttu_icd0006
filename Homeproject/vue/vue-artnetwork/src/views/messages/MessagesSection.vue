@@ -23,9 +23,9 @@
 
           <div class="dropdown-menu" aria-labelledby="profile_more">
             <div class="text-center d-flex flex-column">
-              <a class="btn-link" @click="$emit('onOpenMembers')">Members</a>
-              <a class="btn-link" @click="$emit('onRenameRoom')">Change Title</a>
-              <a class="btn-link" @click="$emit('onLeaveRoom')">Leave</a>
+              <a class="btn-link" @click="$emit('onOpenMembers')">{{$t('views.chatrooms.MembersNav')}}</a>
+              <a class="btn-link" @click="$emit('onRenameRoom')">{{$t('views.chatrooms.RenameNav')}}</a>
+              <a class="btn-link" @click="$emit('onLeaveRoom')">{{$t('views.chatrooms.LeaveNav')}}</a>
             </div>
           </div>
         </div>
@@ -64,11 +64,7 @@
           <textarea rows="2" type="text" id="messageValue" v-model="messagePostModel.messageValue" />
           <button type="submit" class="far fa-paper-plane" @click="onSendMessage"></button>
         </form>
-        <span
-          v-else
-          class="text-center p-3 text-danger"
-          style="border-top: solid 1px gray;"
-        >You cannot send messages to this chat!</span>
+        <span v-else class="text-center p-3 text-danger" style="border-top: solid 1px gray;">{{$t('views.chatrooms.CannotWrite')}}</span>
       </template>
       <form v-else class="chat_input">
         <textarea rows="2" type="text" id="messageValue" v-model="messagePutModel.messageValue" />

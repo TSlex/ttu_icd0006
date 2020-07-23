@@ -5,10 +5,11 @@ import { IProfileDTO } from './../types/IProfileDTO';
 import Axios from 'axios';
 import store from "../store";
 import { IMessageDTO } from '@/types/IMessageDTO';
+import { LanguageService } from './shared/LanguageService';
 
 
 
-export abstract class ChatRoomsApi {
+export abstract class ChatRoomsApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
@@ -23,7 +24,7 @@ export abstract class ChatRoomsApi {
 
   static async getChatRooms(jwt: string | null): Promise<IChatRoomDTO[]> {
     const url = '';
-    const response = await this.axios.get<IChatRoomDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IChatRoomDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -36,7 +37,7 @@ export abstract class ChatRoomsApi {
 
   static async getLastMessage(chatRoomId: string, jwt: string | null): Promise<IMessageDTO> {
     const url = `${chatRoomId}/last`;
-    const response = await this.axios.get<IMessageDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IMessageDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -49,7 +50,7 @@ export abstract class ChatRoomsApi {
 
   static async getMessagesCount(chatRoomId: string, jwt: string | null): Promise<CountResponseDTO> {
     const url = `${chatRoomId}/count`;
-    const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -62,7 +63,7 @@ export abstract class ChatRoomsApi {
 
   static async getMessages(chatRoomId: string, pageNumber: number, jwt: string | null): Promise<IMessageDTO[]> {
     const url = `${chatRoomId}/${pageNumber}`;
-    const response = await this.axios.get<IMessageDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IMessageDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -75,7 +76,7 @@ export abstract class ChatRoomsApi {
 
   static async getChatRoomWithUsername(userName: string, jwt: string | null): Promise<string | null> {
     const url = userName;
-    const response = await this.axios.get<string>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<string>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -88,7 +89,7 @@ export abstract class ChatRoomsApi {
 
   static async putChatTitle(chatRoomId: string, charRoom: IChatRoomPutDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = `${chatRoomId}/rename`;
-    const response = await this.axios.put<ResponseDTO>(url, charRoom, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.put<ResponseDTO>(url, charRoom, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -101,7 +102,7 @@ export abstract class ChatRoomsApi {
 
   static async deleteChatRoom(chatRoomId: string, jwt: string | null): Promise<ResponseDTO> {
     const url = `${chatRoomId}/delete`;
-    const response = await this.axios.get<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:

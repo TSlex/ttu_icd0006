@@ -266,7 +266,10 @@
       "MembersNav": "Members",
       "RenameNav": "Change Title",
       "LeaveNav": "Leave",
-      "CannotWrite": "You cannot send messages to this chat!"
+      "CannotWrite": "You cannot send messages to this chat!",
+      "RenameTitle": "Enter a new room title",
+      "ErrorTitleEmpty": "Room title cannot be empty!",
+      "TitleWasUpdated": "Room title was changed!"
     },
     "comments": {},
     "common": {

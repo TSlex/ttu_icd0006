@@ -3,8 +3,9 @@ import store from "../store";
 
 import { IPostDTO } from '@/types/IPostDTO';
 import { CountResponseDTO } from './../types/Response/CountResponseDTO';
+import { LanguageService } from './shared/LanguageService';
 
-export abstract class FeedApi {
+export abstract class FeedApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
@@ -19,7 +20,7 @@ export abstract class FeedApi {
 
   static async getFeedCount(jwt: string | null): Promise<CountResponseDTO> {
     const url = "count";
-    const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -34,7 +35,7 @@ export abstract class FeedApi {
 
   static async getFeed(pageNUmber: number, jwt: string | null): Promise<IPostDTO[]> {
     const url = pageNUmber.toString();
-    const response = await this.axios.get<IPostDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IPostDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:

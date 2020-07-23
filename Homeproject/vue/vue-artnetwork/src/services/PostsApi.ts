@@ -2,10 +2,11 @@ import { IPostPostDTO, IPostPutDTO, IPostDTO } from './../types/IPostDTO';
 import { CountResponseDTO } from '@/types/Response/CountResponseDTO';
 import { ResponseDTO } from './../types/Response/ResponseDTO';
 import Axios from 'axios';
+import { LanguageService } from './shared/LanguageService';
 
 
 
-export abstract class PostsApi {
+export abstract class PostsApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
@@ -20,7 +21,7 @@ export abstract class PostsApi {
 
   static async getFavoriteCount(postId: string, jwt: string | null): Promise<CountResponseDTO> {
     const url = `${postId}/fav_count`;
-    const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -33,7 +34,7 @@ export abstract class PostsApi {
 
   static async getCommentsCount(postId: string, jwt: string | null): Promise<CountResponseDTO> {
     const url = `${postId}/comments_count`;
-    const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -46,7 +47,7 @@ export abstract class PostsApi {
 
   static async getProfilePostsCount(userName: string, jwt: string | null): Promise<CountResponseDTO> {
     const url = `${userName}/count`;
-    const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<CountResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -59,7 +60,7 @@ export abstract class PostsApi {
 
   static async getProfilePosts(userName: string, pageNumber: number, jwt: string | null): Promise<IPostDTO[]> {
     const url = `${userName}/${pageNumber}`;
-    const response = await this.axios.get<IPostDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IPostDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -72,7 +73,7 @@ export abstract class PostsApi {
 
   static async getPost(postId: string, jwt: string | null): Promise<IPostDTO> {
     const url = `${postId}`;
-    const response = await this.axios.get<IPostDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IPostDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -85,7 +86,7 @@ export abstract class PostsApi {
 
   static async postPost(post: IPostPostDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = ``;
-    const response = await this.axios.post<ResponseDTO>(url, post, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.post<ResponseDTO>(url, post, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -98,7 +99,7 @@ export abstract class PostsApi {
 
   static async putPost(id: string, post: IPostPutDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = `${id}`;
-    const response = await this.axios.put<ResponseDTO>(url, post, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.put<ResponseDTO>(url, post, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -111,7 +112,7 @@ export abstract class PostsApi {
 
   static async deletePost(id: string, jwt: string | null): Promise<ResponseDTO> {
     const url = `${id}`;
-    const response = await this.axios.delete<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.delete<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -124,7 +125,7 @@ export abstract class PostsApi {
 
   static async favorite(id: string, jwt: string | null): Promise<ResponseDTO> {
     const url = `${id}/favorite`;
-    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     console.log(response)
 
@@ -139,7 +140,7 @@ export abstract class PostsApi {
 
   static async unfavorite(id: string, jwt: string | null): Promise<ResponseDTO> {
     const url = `${id}/unfavorite`;
-    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     console.log(response)
 

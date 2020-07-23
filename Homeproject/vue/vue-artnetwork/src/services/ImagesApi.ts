@@ -1,11 +1,10 @@
+import { LanguageService } from './shared/LanguageService';
 import { IImageDTO, IImagePostDTO, IImagePutDTO } from './../types/IImageDTO';
 import { ResponseDTO } from './../types/Response/ResponseDTO';
 import { IProfileDTO } from './../types/IProfileDTO';
 import Axios from 'axios';
-import store from "../store";
 
-
-export abstract class ImagesApi {
+export abstract class ImagesApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
@@ -27,7 +26,7 @@ export abstract class ImagesApi {
   static async getImageModel(id: string = '', jwt: string | null): Promise<IImageDTO> {
     const url = `${id}/model`;
     const response = await this.axios.get(url,
-      { headers: { Authorization: 'Bearer ' + jwt, common: { 'Content-Type': 'multipart/form-data' } }, responseType: 'json' });
+      { headers: { Authorization: 'Bearer ' + jwt, common: { 'Content-Type': 'multipart/form-data' }, 'accept-language': this.culture }, responseType: 'json' });
 
     switch (response.status) {
       case 200:
@@ -54,7 +53,7 @@ export abstract class ImagesApi {
     formData.append('imageFile', imageModel.imageFile ? imageModel.imageFile : '')
 
     const response = await this.axios.post(url, formData,
-      { headers: { Authorization: 'Bearer ' + jwt }, responseType: "json" });
+      { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture }, responseType: "json" });
 
     switch (response.status) {
       case 200:
@@ -80,7 +79,7 @@ export abstract class ImagesApi {
     formData.append('imageFile', imageModel.imageFile ? imageModel.imageFile : '')
 
     const response = await this.axios.put(url, formData,
-      { headers: { Authorization: 'Bearer ' + jwt }, responseType: "json" });
+      { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture }, responseType: "json" });
 
     switch (response.status) {
       case 200:
@@ -93,7 +92,7 @@ export abstract class ImagesApi {
 
   static async getImage(id: string = ''): Promise<string> {
     const url = id;
-    const response = await this.axios.get(url, { headers: { 'Cache-Control': 'no-cache' } });
+    const response = await this.axios.get(url, { headers: { 'Cache-Control': 'no-cache', 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -106,7 +105,7 @@ export abstract class ImagesApi {
 
   static async getOriginalImage(id: string = ''): Promise<string> {
     const url = `${id}/original`;
-    const response = await this.axios.get(url, { headers: { 'Cache-Control': 'no-cache' } });
+    const response = await this.axios.get(url, { headers: { 'Cache-Control': 'no-cache', 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:

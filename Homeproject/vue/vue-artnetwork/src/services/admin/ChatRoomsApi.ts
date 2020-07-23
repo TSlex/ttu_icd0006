@@ -1,10 +1,11 @@
 import { IChatRoomAdminDTO } from '@/types/IChatRoomDTO';
 import { ResponseDTO } from '@/types/Response/ResponseDTO';
 import Axios from 'axios';
+import { LanguageService } from '../shared/LanguageService';
 
 
 
-export abstract class ChatRoomsApi {
+export abstract class ChatRoomsApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
@@ -19,7 +20,7 @@ export abstract class ChatRoomsApi {
 
   static async index(jwt: string | null): Promise<IChatRoomAdminDTO[]> {
     const url = "";
-    const response = await this.axios.get<IChatRoomAdminDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IChatRoomAdminDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -32,7 +33,7 @@ export abstract class ChatRoomsApi {
 
   static async history(id: string, jwt: string | null): Promise<IChatRoomAdminDTO[]> {
     const url = "history/" + id;
-    const response = await this.axios.get<IChatRoomAdminDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IChatRoomAdminDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -45,7 +46,7 @@ export abstract class ChatRoomsApi {
 
   static async details(id: string, jwt: string | null): Promise<IChatRoomAdminDTO> {
     const url = id;
-    const response = await this.axios.get<IChatRoomAdminDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IChatRoomAdminDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -58,7 +59,7 @@ export abstract class ChatRoomsApi {
 
   static async create(model: IChatRoomAdminDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = "";
-    const response = await this.axios.post<ResponseDTO>(url, model, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.post<ResponseDTO>(url, model, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -71,7 +72,7 @@ export abstract class ChatRoomsApi {
 
   static async edit(id: string, model: IChatRoomAdminDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = id;
-    const response = await this.axios.put<ResponseDTO>(url, model, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.put<ResponseDTO>(url, model, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -84,7 +85,7 @@ export abstract class ChatRoomsApi {
 
   static async delete(id: string, jwt: string | null): Promise<ResponseDTO> {
     const url = id;
-    const response = await this.axios.delete<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.delete<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -97,7 +98,7 @@ export abstract class ChatRoomsApi {
 
   static async restore(id: string, jwt: string | null): Promise<ResponseDTO> {
     const url = "restore/" + id;
-    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:

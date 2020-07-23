@@ -1,9 +1,10 @@
+import { LanguageService } from './shared/LanguageService';
 import { IChatRoleDTO } from '../types/IChatRoleDTO';
 import Axios from 'axios';
 
 
 
-export abstract class ChatRolesApi {
+export abstract class ChatRolesApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
@@ -18,7 +19,7 @@ export abstract class ChatRolesApi {
 
   static async getChatRoles(jwt: string | null): Promise<IChatRoleDTO[]> {
     const url = "";
-    const response = await this.axios.get<IChatRoleDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IChatRoleDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:

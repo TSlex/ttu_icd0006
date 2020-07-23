@@ -2,10 +2,11 @@ import { ResponseDTO } from '../types/Response/ResponseDTO';
 import { IProfileDTO } from '../types/IProfileDTO';
 import Axios from 'axios';
 import store from "../store";
+import { LanguageService } from './shared/LanguageService';
 
 
 
-export abstract class ProfilesApi {
+export abstract class ProfilesApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
@@ -24,7 +25,7 @@ export abstract class ProfilesApi {
     let response;
 
     if (jwt) {
-      response = await this.axios.get<IProfileDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+      response = await this.axios.get<IProfileDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
     } else {
       response = await this.axios.get<IProfileDTO>(url);
     }
@@ -40,7 +41,7 @@ export abstract class ProfilesApi {
 
   static async follow(userName: string, jwt: string | null): Promise<ResponseDTO> {
     const url = `/${userName}/follow`
-    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -53,7 +54,7 @@ export abstract class ProfilesApi {
 
   static async unfollow(userName: string, jwt: string | null): Promise<ResponseDTO> {
     const url = `/${userName}/unfollow`
-    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -66,7 +67,7 @@ export abstract class ProfilesApi {
 
   static async block(userName: string, jwt: string | null): Promise<ResponseDTO> {
     const url = `/${userName}/block`
-    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -79,7 +80,7 @@ export abstract class ProfilesApi {
 
   static async unblock(userName: string, jwt: string | null): Promise<ResponseDTO> {
     const url = `/${userName}/unblock`
-    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:

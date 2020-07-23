@@ -1,10 +1,11 @@
 import { ResponseDTO } from '@/types/Response/ResponseDTO';
 import { IBlockedProfileAdminDTO } from '@/types/IBlockedProfileDTO';
 import Axios from 'axios';
+import { LanguageService } from '../shared/LanguageService';
 
 
 
-export abstract class BlockedProfilesApi {
+export abstract class BlockedProfilesApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
@@ -19,7 +20,7 @@ export abstract class BlockedProfilesApi {
 
   static async index(jwt: string | null): Promise<IBlockedProfileAdminDTO[]> {
     const url = "";
-    const response = await this.axios.get<IBlockedProfileAdminDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IBlockedProfileAdminDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -32,7 +33,7 @@ export abstract class BlockedProfilesApi {
 
   static async details(id: string, jwt: string | null): Promise<IBlockedProfileAdminDTO> {
     const url = id;
-    const response = await this.axios.get<IBlockedProfileAdminDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<IBlockedProfileAdminDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -45,7 +46,7 @@ export abstract class BlockedProfilesApi {
 
   static async edit(id: string, model: IBlockedProfileAdminDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = id;
-    const response = await this.axios.put<ResponseDTO>(url, model, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.put<ResponseDTO>(url, model, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -58,7 +59,7 @@ export abstract class BlockedProfilesApi {
 
   static async delete(id: string, jwt: string | null): Promise<ResponseDTO> {
     const url = id;
-    const response = await this.axios.delete<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.delete<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:

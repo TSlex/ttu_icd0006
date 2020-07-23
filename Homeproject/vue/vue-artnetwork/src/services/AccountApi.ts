@@ -1,3 +1,4 @@
+import { LanguageService } from './shared/LanguageService';
 import Axios from 'axios';
 import { ILoginDTO } from '../types/Identity/ILoginDTO';
 import { IRegisterDTO } from '@/types/Identity/IRegisterDTO';
@@ -8,7 +9,7 @@ import { IProfileEmailDTO } from '@/types/Identity/IProfileEmailDTO';
 import { IProfileDataDTO } from '@/types/Identity/IProfileDataDTO';
 
 
-export abstract class AccountApi {
+export abstract class AccountApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
@@ -55,7 +56,7 @@ export abstract class AccountApi {
 
   static async getEmail(jwt: string | null): Promise<string> {
     const url = "getemail"
-    const response = await this.axios.get(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -69,7 +70,7 @@ export abstract class AccountApi {
 
   static async getProfileData(jwt: string | null): Promise<IProfileDataDTO | null> {
     const url = "getprofiledata"
-    const response = await this.axios.get(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -83,7 +84,7 @@ export abstract class AccountApi {
 
   static async putEmail(emailModel: IProfileEmailDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = "updateprofileemail"
-    const response = await this.axios.put(url, emailModel, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.put(url, emailModel, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -99,7 +100,7 @@ export abstract class AccountApi {
 
   static async putPassword(passwordModel: IProfilePasswordDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = "updateprofilepassword"
-    const response = await this.axios.put(url, passwordModel, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.put(url, passwordModel, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -115,7 +116,7 @@ export abstract class AccountApi {
 
   static async putProfileData(dataModel: IProfileDataDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = "updateprofiledata"
-    const response = await this.axios.put(url, dataModel, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.put(url, dataModel, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:

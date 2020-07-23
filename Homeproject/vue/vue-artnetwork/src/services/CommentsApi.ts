@@ -3,10 +3,11 @@ import { ResponseDTO } from './../types/Response/ResponseDTO';
 import { IProfileDTO } from './../types/IProfileDTO';
 import Axios from 'axios';
 import store from "../store";
+import { LanguageService } from './shared/LanguageService';
 
 
 
-export abstract class CommentsApi {
+export abstract class CommentsApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
@@ -21,7 +22,7 @@ export abstract class CommentsApi {
 
   static async getComments(postId: string, pageNumber: number, jwt: string | null): Promise<ICommentDTO[]> {
     const url = `${postId}/${pageNumber}`;
-    const response = await this.axios.get<ICommentDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.get<ICommentDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -34,7 +35,7 @@ export abstract class CommentsApi {
 
   static async postComment(comment: ICommentPostDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = ``;
-    const response = await this.axios.post<ResponseDTO>(url, comment, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.post<ResponseDTO>(url, comment, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -47,7 +48,7 @@ export abstract class CommentsApi {
 
   static async putComment(id: string, comment: ICommentPutDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = `${id}`;
-    const response = await this.axios.put<ResponseDTO>(url, comment, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.put<ResponseDTO>(url, comment, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:
@@ -60,7 +61,7 @@ export abstract class CommentsApi {
 
   static async deleteComment(id: string, jwt: string | null): Promise<ResponseDTO> {
     const url = `${id}`;
-    const response = await this.axios.delete<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt } });
+    const response = await this.axios.delete<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:

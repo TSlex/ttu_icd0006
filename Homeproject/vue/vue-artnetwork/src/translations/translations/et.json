@@ -266,7 +266,10 @@
       "MembersNav": "Osalejad",
       "RenameNav": "Muuda nimetust",
       "LeaveNav": "Ära minna",
-      "CannotWrite": "Sa ei saa saata sõnumeid selle vestluse!"
+      "CannotWrite": "Sa ei saa saata sõnumeid selle vestluse!",
+      "RenameTitle": "Sisestage uus vestlusruumi pealkiri",
+      "ErrorTitleEmpty": "Ruumi pealkiri ei tohi olla tühi!",
+      "TitleWasUpdated": "Ruumi pealkiri muudeti!"
     },
     "comments": {},
     "common": {
