@@ -18,6 +18,8 @@ import '@/static/custom.css'
 
 import moment from 'moment'
 
+import { i18n } from "@/translations/i18n"
+
 // date and time formating for display
 Vue.filter('formatDate', function (value: any) {
   if (value) {
@@ -36,6 +38,7 @@ Vue.config.productionTip = false;
 Vue.use(VueSweetalert2);
 
 new Vue({
+  i18n,
   router,
   store,
   render: h => h(App),

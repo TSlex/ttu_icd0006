@@ -1,6 +1,12 @@
 <template>
   <form class="form-inline navbar-collapse collapse d-sm-inline-flex flex-sm-row" style="margin: unset">
-    <input class="form-control mr-sm-2" type="search" placeholder="username" name="username" v-model="userName" />
+    <input
+      class="form-control mr-sm-2"
+      type="search"
+      :placeholder="$t('views._layout.SearchBarPlaceHolder')"
+      name="username"
+      v-model="userName"
+    />
     <button class="btn btn-primary fas fa-search" @click="search"></button>
   </form>
 </template>

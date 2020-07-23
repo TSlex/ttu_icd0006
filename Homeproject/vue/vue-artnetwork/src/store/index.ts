@@ -37,6 +37,7 @@ import { ChatRolesApi } from '@/services/ChatRolesApi';
 import { IProfileGiftDTO } from '@/types/IProfileGiftDTO';
 
 import { LanguageExtensions } from '@/types/Enums/LanguageExtensions';
+import { i18n } from '@/translations/i18n';
 
 Vue.use(Vuex)
 
@@ -154,6 +155,8 @@ export default new Vuex.Store({
           context.culture = LanguageExtensions.en;
         }
       }
+
+      i18n.locale = context.culture;
 
       return context.culture;
     },
