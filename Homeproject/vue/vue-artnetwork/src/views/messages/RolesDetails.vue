@@ -2,15 +2,15 @@
   <Modal v-on:closeModal="closeRoles">
     <div class="col-md-5 text-center" style="padding: 50px;">
       <div class="form-group d-flex flex-column">
-        <label class="control-label" for="ChatMember_ChatRoleId">Chat role</label>
+        <label class="control-label" for="ChatMember_ChatRoleId">{{$t("bll.chatroles.RoleTitle")}}</label>
         <select class="form-control valid" v-model="rolePutModel">
           <option v-for="(chatRole, index) in chatRoles" :key="index" :value="chatRole">{{chatRole.roleTitleValue}}</option>
         </select>
       </div>
 
       <div class="form-group">
-        <button class="btn btn-success mr-1" @click="commitRole">Submit</button>
-        <button class="btn btn-secondary" @click="closeRoles">Cancel</button>
+        <button class="btn btn-success mr-1" @click="commitRole">{{$t("views.common.SaveButton")}}</button>
+        <button class="btn btn-secondary" @click="closeRoles">{{$t("views.common.CancelButton")}}</button>
       </div>
     </div>
   </Modal>
