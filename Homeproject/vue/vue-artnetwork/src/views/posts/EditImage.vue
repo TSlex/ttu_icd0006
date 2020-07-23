@@ -33,7 +33,7 @@
         <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="imageModel.paddingLeft" />
 
         <div class="form-group mt-2">
-          <button type="submit" class="btn btn-success mt-2" @click="submit">Save</button>
+          <button type="submit" class="btn btn-success mt-2" @click="submit">{{$t('views.common.SaveButton')}}</button>
         </div>
       </div>
     </div>
@@ -146,7 +146,7 @@ export default class PostsEditImage extends Vue {
             title: "Image was updated!",
             showConfirmButton: true
           }).then(() => {
-            this.$emit('closeModal')
+            this.$emit("closeModal");
           });
         }
       }

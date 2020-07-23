@@ -271,7 +271,10 @@
       "ErrorTitleEmpty": "Room title cannot be empty!",
       "TitleWasUpdated": "Room title was changed!"
     },
-    "comments": {},
+    "comments": {
+      "ShowMore": "show more...",
+      "LoginRequired": "You must be signed in to leave comments. Sign in now?"
+    },
     "common": {
       "CreateButton": "Create",
       "CancelButton": "Cancel",

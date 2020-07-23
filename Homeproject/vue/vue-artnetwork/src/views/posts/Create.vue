@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4 class="text-center">Create post</h4>
+    <h4 class="text-center">{{$t('views.posts.CreateHeader')}}</h4>
     <br />
     <div class="post_create">
       <div class="row d-flex flex-column align-items-center text-center">
@@ -14,11 +14,11 @@
             </ul>
           </div>
           <div class="form-group">
-            <label class="control-label" for="postTitle">Post Title</label>
+            <label class="control-label" for="postTitle">{{$t('bll.posts.PostTitle')}}</label>
             <input class="form-control" id="postTitle" v-model="postModel.postTitle" />
           </div>
           <div class="form-group">
-            <label class="control-label" for="postDescription">Post Desription</label>
+            <label class="control-label" for="postDescription">{{$t('bll.posts.PostDescription')}}</label>
             <textarea class="form-control" id="postDescription" v-model="postModel.postDescription" />
           </div>
           <div class="custom-file mb-3">
@@ -42,8 +42,8 @@
           <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="imageModel.paddingLeft" />
 
           <div class="form-group">
-            <button type="submit" class="btn btn-success mr-1" @click="submit">Create</button>
-            <button class="btn btn-secondary" @click="goBack">Cancel</button>
+            <button type="submit" class="btn btn-success mr-1" @click="submit">{{$t('views.common.CreateButton')}}</button>
+            <button class="btn btn-secondary" @click="goBack">{{$t('views.common.CancelButton')}}</button>
           </div>
         </div>
       </div>

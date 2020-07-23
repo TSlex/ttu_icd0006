@@ -564,6 +564,7 @@ header {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    background: white;
 }
 
 .post_details_meta_section>span {
@@ -584,7 +585,7 @@ header {
     display: inline-block;
     overflow: auto;
     text-overflow: ellipsis;
-    max-height: 1.5em;
+    /* max-height: 1.5em; */
     box-sizing: content-box;
     margin-left: auto;
     margin-right: auto;

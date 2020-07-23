@@ -271,7 +271,10 @@
       "ErrorTitleEmpty": "Ruumi pealkiri ei tohi olla tühi!",
       "TitleWasUpdated": "Ruumi pealkiri muudeti!"
     },
-    "comments": {},
+    "comments": {
+      "ShowMore": "näita rohkem...",
+      "LoginRequired": "Kommenteerimiseks peate olema sisse logitud. Kas soovite sisse logida kohe?"
+    },
     "common": {
       "CreateButton": "Luua",
       "CancelButton": "Tagasi",

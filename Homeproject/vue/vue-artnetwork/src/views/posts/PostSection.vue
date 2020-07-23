@@ -21,13 +21,13 @@
 
     <div class="post_details_meta_section">
       <template v-if="!postEditing">
-        <p>{{post.postTitle}} by "{{post.profileUsername}}"</p>
+        <p>{{post.postTitle}} {{$t('views.posts.ByUsername')}} "{{post.profileUsername}}"</p>
         <span>{{post.postDescription}}</span>
       </template>
       <template v-else>
         <p>
           <input type="text" class="post_title text-center" v-model="postPutModel.postTitle" />
-          by "{{post.profileUsername}}"
+          {{$t('views.posts.ByUsername')}} "{{post.profileUsername}}"
         </p>
         <textarea class="post_description text-center" rows="2" v-model="postPutModel.postDescription"></textarea>
       </template>
@@ -38,12 +38,12 @@
         </li>
         <li class="post_meta btn-link" @click="$emit('onOpenFavorites')">
           <span class="meta_counter">{{post.postFavoritesCount}}&nbsp;</span>
-          <span class="meta_title">favorites</span>
+          <span class="meta_title">{{$t('views.posts.OfFavorites')}}</span>
         </li>
         <li class="post_meta">
           <span class="meta_counter" v-if="comments.length">{{comments.length}}&nbsp;</span>
           <span class="meta_counter" v-else>{{post.postCommentsCount}}&nbsp;</span>
-          <span class="meta_title">comments</span>
+          <span class="meta_title">{{$t('views.posts.OfComments')}}</span>
         </li>
         <li v-if="isAuthenticated">
           <a v-if="post.isFavorite" class="fas fa-heart btn-link" @click="onUnfavorite"></a>

@@ -271,7 +271,10 @@
       "ErrorTitleEmpty": "Название не может отсутствовать!",
       "TitleWasUpdated": "Название было изменено!"
     },
-    "comments": {},
+    "comments": {
+      "ShowMore": "загрузить еще...",
+      "LoginRequired": "Для оставления комментариев, нужно быть в сети. Войти?"
+    },
     "common": {
       "CreateButton": "Создать",
       "CancelButton": "Отмена",

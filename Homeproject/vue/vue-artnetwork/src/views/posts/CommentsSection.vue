@@ -19,7 +19,7 @@
           </template>
         </div>
       </a>
-      <a @click="onLoadMore" class="text-center btn-link">show more...</a>
+      <a @click="onLoadMore" class="text-center btn-link">{{$t('views.comments.ShowMore')}}</a>
     </div>
     <div class="row d-flex justify-content-center mt-3">
       <form v-if="isAuthenticated" class="chat_input">
@@ -32,7 +32,9 @@
           <button type="submit" class="far fa-paper-plane" @click="onPutComment"></button>
         </template>
       </form>
-      <router-link v-else to="account/login">You must be signed in to leave comments. Sign in now?</router-link>
+      <div v-else class="col-10 text-center">
+        <router-link to="/account/login">{{$t('views.comments.LoginRequired')}}</router-link>
+      </div>
     </div>
   </div>
 </template>
