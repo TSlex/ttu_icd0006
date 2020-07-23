@@ -2,18 +2,18 @@
   <ul class="navbar-nav">
     <template v-if="isAuthenticated">
       <li class="nav-item">
-        <router-link to="/account/manage" class="nav-link text-dark">Hello, {{userName}}!</router-link>
+        <router-link to="/account/manage" class="nav-link text-dark">{{$t('views._layout.UserWelcome')}} {{userName}}!</router-link>
       </li>
       <li class="nav-item">
-        <div @click="logoutOnClick" class="nav-link text-dark" href>Logout</div>
+        <div @click="logoutOnClick" class="nav-link text-dark" href>{{$t('views._layout.LogoutButton')}}</div>
       </li>
     </template>
     <template v-else>
       <li class="nav-item">
-        <router-link to="/account/register" class="nav-link text-dark">Register</router-link>
+        <router-link to="/account/register" class="nav-link text-dark">{{$t('views._layout.RegisterButton')}}</router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/account/login" class="nav-link text-dark">Login</router-link>
+        <router-link to="/account/login" class="nav-link text-dark">{{$t('views._layout.LoginButton')}}</router-link>
       </li>
     </template>
     <LanguageSelection />
