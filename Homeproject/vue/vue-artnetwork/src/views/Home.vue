@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <PostDetails v-if="post" :post="post" v-on:closePost="closePost" />
-    <h3 class="text-center">Last posts</h3>
+    <h3 class="text-center">{{$t('views.home.FeedHeader')}}</h3>
     <hr />
     <a class="float_control feed_controls far fa-caret-square-up" id="toUpButton" v-on:click="scrollTop"></a>
     <div class="feed text-center">
@@ -12,7 +12,7 @@
           </div>
 
           <div class="post_details_meta_section">
-            <p>{{post.postTitle}} by {{post.profileUsername}}</p>
+            <p>{{post.postTitle}} {{$t('views.posts.ByUsername')}} {{post.profileUsername}}</p>
             <span>{{post.postDescription}}</span>
             <ul class="post_meta_section">
               <li class="post_meta">
@@ -21,18 +21,18 @@
               <li class="post_meta">
                 <span class="meta_counter">{{post.postFavoritesCount}}</span>
                 &nbsp;
-                <span class="meta_title">favorites</span>
+                <span class="meta_title">{{$t('views.posts.OfFavorites')}}</span>
               </li>
               <li class="post_meta">
                 <span class="meta_counter">{{post.postCommentsCount}}</span>
                 &nbsp;
-                <span class="meta_title">comments</span>
+                <span class="meta_title">{{$t('views.posts.OfComments')}}</span>
               </li>
             </ul>
           </div>
         </div>
       </a>
-      <span v-if="feed.length <= 0" style="margin-top: 100px">Nothing here yet...</span>
+      <span v-if="feed.length <= 0" style="margin-top: 100px">{{$t('views.profiles.NoPosts')}}...</span>
     </div>
   </div>
 </template>

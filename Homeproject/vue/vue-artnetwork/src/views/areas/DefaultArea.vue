@@ -35,7 +35,7 @@
       <div class="container d-flex justify-content-center">
         <span>
           &copy; 2020 - ArtNetwork -
-          <router-link to="/about">Privacy</router-link>
+          <router-link to="/about">{{$t('views._layout.Privacy')}}</router-link>
         </span>
       </div>
     </footer>
