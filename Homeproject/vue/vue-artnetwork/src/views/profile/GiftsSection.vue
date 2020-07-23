@@ -8,7 +8,7 @@
     >
       <ImageComponent :id="gift.imageId" :key="gift.imageId" />
     </div>
-    <span v-if="profileGifts.length <= 0">This user has no gifts yet. Give? :)</span>
+    <span v-if="profileGifts.length <= 0">{{$t('views.profiles.NoPresents')}}</span>
 
     <a
       v-if="!isCurrentUser"

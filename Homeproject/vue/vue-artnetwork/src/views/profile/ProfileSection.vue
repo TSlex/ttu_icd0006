@@ -20,20 +20,24 @@
             aria-labelledby="profile_more"
             x-placement="bottom-start"
             style="position: absolute; will-change: transform; top: 0px; left:
-              20px; transform: translate3d(0px, 38px, 0px);"
+              20px; transform: translate3d(0px, 38px, 0px); text-align: center;"
           >
-            <button class="dropdown-item text-center" @click="$emit('onOpenChatWithUser')">Write a Message</button>
+            <button class="dropdown-item text-center" @click="$emit('onOpenChatWithUser')">{{$t('views.profiles.WriteMessage')}}</button>
             <button v-if="!profile.isUserFollows" type="submit" class="dropdown-item" @click="$emit('onFollowProfile')">
-              <i class="far fa-bell"></i> Follow
+              <i class="far fa-bell"></i>
+              {{$t('views.profiles.Follow')}}
             </button>
             <button v-else type="submit" class="dropdown-item" @click="$emit('onUnfollowProfile')">
-              <i class="fas fa-bell"></i> Unfollow
+              <i class="fas fa-bell"></i>
+              {{$t('views.profiles.Unfollow')}}
             </button>
             <button v-if="!profile.isUserBlocks" type="submit" class="dropdown-item" @click="$emit('onBlockProfile')">
-              <i class="far fa-user"></i> Block
+              <i class="far fa-user"></i>
+              {{$t('views.profiles.Block')}}
             </button>
             <button v-else type="submit" class="dropdown-item" @click="$emit('onUnblockProfile')">
-              <i class="fas fa-user"></i> Unblock
+              <i class="fas fa-user"></i>
+              {{$t('views.profiles.Unblock')}}
             </button>
           </div>
         </li>
@@ -52,18 +56,18 @@
       <ul class="profile_meta_section">
         <li class="profile_meta">
           <span class="meta_counter">{{ profile.postsCount }}</span>&nbsp;
-          <span class="meta_title">posts</span>
+          <span class="meta_title">{{$t('views.profiles.OfPosts')}}</span>
         </li>
         <li class="profile_meta" @click="$emit('onOpenFollowers')">
           <a class="btn-link">
             <span class="meta_counter">{{ profile.followersCount }}</span>&nbsp;
-            <span class="meta_title">followers</span>
+            <span class="meta_title">{{$t('views.profiles.OfFollowers')}}</span>
           </a>
         </li>
         <li class="profile_meta" @click="$emit('onOpenFollowed')">
           <a class="btn-link">
             <span class="meta_counter">{{ profile.followedCount }}</span>&nbsp;
-            <span class="meta_title">followed</span>
+            <span class="meta_title">{{$t('views.profiles.OfFollowed')}}</span>
           </a>
         </li>
       </ul>

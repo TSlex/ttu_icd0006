@@ -10,7 +10,7 @@
     <div class="text-center" v-if="posts.length > 0">
       <button @click="$emit('onLoadMore')" class="btn_circle fa fa-download"></button>
     </div>
-    <span v-else class="text-center">Nothing here yet</span>
+    <span v-else class="text-center">{{$t('views.profiles.NoPosts')}}</span>
   </div>
 </template>
 
