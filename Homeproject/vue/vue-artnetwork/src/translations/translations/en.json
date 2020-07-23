@@ -325,7 +325,8 @@
       "From": "From {0}",
       "Anonymous": "Anonymous?",
       "Message": "Message",
-      "AreSure": "Are you sure?"
+      "AreSure": "Are you sure?",
+      "GiftSended": "Gift was sended!"
     },
     "home": {
       "FeedHeader": "Last posts"

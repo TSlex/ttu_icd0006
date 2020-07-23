@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-center">Send a gift to wareware_san</h2>
+    <h2 class="text-center">{{$t('views.gifts.SendGiftHeader', [username])}}</h2>
     <hr />
     <div class="row text-center justify-content-center">
       <div class="d-flex flex-column">
@@ -11,21 +11,21 @@
         </div>
 
         <a class="btn-link" href="/wareware_san">
-          <b>The next gift will be sent to wareware_san</b>
+          <b>{{$t('views.gifts.SendGiftTitle', [username])}}</b>
         </a>
         <div class="profile_gift">
           <ImageComponent :id="gift.giftImageId" :key="gift.giftImageId" height="300px" width="300px" classHtml="m-3" />
         </div>
-        <span class="font-weight-bold">Title: {{gift.giftName}}</span>
-        <span class="text-danger font-weight-bold">Price: {{gift.price}}</span>
+        <span class="font-weight-bold">{{$t('views.gifts.Title')}}: {{gift.giftName}}</span>
+        <span class="text-danger font-weight-bold">{{$t('views.gifts.Price')}}: {{gift.price}}</span>
 
         <div class="form-group">
-          <label for="anon" class="control-label">Anonymous?</label>
+          <label for="anon" class="control-label">{{$t('views.gifts.Anonymous')}}</label>
           <input type="checkbox" id="anon" class="form-control" v-model="isAnonymous" />
         </div>
 
         <div class="form-group">
-          <label class="control-label" for="Message">Message:</label>
+          <label class="control-label" for="Message">{{$t('bll.profilegifts.Message')}}:</label>
           <textarea
             rows="3"
             v-model="profileGiftModel.message"
@@ -36,15 +36,15 @@
           ></textarea>
         </div>
 
-        <span>Are you sure?</span>
+        <span>{{$t('views.gifts.AreSure')}}</span>
         <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
           <ul>
             <li style="display:none"></li>
           </ul>
         </div>
         <div class="form-group">
-          <button class="btn btn-success mr-1" @click="submit">Send</button>
-          <button class="btn btn-secondary" @click="$emit('closeModal')">Cancel</button>
+          <button class="btn btn-success mr-1" @click="submit">{{$t('views.common.SendButton')}}</button>
+          <button class="btn btn-secondary" @click="$emit('closeModal')">{{$t('views.common.CancelButton')}}</button>
         </div>
       </div>
     </div>
@@ -107,7 +107,7 @@ export default class GiftCreate extends IdentityStore {
       if (!response?.errors) {
         this.$swal({
           icon: "success",
-          title: "Gift was sended!",
+          title: this.$t("views.gifts.GiftSended"),
           showConfirmButton: true
         }).then(() => {
           this.$emit("closeModal");

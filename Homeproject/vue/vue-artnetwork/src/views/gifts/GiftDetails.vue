@@ -16,9 +16,9 @@
       <span class="font-weight-bold">{{gift.giftName}}</span>
 
       <span v-if="gift.fromUsername" class="font-weight-bold mt-2">From "{{gift.fromUsername}}"</span>
-      <span v-else class="font-weight-bold mt-2">Anonymous</span>
+      <span v-else class="font-weight-bold mt-2">{{$t('views.gifts.Anonymous')}}</span>
       <template v-if="gift.message">
-        <span class="font-weight-bold mt-2">Message:</span>
+        <span class="font-weight-bold mt-2">{{$t('bll.profilegifts.Message')}}:</span>
         <div
           style="color: black !important; margin: auto; max-width: 400px; overflow: hidden; text-overflow: ellipsis; word-break: break-word"
         >{{gift.message}}</div>
