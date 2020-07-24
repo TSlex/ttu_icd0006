@@ -59,7 +59,7 @@ export default new Vuex.Store({
     favorites: [] as IFavoriteDTO[],
 
     // Images
-    images: {} as Record<string, { images: IImageDTO; exp: number }>,
+    images: {} as Record<string, { imageData: string; exp: number }>,
 
     // Profile
     profile: null as IProfileDTO | null,
@@ -189,6 +189,15 @@ export default new Vuex.Store({
 
       return current;
     },
+    getImageData(context): (id: string) => string {
+      return (id: string) => {
+        if (context.images[id] && !(Date.now() >= context.images[id].exp * 1000)) {
+          return context.images[id].imageData;
+        }
+
+        return ""
+      }
+    }
   },
 
   mutations: {
@@ -203,6 +212,11 @@ export default new Vuex.Store({
     setCulture(state, culture: LanguageExtensions) {
       localStorage.setItem('culture', culture)
       state.culture = culture;
+    },
+
+    // Images
+    setImageData(state, image: { imageData: string; id: string }) {
+      state.images[image.id] = { imageData: image.imageData, exp: (Date.now() / 1000) + 60 }
     },
 
     // Feed

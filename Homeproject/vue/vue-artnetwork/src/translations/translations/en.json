@@ -314,7 +314,8 @@
       "AdminRanksHeader": "Ranks",
       "AdminGiftsHeader": "Gifts",
       "AdminUserRolesHeader": "User roles",
-      "AdminUserInRolesHeader": "User in roles"
+      "AdminUserInRolesHeader": "User in roles",
+      "Loading": "Loading"
     },
     "favorites": {
       "Header": "Liked"

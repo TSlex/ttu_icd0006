@@ -20,7 +20,7 @@ import { IPostDTO, IPostPutDTO } from "../../types/IPostDTO";
 import {
   ICommentPostDTO,
   ICommentPutDTO,
-  ICommentDTO
+  ICommentDTO,
 } from "../../types/ICommentDTO";
 import ImageComponent from "../../components/Image.vue";
 import ProfilesModal from "../../components/ProfilesModal.vue";
@@ -43,8 +43,8 @@ import CommentsSection from "./CommentsSection.vue";
     PostsEditImage,
     Modal,
     PostSection,
-    CommentsSection
-  }
+    CommentsSection,
+  },
 })
 export default class PostDetails extends IdentityStore {
   private comment: ICommentDTO | null = null;
@@ -52,17 +52,17 @@ export default class PostDetails extends IdentityStore {
   private postPutModel: IPostPutDTO = {
     id: this.post!.id,
     postTitle: this.post!.postTitle,
-    postDescription: this.post!.postDescription
+    postDescription: this.post!.postDescription,
   };
 
   private commentPutModel: ICommentPutDTO = {
     id: "",
-    commentValue: ""
+    commentValue: "",
   };
 
   private commentPostModel: ICommentPostDTO = {
     postId: this.post!.id,
-    commentValue: ""
+    commentValue: "",
   };
 
   private postEditing: boolean = false;

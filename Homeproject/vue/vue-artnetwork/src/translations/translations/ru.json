@@ -314,7 +314,8 @@
       "AdminRanksHeader": "Ранки",
       "AdminGiftsHeader": "Подарки",
       "AdminUserRolesHeader": "Пользовательские роли",
-      "AdminUserInRolesHeader": "Пользователи в ролях"
+      "AdminUserInRolesHeader": "Пользователи в ролях",
+      "Loading": "Загрузка"
     },
     "favorites": {
       "Header": "Понравилось"

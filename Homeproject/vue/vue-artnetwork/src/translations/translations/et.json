@@ -314,7 +314,8 @@
       "AdminRanksHeader": "Auastmed",
       "AdminGiftsHeader": "Kingitused",
       "AdminUserRolesHeader": "Kasutajarollid",
-      "AdminUserInRolesHeader": "Kasutaja rollides"
+      "AdminUserInRolesHeader": "Kasutaja rollides",
+      "Loading": "Laadimine"
     },
     "favorites": {
       "Header": "Meeldinud"
