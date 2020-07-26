@@ -31,7 +31,7 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import { CommentsApi } from "../../services/CommentsApi";
 import { IFavoriteDTO } from "../../types/IFavoriteDTO";
 
-import IdentityStore from "../../components/shared/IdentityStore.vue";
+import LoadingComponent from "../../components/shared/LoadingComponent.vue";
 
 import PostSection from "./PostSection.vue";
 import CommentsSection from "./CommentsSection.vue";
@@ -46,7 +46,7 @@ import CommentsSection from "./CommentsSection.vue";
     CommentsSection,
   },
 })
-export default class PostDetails extends IdentityStore {
+export default class PostDetails extends LoadingComponent {
   private comment: ICommentDTO | null = null;
 
   private postPutModel: IPostPutDTO = {
@@ -109,11 +109,6 @@ export default class PostDetails extends IdentityStore {
 
   closeFavorites() {
     this.favorites = null;
-  }
-
-  created(): void {
-    console.log("created");
-    store.dispatch("setComments", { postId: this.post!.id, pageNumber: 1 });
   }
 }
 </script>

@@ -1,30 +1,33 @@
 <template>
   <div id="profileIndex">
-    <FollowersDetails v-if="isFollowersDetails" v-on:onCloseFollowers="closeFollowers" :isFollowedOpen="isFollowedOpen" />
-    <PostDetails v-if="post" v-on:closePost="closePost" />
-    <RanksDetails v-if="isRankDetails" v-on:onCloseRankDetails="closeRankDetails" />
-    <GiftSelection v-if="isGiftSelection" v-on:closeGifts="closeGiftsSelector" />
-    <GiftDetails v-if="isGiftDetails" v-on:onCloseGiftDetails="closeGiftDetails" />
+    <template v-if="isLoaded">
+      <FollowersDetails v-if="isFollowersDetails" v-on:onCloseFollowers="closeFollowers" :isFollowedOpen="isFollowedOpen" />
+      <PostDetails v-if="post" v-on:closePost="closePost" />
+      <RanksDetails v-if="isRankDetails" v-on:onCloseRankDetails="closeRankDetails" />
+      <GiftSelection v-if="isGiftSelection" v-on:closeGifts="closeGiftsSelector" />
+      <GiftDetails v-if="isGiftDetails" v-on:onCloseGiftDetails="closeGiftDetails" />
 
-    <div v-if="profile && rank" class="profile_container">
-      <ProfileSection
-        v-on:onOpenChatWithUser="openChatWithUser"
-        v-on:onFollowProfile="followProfile"
-        v-on:onUnfollowProfile="unfollowProfile"
-        v-on:onBlockProfile="blockProfile"
-        v-on:onUnblockProfile="unblockProfile"
-        v-on:onOpenRankDetails="openRankDetails"
-        v-on:onOpenFollowers="openFollowers"
-        v-on:onOpenFollowed="openFollowed"
-      />
+      <div v-if="profile && rank" class="profile_container">
+        <ProfileSection
+          v-on:onOpenChatWithUser="openChatWithUser"
+          v-on:onFollowProfile="followProfile"
+          v-on:onUnfollowProfile="unfollowProfile"
+          v-on:onBlockProfile="blockProfile"
+          v-on:onUnblockProfile="unblockProfile"
+          v-on:onOpenRankDetails="openRankDetails"
+          v-on:onOpenFollowers="openFollowers"
+          v-on:onOpenFollowed="openFollowed"
+        />
 
-      <template v-if="!(isCurrentUser && profileGifts.length <= 0)">
+        <template v-if="!(isCurrentUser && profileGifts.length <= 0)">
+          <hr />
+          <GiftsSection v-on:onOpenGiftDetails="openGiftDetails" v-on:onOpenGiftsSelector="openGiftsSelector" />
+        </template>
         <hr />
-        <GiftsSection v-on:onOpenGiftDetails="openGiftDetails" v-on:onOpenGiftsSelector="openGiftsSelector" />
-      </template>
-      <hr />
-      <PostsSection v-on:onSelectPost="selectPost" v-on:onLoadMore="loadMore" />
-    </div>
+        <PostsSection v-on:onSelectPost="selectPost" v-on:onLoadMore="loadMore" />
+      </div>
+    </template>
+    <LoadingOverlay v-else />
   </div>
 </template>
 
@@ -33,6 +36,8 @@ import store from "@/store";
 import router from "@/router";
 
 import { Component, Prop, Vue } from "vue-property-decorator";
+
+import LoadingComponent from "@/components/shared/LoadingComponent.vue";
 
 import GiftSelection from "@/views/gifts/GiftSelection.vue";
 
@@ -44,7 +49,6 @@ import FollowersDetails from "@/views/followers/FollowersDetails.vue";
 import ProfileSection from "./ProfileSection.vue";
 import GiftsSection from "./GiftsSection.vue";
 import PostsSection from "./PostsSection.vue";
-import IdentityStore from "../../components/shared/IdentityStore.vue";
 
 import { IGiftDTO } from "@/types/IGiftDTO";
 import { IProfileDTO } from "@/types/IProfileDTO";
@@ -66,10 +70,10 @@ import { IFollowerDTO } from "@/types/IFollowerDTO";
 
     ProfileSection,
     GiftsSection,
-    PostsSection
-  }
+    PostsSection,
+  },
 })
-export default class ProfileIndex extends IdentityStore {
+export default class ProfileIndex extends LoadingComponent {
   private pageToLoad = 2;
   private isFetching = false;
 
@@ -179,7 +183,7 @@ export default class ProfileIndex extends IdentityStore {
       store
         .dispatch("getPosts", {
           userName: this.username,
-          pageNumber: this.pageToLoad
+          pageNumber: this.pageToLoad,
         })
         .then(() => {
           this.isFetching = false;
@@ -227,10 +231,14 @@ export default class ProfileIndex extends IdentityStore {
   created(): void {
     store.dispatch("getProfile", this.username);
     store.dispatch("getProfileRank", this.username);
-    store.dispatch("setPosts", { userName: this.username, pageNumber: 1 });
+    store
+      .dispatch("setPosts", { userName: this.username, pageNumber: 1 })
+      .then(() => {
+        this.isLoaded = true;
+      });
     store.dispatch("getProfileGifts", {
       userName: this.username,
-      pageNumber: 1
+      pageNumber: 1,
     });
   }
 }

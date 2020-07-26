@@ -78,7 +78,6 @@ export default class ImageComponent extends Vue {
   private src: string = "";
 
   mounted() {
-    console.log(store);
     let data: string;
 
     if (!this.IsOriginal) {

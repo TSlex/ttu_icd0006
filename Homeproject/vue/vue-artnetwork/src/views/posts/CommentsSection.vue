@@ -1,25 +1,28 @@
 <template>
   <div class="post_details_comments">
-    <div class="post_comments_section">
-      <a class="post_comment" v-for="comment in comments" :key="comment.id">
-        <span class="comment_datetime">[{{comment.commentDateTime | formatTime}}]</span>
-        <span class="comment_username">@{{comment.userName}}:</span>
-        <span class="comment_value">&nbsp;{{comment.commentValue}}</span>
-        <div v-if="!commentEditing
+    <div class="post_comments_section" style="position: relative;">
+      <template v-if="isLoaded">
+        <a class="post_comment" v-for="comment in comments" :key="comment.id">
+          <span class="comment_datetime">[{{comment.commentDateTime | formatTime}}]</span>
+          <span class="comment_username">@{{comment.userName}}:</span>
+          <span class="comment_value">&nbsp;{{comment.commentValue}}</span>
+          <div v-if="!commentEditing
             || commentEditing && editedComment.id === comment.id" class="comment_controls">
-          <template v-if="!commentEditing && userName === comment.userName">
-            <a class="fa fa-edit btn-link mr-2" href="#" @click="onEditComment(comment)"></a>
-            <a class="fa fa-times-circle btn-link" href="#" @click="onDeleteComment(comment)"></a>
-          </template>
-          <template v-else-if="!commentEditing && userName === post.profileUsername">
-            <a class="fa fa-times-circle btn-link" href="#" @click="onDeleteComment(comment)"></a>
-          </template>
-          <template v-if="commentEditing">
-            <a class="fa fa-times btn-link" href="#" @click="onSetCommentEditing(false)"></a>
-          </template>
-        </div>
-      </a>
-      <a @click="onLoadMore" class="text-center btn-link">{{$t('views.comments.ShowMore')}}</a>
+            <template v-if="!commentEditing && userName === comment.userName">
+              <a class="fa fa-edit btn-link mr-2" href="#" @click="onEditComment(comment)"></a>
+              <a class="fa fa-times-circle btn-link" href="#" @click="onDeleteComment(comment)"></a>
+            </template>
+            <template v-else-if="!commentEditing && userName === post.profileUsername">
+              <a class="fa fa-times-circle btn-link" href="#" @click="onDeleteComment(comment)"></a>
+            </template>
+            <template v-if="commentEditing">
+              <a class="fa fa-times btn-link" href="#" @click="onSetCommentEditing(false)"></a>
+            </template>
+          </div>
+        </a>
+        <a @click="onLoadMore" class="text-center btn-link">{{$t('views.comments.ShowMore')}}</a>
+      </template>
+      <LoadingOverlay :fixed="false" v-else />
     </div>
     <div class="row d-flex justify-content-center mt-3">
       <form v-if="isAuthenticated" class="chat_input">
@@ -46,24 +49,26 @@ import store from "@/store";
 import {
   ICommentDTO,
   ICommentPutDTO,
-  ICommentPostDTO
+  ICommentPostDTO,
 } from "@/types/ICommentDTO";
 import { IPostDTO } from "../../types/IPostDTO";
 import { CommentsApi } from "@/services/CommentsApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
+import LoadingComponent from "../../components/shared/LoadingComponent.vue";
+import moment from "moment";
 
 @Component({
-  components: {}
+  components: {},
 })
-export default class CommentsSection extends IdentityStore {
+export default class CommentsSection extends LoadingComponent {
   private commentPutModel: ICommentPutDTO = {
     id: "",
-    commentValue: ""
+    commentValue: "",
   };
 
   private commentPostModel: ICommentPostDTO = {
     postId: this.post!.id,
-    commentValue: ""
+    commentValue: "",
   };
 
   private pageToLoad = 2;
@@ -123,10 +128,17 @@ export default class CommentsSection extends IdentityStore {
 
   onSendComment(e: Event) {
     if (this.commentPostModel.commentValue !== "") {
-      store.dispatch("postComment", this.commentPostModel).then(() => {
-        this.commentPostModel.commentValue = "";
-        this.post!.postCommentsCount += 1;
-      });
+      store.dispatch("postComment", { ...this.commentPostModel });
+      store.commit("setComments", [
+        ...this.comments,
+        {
+          ...this.commentPostModel,
+          userName: this.userName,
+          commentDateTime: moment.utc(),
+        },
+      ]);
+      this.post!.postCommentsCount += 1;
+      this.commentPostModel.commentValue = "";
     }
 
     e.preventDefault();
@@ -138,7 +150,7 @@ export default class CommentsSection extends IdentityStore {
       store
         .dispatch("getComments", {
           postId: this.post!.id,
-          pageNumber: this.pageToLoad
+          pageNumber: this.pageToLoad,
         })
         .then(() => {
           this.isFetching = false;
@@ -147,6 +159,14 @@ export default class CommentsSection extends IdentityStore {
     }
 
     e.preventDefault();
+  }
+
+  created(): void {
+    store
+      .dispatch("setComments", { postId: this.post!.id, pageNumber: 1 })
+      .then(() => {
+        this.isLoaded = true;
+      });
   }
 }
 </script>

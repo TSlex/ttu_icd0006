@@ -38,11 +38,16 @@ body {
 }
 
 header {
-    z-index: 100;
+    z-index: 200;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+}
+
+footer {
+    z-index: 200;
+    background: white;
 }
 
 .fa, .fas, .far {
