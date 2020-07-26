@@ -1,6 +1,8 @@
 import { IPostDTO } from '@/types/IPostDTO';
 import { CountResponseDTO } from '@/types/Response/CountResponseDTO';
 import { FeedApi } from '@/services/FeedApi';
+import { distinctIdArray } from '@/helpers/distinctArray';
+import { deleteFromArrayById } from '@/helpers/deleteArray';
 
 interface IState {
   feed: IPostDTO[];
@@ -23,8 +25,10 @@ export const FeedModule = {
       state.feed = feed;
     },
     addFeed(state: IState, feed: IPostDTO[]) {
-      // TODO: fix not unique
-      feed.forEach(feed => state.feed.push(feed))
+      state.feed = distinctIdArray([...feed, state.feed])
+    },
+    deleteFeed(state: IState, post: IPostDTO) {
+      state.feed = deleteFromArrayById(state.feed, post.id)
     },
   },
   actions: {

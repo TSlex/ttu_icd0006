@@ -41,8 +41,7 @@
           <span class="meta_title">{{$t('views.posts.OfFavorites')}}</span>
         </li>
         <li class="post_meta">
-          <span class="meta_counter" v-if="comments.length">{{comments.length}}&nbsp;</span>
-          <span class="meta_counter" v-else>{{post.postCommentsCount}}&nbsp;</span>
+          <span class="meta_counter">{{post.postCommentsCount}}&nbsp;</span>
           <span class="meta_title">{{$t('views.posts.OfComments')}}</span>
         </li>
         <li v-if="isAuthenticated">
@@ -65,8 +64,8 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class PostSection extends IdentityStore {
   @Prop() imageEditing!: boolean;
@@ -76,7 +75,7 @@ export default class PostSection extends IdentityStore {
   private postPutModel: IPostPutDTO = {
     id: this.post!.id,
     postTitle: this.post!.postTitle,
-    postDescription: this.post!.postDescription
+    postDescription: this.post!.postDescription,
   };
 
   get comments() {
@@ -99,23 +98,27 @@ export default class PostSection extends IdentityStore {
       this.postPutModel.postDescription!.length > 0
     ) {
       this.postEditing = false;
-      PostsApi.putPost(this.post.id, this.postPutModel, this.jwt).then(
-        (response: ResponseDTO) => {
-          if (!response.errors) {
-            this.post!.postTitle = this.postPutModel.postTitle;
-            this.post!.postDescription = this.postPutModel.postDescription;
-          }
-        }
-      );
+
+      store.dispatch("putPost", this.postPutModel);
     }
   }
 
   onDeletePost() {
-    PostsApi.deletePost(this.post!.id, this.jwt).then(
-      (response: ResponseDTO) => {
+    this.$swal({
+      icon: "warning",
+      title: this.$t("views.common.DeleteConfirm"),
+      text: this.$t("views.common.DeletePermanent"),
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonColor: "#d33",
+      confirmButtonText: this.$t("views.common.DeleteButton"),
+      cancelButtonText: this.$t("views.common.CancelButton"),
+    }).then((result: any) => {
+      if (result.value) {
+        store.dispatch("deletePost", { ...this.post });
         this.$emit("closePost");
       }
-    );
+    });
   }
 
   onFavorite() {

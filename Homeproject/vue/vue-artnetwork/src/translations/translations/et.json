@@ -286,6 +286,8 @@
       "DetailsHeader": "Detailid",
       "EditHeader": "Muutus",
       "DeleteHeader": "Kustutamine",
+      "DeletePermanent": "Seda ei saa olematuks teha!",
+      "UpdateSuccess": "{0} värskendamine õnnestus!",
       "SendButton": "Saada",
       "DeleteConfirm": "Kas soovite selle kindlasti kustutada?",
       "DownloadButton": "Lae alla",
@@ -315,7 +317,8 @@
       "AdminGiftsHeader": "Kingitused",
       "AdminUserRolesHeader": "Kasutajarollid",
       "AdminUserInRolesHeader": "Kasutaja rollides",
-      "Loading": "Laadimine"
+      "Loading": "Laadimine",
+      "Success": "Edukas!"
     },
     "favorites": {
       "Header": "Meeldinud"

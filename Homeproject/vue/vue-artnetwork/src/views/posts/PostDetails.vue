@@ -1,11 +1,16 @@
 <template>
-  <div class="modal_back" @click="closeModal">
+  <div class="modal_back" @click="closePost">
     <ProfilesModal v-if="favorites" :profilesData="favorites" v-on:closeProfiles="closeFavorites" />
     <Modal v-if="imageEditing" v-on:closeModal="closeImageEdit">
       <PostsEditImage :id="post.postImageId" v-on:closeModal="closeImageEdit" />
     </Modal>
     <div class="post_details" @click.stop>
-      <PostSection v-on:onOpenImageEdit="openImageEdit" v-on:openFavorites="openFavorites" :imageEditing="imageEditing" />
+      <PostSection
+        v-on:onOpenImageEdit="openImageEdit"
+        v-on:openFavorites="openFavorites"
+        :imageEditing="imageEditing"
+        v-on:closePost="closePost"
+      />
       <CommentsSection />
     </div>
   </div>
@@ -85,7 +90,7 @@ export default class PostDetails extends LoadingComponent {
     return store.state.comments;
   }
 
-  closeModal() {
+  closePost() {
     if (!this.postEditing) {
       this.$emit("closePost");
     }

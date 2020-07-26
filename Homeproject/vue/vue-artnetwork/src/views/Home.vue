@@ -84,23 +84,25 @@ export default class Home extends LoadingComponent {
 
   scrollTop() {
     document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }
 
   scroll() {
     window.onscroll = (e: Event) => {
+      let scroll = Math.max(
+        window.pageYOffset,
+        document.documentElement.scrollTop,
+        document.body.scrollTop
+      );
+
       let bottomOfWindow =
-        Math.max(
-          window.pageYOffset,
-          document.documentElement.scrollTop,
-          document.body.scrollTop
-        ) +
-          window.innerHeight >
+        scroll + window.innerHeight >
         document.documentElement.offsetHeight - 1400;
 
       let toUpButton = document.getElementById("toUpButton")!;
 
-      if (document.documentElement.scrollTop > 100) {
-        toUpButton.style.display = "initial";
+      if (scroll > 100) {
+        toUpButton.style.display = "unset";
       } else {
         toUpButton.style.display = "none";
       }

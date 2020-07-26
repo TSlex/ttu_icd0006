@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div v-if="imageModel.id !== ''" class="row d-flex flex-column align-items-center text-center mt-2">
+  <div style="position: relative; min-height: 400px">
+    <div class="row d-flex flex-column align-items-center text-center mt-2">
       <div class="card" style="width: 20rem; user-select: none; position: relative;" id="image-miniature">
         <ImageComponent
           :id="Id"
@@ -10,6 +10,7 @@
           :original="true"
           htmlId="render_image"
           htmlClass="card-img"
+          v-on:imageLoaded="loadMiniatureControl()"
         />
       </div>
 
@@ -49,13 +50,16 @@ import { IImagePutDTO, IImageDTO } from "@/types/IImageDTO";
 import store from "@/store";
 import { ImagesApi } from "@/services/ImagesApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
+import LoadingComponent from "../../components/shared/LoadingComponent.vue";
+
+import EventBus from "@/events/EventBus";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
-export default class PostsEditImage extends Vue {
+export default class PostsEditImage extends LoadingComponent {
   @Prop()
   private id!: string;
 
@@ -67,7 +71,7 @@ export default class PostsEditImage extends Vue {
     paddingLeft: 0,
     heightPx: 0,
     widthPx: 0,
-    imageFile: null
+    imageFile: null,
   };
 
   get Id() {
@@ -86,7 +90,6 @@ export default class PostsEditImage extends Vue {
     ImagesApi.getImageModel(this.Id, this.jwt).then(
       (response: IImagePutDTO) => {
         this.imageModel = response;
-        console.log(this.imageModel);
       }
     );
   }
@@ -97,13 +100,13 @@ export default class PostsEditImage extends Vue {
     if (this.imageModel && this.imageModel.imageFile) {
       let reader = new FileReader();
 
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         let image = new Image();
         image.src = e.target!.result as string;
 
         console.log("reader");
 
-        image.onload = function() {
+        image.onload = function () {
           console.log("image");
 
           let height = $("#HeightPx");
@@ -123,7 +126,7 @@ export default class PostsEditImage extends Vue {
     }
   }
 
-  updated() {
+  loadMiniatureControl() {
     let exist = document.getElementById("image_miniature_script");
 
     if (exist) {
@@ -137,20 +140,27 @@ export default class PostsEditImage extends Vue {
     }
   }
 
+  // updated() {
+  //   if (this.isLoaded) {
+  //     this.loadMiniatureControl();
+  //   }
+  // }
+
   submit() {
-    ImagesApi.putImageModel(this.imageModel.id, this.imageModel, this.jwt).then(
-      (response: ResponseDTO) => {
+    store
+      .dispatch("putImageModel", { ...this.imageModel })
+      .then((response: ResponseDTO) => {
         if (!response?.errors) {
           this.$swal({
             icon: "success",
-            title: "Image was updated!",
-            showConfirmButton: true
+            title: this.$t("views.common.Success"),
+            showConfirmButton: true,
           }).then(() => {
+            EventBus.$emit("updateImage", this.imageModel.id);
             this.$emit("closeModal");
           });
         }
-      }
-    );
+      });
   }
 
   beforeDestroy() {

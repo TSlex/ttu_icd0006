@@ -16,6 +16,7 @@ import { ImagesApi } from "@/services/ImagesApi";
 import LoadingOverlay from "@/components/LoadingOverlay.vue";
 
 import store from "@/store";
+import EventBus from "../events/EventBus";
 
 @Component({
   components: {
@@ -31,6 +32,7 @@ export default class ImageComponent extends Vue {
   @Prop() private original!: boolean;
 
   private imageLoaded: boolean = false;
+  private src: string = "";
 
   get Id() {
     return this.id ?? "null";
@@ -75,30 +77,30 @@ export default class ImageComponent extends Vue {
     return base;
   }
 
-  private src: string = "";
+  get ImageData() {
+    const imageId = this.IsOriginal ? this.id + ":original" : this.id;
 
-  mounted() {
-    let data: string;
+    return store.getters.getImageData(imageId) ?? "";
+  }
+
+  loadImage() {
+    const data = this.ImageData;
 
     if (!this.IsOriginal) {
-      data = store.getters.getImageData(this.Id);
-
       if (data.length > 0) {
         this.src = data;
-        this.imageLoaded = true;
+        this.onImageLoaded();
       } else {
         ImagesApi.getImage(this.Id).then((imageData) => {
           store.commit("setImageData", { imageData: imageData, id: this.Id });
           this.src = imageData;
-          this.imageLoaded = true;
+          this.onImageLoaded();
         });
       }
     } else {
-      data = store.getters.getImageData(this.Id + ":original");
-
       if (data.length > 0) {
         this.src = data;
-        this.imageLoaded = true;
+        this.onImageLoaded();
       } else {
         ImagesApi.getOriginalImage(this.Id).then((imageData) => {
           store.commit("setImageData", {
@@ -106,10 +108,28 @@ export default class ImageComponent extends Vue {
             id: this.Id + ":original",
           });
           this.src = imageData;
-          this.imageLoaded = true;
+          this.onImageLoaded();
         });
       }
     }
+  }
+
+  onImageLoaded() {
+    this.imageLoaded = true;
+    this.$emit("imageLoaded");
+  }
+
+  beforeCreate() {
+    EventBus.$on("updateImage", (id: string) => {
+      if (id === this.Id) {
+        this.imageLoaded = false;
+        this.loadImage();
+      }
+    });
+  }
+
+  mounted() {
+    this.loadImage();
   }
 }
 </script>

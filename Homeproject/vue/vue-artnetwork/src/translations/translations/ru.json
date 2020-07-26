@@ -286,6 +286,8 @@
       "DetailsHeader": "Детали",
       "EditHeader": "Изменение",
       "DeleteHeader": "Удаление",
+      "DeletePermanent": "Это не может быть отменено!",
+      "UpdateSuccess": "{0} была обновленна!",
       "SendButton": "Отправить",
       "DeleteConfirm": "Вы уверены, что хотите удалить это?",
       "DownloadButton": "Скачать",
@@ -315,7 +317,8 @@
       "AdminGiftsHeader": "Подарки",
       "AdminUserRolesHeader": "Пользовательские роли",
       "AdminUserInRolesHeader": "Пользователи в ролях",
-      "Loading": "Загрузка"
+      "Loading": "Загрузка",
+      "Success": "Успех!"
     },
     "favorites": {
       "Header": "Понравилось"

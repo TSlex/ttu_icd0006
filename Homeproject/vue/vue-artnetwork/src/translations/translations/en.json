@@ -291,6 +291,8 @@
       "EditHeader": "Edit",
       "DeleteHeader": "Delete",
       "DeleteConfirm": "Are you sure you want to delete this?",
+      "DeletePermanent": "This cannot be undone!",
+      "UpdateSuccess": "{0} was successfully updated!",
       "NoContent": "Nothing here yet",
       "AdminProfileSectionHeader": "Profile",
       "AdminImageSectionHeader": "Image",
@@ -315,7 +317,8 @@
       "AdminGiftsHeader": "Gifts",
       "AdminUserRolesHeader": "User roles",
       "AdminUserInRolesHeader": "User in roles",
-      "Loading": "Loading"
+      "Loading": "Loading",
+      "Success": "Success!"
     },
     "favorites": {
       "Header": "Liked"
