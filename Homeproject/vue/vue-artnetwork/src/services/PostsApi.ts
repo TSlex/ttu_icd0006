@@ -25,6 +25,8 @@ export abstract class PostsApi extends LanguageService {
 
     switch (response.status) {
       case 200:
+      case 201:
+      case 204:
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
@@ -38,6 +40,8 @@ export abstract class PostsApi extends LanguageService {
 
     switch (response.status) {
       case 200:
+      case 201:
+      case 204:
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
@@ -51,6 +55,8 @@ export abstract class PostsApi extends LanguageService {
 
     switch (response.status) {
       case 200:
+      case 201:
+      case 204:
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
@@ -64,6 +70,8 @@ export abstract class PostsApi extends LanguageService {
 
     switch (response.status) {
       case 200:
+      case 201:
+      case 204:
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
@@ -77,6 +85,8 @@ export abstract class PostsApi extends LanguageService {
 
     switch (response.status) {
       case 200:
+      case 201:
+      case 204:
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
@@ -90,6 +100,8 @@ export abstract class PostsApi extends LanguageService {
 
     switch (response.status) {
       case 200:
+      case 201:
+      case 204:
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
@@ -103,6 +115,8 @@ export abstract class PostsApi extends LanguageService {
 
     switch (response.status) {
       case 200:
+      case 201:
+      case 204:
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
@@ -116,6 +130,8 @@ export abstract class PostsApi extends LanguageService {
 
     switch (response.status) {
       case 200:
+      case 201:
+      case 204:
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
@@ -127,10 +143,10 @@ export abstract class PostsApi extends LanguageService {
     const url = `${id}/favorite`;
     const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
-    console.log(response)
-
     switch (response.status) {
       case 200:
+      case 201:
+      case 204:
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
@@ -142,10 +158,10 @@ export abstract class PostsApi extends LanguageService {
     const url = `${id}/unfavorite`;
     const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
-    console.log(response)
-
     switch (response.status) {
       case 200:
+      case 201:
+      case 204:
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)

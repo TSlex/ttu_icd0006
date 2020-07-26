@@ -26,6 +26,8 @@ export abstract class ChatMembersApi extends LanguageService {
 
     switch (response.status) {
       case 200:
+      case 201:
+      case 204:
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
@@ -40,6 +42,8 @@ export abstract class ChatMembersApi extends LanguageService {
 
     switch (response.status) {
       case 200:
+      case 201:
+      case 204:
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
@@ -53,6 +57,8 @@ export abstract class ChatMembersApi extends LanguageService {
 
     switch (response.status) {
       case 200:
+      case 201:
+      case 204:
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)

@@ -2,6 +2,7 @@ import { ICommentDTO, ICommentPostDTO } from '@/types/ICommentDTO';
 import { distinctIdArray } from '@/helpers/distinctArray';
 import { CommentsApi } from '@/services/CommentsApi';
 import { ResponseDTO } from '@/types/Response/ResponseDTO';
+import moment from 'moment';
 
 interface IState {
   comments: ICommentDTO[];
@@ -13,11 +14,16 @@ export const CommentsModule = {
     comments: [] as ICommentDTO[],
     commentsLoadedCount: -1,
   },
-  getters: {},
+  getters: {
+    getComments(state: IState) {
+      return state.comments.sort((comment1, comment2) => {
+        return comment1.commentDateTime < comment2.commentDateTime ? 1 : -1
+      })
+    }
+  },
   mutations: {
     getComments(state: IState, comments: ICommentDTO[]) {
-      // comments.forEach(comment => state.comments.push(comment))
-      state.comments = distinctIdArray([...state.comments, ...comments]);
+      state.comments = distinctIdArray([...comments, ...state.comments])
     },
     setComments(state: IState, comments: ICommentDTO[]) {
       state.comments = comments;
@@ -43,7 +49,9 @@ export const CommentsModule = {
     },
     async postComment(context: any, comment: ICommentPostDTO): Promise<ResponseDTO> {
       const response = await CommentsApi.postComment(comment, context.state.jwt);
-      context.dispatch('getComments', { postId: comment.postId, pageNumber: 1 });
+      await context.dispatch('getComments', { postId: comment.postId, pageNumber: 1 });
+
+      context.commit('deleteComment', comment)
 
       return response;
     },

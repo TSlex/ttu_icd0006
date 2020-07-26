@@ -8,25 +8,25 @@ interface IState {
 export const CultureModule = {
   state: { culture: null as LanguageExtensions | null, },
   getters: {
-    getCurrentCulture(context: any): LanguageExtensions {
-      if (!context.culture) {
+    getCurrentCulture(state: any): LanguageExtensions {
+      if (!state.culture) {
         let cultureCode = localStorage.getItem('culture')
 
         for (let key in LanguageExtensions) {
           let value: string = LanguageExtensions[key as keyof typeof LanguageExtensions];
           if (value === cultureCode) {
-            context.culture = value as LanguageExtensions;
+            state.culture = value as LanguageExtensions;
           }
         }
 
-        if (!context.culture) {
-          context.culture = LanguageExtensions.en;
+        if (!state.culture) {
+          state.culture = LanguageExtensions.en;
         }
       }
 
-      i18n.locale = context.culture;
+      i18n.locale = state.culture;
 
-      return context.culture;
+      return state.culture;
     },
   },
   mutations: {

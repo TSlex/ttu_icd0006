@@ -2,7 +2,7 @@
   <div class="post_details_comments">
     <div class="post_comments_section" style="position: relative;">
       <template v-if="isLoaded">
-        <a class="post_comment" v-for="comment in comments" :key="comment.id">
+        <a class="post_comment" v-for="(comment, index) in comments" :key="index">
           <span class="comment_datetime">[{{comment.commentDateTime | formatTime}}]</span>
           <span class="comment_username">@{{comment.userName}}:</span>
           <span class="comment_value">&nbsp;{{comment.commentValue}}</span>
@@ -78,7 +78,7 @@ export default class CommentsSection extends LoadingComponent {
   private commentEditing: boolean = false;
 
   get comments() {
-    return store.state.comments;
+    return store.getters.getComments;
   }
 
   get post(): IPostDTO | null {
@@ -128,14 +128,16 @@ export default class CommentsSection extends LoadingComponent {
 
   onSendComment(e: Event) {
     if (this.commentPostModel.commentValue !== "") {
-      store.dispatch("postComment", { ...this.commentPostModel });
+      store.dispatch("postComment", {
+        ...this.commentPostModel,
+      });
       store.commit("setComments", [
-        ...this.comments,
         {
           ...this.commentPostModel,
           userName: this.userName,
-          commentDateTime: moment.utc(),
+          commentDateTime: new Date().toISOString(),
         },
+        ...this.comments,
       ]);
       this.post!.postCommentsCount += 1;
       this.commentPostModel.commentValue = "";
