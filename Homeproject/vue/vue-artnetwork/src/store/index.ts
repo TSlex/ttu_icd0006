@@ -1,15 +1,15 @@
-import { RanksModule } from './ranks';
-import { ProfilesModule } from './profiles';
-import { PostsModule } from './posts';
-import { MessagesModule } from './messages';
-import { ImagesModule } from './images';
-import { GiftsModule } from './gifts';
-import { FollowersModule } from './followers';
-import { FeedModule } from './feed';
-import { FavoritesModule } from './favorites';
-import { CultureModule } from './culture';
-import { CommentsModule } from './comments';
-import { IdentityModule } from './identity';
+import { RanksModule } from './modules/ranks';
+import { ProfilesModule } from './modules/profiles';
+import { PostsModule } from './modules/posts';
+import { MessagesModule } from './modules/messages';
+import { ImagesModule } from './modules/images';
+import { GiftsModule } from './modules/gifts';
+import { FollowersModule } from './modules/followers';
+import { FeedModule } from './modules/feed';
+import { FavoritesModule } from './modules/favorites';
+import { CultureModule } from './modules/culture';
+import { CommentsModule } from './modules/comments';
+import { IdentityModule } from './modules/identity';
 
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
