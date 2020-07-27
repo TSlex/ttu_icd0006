@@ -318,7 +318,8 @@
       "AdminUserRolesHeader": "User roles",
       "AdminUserInRolesHeader": "User in roles",
       "Loading": "Loading",
-      "Success": "Success!"
+      "Success": "Success!",
+      "Page404": "The page you are looking for was not found!"
     },
     "favorites": {
       "Header": "Liked"

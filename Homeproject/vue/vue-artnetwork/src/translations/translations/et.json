@@ -318,7 +318,8 @@
       "AdminUserRolesHeader": "Kasutajarollid",
       "AdminUserInRolesHeader": "Kasutaja rollides",
       "Loading": "Laadimine",
-      "Success": "Edukas!"
+      "Success": "Edukas!",
+      "Page404": "Lehte, mida otsisite, ei leitud!"
     },
     "favorites": {
       "Header": "Meeldinud"

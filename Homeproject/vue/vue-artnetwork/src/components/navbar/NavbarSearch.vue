@@ -16,6 +16,9 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import store from "@/store";
 import router from "@/router";
+import { ProfilesApi } from "../../services/ProfilesApi";
+
+import { routeIfCan } from "@/helpers/route";
 
 @Component
 export default class NavbarSearch extends Vue {
@@ -23,8 +26,17 @@ export default class NavbarSearch extends Vue {
 
   private search(e: Event) {
     if (this.userName.length > 0) {
-      router.push("/profiles/" + this.userName);
-      this.userName = "";
+      ProfilesApi.exists(this.userName).then((response: boolean) => {
+        if (response) {
+          // router.push("/profiles/" + this.userName).catch((err) => {});
+          routeIfCan("/profiles/" + this.userName);
+        } else {
+          // router.push("/404").catch((err) => {});
+          routeIfCan("/404");
+        }
+
+        this.userName = "";
+      });
     }
 
     e.preventDefault();

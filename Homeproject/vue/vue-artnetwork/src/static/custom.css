@@ -7,7 +7,19 @@ html::-webkit-scrollbar {
 }
 
 span::-webkit-scrollbar, p::-webkit-scrollbar {
-    width: 0;
+    width: .4em;
+}
+
+span::-webkit-scrollbar-track, p::-webkit-scrollbar-track {
+    border-left: 1px solid lightgray;
+    /* background: lightgray; */
+    border-radius: 10px;
+}
+
+span::-webkit-scrollbar-thumb, p::-webkit-scrollbar-thumb {
+    background-color: lightgray;
+    outline: 1px solid slategrey;
+    border-radius: 10px;
 }
 
 html::-webkit-scrollbar-track {
@@ -15,6 +27,19 @@ html::-webkit-scrollbar-track {
 }
 
 html::-webkit-scrollbar-thumb {
+    background-color: lightgray;
+    outline: 1px solid slategrey;
+}
+
+textarea::-webkit-scrollbar {
+    width: .5em;
+}
+
+textarea::-webkit-scrollbar-track {
+    border-left: 1px solid lightgray;
+}
+
+textarea::-webkit-scrollbar-thumb {
     background-color: lightgray;
     outline: 1px solid slategrey;
 }
@@ -118,20 +143,22 @@ footer {
 /* float controls */
 
 .float_control {
+    opacity: .8;
     position: fixed;
     top: 100px;
     left: 100px;
-    transition: color ease-in .2s;
+    transition: color .1s;
 }
 
 .float_control:hover {
+    cursor: pointer;
     position: fixed;
     color: #005cbfaa !important;
-    text-shadow: 0 0 20px #005cbf66;
+    /* text-shadow: 0 0 20px #005cbf66; */
 }
 
 .float_control.feed_controls {
-    font-size: 50px;
+    font-size: 40px;
     display: none;
 }
 

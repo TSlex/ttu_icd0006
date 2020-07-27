@@ -19,6 +19,22 @@ export abstract class ProfilesApi extends LanguageService {
     }
   )
 
+  static async exists(userName: string): Promise<boolean> {
+    const url = `${userName}/exists`;
+
+    const response = await this.axios.get<boolean>(url);
+
+    switch (response.status) {
+      case 200:
+      case 201:
+      case 204:
+        return response.data;
+      default:
+        console.log(response.status + ":" + response.statusText)
+        return response.data;
+    }
+  }
+
   static async getProfile(userName: string, jwt: string | null): Promise<IProfileDTO> {
     const url = userName;
 

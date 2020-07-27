@@ -318,7 +318,8 @@
       "AdminUserRolesHeader": "Пользовательские роли",
       "AdminUserInRolesHeader": "Пользователи в ролях",
       "Loading": "Загрузка",
-      "Success": "Успех!"
+      "Success": "Успех!",
+      "Page404": "Страница, которую вы ищете, не найдена!"
     },
     "favorites": {
       "Header": "Понравилось"

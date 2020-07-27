@@ -26,7 +26,7 @@ export default class LoadingOverlay extends Vue {
 
   get ModalStyle() {
     let style =
-      "left: 0px; top: 0px; height: 100%; width: 100%; background: rgba(0, 0, 0, 0.133); z-index: 100;";
+      "left: 0px; top: 0px; height: 100%; width: 100%; background: rgba(0, 0, 0, 0.133);";
 
     if (this.IsFixed) {
       style = "position: fixed; " + style;

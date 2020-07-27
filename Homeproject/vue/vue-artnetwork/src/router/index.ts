@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from 'vue-router'
 
 import Home from '@/views/Home.vue'
 import About from '@/views/About.vue'
+import NotFound from '@/views/404.vue'
 
 import AccountRegister from '@/views/account/Register.vue'
 import AccountLogin from '@/views/account/Login.vue'
@@ -92,6 +93,7 @@ Vue.use(VueRouter)
 const routes: Array<RouteConfig> = [
   { path: '/', name: 'Home', component: Home },
   { path: '/about', name: 'About', component: About },
+  { path: '/404', name: '404', component: NotFound },
 
   // Account
   { path: '/account/login', name: 'Login', component: AccountLogin },
@@ -182,6 +184,10 @@ const routes: Array<RouteConfig> = [
   { path: '/admin/ranks/create', name: 'RanksCreateA', component: RanksCreateA },
   { path: '/admin/ranks/details/:id', name: 'RanksDetailsA', component: RanksDetailsA, props: true },
   { path: '/admin/ranks/edit/:id', name: 'RanksEditA', component: RanksEditA, props: true },
+
+
+  // Fallback
+  { path: '*', name: '404', component: NotFound },
 ]
 
 const router = new VueRouter({
