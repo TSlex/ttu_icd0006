@@ -22,7 +22,7 @@ export const PostsModule = {
       state.selectedPost = post
     },
     getPosts(state: IState, posts: IPostDTO[]) {
-      state.posts = distinctIdArray([...posts, state.posts])
+      state.posts = distinctIdArray([...posts, ...state.posts])
     },
     setPosts(state: IState, posts: IPostDTO[]) {
       state.posts = posts;

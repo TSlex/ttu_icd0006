@@ -1,5 +1,6 @@
 import { LanguageExtensions } from '@/types/Enums/LanguageExtensions';
 import { i18n } from '@/translations/i18n';
+import EventBus from '@/events/EventBus';
 
 interface IState {
   culture: LanguageExtensions | null;
@@ -33,6 +34,8 @@ export const CultureModule = {
     setCulture(state: IState, culture: LanguageExtensions) {
       localStorage.setItem('culture', culture)
       state.culture = culture;
+
+      EventBus.$emit('cultureUpdate', culture)
     },
   },
   actions: {}

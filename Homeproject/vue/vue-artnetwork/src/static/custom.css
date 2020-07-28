@@ -183,7 +183,7 @@ footer {
     box-shadow: 0 0 30px #005cbf66, 0 0 30px #005cbf66;
 }
 
-.btn_circle:active {
+.btn_circle:focus {
     outline: none;
 }
 

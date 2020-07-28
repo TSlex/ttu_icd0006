@@ -93,7 +93,7 @@ Vue.use(VueRouter)
 const routes: Array<RouteConfig> = [
   { path: '/', name: 'Home', component: Home },
   { path: '/about', name: 'About', component: About },
-  { path: '/404', name: '404', component: NotFound },
+  // { path: '/404', name: '404', component: NotFound },
 
   // Account
   { path: '/account/login', name: 'Login', component: AccountLogin },
@@ -184,7 +184,6 @@ const routes: Array<RouteConfig> = [
   { path: '/admin/ranks/create', name: 'RanksCreateA', component: RanksCreateA },
   { path: '/admin/ranks/details/:id', name: 'RanksDetailsA', component: RanksDetailsA, props: true },
   { path: '/admin/ranks/edit/:id', name: 'RanksEditA', component: RanksEditA, props: true },
-
 
   // Fallback
   { path: '*', name: '404', component: NotFound },

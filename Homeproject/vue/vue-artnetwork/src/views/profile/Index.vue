@@ -1,6 +1,6 @@
 <template>
   <div id="profileIndex">
-    <template v-if="isLoaded">
+    <template v-if="isAllLoaded">
       <FollowersDetails v-if="isFollowersDetails" v-on:onCloseFollowers="closeFollowers" :isFollowedOpen="isFollowedOpen" />
       <PostDetails v-if="post" v-on:closePost="closePost" />
       <RanksDetails v-if="isRankDetails" v-on:onCloseRankDetails="closeRankDetails" />
@@ -58,6 +58,7 @@ import { IRankDTO } from "@/types/IRankDTO";
 
 import { ChatRoomsApi } from "@/services/ChatRoomsApi";
 import { IFollowerDTO } from "@/types/IFollowerDTO";
+import EventBus from "../../events/EventBus";
 
 @Component({
   components: {
@@ -84,8 +85,24 @@ export default class ProfileIndex extends LoadingComponent {
   private isGiftSelection: boolean = false;
   private isFollowersDetails: boolean = false;
 
+  private isProfileLoaded: boolean = false;
+  private isProfileRankLoaded: boolean = false;
+  private isPostsLoaded: boolean = false;
+  private isGiftsLoaded: boolean = false;
+
+  private loadedCulture!: string;
+
   @Prop()
   private username!: string;
+
+  get isAllLoaded(): boolean {
+    return (
+      this.isProfileLoaded &&
+      this.isProfileRankLoaded &&
+      this.isPostsLoaded &&
+      this.isGiftsLoaded
+    );
+  }
 
   get profile(): IProfileDTO | null {
     return store.state.profile;
@@ -103,12 +120,26 @@ export default class ProfileIndex extends LoadingComponent {
     return store.getters.getUserName === this.username;
   }
 
-  get canLoadMore(): boolean {
-    return store.state.feedLoadedCount === 10;
-  }
-
   get profileGifts(): IProfileGiftDTO[] {
     return store.state.profileGifts;
+  }
+
+  updateRank() {
+    this.isProfileRankLoaded = false;
+
+    store.dispatch("getProfileRank", this.username).then(() => {
+      this.isProfileRankLoaded = true;
+    });
+  }
+
+  updateGifts() {
+    this.isGiftsLoaded = false;
+
+    store
+      .dispatch("getProfileGifts", { userName: this.username, pageNumber: 1 })
+      .then(() => {
+        this.isGiftsLoaded = true;
+      });
   }
 
   // Gift details
@@ -229,17 +260,35 @@ export default class ProfileIndex extends LoadingComponent {
   }
 
   created(): void {
-    store.dispatch("getProfile", this.username);
-    store.dispatch("getProfileRank", this.username);
+    this.loadedCulture = store.state.culture!;
+
+    EventBus.$on("cultureUpdate", (culture: string) => {
+      if (this.loadedCulture !== culture) {
+        this.loadedCulture = culture;
+        this.updateRank();
+        this.updateGifts();
+      }
+    });
+
+    store.dispatch("getProfile", this.username).then(() => {
+      this.isProfileLoaded = true;
+    });
+    store.dispatch("getProfileRank", this.username).then(() => {
+      this.isProfileRankLoaded = true;
+    });
     store
       .dispatch("setPosts", { userName: this.username, pageNumber: 1 })
       .then(() => {
-        this.isLoaded = true;
+        this.isPostsLoaded = true;
       });
-    store.dispatch("getProfileGifts", {
-      userName: this.username,
-      pageNumber: 1,
-    });
+    store
+      .dispatch("getProfileGifts", {
+        userName: this.username,
+        pageNumber: 1,
+      })
+      .then(() => {
+        this.isGiftsLoaded = true;
+      });
   }
 }
 </script>

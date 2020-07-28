@@ -1,7 +1,7 @@
 <template>
   <div style="position: relative; min-height: 400px">
     <div class="row d-flex flex-column align-items-center text-center mt-2">
-      <div class="card" style="width: 20rem; user-select: none; position: relative;" id="image-miniature">
+      <div class="card mt-4" style="width: 20rem; user-select: none; position: relative;" id="image-miniature">
         <ImageComponent
           :id="Id"
           :key="Id"
@@ -156,7 +156,6 @@ export default class PostsEditImage extends LoadingComponent {
             title: this.$t("views.common.Success"),
             showConfirmButton: true,
           }).then(() => {
-            EventBus.$emit("updateImage", this.imageModel.id);
             this.$emit("closeModal");
           });
         }

@@ -1,6 +1,7 @@
 import { IImagePutDTO } from '@/types/IImageDTO';
 import { ResponseDTO } from '@/types/Response/ResponseDTO';
 import { ImagesApi } from '@/services/ImagesApi';
+import EventBus from '@/events/EventBus';
 
 interface IState {
   images: Record<string, { imageData: string; exp: number }>;
@@ -35,6 +36,10 @@ export const ImagesModule = {
       context.commit('removeImageData', imageModel.id)
 
       const response = await ImagesApi.putImageModel(imageModel.id, imageModel, context.state.jwt)
+
+      if ((response?.errors?.length === 0)) {
+        EventBus.$emit("updateImage", imageModel.id);
+      }
 
       return response;
     }
