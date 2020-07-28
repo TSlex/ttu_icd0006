@@ -51,29 +51,22 @@ import { ProfilesApi } from "../../../services/ProfilesApi";
 import {
   IImageDTO,
   IImagePostDTO,
-  IImagePutDTO
+  IImagePutDTO,
 } from "../../../types/IImageDTO";
 import { ImagesApi } from "../../../services/ImagesApi";
 import { ImageType } from "../../../types/Enums/ImageType";
 import $ from "jquery";
 import { PostsApi } from "../../../services/PostsApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
+import IdentityStore from "../../../components/shared/IdentityStore.vue";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
-export default class Avatar extends Vue {
+export default class Avatar extends IdentityStore {
   private imageModel: IImageDTO | null = null;
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  get userName() {
-    return store.getters.getUserName;
-  }
 
   get isAvatarExist() {
     return this.profile?.profileAvatarId != null;
@@ -108,7 +101,7 @@ export default class Avatar extends Vue {
             paddingLeft: 0,
             imageFile: null,
             imageType: ImageType.ProfileAvatar,
-            imageFor: ""
+            imageFor: "",
           };
         }
       }
@@ -121,22 +114,18 @@ export default class Avatar extends Vue {
     if (this.imageModel && this.imageModel.imageFile) {
       let reader = new FileReader();
 
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         let image = new Image();
         image.src = e.target!.result as string;
 
-        console.log("reader");
-
-        image.onload = function() {
-          console.log("image");
-
+        image.onload = function () {
           let height = $("#HeightPx");
           let width = $("#WidthPx");
           height.attr("value", image.height);
           width.attr("value", image.width);
 
-          height.get()[0].dispatchEvent(new Event('change'))
-          width.get()[0].dispatchEvent(new Event('change'))
+          height.get()[0].dispatchEvent(new Event("change"));
+          width.get()[0].dispatchEvent(new Event("change"));
         };
 
         $("#render_image").attr("src", image.src);
@@ -174,7 +163,7 @@ export default class Avatar extends Vue {
         paddingLeft: this.imageModel.paddingLeft,
         imageFile: this.imageModel.imageFile,
         imageType: ImageType.ProfileAvatar,
-        imageFor: ""
+        imageFor: "",
       };
 
       ImagesApi.postImageModel(postModel, this.jwt).then(
@@ -191,7 +180,7 @@ export default class Avatar extends Vue {
         paddingRight: this.imageModel.paddingRight,
         paddingBottom: this.imageModel.paddingBottom,
         paddingLeft: this.imageModel.paddingLeft,
-        imageFile: this.imageModel.imageFile
+        imageFile: this.imageModel.imageFile,
       };
 
       ImagesApi.putImageModel(this.imageModel.id, putModel, this.jwt).then(
@@ -200,7 +189,7 @@ export default class Avatar extends Vue {
             this.$swal({
               icon: "success",
               title: "Avatar was updated!",
-              showConfirmButton: true
+              showConfirmButton: true,
             });
           }
         }

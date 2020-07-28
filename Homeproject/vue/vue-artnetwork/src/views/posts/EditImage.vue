@@ -15,12 +15,6 @@
       </div>
 
       <div class="col">
-        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-          <ul>
-            <li style="display:none"></li>
-          </ul>
-        </div>
-
         <div class="custom-file">
           <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile" @change="loadFile" />
           <label class="custom-file-label" style="overflow: hidden">{{fileName}}</label>

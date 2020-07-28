@@ -68,8 +68,8 @@ import { ImagesApi } from "@/services/ImagesApi";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class PostsCreate extends Vue {
   private imageModel: IImagePostDTO = {
@@ -81,14 +81,14 @@ export default class PostsCreate extends Vue {
     imageType: ImageType.Post,
     imageFor: "",
     heightPx: 0,
-    widthPx: 0
+    widthPx: 0,
   };
 
   private postModel: IPostPostDTO = {
     id: "",
     postTitle: "",
     postDescription: "",
-    postImageId: ""
+    postImageId: "",
   };
 
   private isImageLoaded: boolean = false;
@@ -116,15 +116,11 @@ export default class PostsCreate extends Vue {
     if (this.imageModel && this.imageModel.imageFile) {
       let reader = new FileReader();
 
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         let image = new Image();
         image.src = e.target!.result as string;
 
-        console.log("reader");
-
-        image.onload = function() {
-          console.log("image");
-
+        image.onload = function () {
           let height = $("#HeightPx");
           let width = $("#WidthPx");
           height.attr("value", image.height);
