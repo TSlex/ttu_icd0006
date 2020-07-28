@@ -40,14 +40,17 @@ import ImageComponent from "@/components/Image.vue";
 import Modal from "@/components/Modal.vue";
 
 import { IChatMemberDTO } from "@/types/IChatMemberDTO";
+import EventBus from "@/events/EventBus";
 
 @Component({
   components: {
     ImageComponent,
-    Modal
-  }
+    Modal,
+  },
 })
 export default class MembersDetails extends IdentityStore {
+  private loadedCulture!: string;
+
   get currentMember(): IChatMemberDTO | null {
     return store.getters.getCurrentChatMember;
   }
@@ -61,6 +64,16 @@ export default class MembersDetails extends IdentityStore {
       store.dispatch("deleteChatMember", member);
       store.dispatch("getChatRooms");
     }
+  }
+
+  created() {
+    this.loadedCulture = store.state.culture!;
+
+    EventBus.$on("cultureUpdate", (culture: string) => {
+      if (this.loadedCulture !== culture) {
+        this.$emit("onCloseModal");
+      }
+    });
   }
 }
 </script>

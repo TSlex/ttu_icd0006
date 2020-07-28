@@ -1,15 +1,25 @@
 <template>
-  <div v-if="chatRooms" class="chat_section mt-5">
-    <MembersDetails v-if="isMembersModal" v-on:onCloseModal="closeMembers" v-on:onChangeRole="changeRole" />
-    <RolesDetails v-if="isRolesModal" v-on:onCloseModal="closeRoles" />
+  <div>
+    <div v-if="IsAllLoaded" class="chat_section mt-5">
+      <MembersDetails v-if="isMembersModal" v-on:onCloseModal="closeMembers" v-on:onChangeRole="changeRole" />
+      <RolesDetails v-if="isRolesModal" v-on:onCloseModal="closeRoles" />
 
-    <div class="col-md-4" style="padding: unset">
-      <ChatRoomsSection />
-    </div>
+      <div class="col-md-4" style="padding: unset; overflow: hidden;">
+        <ChatRoomsSection />
+      </div>
 
-    <div class="col-md-8" style="padding: unset">
-      <MessagesSection v-on:onOpenMembers="openMembers" v-on:onRenameRoom="renameRoom" v-on:onLeaveRoom="leaveRoom" />
+      <div class="col-md-8" style="padding: unset;">
+        <MessagesSection
+          :key="selectedChatRoom.id"
+          v-if="selectedChatRoom"
+          v-on:onOpenMembers="openMembers"
+          v-on:onRenameRoom="renameRoom"
+          v-on:onLeaveRoom="leaveRoom"
+        />
+        <div v-else class="chat_wall" style="position: relative;"></div>
+      </div>
     </div>
+    <LoadingOverlay v-else />
   </div>
 </template>
 
@@ -29,24 +39,35 @@ import { IChatMemberDTO } from "@/types/IChatMemberDTO";
 import { IChatRoomDTO } from "@/types/IChatRoomDTO";
 import { ChatRoomsApi } from "@/services/ChatRoomsApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
+import LoadingComponent from "../../components/shared/LoadingComponent.vue";
+import EventBus from "@/events/EventBus";
 
 @Component({
   components: {
     MembersDetails,
     RolesDetails,
     ChatRoomsSection,
-    MessagesSection
-  }
+    MessagesSection,
+  },
 })
-export default class ChatRoom extends IdentityStore {
-  private pageToLoad = 2;
-  private isFetching = false;
-
+export default class ChatRoom extends LoadingComponent {
   @Prop()
   chatRoomId: string | undefined;
 
+  private pageToLoad = 2;
+  private isFetching = false;
+
   private isMembersModal: boolean = false;
   private isRolesModal: boolean = false;
+
+  private isChatRoomsLoaded: boolean = false;
+  private isChatRolesLoaded: boolean = false;
+
+  private loadedCulture!: string;
+
+  get IsAllLoaded() {
+    return this.isChatRoomsLoaded && this.isChatRolesLoaded;
+  }
 
   get chatRooms() {
     return store.state.chatRooms;
@@ -82,21 +103,18 @@ export default class ChatRoom extends IdentityStore {
           if (!value) {
             return this.$t("views.chatrooms.ErrorTitleEmpty");
           } else {
-            ChatRoomsApi.putChatTitle(
-              this.selectedChatRoom!.id,
-              { id: this.selectedChatRoom!.id, chatRoomTitle: value },
-              this.jwt
-            ).then((response: ResponseDTO) => {
-              if (!response.errors) {
-                this.$swal(this.$t("views.chatrooms.TitleWasUpdated")).then(
-                  () => {
-                    this.$emit("closeGifts");
-                  }
-                );
-              }
-            });
+            store
+              .dispatch("renameChatRoom", {
+                ...this.selectedChatRoom,
+                ...{ chatRoomTitle: value },
+              })
+              .then((response: ResponseDTO) => {
+                if (!response.errors) {
+                  this.$swal(this.$t("views.chatrooms.TitleWasUpdated"));
+                }
+              });
           }
-        }
+        },
       });
     }
   }
@@ -121,16 +139,33 @@ export default class ChatRoom extends IdentityStore {
     this.isMembersModal = false;
   }
 
-  loadData() {
-    store.dispatch("getChatRooms");
-    store.dispatch("getChatRoles");
+  updateRoles() {
+    this.isChatRolesLoaded = false;
+
+    store.dispatch("getChatRoles").then(() => {
+      this.isChatRolesLoaded = true;
+    });
   }
 
-  get canLoadMore(): boolean {
-    return store.state.feedLoadedCount === 10;
+  loadData() {
+    store.dispatch("getChatRooms").then(() => {
+      this.isChatRoomsLoaded = true;
+    });
+    store.dispatch("getChatRoles").then(() => {
+      this.isChatRolesLoaded = true;
+    });
   }
 
   created(): void {
+    this.loadedCulture = store.state.culture!;
+
+    EventBus.$on("cultureUpdate", (culture: string) => {
+      if (this.loadedCulture !== culture) {
+        this.loadedCulture = culture;
+        this.updateRoles();
+      }
+    });
+
     this.loadData();
   }
 }

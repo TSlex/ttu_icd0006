@@ -97,9 +97,9 @@ export abstract class ChatRoomsApi extends LanguageService {
     }
   }
 
-  static async putChatTitle(chatRoomId: string, charRoom: IChatRoomPutDTO, jwt: string | null): Promise<ResponseDTO> {
+  static async putChatTitle(chatRoomId: string, chatRoom: IChatRoomPutDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = `${chatRoomId}/rename`;
-    const response = await this.axios.put<ResponseDTO>(url, charRoom, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
+    const response = await this.axios.put<ResponseDTO>(url, chatRoom, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:

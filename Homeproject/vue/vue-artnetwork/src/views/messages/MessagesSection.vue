@@ -1,6 +1,6 @@
 <template>
-  <div class="chat_wall">
-    <template v-if="selectedChatRoom">
+  <div class="chat_wall" style="position: relative;">
+    <template v-if="IsAllLoaded">
       <div class="chat_header d-flex align-items-center">
         <div style="flex-grow: 1; display: flex; justify-content: center">
           <div>&lt;--</div>
@@ -24,7 +24,11 @@
           <div class="dropdown-menu" aria-labelledby="profile_more">
             <div class="text-center d-flex flex-column">
               <a class="btn-link" @click="$emit('onOpenMembers')">{{$t('views.chatrooms.MembersNav')}}</a>
-              <a class="btn-link" @click="$emit('onRenameRoom')">{{$t('views.chatrooms.RenameNav')}}</a>
+              <a
+                v-if="currentMember.canRenameRoom"
+                class="btn-link"
+                @click="$emit('onRenameRoom')"
+              >{{$t('views.chatrooms.RenameNav')}}</a>
               <a class="btn-link" @click="$emit('onLeaveRoom')">{{$t('views.chatrooms.LeaveNav')}}</a>
             </div>
           </div>
@@ -71,6 +75,7 @@
         <button type="submit" class="far fa-paper-plane" @click="onPutMessage"></button>
       </form>
     </template>
+    <LoadingOverlay v-else :fixed="false" />
   </div>
 </template>
 
@@ -85,32 +90,41 @@ import ImageComponent from "@/components/Image.vue";
 import {
   IMessagePostDTO,
   IMessagePutDTO,
-  IMessageDTO
+  IMessageDTO,
 } from "@/types/IMessageDTO";
 
 import { IChatRoomDTO } from "@/types/IChatRoomDTO";
 import { MessagesApi } from "@/services/MessagesApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import { IChatMemberDTO } from "@/types/IChatMemberDTO";
+import LoadingComponent from "../../components/shared/LoadingComponent.vue";
+import EventBus from "../../events/EventBus";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
-export default class MessagesSection extends IdentityStore {
+export default class MessagesSection extends LoadingComponent {
   private messageEditing: boolean = false;
   private selectedMessage: IMessageDTO | null = null;
 
+  private isMembersLoaded: boolean = false;
+  private isMessagesLoaded: boolean = false;
+
   private messagePostModel: IMessagePostDTO = {
     chatRoomId: "",
-    messageValue: ""
+    messageValue: "",
   };
 
   private messagePutModel: IMessagePutDTO = {
     id: "",
-    messageValue: ""
+    messageValue: "",
   };
+
+  get IsAllLoaded() {
+    return this.isMembersLoaded && this.isMessagesLoaded;
+  }
 
   get messages(): IMessageDTO[] {
     return store.state.messages;
@@ -173,13 +187,44 @@ export default class MessagesSection extends IdentityStore {
     store.dispatch("deleteMessage", message);
   }
 
-  updated() {
-    this.messagePostModel.chatRoomId = this.selectedChatRoom?.id ?? "";
-  }
-
   checkURL(url: string) {
     return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
   }
+
+  loadComponent() {
+    store
+      .dispatch("getMessages", {
+        chatRoomId: this.selectedChatRoom!.id,
+        pageNumber: 1,
+      })
+      .then(() => {
+        this.isMessagesLoaded = true;
+      });
+
+    store.dispatch("getChatMembers", this.selectedChatRoom!.id).then(() => {
+      this.isMembersLoaded = true;
+    });
+
+    this.messagePostModel.chatRoomId = this.selectedChatRoom?.id ?? "";
+  }
+
+  created() {
+    // this.loadedChatRoom = this.selectedChatRoom!.chatRoomTitle;
+
+    this.loadComponent();
+  }
+
+  // updated() {
+  //   if (
+  //     this.IsAllLoaded &&
+  //     this.loadedChatRoom !== this.selectedChatRoom!.chatRoomTitle
+  //   ) {
+  //     this.isMessagesLoaded = false;
+  //     this.isMembersLoaded = false;
+
+  //     this.loadComponent();
+  //   }
+  // }
 }
 </script>
 

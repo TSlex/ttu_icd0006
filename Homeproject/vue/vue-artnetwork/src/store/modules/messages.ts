@@ -44,6 +44,11 @@ export const MessagesModule = {
     },
   },
   mutations: {
+    setChatRoomTitle(state: IState, title: string) {
+      if (state.selectedChatRoom) {
+        state.selectedChatRoom.chatRoomTitle = title;
+      }
+    },
     selectChatMember(state: IState, chatMember: IChatMemberDTO | null) {
       state.selectedChatMember = chatMember;
 
@@ -87,21 +92,25 @@ export const MessagesModule = {
 
   },
   actions: {
+    // ChatRoom
+    async renameChatRoom(context: any, chatRoom: IChatRoomDTO): Promise<ResponseDTO> {
+      context.commit('setChatRoomTitle', chatRoom.chatRoomTitle)
+
+      const response = await ChatRoomsApi.putChatTitle(chatRoom.id, { id: chatRoom.id, chatRoomTitle: chatRoom.chatRoomTitle }, context.state.jwt)
+
+      return response
+    },
+
     async selectChatRoom(context: any, chatRoom: IChatRoomDTO) {
-      context.commit("selectChatRoom", chatRoom)
-
-      context.dispatch("getMessages", {
-        chatRoomId: chatRoom.id,
-        pageNumber: 1
-      });
-
-      context.dispatch("getChatMembers", chatRoom.id);
+      await context.commit("selectChatRoom", chatRoom)
     },
     async getChatRooms(context: any): Promise<IChatRoomDTO[]> {
       const response = await ChatRoomsApi.getChatRooms(context.state.jwt);
       context.commit('setChatRooms', response)
       return response;
     },
+
+    // Messages
     async getMessages(context: any, params: { chatRoomId: string; pageNumber: number }): Promise<IMessageDTO[]> {
       const response = await ChatRoomsApi.getMessages(params.chatRoomId, params.pageNumber, context.state.jwt);
       context.commit('setMessages', response)

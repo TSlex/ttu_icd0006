@@ -752,8 +752,8 @@ li form button, nav form button {
 .chat_section {
     border: 1px solid gray;
     border-radius: 4px;
-    margin-right: 8em !important;
-    margin-left: 8em !important;
+    margin-right: 4em !important;
+    margin-left: 4em !important;
     display: flex;
     /* flex-direction: column; */
     height: 550px;
@@ -827,6 +827,7 @@ li form button, nav form button {
     position: relative;
     margin-bottom: 40px;
     margin-left: 10px;
+    text-align: center;
 }
 
 .message.active {

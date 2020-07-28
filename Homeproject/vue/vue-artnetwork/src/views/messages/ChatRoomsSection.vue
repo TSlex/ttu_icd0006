@@ -1,5 +1,5 @@
 <template>
-  <ul class="nav nav-pills flex-column chat_rooms text-center">
+  <ul class="nav nav-pills flex-column chat_rooms text-center" style="flex-wrap: unset;">
     <li v-for="chatRoom in chatRooms" :key="chatRoom.id" class="nav-item">
       <a class="chat_room btn-link" @click="onSellectChatRoom(chatRoom)">
         <div v-if="chatRoom.lastMessageValue" :key="chatRoom.lastMessageValue" class="message">
@@ -35,11 +35,12 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import ImageComponent from "@/components/Image.vue";
 import store from "@/store";
 import { IChatRoomDTO } from "@/types/IChatRoomDTO";
+import EventBus from "../../events/EventBus";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class ChatRoomsSection extends Vue {
   get chatRooms() {

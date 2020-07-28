@@ -25,14 +25,16 @@ import { ChatMembersApi } from "@/services/ChatMembersApi";
 import IdentityStore from "../../components/shared/IdentityStore.vue";
 import { IChatRoomDTO } from "@/types/IChatRoomDTO";
 import Modal from "@/components/Modal.vue";
+import EventBus from "@/events/EventBus";
 
 @Component({
   components: {
-    Modal
-  }
+    Modal,
+  },
 })
 export default class RolesDetails extends IdentityStore {
   private rolePutModel?: IChatRoleDTO;
+  private loadedCulture!: string;
 
   get selectedMemberRole(): IChatRoleDTO | null {
     return store.state.selectedMemberRole;
@@ -76,6 +78,14 @@ export default class RolesDetails extends IdentityStore {
 
   created() {
     this.rolePutModel = this.selectedMemberRole ?? ({} as IChatRoleDTO);
+
+    this.loadedCulture = store.state.culture!;
+
+    EventBus.$on("cultureUpdate", (culture: string) => {
+      if (this.loadedCulture !== culture) {
+        this.closeRoles();
+      }
+    });
   }
 }
 </script>
