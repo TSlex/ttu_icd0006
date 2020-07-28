@@ -104,11 +104,7 @@ export default class PostsEditImage extends LoadingComponent {
         let image = new Image();
         image.src = e.target!.result as string;
 
-        console.log("reader");
-
         image.onload = function () {
-          console.log("image");
-
           let height = $("#HeightPx");
           let width = $("#WidthPx");
           height.attr("value", image.height);

@@ -83,11 +83,11 @@ export default class ImageComponent extends Vue {
     return store.getters.getImageData(imageId) ?? "";
   }
 
-  loadImage() {
+  loadImage(fetchForce?: boolean) {
     const data = this.ImageData;
 
     if (!this.IsOriginal) {
-      if (data.length > 0) {
+      if (!fetchForce && data.length > 0) {
         this.src = data;
         this.onImageLoaded();
       } else {
@@ -98,7 +98,7 @@ export default class ImageComponent extends Vue {
         });
       }
     } else {
-      if (data.length > 0) {
+      if (!fetchForce && data.length > 0) {
         this.src = data;
         this.onImageLoaded();
       } else {
@@ -121,9 +121,11 @@ export default class ImageComponent extends Vue {
 
   beforeCreate() {
     EventBus.$on("updateImage", (id: string) => {
-      if (id === this.Id) {
+      const FullId = this.IsOriginal ? `${this.id}:original` : this.id;
+
+      if (FullId === id) {
         this.imageLoaded = false;
-        this.loadImage();
+        this.loadImage(true);
       }
     });
   }

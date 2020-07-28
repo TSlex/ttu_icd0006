@@ -37,9 +37,7 @@ export const ImagesModule = {
 
       const response = await ImagesApi.putImageModel(imageModel.id, imageModel, context.state.jwt)
 
-      if ((response?.errors?.length === 0)) {
-        EventBus.$emit("updateImage", imageModel.id);
-      }
+      EventBus.$emit("updateImage", imageModel.id);
 
       return response;
     }
