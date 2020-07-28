@@ -1,5 +1,5 @@
 <template>
-  <div class="modal_back" @click="$emit('closeProfiles')">
+  <div class="modal_back" @click="$emit('closeProfiles')" @click.stop>
     <div class="gift_gallery_modal" @click.stop>
       <router-link
         class="gallery_item"
@@ -28,8 +28,8 @@ import { IFavoriteDTO } from "@/types/IFavoriteDTO";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class ProfilesModal extends Vue {
   @Prop()

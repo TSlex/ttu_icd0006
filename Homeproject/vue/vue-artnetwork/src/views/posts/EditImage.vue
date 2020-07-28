@@ -1,9 +1,9 @@
 <template>
   <div style="position: relative; min-height: 400px">
-    <div class="row d-flex flex-column align-items-center text-center mt-2">
+    <div v-if="isLoaded" class="row d-flex flex-column align-items-center text-center mt-2">
       <ImageMiniature :initialId="Id" :htmlStyle="'width: 20rem !important'" ref="miniature" />
 
-      <div class="col">
+      <div class="col mt-2">
         <ImageForm :imageModel="imageModel" v-on:onLoadFile="loadImage" />
 
         <div class="form-group mt-2">
@@ -11,6 +11,7 @@
         </div>
       </div>
     </div>
+    <LoadingOverlay v-else :fixed="false" />
   </div>
 </template>
 
@@ -67,6 +68,7 @@ export default class PostsEditImage extends LoadingComponent {
     ImagesApi.getImageModel(this.Id, this.jwt).then(
       (response: IImagePutDTO) => {
         this.imageModel = response;
+        this.isLoaded = true;
       }
     );
   }
