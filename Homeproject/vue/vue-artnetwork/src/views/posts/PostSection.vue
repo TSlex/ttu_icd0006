@@ -123,11 +123,13 @@ export default class PostSection extends IdentityStore {
 
   onFavorite() {
     if (this.post) {
+      this.post.isFavorite = true;
+      this.post.postFavoritesCount += 1;
       PostsApi.favorite(this.post.id, this.jwt).then(
         (response: ResponseDTO) => {
           if (!response.errors && this.post) {
-            this.post.isFavorite = true;
-            this.post.postFavoritesCount += 1;
+            // this.post.isFavorite = true;
+            // this.post.postFavoritesCount += 1;
           }
         }
       );
@@ -136,11 +138,13 @@ export default class PostSection extends IdentityStore {
 
   onUnfavorite() {
     if (this.post) {
+      this.post.isFavorite = false;
+      this.post.postFavoritesCount -= 1;
       PostsApi.unfavorite(this.post.id, this.jwt).then(
         (response: ResponseDTO) => {
           if (!response.errors && this.post) {
-            this.post.isFavorite = false;
-            this.post.postFavoritesCount -= 1;
+            // this.post.isFavorite = false;
+            // this.post.postFavoritesCount -= 1;
           }
         }
       );
