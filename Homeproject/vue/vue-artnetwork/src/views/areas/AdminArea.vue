@@ -3,9 +3,9 @@
     <header>
       <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 fixed-to">
         <div class="container">
-          <a class="navbar-brand" asp-area="Admin" asp-controller="Home" asp-action="Index">
+          <router-link class="navbar-brand" to="/admin/panel">
             <i class="fab fa-galactic-senate"></i>Admin panel
-          </a>
+          </router-link>
           <button
             class="navbar-toggler"
             type="button"
@@ -46,26 +46,31 @@ import NavbarControls from "@/views/admin/components/NavbarControls.vue";
   components: {
     Identity,
     NavbarSearch,
-    NavbarControls
-  }
+    NavbarControls,
+  },
 })
 export default class AdminArea extends Vue {
-  beforeCreate() {
+  loadStyle() {
     let exist = document.getElementById("admin_style");
-
     if (!exist) {
       let link = document.createElement("link");
       link.setAttribute("id", "admin_style");
       link.setAttribute("rel", "stylesheet");
       link.setAttribute("href", "admin.css");
-
       document.head.append(link);
     }
   }
 
+  beforeMount() {
+    this.loadStyle();
+  }
+
+  updated() {
+    this.loadStyle();
+  }
+
   beforeDestroy() {
     let exist = document.getElementById("admin_style");
-
     if (exist) {
       exist.remove();
     }

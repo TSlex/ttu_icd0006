@@ -167,16 +167,13 @@ export default class MessagesSection extends LoadingComponent {
       this.messagePutModel.messageValue.length > 0
     ) {
       this.messageEditing = false;
+      this.selectedMessage!.messageValue = this.messagePutModel.messageValue;
+
       MessagesApi.putMessage(
         this.messagePutModel.id,
         this.messagePutModel,
         this.jwt
-      ).then((response: ResponseDTO) => {
-        if (!response.errors) {
-          this.selectedMessage!.messageValue = this.messagePutModel.messageValue;
-        }
-        this.onSetMessageEditing(false);
-      });
+      );
     }
 
     e.preventDefault();
@@ -209,22 +206,8 @@ export default class MessagesSection extends LoadingComponent {
   }
 
   created() {
-    // this.loadedChatRoom = this.selectedChatRoom!.chatRoomTitle;
-
     this.loadComponent();
   }
-
-  // updated() {
-  //   if (
-  //     this.IsAllLoaded &&
-  //     this.loadedChatRoom !== this.selectedChatRoom!.chatRoomTitle
-  //   ) {
-  //     this.isMessagesLoaded = false;
-  //     this.isMembersLoaded = false;
-
-  //     this.loadComponent();
-  //   }
-  // }
 }
 </script>
 

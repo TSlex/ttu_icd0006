@@ -15,6 +15,18 @@ export const IdentityModule = {
     isAuthenticated(state: IState, getters: any): boolean {
       return getters.getJwt !== null;
     },
+
+    isAdmin(state: IState, getters: any) {
+      let result: boolean = false
+      getters.getUserRoles.forEach((element: string) => {
+        if (element.toLowerCase().indexOf("admin") !== -1) {
+          result = true;
+        }
+      });
+
+      return result;
+    },
+
     getUserName(state: IState, getters: any): string {
       if (getters.isAuthenticated) {
         const decoded = JwtDecode(state.jwt!) as Record<string, string>;
@@ -38,7 +50,7 @@ export const IdentityModule = {
         const decoded = JwtDecode(state.jwt!) as Record<string, string>;
         return decoded[
           "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-        ].split(",");
+        ].toString().split(',') as string[]
       }
       return [];
     },
@@ -64,10 +76,11 @@ export const IdentityModule = {
     setJwt(state: IState, jwt: string | null) {
       if (jwt) {
         localStorage.setItem('jwt', jwt)
-        state.jwt = jwt;
       } else {
         localStorage.removeItem('jwt')
       }
+
+      state.jwt = jwt;
     },
   },
   actions: {

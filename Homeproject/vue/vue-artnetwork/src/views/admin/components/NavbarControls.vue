@@ -1,10 +1,10 @@
 <template>
   <div>
     <slot></slot>
-      <a class="btn btn-primary fas fa-home  mr-2"></a>
-      <a class="btn btn-primary fas fa-briefcase  mr-2"></a>
-      <a class="btn btn-primary fas fa-user-alt mr-2"></a>
-      <a class="btn btn-primary fas fa-envelope mr-2"></a>
+    <router-link class="btn btn-primary fas fa-home mr-2" to="/"></router-link>
+    <router-link class="btn btn-primary fas fa-briefcase mr-2" to="/admin/panel"></router-link>
+    <router-link class="btn btn-primary fas fa-user-alt mr-2" :to="'/profiles/' + userName"></router-link>
+    <router-link class="btn btn-primary fas fa-envelope mr-2" to="/messages"></router-link>
   </div>
 </template>
 
@@ -13,14 +13,8 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import store from "@/store";
 import router from "@/router";
 
-@Component
-export default class NavbarControls extends Vue {
-  get isAuthenticated(): boolean {
-    return store.getters.isAuthenticated;
-  }
+import IdentityStore from "@/components/shared/IdentityStore.vue";
 
-  get userName(): string {
-    return store.getters.getUserName;
-  }
-}
+@Component
+export default class NavbarControls extends IdentityStore {}
 </script>

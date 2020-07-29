@@ -10,6 +10,10 @@ export default class IdentityStore extends Vue {
     return store.getters.isAuthenticated;
   }
 
+  protected get isAdmin(): boolean {
+    return store.getters.isAdmin;
+  }
+
   protected get userName(): string {
     return store.getters.getUserName;
   }

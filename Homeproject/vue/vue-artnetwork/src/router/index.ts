@@ -112,7 +112,7 @@ const routes: Array<RouteConfig> = [
 
 
   // ======================= admin =======================
-  { path: '/admin', name: 'AdminPanel', component: AdminPanel },
+  { path: '/admin/panel', name: 'AdminPanel', component: AdminPanel },
 
   { path: '/admin/blockedprofiles', name: 'BPIndexA', component: BPIndexA },
   { path: '/admin/blockedprofiles/details/:id', name: 'BPDetailsA', component: BPDetailsA, props: true },

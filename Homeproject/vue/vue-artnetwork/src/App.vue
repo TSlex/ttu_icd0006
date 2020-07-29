@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
-    <AdminArea v-if="$route.path.indexOf('admin') === 1" />
-    <DafaultArea v-else/>
+  <div id="app" :key="isAdminPanel">
+    <AdminArea v-if="isAdminPanel" />
+    <DafaultArea v-else />
   </div>
 </template>
 
@@ -13,9 +13,12 @@ import AdminArea from "@/views/areas/AdminArea.vue";
 @Component({
   components: {
     DafaultArea,
-    AdminArea
-  }
+    AdminArea,
+  },
 })
 export default class App extends Vue {
+  get isAdminPanel() {
+    return this.$route.path.indexOf("admin") === 1;
+  }
 }
 </script>
