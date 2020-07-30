@@ -1,23 +1,21 @@
 <template>
   <div>
-    <h1>Index</h1>
-    <p>
-      <a href="#" @click="onCreate" @click.prevent>Create New</a>
-    </p>
+    <h1 class="text-center">{{$t('views.common.IndexHeader')}}</h1>
+    <br />
     <table class="table">
       <thead>
         <tr>
-          <th>(ID)</th>
-          <th>Title</th>
-          <th>IS DELETED?</th>
+          <th>{{$t('bll.common.Id')}}</th>
+          <th>{{$t('bll.profiles.UserName')}}</th>
+          <th>{{$t('bll.profiles.Email')}}</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in Model" :key="item.id">
           <td>{{item.id}}</td>
-          <td>{{item.postTitle}}</td>
-          <td>{{item.deletedAt != null}}</td>
+          <td>{{item.userName}}</td>
+          <td>{{item.email}}</td>
           <td>
             <IndexControls
               :model="item"
@@ -48,8 +46,8 @@ import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 
 @Component({
   components: {
-    IndexControls
-  }
+    IndexControls,
+  },
 })
 export default class ProfilesIndexA extends Vue {
   private Model: IProfileAdminDTO[] = [];

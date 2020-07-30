@@ -1,3 +1,5 @@
+import { ProfileGender } from './Enums/ProfileGender';
+
 export interface IProfileDTO {
   userName: string;
 
@@ -9,7 +11,7 @@ export interface IProfileDTO {
   profileAvatarUrl: string;
   profileAvatarId: string;
 
-  profileGender: number;
+  profileGender: ProfileGender;
   profileGenderOwn: string;
 
   lastLoginDateTime: Date;
@@ -31,7 +33,7 @@ export interface IProfileAdminDTO {
   profileStatus: string;
   profileAvatarId: string;
   profileAbout: string;
-  profileGender: number;
+  profileGender: ProfileGender;
   profileGenderOwn: string;
   followersCount: number;
   followedCount: number;

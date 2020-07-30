@@ -176,7 +176,7 @@ const routes: Array<RouteConfig> = [
   { path: '/admin/profileranks/edit/:id', name: 'ProfileRanksEditA', component: ProfileRanksEditA, props: true },
 
   { path: '/admin/profiles', name: 'ProfilesIndexA', component: ProfilesIndexA },
-  { path: '/admin/profiles/create', name: 'ProfilesCreateA', component: ProfilesCreateA },
+  // { path: '/admin/profiles/create', name: 'ProfilesCreateA', component: ProfilesCreateA },
   { path: '/admin/profiles/details/:id', name: 'ProfilesDetailsA', component: ProfilesDetailsA, props: true },
   { path: '/admin/profiles/edit/:id', name: 'ProfilesEditA', component: ProfilesEditA, props: true },
 

@@ -1,6 +1,6 @@
 <template>
   <div v-if="Id && Model">
-    <h1 class="text-center">Edit</h1>
+    <h1 class="text-center">{{$t('views.common.EditHeader')}}</h1>
     <hr />
     <div class="row text-center align-items-center d-flex flex-column">
       <div class="card" style="width: 20rem; user-select: none; position: relative;" id="image-miniature">
@@ -100,8 +100,8 @@ import { ImageType } from "@/types/Enums/ImageType";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class ProfilesEditA extends Vue {
   @Prop()
@@ -134,13 +134,13 @@ export default class ProfilesEditA extends Vue {
     if (this.imageModel && this.imageModel.imageFile) {
       let reader = new FileReader();
 
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         let image = new Image();
         image.src = e.target!.result as string;
 
         console.log("reader");
 
-        image.onload = function() {
+        image.onload = function () {
           console.log("image");
 
           let height = $("#HeightPx");
@@ -176,31 +176,33 @@ export default class ProfilesEditA extends Vue {
   }
 
   beforeMount() {
-    ProfilesApi.details(this.Id, this.jwt).then((response: IProfileAdminDTO) => {
-      this.Model = response;
-      if (this.isImageExist) {
-        ImagesApi.getImageModel(response.postImageId!, this.jwt).then(
-          (response: IImageDTO) => {
-            this.imageModel = response;
-          }
-        );
-      } else {
-        this.imageModel = {
-          id: "",
-          imageUrl: "",
-          originalImageUrl: "",
-          heightPx: 0,
-          widthPx: 0,
-          paddingTop: 0,
-          paddingRight: 0,
-          paddingBottom: 0,
-          paddingLeft: 0,
-          imageFile: null,
-          imageType: ImageType.ProfileAvatar,
-          imageFor: ""
-        };
+    ProfilesApi.details(this.Id, this.jwt).then(
+      (response: IProfileAdminDTO) => {
+        this.Model = response;
+        if (this.isImageExist) {
+          ImagesApi.getImageModel(response.postImageId!, this.jwt).then(
+            (response: IImageDTO) => {
+              this.imageModel = response;
+            }
+          );
+        } else {
+          this.imageModel = {
+            id: "",
+            imageUrl: "",
+            originalImageUrl: "",
+            heightPx: 0,
+            widthPx: 0,
+            paddingTop: 0,
+            paddingRight: 0,
+            paddingBottom: 0,
+            paddingLeft: 0,
+            imageFile: null,
+            imageType: ImageType.ProfileAvatar,
+            imageFor: "",
+          };
+        }
       }
-    });
+    );
   }
 
   submit() {

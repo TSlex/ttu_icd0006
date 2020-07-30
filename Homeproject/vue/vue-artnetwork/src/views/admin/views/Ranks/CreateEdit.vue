@@ -8,7 +8,7 @@
 
     <div class="form-group mt-3">
       <label class="control-label" for="string">Title</label>
-      <input class="form-control" type="text" required id="string" name="string" v-model="model.string" />
+      <input class="form-control" type="text" required id="string" name="string" v-model="model.rankTitle" />
       <span class="text-danger field-validation-valid" data-valmsg-for="RankId" data-valmsg-replace="true"></span>
     </div>
 
@@ -68,7 +68,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { IRankAdminDTO } from "@/types/IRankDTO";
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class CreateEdit extends Vue {
   @Prop() model!: IRankAdminDTO;

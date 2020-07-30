@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex" v-if="Model">
+  <div class="d-flex justify-content-end" v-if="Model">
     <button class="btn btn-info fa fa-history index_controls" v-if="IsOriginalRecord" @click="$emit('onHistory')"></button>
     <button class="btn btn-primary fa fa-edit index_controls" @click="$emit('onEdit')"></button>
     <button class="btn btn-primary fa fa-eye index_controls" @click="$emit('onDetails')"></button>

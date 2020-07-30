@@ -12,7 +12,7 @@ export interface IRankDTO {
 
 export interface IRankAdminDTO extends DomainEntityBaseMetaSoftUpdateDelete {
   rankCode: string;
-  rankTitleId: string;
+  rankTitleId: string | null;
   rankTitle: string | null;
   rankDescriptionId: string | null;
   rankDescription: string | null;

@@ -21,12 +21,12 @@ import CreateEdit from "./CreateEdit.vue";
 @Component({
   components: {
     AdminCreate,
-    CreateEdit
-  }
+    CreateEdit,
+  },
 })
 export default class RanksCreateA extends AdminCreate {
   private Model: IRankAdminDTO = {
-    id: "",
+    id: "00000000-0000-0000-0000-000000000000",
     masterId: null,
     createdBy: null,
     createdAt: new Date(),
@@ -34,37 +34,38 @@ export default class RanksCreateA extends AdminCreate {
     changedAt: new Date(),
     deletedBy: null,
     deletedAt: null,
-    rankCode: "",
-    rankTitleId: "",
-    rankTitle: "",
+    rankCode: "test" + Math.random() * 1000,
+    rankTitleId: "00000000-0000-0000-0000-000000000000",
+    rankTitle: "test",
     rankDescriptionId: null,
-    rankDescription: "",
-    rankColor: "",
-    rankTextColor: "",
+    rankDescription: "text",
+    rankColor: "#FFF",
+    rankTextColor: "#000",
     rankIcon: null,
-    maxExperience: 0,
+    maxExperience: 100,
     minExperience: 0,
     previousRankId: null,
-    nextRankId: null
+    nextRankId: null,
   };
 
   onSubmit() {
-    console.log(this.Model);
-    if (
-      this.Model.rankCode.length > 0 &&
-      this.Model.rankTitle!.length > 0 &&
-      this.Model.rankColor.length > 0 &&
-      this.Model.rankTextColor.length > 0 &&
-      this.Model.minExperience < this.Model.maxExperience
-    ) {
-      RanksApi.create(this.Model, this.jwt).then((response: ResponseDTO) => {
-        if (response?.errors) {
-          this.errors = response.errors;
-        } else {
-          this.$router.go(-1);
-        }
-      });
-    }
+    this.errors = ["hui sosi guboi trasi"];
+    // if (
+    //   this.Model.rankCode.length > 0 &&
+    //   this.Model.rankTitle!.length > 0 &&
+    //   this.Model.rankColor.length > 0 &&
+    //   this.Model.rankTextColor.length > 0 &&
+    //   Number(this.Model.minExperience) < Number(this.Model.maxExperience)
+    // ) {
+    //   RanksApi.create(this.Model, this.jwt).then((response: ResponseDTO) => {
+    //     if (response?.errors) {
+    //       console.log(response?.errors);
+    //       this.errors = response.errors;
+    //     } else {
+    //       this.$router.go(-1);
+    //     }
+    //   });
+    // }
   }
 }
 </script>
