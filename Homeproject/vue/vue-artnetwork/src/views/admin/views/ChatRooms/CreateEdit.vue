@@ -1,8 +1,15 @@
 <template>
   <div>
     <div class="form-group">
-      <label class="control-label" for="RoomTitle">Title</label>
-      <input class="form-control" type="text" id="RoomTitle" maxlength="100" name="RoomTitle" v-model="Model.chatRoomTitle" />
+      <label class="control-label" for="chatRoomTitle">{{$t("bll.chatrooms.ChatRoomTitle")}}</label>
+      <input
+        class="form-control"
+        type="text"
+        id="chatRoomTitle"
+        maxlength="100"
+        name="chatRoomTitle"
+        v-model="model.chatRoomTitle"
+      />
     </div>
   </div>
 </template>

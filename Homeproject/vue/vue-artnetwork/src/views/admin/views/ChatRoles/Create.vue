@@ -1,7 +1,8 @@
 <template>
-  <AdminCreateWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
-    <CreateEdit />
+  <AdminCreateWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
+    <CreateEdit :model="model" />
   </AdminCreateWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -16,6 +17,7 @@ import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
 
 import CreateEdit from "./CreateEdit.vue";
+import { createEmptyGuid } from "@/helpers/guid";
 
 @Component({
   components: {
@@ -25,13 +27,13 @@ import CreateEdit from "./CreateEdit.vue";
 export default class ChatRolesCreateA extends AdminCreate {
   private model: IChatRoleAdminDTO = {
     roleTitle: "",
-    roleTitleValueId: "",
+    roleTitleValueId: createEmptyGuid(),
     canRenameRoom: false,
     canEditMembers: false,
     canWriteMessages: false,
     canEditAllMessages: false,
     canEditMessages: false,
-    id: "",
+    id: createEmptyGuid(),
     masterId: null,
     createdBy: null,
     createdAt: new Date(),
@@ -40,10 +42,6 @@ export default class ChatRolesCreateA extends AdminCreate {
     deletedBy: null,
     deletedAt: null,
   };
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
 
   onSubmit() {
     if (
@@ -60,6 +58,10 @@ export default class ChatRolesCreateA extends AdminCreate {
         }
       );
     }
+  }
+
+  mounted() {
+    this.isLoaded = true;
   }
 }
 </script>

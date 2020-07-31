@@ -1,88 +1,44 @@
 <template>
   <div>
     <div class="form-group">
-      <label class="control-label" for="RoleTitle">Название</label>
-      <input
-        class="form-control"
-        type="text"
-        id="RoleTitle"
-        maxlength="200"
-        name="RoleTitle"
-        value="Member"
-        v-model="model.roleTitle"
-      />
+      <label class="control-label" for="roleTitle">{{$t('bll.chatroles.RoleTitle')}}</label>
+      <input class="form-control" type="text" id="roleTitle" maxlength="200" name="roleTitle" v-model="model.roleTitle" />
     </div>
 
     <div class="form-group">
-      <label class="control-label" for="RoleTitleValue">Переведенное название [ru-RU]</label>
-      <input
-        class="form-control"
-        type="text"
-        id="RoleTitleValue"
-        name="RoleTitleValue"
-        value="Участник"
-        v-model="model.roleTitleValueId"
-      />
+      <label class="control-label" for="RoleTitleValue">{{$t('bll.chatroles.RoleTitleValue')}} [{{CurrentCulture}}]</label>
+      <input class="form-control" type="text" id="RoleTitleValue" name="RoleTitleValue" v-model="model.roleTitleValue" />
     </div>
 
     <div class="form-group">
-      <label class="control-label" for="CanRenameRoom">Может переменовывать чат?</label>
-      <input
-        type="checkbox"
-        class="form-control"
-        id="CanRenameRoom"
-        name="CanRenameRoom"
-        value="true"
-        v-model="model.canRenameRoom"
-      />
+      <label class="control-label" for="CanRenameRoom">{{$t('bll.chatroles.CanRenameRoom')}}</label>
+      <input type="checkbox" class="form-control" id="CanRenameRoom" name="CanRenameRoom" v-model="model.canRenameRoom" />
     </div>
 
     <div class="form-group">
-      <label class="control-label" for="CanEditMembers">Может менять роли участников?</label>
-      <input
-        type="checkbox"
-        class="form-control"
-        id="CanEditMembers"
-        name="CanEditMembers"
-        value="true"
-        v-model="model.canEditMembers"
-      />
+      <label class="control-label" for="CanEditMembers">{{$t('bll.chatroles.CanEditMembers')}}</label>
+      <input type="checkbox" class="form-control" id="CanEditMembers" name="CanEditMembers" v-model="model.canEditMembers" />
     </div>
 
     <div class="form-group">
-      <label class="control-label" for="CanWriteMessages">Может писать в этот чат?</label>
-      <input
-        type="checkbox"
-        class="form-control"
-        id="CanWriteMessages"
-        name="CanWriteMessages"
-        value="true"
-        v-model="model.canWriteMessages"
-      />
+      <label class="control-label" for="CanWriteMessages">{{$t('bll.chatroles.CanWriteMessages')}}</label>
+      <input type="checkbox" class="form-control" id="CanWriteMessages" name="CanWriteMessages" v-model="model.canWriteMessages" />
     </div>
 
     <div class="form-group">
-      <label class="control-label" for="CanEditAllMessages">Может редактировать все сообщения?</label>
+      <label class="control-label" for="CanEditAllMessages">{{$t('bll.chatroles.CanEditAllMessages')}}</label>
       <input
         type="checkbox"
         class="form-control"
         id="CanEditAllMessages"
         name="CanEditAllMessages"
-        value="true"
         v-model="model.canEditAllMessages"
       />
     </div>
 
     <div class="form-group">
-      <label class="control-label" for="CanEditMessages">Может редактировать свои сообщения?</label>
-      <input
-        type="checkbox"
-        class="form-control"
-        id="CanEditMessages"
-        name="CanEditMessages"
-        value="true"
-        v-model="model.canEditMessages"
-      />
+      <label class="control-label" for="CanEditMessages">{{$t('bll.chatroles.CanEditMessages')}}</label>
+      <input type="checkbox" class="form-control" id="CanEditMessages" name="CanEditMessages" v-model="model.canEditMessages" />
     </div>
   </div>
 </template>
@@ -91,12 +47,17 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 import { IRankAdminDTO } from "@/types/IRankDTO";
+import store from "@/store";
 
 @Component({
   components: {},
 })
 export default class CreateEdit extends Vue {
   @Prop() model!: IRankAdminDTO;
+
+  get CurrentCulture() {
+    return store.getters.getCurrentCulture;
+  }
 }
 </script>
 

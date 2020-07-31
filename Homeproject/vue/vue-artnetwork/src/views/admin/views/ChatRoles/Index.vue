@@ -5,7 +5,7 @@
         <tr>
           <th>(ID)</th>
           <th>Title</th>
-          <th>Title [CULTURE]</th>
+          <th>Title [{{CurrentCulture}}]</th>
           <th>IS DELETED?</th>
           <th></th>
         </tr>
@@ -53,6 +53,10 @@ import AdminIndex from "../../components/shared/base/AdminIndex.vue";
   },
 })
 export default class ChatRolesIndexA extends AdminIndex<IChatRoleAdminDTO> {
+  get CurrentCulture() {
+    return store.getters.getCurrentCulture;
+  }
+
   onHistory(id: string) {
     ChatRolesApi.history(id, this.jwt).then((response: IChatRoleAdminDTO[]) => {
       this.model = response;
