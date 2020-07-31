@@ -3,11 +3,16 @@
     <h1 class="text-center">{{$t('views.common.CreateHeader')}}</h1>
     <hr />
     <div class="row text-center align-items-center d-flex flex-column">
-      <div class="col-md-4">
+      <div v-if="!ignoreTopColStyle" class="col-md-4">
         <ErrorsList :errors="errors"></ErrorsList>
         <slot></slot>
-        <CreateControls v-on:onSubmit="$emit('onSubmit')" />
+        <CreateControls v-on:onSubmit="$emit('onSubmit')" v-on:onBackToList="$emit('onBackToList')" />
       </div>
+      <template v-else>
+        <ErrorsList :errors="errors"></ErrorsList>
+        <slot></slot>
+        <CreateControls v-on:onSubmit="$emit('onSubmit')" v-on:onBackToList="$emit('onBackToList')" />
+      </template>
     </div>
   </div>
 </template>
@@ -18,6 +23,7 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import CreateControls from "@/views/admin/components/shared/CreateControls.vue";
 
 import ErrorsList from "@/components/shared/ErrorsList.vue";
+import BaseWrapper from "./BaseWrapper.vue";
 
 @Component({
   components: {
@@ -25,7 +31,7 @@ import ErrorsList from "@/components/shared/ErrorsList.vue";
     ErrorsList,
   },
 })
-export default class AdminCreateWrapper extends Vue {
+export default class AdminCreateWrapper extends BaseWrapper {
   @Prop({ default: [] }) errors!: string[];
 }
 </script>

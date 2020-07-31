@@ -1,10 +1,14 @@
 <template>
   <div class="d-flex justify-content-end" v-if="Model">
     <button class="btn btn-info fa fa-history index_controls" v-if="IsOriginalRecord" @click="$emit('onHistory')"></button>
-    <button class="btn btn-primary fa fa-edit index_controls" @click="$emit('onEdit')"></button>
+    <button class="btn btn-primary fa fa-edit index_controls" v-if="IsOriginalRecord" @click="$emit('onEdit')"></button>
     <button class="btn btn-primary fa fa-eye index_controls" @click="$emit('onDetails')"></button>
-    <button class="btn btn-danger fa fa-trash index_controls" v-if="!IsDeleted" @click="$emit('onDelete')"></button>
-    <button class="btn btn-success fa fa-trash-restore index_controls" v-else @click="$emit('onRestore')"></button>
+    <button class="btn btn-danger fa fa-trash index_controls" v-if="IsOriginalRecord && !IsDeleted" @click="$emit('onDelete')"></button>
+    <button
+      class="btn btn-success fa fa-trash-restore index_controls"
+      v-if="IsOriginalRecord && IsDeleted"
+      @click="$emit('onRestore')"
+    ></button>
   </div>
 </template>
 
@@ -25,7 +29,7 @@ export default class IndexControls extends Vue {
 
   get IsOriginalRecord() {
     if ((this.Model as BaseSoftUpdate).masterId === null) {
-      return true
+      return true;
     }
     return false;
   }

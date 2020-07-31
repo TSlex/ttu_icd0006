@@ -3,9 +3,16 @@
     <h1 class="text-center">{{$t('views.common.EditHeader')}}</h1>
     <hr />
     <div class="row text-center align-items-center d-flex flex-column">
-      <ErrorsList :errors="errors"></ErrorsList>
-      <slot></slot>
-      <EditControls v-on:onSubmit="$emit('onSubmit')" />
+      <div v-if="!ignoreTopColStyle" class="col-md-4">
+        <ErrorsList :errors="errors"></ErrorsList>
+        <slot></slot>
+        <EditControls v-on:onSubmit="$emit('onSubmit')" v-on:onBackToList="$emit('onBackToList')" />
+      </div>
+      <template v-else>
+        <ErrorsList :errors="errors"></ErrorsList>
+        <slot></slot>
+        <EditControls v-on:onSubmit="$emit('onSubmit')" v-on:onBackToList="$emit('onBackToList')" />
+      </template>
     </div>
   </div>
 </template>
@@ -16,6 +23,7 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import EditControls from "@/views/admin/components/shared/EditControls.vue";
 
 import ErrorsList from "@/components/shared/ErrorsList.vue";
+import BaseWrapper from "./BaseWrapper.vue";
 
 @Component({
   components: {
@@ -23,7 +31,7 @@ import ErrorsList from "@/components/shared/ErrorsList.vue";
     ErrorsList,
   },
 })
-export default class AdminEditWrapper extends Vue {
+export default class AdminEditWrapper extends BaseWrapper {
   @Prop({ default: () => [] }) errors!: string[];
 }
 </script>

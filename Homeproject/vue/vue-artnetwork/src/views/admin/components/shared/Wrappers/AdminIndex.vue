@@ -16,11 +16,12 @@ import IdentityStore from "@/components/shared/IdentityStore.vue";
 import { RanksApi } from "@/services/RanksApi";
 
 import router from "@/router";
+import BaseWrapper from "./BaseWrapper.vue";
 
 @Component({
   components: {},
 })
-export default class AdminIndexWrapper extends Vue {
+export default class AdminIndexWrapper extends BaseWrapper {
   @Prop({ default: true }) canCreate?: boolean;
 }
 </script>

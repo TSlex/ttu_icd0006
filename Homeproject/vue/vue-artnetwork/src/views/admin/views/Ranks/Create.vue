@@ -1,7 +1,7 @@
 <template>
-  <AdminCreate v-on:onSubmit="onSubmit">
+  <AdminCreateWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
     <CreateEdit :model="Model" />
-  </AdminCreate>
+  </AdminCreateWrapper>
 </template>
 
 <script lang="ts">
@@ -14,19 +14,19 @@ import { RanksApi } from "@/services/admin/RanksApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import { ImageType } from "@/types/Enums/ImageType";
 
-import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
-
 import CreateEdit from "./CreateEdit.vue";
+import { createEmptyGuid } from "@/helpers/guid";
+
+import AdminCreate from "../../components/shared/base/AdminCreate.vue";
 
 @Component({
   components: {
-    AdminCreate,
     CreateEdit,
   },
 })
-export default class RanksCreateA extends AdminCreate {
+export default class RanksCreateA extends AdminCreate<IRankAdminDTO> {
   private Model: IRankAdminDTO = {
-    id: "00000000-0000-0000-0000-000000000000",
+    id: createEmptyGuid(),
     masterId: null,
     createdBy: null,
     createdAt: new Date(),
@@ -34,22 +34,21 @@ export default class RanksCreateA extends AdminCreate {
     changedAt: new Date(),
     deletedBy: null,
     deletedAt: null,
-    rankCode: "test" + Math.random() * 1000,
-    rankTitleId: "00000000-0000-0000-0000-000000000000",
-    rankTitle: "test",
+    rankCode: "",
+    rankTitleId: createEmptyGuid(),
+    rankTitle: "",
     rankDescriptionId: null,
-    rankDescription: "text",
-    rankColor: "#FFF",
-    rankTextColor: "#000",
+    rankDescription: "",
+    rankColor: "",
+    rankTextColor: "",
     rankIcon: null,
-    maxExperience: 100,
+    maxExperience: 0,
     minExperience: 0,
     previousRankId: null,
     nextRankId: null,
   };
 
   onSubmit() {
-    this.errors = ["hui sosi guboi trasi"];
     // if (
     //   this.Model.rankCode.length > 0 &&
     //   this.Model.rankTitle!.length > 0 &&
@@ -57,15 +56,18 @@ export default class RanksCreateA extends AdminCreate {
     //   this.Model.rankTextColor.length > 0 &&
     //   Number(this.Model.minExperience) < Number(this.Model.maxExperience)
     // ) {
-    //   RanksApi.create(this.Model, this.jwt).then((response: ResponseDTO) => {
-    //     if (response?.errors) {
-    //       console.log(response?.errors);
-    //       this.errors = response.errors;
-    //     } else {
-    //       this.$router.go(-1);
-    //     }
-    //   });
+    RanksApi.create(this.Model, this.jwt).then((response: ResponseDTO) => {
+      if (response?.errors) {
+        this.errors = response.errors;
+      } else {
+        this.$router.go(-1);
+      }
+    });
     // }
+  }
+
+  created() {
+    this.modelName = "Rank";
   }
 }
 </script>

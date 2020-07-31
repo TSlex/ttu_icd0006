@@ -14,11 +14,12 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 import DetailsControls from "@/views/admin/components/shared/DetailsControls.vue";
+import BaseWrapper from "./BaseWrapper.vue";
 
 @Component({
   components: {
     DetailsControls,
   },
 })
-export default class AdminDetailsWrapper extends Vue {}
+export default class AdminDetailsWrapper extends BaseWrapper {}
 </script>

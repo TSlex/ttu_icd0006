@@ -1,55 +1,48 @@
 <template>
-  <AdminDetails v-if="Id && Model" v-on:onEdit="onEdit">
+  <AdminDetailsWrapper v-if="isLoaded" v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
     <dl class="row">
-      <dt class="col-sm-2">(ID)</dt>
-      <dd class="col-sm-10">{{Model.id}}</dd>
-
-      <dt class="col-sm-2">Previous rank (ID)</dt>
-      <dd class="col-sm-10">{{Model.previousRankId}}</dd>
-
-      <dt class="col-sm-2">Next rank (ID)</dt>
-      <dd class="col-sm-10">{{Model.nextRankId}}</dd>
-
-      <dt class="col-sm-2">Title</dt>
-      <dd class="col-sm-10">{{Model.rankTitle}}</dd>
-
-      <dt class="col-sm-2">Description</dt>
-      <dd class="col-sm-10">{{Model.rankDescription}}</dd>
-
-      <dt class="col-sm-2">Icons</dt>
-      <dd class="col-sm-10">{{Model.rankIcon}}</dd>
-
-      <dt class="col-sm-2">Color</dt>
-      <dd class="col-sm-10">{{Model.rankTextColor}}</dd>
-
-      <dt class="col-sm-2">Background color</dt>
-      <dd class="col-sm-10">{{Model.rankColor}}</dd>
-
-      <dt class="col-sm-2">Min experience</dt>
-      <dd class="col-sm-10">{{Model.minExperience}}</dd>
-
-      <dt class="col-sm-2">Max experience</dt>
-      <dd class="col-sm-10">{{Model.maxExperience}}</dd>
-
-      <dt class="col-sm-2">CreatedBy</dt>
-      <dd class="col-sm-10">{{Model.createdBy}}</dd>
-
-      <dt class="col-sm-2">CreatedAt</dt>
-      <dd class="col-sm-10">{{Model.createdAt}}</dd>
-
-      <dt class="col-sm-2">ChangedBy</dt>
-      <dd class="col-sm-10">{{Model.changedBy}}</dd>
-
-      <dt class="col-sm-2">ChangedAt</dt>
-      <dd class="col-sm-10">{{Model.changedAt}}</dd>
-
-      <dt class="col-sm-2">DeletedBy</dt>
-      <dd class="col-sm-10">{{Model.deletedBy}}</dd>
-
-      <dt class="col-sm-2">DeletedAt</dt>
-      <dd class="col-sm-10">{{Model.deletedAt}}</dd>
+      <dt class="col-sm-2">{{$t('bll.common.Id')}}</dt>
+      <dd class="col-sm-10">{{model.id}}</dd>
+      <dt class="col-sm-2">{{$t('bll.ranks.RankTitleId')}}</dt>
+      <dd class="col-sm-10">{{model.rankTitleId}}</dd>
+      <dt class="col-sm-2">{{$t('bll.ranks.RankDescriptionId')}}</dt>
+      <dd class="col-sm-10">{{model.rankDescriptionId}}</dd>
+      <dt class="col-sm-2">{{$t('bll.ranks.PreviousRankId')}}</dt>
+      <dd class="col-sm-10">{{model.previousRankId}}</dd>
+      <dt class="col-sm-2">{{$t('bll.ranks.NextRankId')}}</dt>
+      <dd class="col-sm-10">{{model.nextRankId}}</dd>
     </dl>
-  </AdminDetails>
+    <hr />
+    <dl class="row">
+      <dt class="col-sm-2">{{$t('bll.ranks.RankTitle')}}</dt>
+      <dd class="col-sm-10">{{model.rankTitle}}</dd>
+      <dt class="col-sm-2">{{$t('bll.ranks.RankDescription')}}</dt>
+      <dd class="col-sm-10">{{model.rankDescription}}</dd>
+    </dl>
+    <hr />
+    <dl class="row">
+      <dt class="col-sm-2">{{$t('bll.ranks.RankCode')}}</dt>
+      <dd class="col-sm-10">{{model.rankCode}}</dd>
+      <dt class="col-sm-2">{{$t('bll.ranks.RankColor')}}</dt>
+      <dd class="col-sm-10" :style="`background-color: ${model.rankColor}`"></dd>
+      <dt class="col-sm-2">{{$t('bll.ranks.RankTextColor')}}</dt>
+      <dd class="col-sm-10" :style="`background-color: ${model.rankTextColor}`"></dd>
+      <dt class="col-sm-2">{{$t('bll.ranks.RankIcon')}}</dt>
+      <dd class="col-sm-10">
+        <icon v-for="(icon, index) in Icons" :key="index" :class="`fa fa-${icon}`"></icon>
+      </dd>
+    </dl>
+    <hr />
+    <dl class="row">
+      <dt class="col-sm-2">{{$t('bll.ranks.MinExperience')}}</dt>
+      <dd class="col-sm-10">{{model.minExperience}}</dd>
+      <dt class="col-sm-2">{{$t('bll.ranks.MaxExperience')}}</dt>
+      <dd class="col-sm-10">{{model.maxExperience}}</dd>
+    </dl>
+    <hr />
+    <MetaDetailsSection :model="model" />
+  </AdminDetailsWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -65,29 +58,43 @@ import { RanksApi } from "@/services/admin/RanksApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 import AdminDetails from "@/views/admin/components/shared/base/AdminDetails.vue";
+import EventBus from "@/events/EventBus";
 
 @Component({
   components: {
     AdminDetails,
   },
 })
-export default class RanksDetailsA extends AdminDetails {
+export default class RanksDetailsA extends AdminDetails<IRankAdminDTO> {
   @Prop() protected id!: string;
-
-  private Model: IRankAdminDTO | null = null;
 
   get Id() {
     return this.id;
   }
 
+  get Icons() {
+    return this.model?.rankIcon?.split(";").filter((s) => s !== "") ?? [];
+  }
+
+  loadData() {
+    this.isLoaded = false;
+
+    RanksApi.details(this.Id, this.jwt).then((response: IRankAdminDTO) => {
+      this.model = response;
+      this.isLoaded = true;
+    });
+  }
+
   created() {
     this.modelName = "Rank";
+
+    EventBus.$on("cultureUpdate", (culture: string) => {
+      this.loadData();
+    });
   }
 
   mounted() {
-    RanksApi.details(this.Id, this.jwt).then((response: IRankAdminDTO) => {
-      this.Model = response;
-    });
+    this.loadData();
   }
 }
 </script>

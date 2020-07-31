@@ -1,6 +1,6 @@
 <template>
   <div v-if="isLoaded">
-    <AdminEditWrapper v-on:onSubmit="onSubmit">
+    <AdminEditWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors" :ignoreTopColStyle="true">
       <ImageMiniature :initialId="imageModel.id" :htmlStyle="'width: 20rem !important'" ref="miniature" />
 
       <div class="col-md-4 mt-4">
@@ -165,6 +165,8 @@ export default class ProfilesEditA extends AdminEdit<IProfileAdminDTO> {
   }
 
   created() {
+    this.modelName = "Profile";
+
     ProfilesApi.details(this.Id, this.jwt).then(
       (response: IProfileAdminDTO) => {
         this.model = response;

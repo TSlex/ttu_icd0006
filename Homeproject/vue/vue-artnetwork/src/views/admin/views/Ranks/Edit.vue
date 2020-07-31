@@ -1,8 +1,8 @@
 <template>
-  <AdminEdit v-if="id && Model" v-on:onSubmit="onSubmit">
-    <FormInput id="rankId" label="Title" :model="Model.id" v-on:onChange="(value) => {Model.id = value}" />
-    <CreateEdit :model="Model" />
-  </AdminEdit>
+  <AdminEditWrapper v-if="id && model" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList">
+    <FormInput id="rankId" label="Title" :model="model.id" v-on:onChange="(value) => {model.id = value}" />
+    <CreateEdit :model="model" />
+  </AdminEditWrapper>
 </template>
 
 <script lang="ts">
@@ -25,34 +25,34 @@ import CreateEdit from "./CreateEdit.vue";
 @Component({
   components: {
     FormInput,
-    AdminEdit,
     CreateEdit,
   },
 })
-export default class RanksEditA extends AdminEdit {
+export default class RanksEditA extends AdminEdit<IRankAdminDTO> {
   @Prop() id!: string;
 
-  private Model: IRankAdminDTO | null = null;
-
-  beforeMount() {
-    RanksApi.details(this.id, this.jwt).then((response: IRankAdminDTO) => {
-      this.Model = response;
-    });
-  }
-
   onSubmit() {
-    if (this.id && this.Model) {
-      RanksApi.edit(this.id, this.Model, this.jwt).then(
+    if (this.id && this.model) {
+      RanksApi.edit(this.id, this.model, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;
-            console.log(this.errors);
           } else {
             this.$router.go(-1);
           }
         }
       );
     }
+  }
+
+  beforeMount() {
+    RanksApi.details(this.id, this.jwt).then((response: IRankAdminDTO) => {
+      this.model = response;
+    });
+  }
+
+  created() {
+    this.modelName = "Rank";
   }
 }
 </script>

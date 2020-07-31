@@ -1,21 +1,19 @@
 <template>
-  <AdminIndex v-on:onCreate="onCreate()">
+  <AdminIndexWrapper v-if="isLoaded" :canCreate="true" v-on:onCreate="onCreate">
     <table class="table">
       <thead>
         <tr>
-          <th>(ID)</th>
-          <th>Title</th>
-          <th>Next Rank (ID)</th>
-          <th>IS DELETED?</th>
+          <th>{{$t('bll.common.Id')}}</th>
+          <th>{{$t('bll.ranks.RankTitle')}}</th>
+          <th>{{$t('bll.ranks.NextRankId')}}</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in Model" :key="item.id" :style="`color: ${item.rankTextColor}; background-color: ${item.rankColor}33`">
+        <tr v-for="item in model" :key="item.id" :style="`color: ${item.rankTextColor}; background-color: ${item.rankColor}33`">
           <td>{{item.id}}</td>
           <td>{{item.rankTitle}}</td>
           <td>{{item.nextRankId}}</td>
-          <td>{{item.deletedAt != null}}</td>
           <td>
             <IndexControls
               :model="item"
@@ -29,7 +27,8 @@
         </tr>
       </tbody>
     </table>
-  </AdminIndex>
+  </AdminIndexWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -44,28 +43,26 @@ import { RanksApi } from "@/services/admin/RanksApi";
 
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 import AdminIndex from "@/views/admin/components/shared/base/AdminIndex.vue";
+import EventBus from "@/events/EventBus";
 
 @Component({
   components: {
     IndexControls,
   },
 })
-export default class RanksIndexA extends AdminIndex {
-  private Model: IRankAdminDTO[] = [];
+export default class RanksIndexA extends AdminIndex<IRankAdminDTO> {
+  loadData() {
+    this.isLoaded = false;
 
-  created() {
-    this.modelName = "Rank";
-  }
-
-  mounted() {
     RanksApi.index(this.jwt).then((response: IRankAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
+      this.isLoaded = true;
     });
   }
 
   onHistory(id: string) {
     RanksApi.history(id, this.jwt).then((response: IRankAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
   }
 
@@ -73,7 +70,7 @@ export default class RanksIndexA extends AdminIndex {
     RanksApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         RanksApi.index(this.jwt).then((response: IRankAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
@@ -83,10 +80,22 @@ export default class RanksIndexA extends AdminIndex {
     RanksApi.restore(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         RanksApi.index(this.jwt).then((response: IRankAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
+  }
+
+  created() {
+    this.modelName = "Rank";
+
+    EventBus.$on("cultureUpdate", (culture: string) => {
+      this.loadData();
+    });
+  }
+
+  mounted() {
+    this.loadData();
   }
 }
 </script>
