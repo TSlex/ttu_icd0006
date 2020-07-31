@@ -1,7 +1,8 @@
 <template>
-  <AdminCreateWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
-    <CreateEdit />
+  <AdminCreateWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
+    <CreateEdit :model="model" />
   </AdminCreateWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -16,6 +17,7 @@ import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
 
 import CreateEdit from "./CreateEdit.vue";
+import { createEmptyGuid } from "../../../../helpers/guid";
 
 @Component({
   components: {
@@ -24,7 +26,7 @@ import CreateEdit from "./CreateEdit.vue";
 })
 export default class CommentsCreateA extends AdminCreate {
   private model: ICommentAdminDTO = {
-    id: "",
+    id: createEmptyGuid(),
     masterId: null,
     createdBy: null,
     createdAt: new Date(),
@@ -52,6 +54,10 @@ export default class CommentsCreateA extends AdminCreate {
         }
       });
     }
+  }
+
+  mounted() {
+    this.isLoaded = true;
   }
 }
 </script>

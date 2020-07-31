@@ -1,7 +1,7 @@
 <template>
   <AdminDetailsWrapper v-if="isLoaded" v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
     <dl class="row">
-      <dt class="col-sm-2">(ID)</dt>
+      <dt class="col-sm-2">{{$t('bll.common.Id')}}</dt>
       <dd class="col-sm-10">{{model.id}}</dd>
 
       <dt class="col-sm-2">{{$t('bll.favorites.ProfileId')}}</dt>

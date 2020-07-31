@@ -19,7 +19,6 @@
       <dd class="col-sm-10">{{model.lastMessageDateTime}}</dd>
     </dl>
     <hr />
-
     <MetaDetailsSection :model="model" />
   </AdminDetailsWrapper>
   <LoadingOverlay v-else />

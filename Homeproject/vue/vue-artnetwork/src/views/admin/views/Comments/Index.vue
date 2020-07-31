@@ -3,21 +3,17 @@
     <table class="table">
       <thead>
         <tr>
-          <th>(ID)</th>
-          <th>Profile (ID)</th>
-          <th>Post (ID)</th>
-          <th>Value</th>
-          <th>IS DELETED?</th>
+          <th>{{$t('bll.comments.ProfileId')}}</th>
+          <th>{{$t('bll.comments.PostId')}}</th>
+          <th>{{$t('bll.comments.CommentValue')}}</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in model" :key="item.id">
-          <td>{{item.id}}</td>
           <td>{{item.profileId}}</td>
           <td>{{item.postId}}</td>
           <td>{{item.commentValue}}</td>
-          <td>{{item.deletedAt != null}}</td>
           <td>
             <IndexControls
               :model="item"
