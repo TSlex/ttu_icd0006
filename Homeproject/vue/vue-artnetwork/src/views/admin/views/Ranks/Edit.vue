@@ -1,6 +1,5 @@
 <template>
-  <AdminEditWrapper v-if="id && model" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList">
-    <FormInput id="rankId" label="Title" :model="model.id" v-on:onChange="(value) => {model.id = value}" />
+  <AdminEditWrapper v-if="id && model" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
     <CreateEdit :model="model" />
   </AdminEditWrapper>
 </template>

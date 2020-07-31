@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <h1>Index</h1>
-    <p>
-      <a href="#" @click="onCreate" @click.prevent>Create New</a>
-    </p>
+  <AdminIndexWrapper v-if="isLoaded" :canCreate="true" v-on:onCreate="onCreate">
     <table class="table">
       <thead>
         <tr>
@@ -16,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in Model" :key="item.id">
+        <tr v-for="item in model" :key="item.id">
           <td>{{item.id}}</td>
           <td>{{item.giftCode}}</td>
           <td>{{item.giftName}}</td>
@@ -35,7 +31,7 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </AdminIndexWrapper>
 </template>
 
 <script lang="ts">
@@ -49,42 +45,25 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import { GiftsApi } from "@/services/admin/GiftsApi";
 
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
+import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 
 @Component({
   components: {
     IndexControls,
   },
 })
-export default class GiftsIndexA extends Vue {
-  private Model: IGiftAdminDTO[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  onCreate() {
-    router.push({ name: "GiftsCreateA" });
-  }
-
+export default class GiftsIndexA extends AdminIndex<IGiftAdminDTO> {
   onHistory(id: string) {
     GiftsApi.history(id, this.jwt).then((response: IGiftAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
-  }
-
-  onEdit(id: string) {
-    router.push({ name: "GiftsEditA", params: { id } });
-  }
-
-  onDetails(id: string) {
-    router.push({ name: "GiftsDetailsA", params: { id } });
   }
 
   onDelete(id: string) {
     GiftsApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         GiftsApi.index(this.jwt).then((response: IGiftAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
@@ -94,15 +73,19 @@ export default class GiftsIndexA extends Vue {
     GiftsApi.restore(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         GiftsApi.index(this.jwt).then((response: IGiftAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
   }
 
+  created() {
+    this.modelName = "Gift";
+  }
+
   mounted() {
     GiftsApi.index(this.jwt).then((response: IGiftAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
   }
 }

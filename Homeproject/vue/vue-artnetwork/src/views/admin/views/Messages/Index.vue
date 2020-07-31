@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <h1>Index</h1>
-    <p>
-      <a href="#" @click="onCreate" @click.prevent>Create New</a>
-    </p>
+  <AdminIndexWrapper v-if="isLoaded" :canCreate="true" v-on:onCreate="onCreate">
     <table class="table">
       <thead>
         <tr>
@@ -15,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in Model" :key="item.id">
+        <tr v-for="item in model" :key="item.id">
           <td>{{item.profileId}}</td>
           <td>{{item.chatRoomId}}</td>
           <td>{{item.messageValue}}</td>
@@ -33,7 +29,7 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </AdminIndexWrapper>
 </template>
 
 <script lang="ts">
@@ -47,42 +43,25 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import { MessagesApi } from "@/services/admin/MessagesApi";
 
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
+import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 
 @Component({
   components: {
     IndexControls,
   },
 })
-export default class MessagesIndexA extends Vue {
-  private Model: IMessageAdminDTO[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  onCreate() {
-    router.push({ name: "MessagesCreateA" });
-  }
-
+export default class MessagesIndexA extends AdminIndex<IMessageAdminDTO> {
   onHistory(id: string) {
     MessagesApi.history(id, this.jwt).then((response: IMessageAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
-  }
-
-  onEdit(id: string) {
-    router.push({ name: "MessagesEditA", params: { id } });
-  }
-
-  onDetails(id: string) {
-    router.push({ name: "MessagesDetailsA", params: { id } });
   }
 
   onDelete(id: string) {
     MessagesApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         MessagesApi.index(this.jwt).then((response: IMessageAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
@@ -92,15 +71,19 @@ export default class MessagesIndexA extends Vue {
     MessagesApi.restore(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         MessagesApi.index(this.jwt).then((response: IMessageAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
   }
 
+  created() {
+    this.modelName = "Message";
+  }
+
   mounted() {
     MessagesApi.index(this.jwt).then((response: IMessageAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
   }
 }

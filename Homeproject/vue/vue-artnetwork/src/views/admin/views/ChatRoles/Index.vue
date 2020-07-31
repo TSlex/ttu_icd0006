@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <h1>Index</h1>
-    <p>
-      <a href="#" @click="onCreate" @click.prevent>Create New</a>
-    </p>
+  <AdminIndexWrapper v-if="isLoaded" :canCreate="true" v-on:onCreate="onCreate">
     <table class="table">
       <thead>
         <tr>
@@ -15,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in Model" :key="item.id">
+        <tr v-for="item in model" :key="item.id">
           <td>{{item.id}}</td>
           <td>{{item.roleTitle}}</td>
           <td>{{item.roleTitleValue}}</td>
@@ -33,7 +29,7 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </AdminIndexWrapper>
 </template>
 
 <script lang="ts">
@@ -48,42 +44,25 @@ import router from "@/router";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
 
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
+import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 
 @Component({
   components: {
     IndexControls,
   },
 })
-export default class ChatRolesIndexA extends Vue {
-  private Model: IChatRoleAdminDTO[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  onCreate() {
-    router.push({ name: "ChatRolesCreateA" });
-  }
-
+export default class ChatRolesIndexA extends AdminIndex<IChatRoleAdminDTO> {
   onHistory(id: string) {
     ChatRolesApi.history(id, this.jwt).then((response: IChatRoleAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
-  }
-
-  onEdit(id: string) {
-    router.push({ name: "ChatRolesEditA", params: { id } });
-  }
-
-  onDetails(id: string) {
-    router.push({ name: "ChatRolesDetailsA", params: { id } });
   }
 
   onDelete(id: string) {
     ChatRolesApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         ChatRolesApi.index(this.jwt).then((response: IChatRoleAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
@@ -93,15 +72,19 @@ export default class ChatRolesIndexA extends Vue {
     ChatRolesApi.restore(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         ChatRolesApi.index(this.jwt).then((response: IChatRoleAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
   }
 
+  created() {
+    this.modelName = "ChatRole";
+  }
+
   mounted() {
     ChatRolesApi.index(this.jwt).then((response: IChatRoleAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
   }
 }

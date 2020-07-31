@@ -27,7 +27,7 @@
 
     <div class="form-group">
       <label class="control-label" for="giftDateTime">{{$t('bll.profilegifts.GiftDateTime')}}</label>
-      <flat-pickr class="form-control" v-model="model.giftDateTime" :config="Config"></flat-pickr>
+      <flat-pickr class="form-control" v-model="GiftDateTime" :config="Config"></flat-pickr>
     </div>
   </div>
 </template>
@@ -39,6 +39,7 @@ import { IProfileGiftAdminDTO } from "@/types/IProfileGiftDTO";
 
 import flatPickr from "vue-flatpickr-component";
 import { flatConfig } from "@/translations/flatpickr";
+import moment from "moment";
 
 @Component({
   components: {
@@ -50,6 +51,14 @@ export default class CreateEdit extends Vue {
 
   get Config() {
     return flatConfig;
+  }
+
+  get GiftDateTime(): string | Date {
+    return new Date(this.model.giftDateTime!);
+  }
+
+  set GiftDateTime(value: Date | string) {
+    this.model.giftDateTime = value as Date;
   }
 }
 </script>

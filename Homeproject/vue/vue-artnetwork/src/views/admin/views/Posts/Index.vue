@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <h1>Index</h1>
-    <p>
-      <a href="#" @click="onCreate" @click.prevent>Create New</a>
-    </p>
+  <AdminIndexWrapper v-if="isLoaded" :canCreate="true" v-on:onCreate="onCreate">
     <table class="table">
       <thead>
         <tr>
@@ -14,7 +10,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in Model" :key="item.id">
+        <tr v-for="item in model" :key="item.id">
           <td>{{item.id}}</td>
           <td>{{item.postTitle}}</td>
           <td>{{item.deletedAt != null}}</td>
@@ -31,7 +27,7 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </AdminIndexWrapper>
 </template>
 
 <script lang="ts">
@@ -45,42 +41,25 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import { PostsApi } from "@/services/admin/PostsApi";
 
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
+import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 
 @Component({
   components: {
     IndexControls,
   },
 })
-export default class PostsIndexA extends Vue {
-  private Model: IPostAdminDTO[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  onCreate() {
-    router.push({ name: "PostsCreateA" });
-  }
-
+export default class PostsIndexA extends AdminIndex<IPostAdminDTO> {
   onHistory(id: string) {
     PostsApi.history(id, this.jwt).then((response: IPostAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
-  }
-
-  onEdit(id: string) {
-    router.push({ name: "PostsEditA", params: { id } });
-  }
-
-  onDetails(id: string) {
-    router.push({ name: "PostsDetailsA", params: { id } });
   }
 
   onDelete(id: string) {
     PostsApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         PostsApi.index(this.jwt).then((response: IPostAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
@@ -90,7 +69,7 @@ export default class PostsIndexA extends Vue {
     PostsApi.restore(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         PostsApi.index(this.jwt).then((response: IPostAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
@@ -98,8 +77,12 @@ export default class PostsIndexA extends Vue {
 
   mounted() {
     PostsApi.index(this.jwt).then((response: IPostAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
+  }
+
+  created() {
+    this.modelName = "Post";
   }
 }
 </script>

@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h1>Index</h1>
-
+  <AdminIndexWrapper v-if="isLoaded" :canCreate="true" v-on:onCreate="onCreate">
     <table class="table">
       <thead>
         <tr>
@@ -13,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in Model" :key="item.id">
+        <tr v-for="item in model" :key="item.id">
           <td>{{item.profileId}}</td>
           <td>{{item.chatRoomId}}</td>
           <td>{{item.chatRoleId}}</td>
@@ -31,7 +29,7 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </AdminIndexWrapper>
 </template>
 
 <script lang="ts">
@@ -46,33 +44,20 @@ import router from "../../../../router";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
+import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 
 @Component({
   components: {
     IndexControls,
   },
 })
-export default class CMIndexA extends Vue {
-  private Model: IChatMemberAdminDTO[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
+export default class CMIndexA extends AdminIndex<IChatMemberAdminDTO> {
   onHistory(id: string) {
     ChatMembersApi.history(id, this.jwt).then(
       (response: IChatMemberAdminDTO[]) => {
-        this.Model = response;
+        this.model = response;
       }
     );
-  }
-
-  onEdit(id: string) {
-    router.push({ name: "CMEditA", params: { id } });
-  }
-
-  onDetails(id: string) {
-    router.push({ name: "CMDetailsA", params: { id } });
   }
 
   onDelete(id: string) {
@@ -80,7 +65,7 @@ export default class CMIndexA extends Vue {
       if (!response?.errors) {
         ChatMembersApi.index(this.jwt).then(
           (response: IChatMemberAdminDTO[]) => {
-            this.Model = response;
+            this.model = response;
           }
         );
       }
@@ -92,16 +77,20 @@ export default class CMIndexA extends Vue {
       if (!response?.errors) {
         ChatMembersApi.index(this.jwt).then(
           (response: IChatMemberAdminDTO[]) => {
-            this.Model = response;
+            this.model = response;
           }
         );
       }
     });
   }
 
+  created() {
+    this.modelName = "ChatMember";
+  }
+
   mounted() {
     ChatMembersApi.index(this.jwt).then((response: IChatMemberAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
   }
 }

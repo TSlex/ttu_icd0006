@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h1>Index</h1>
-
+  <AdminIndexWrapper v-if="isLoaded" :canCreate="true" v-on:onCreate="onCreate">
     <table class="table">
       <thead>
         <tr>
@@ -13,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in Model" :key="item.id">
+        <tr v-for="item in model" :key="item.id">
           <td>{{item.followerProfileId}}</td>
           <td>-&gt;</td>
           <td>{{item.profileId}}</td>
@@ -29,7 +27,7 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </AdminIndexWrapper>
 </template>
 
 <script lang="ts">
@@ -43,32 +41,19 @@ import { FollowersApi } from "@/services/admin/FollowersApi";
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 import router from "../../../../router";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
+import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 
 @Component({
   components: {
     IndexControls,
   },
 })
-export default class FollowersIndexA extends Vue {
-  private Model: IFollowerAdminDTO[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  onEdit(id: string) {
-    router.push({ name: "FollowersEditA", params: { id } });
-  }
-
-  onDetails(id: string) {
-    router.push({ name: "FollowersDetailsA", params: { id } });
-  }
-
+export default class FollowersIndexA extends AdminIndex<IFollowerAdminDTO> {
   onDelete(id: string) {
     FollowersApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         FollowersApi.index(this.jwt).then((response: IFollowerAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
@@ -76,7 +61,7 @@ export default class FollowersIndexA extends Vue {
 
   mounted() {
     FollowersApi.index(this.jwt).then((response: IFollowerAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
   }
 }

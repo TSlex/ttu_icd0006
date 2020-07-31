@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <h1>Index</h1>
-    <p>
-      <a href="#" @click="onCreate" @click.prevent>Create New</a>
-    </p>
+  <AdminIndexWrapper v-if="isLoaded" :canCreate="true" v-on:onCreate="onCreate">
     <table class="table">
       <thead>
         <tr>
@@ -16,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in Model" :key="item.id">
+        <tr v-for="item in model" :key="item.id">
           <td>{{item.id}}</td>
           <td>{{item.profileId}}</td>
           <td>{{item.postId}}</td>
@@ -35,7 +31,7 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </AdminIndexWrapper>
 </template>
 
 <script lang="ts">
@@ -49,42 +45,25 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import { CommentsApi } from "@/services/admin/CommentsApi";
 
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
+import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 
 @Component({
   components: {
     IndexControls,
   },
 })
-export default class CommentsIndexA extends Vue {
-  private Model: ICommentAdminDTO[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  onCreate() {
-    router.push({ name: "CommentsCreateA" });
-  }
-
+export default class CommentsIndexA extends AdminIndex<ICommentAdminDTO> {
   onHistory(id: string) {
     CommentsApi.history(id, this.jwt).then((response: ICommentAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
-  }
-
-  onEdit(id: string) {
-    router.push({ name: "CommentsEditA", params: { id } });
-  }
-
-  onDetails(id: string) {
-    router.push({ name: "CommentsDetailsA", params: { id } });
   }
 
   onDelete(id: string) {
     CommentsApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         CommentsApi.index(this.jwt).then((response: ICommentAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
@@ -94,15 +73,19 @@ export default class CommentsIndexA extends Vue {
     CommentsApi.restore(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         CommentsApi.index(this.jwt).then((response: ICommentAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
   }
 
+  created() {
+    this.modelName = "Comment";
+  }
+
   mounted() {
     CommentsApi.index(this.jwt).then((response: ICommentAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
   }
 }

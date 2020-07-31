@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h1>Index</h1>
-
+  <AdminIndexWrapper v-if="isLoaded" :canCreate="true" v-on:onCreate="onCreate">
     <table class="table">
       <thead>
         <tr>
@@ -13,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in Model" :key="item.id">
+        <tr v-for="item in model" :key="item.id">
           <td>{{item.profileId}}</td>
           <td>-&gt;</td>
           <td>{{item.bProfileId}}</td>
@@ -29,7 +27,7 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </AdminIndexWrapper>
 </template>
 
 <script lang="ts">
@@ -43,25 +41,16 @@ import { BlockedProfilesApi } from "@/services/admin/BlockedProfilesApi";
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 import router from "../../../../router";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
+import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 
 @Component({
   components: {
-    IndexControls
-  }
+    IndexControls,
+  },
 })
-export default class BPIndexA extends Vue {
-  private Model: IBlockedProfileAdminDTO[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  onEdit(id: string) {
-    router.push({ name: "BPEditA", params: { id } });
-  }
-
-  onDetails(id: string) {
-    router.push({ name: "BPDetailsA", params: { id } });
+export default class BPIndexA extends AdminIndex<IBlockedProfileAdminDTO> {
+  created() {
+    this.modelName = "BlockedProfile";
   }
 
   onDelete(id: string) {
@@ -69,7 +58,7 @@ export default class BPIndexA extends Vue {
       if (!response?.errors) {
         BlockedProfilesApi.index(this.jwt).then(
           (response: IBlockedProfileAdminDTO[]) => {
-            this.Model = response;
+            this.model = response;
           }
         );
       }
@@ -79,7 +68,7 @@ export default class BPIndexA extends Vue {
   mounted() {
     BlockedProfilesApi.index(this.jwt).then(
       (response: IBlockedProfileAdminDTO[]) => {
-        this.Model = response;
+        this.model = response;
       }
     );
   }

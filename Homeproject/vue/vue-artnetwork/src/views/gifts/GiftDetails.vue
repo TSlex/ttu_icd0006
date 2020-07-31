@@ -16,7 +16,7 @@
       <span class="font-weight-bold">{{gift.giftName}}</span>
 
       <span v-if="gift.fromUsername" class="font-weight-bold mt-2">From "{{gift.fromUsername}}"</span>
-      <span v-else class="font-weight-bold mt-2">{{$t('views.gifts.Anonymous')}}</span>
+      <span v-else class="font-weight-bold mt-2">{{$t('views.gifts.Anonymous').replace("?", "")}}</span>
       <template v-if="gift.message">
         <span class="font-weight-bold mt-2">{{$t('bll.profilegifts.Message')}}:</span>
         <div
@@ -40,8 +40,8 @@ import ProfileContainer from "@/components/shared/ProfileContainer.vue";
 @Component({
   components: {
     Modal,
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class GiftDetails extends ProfileContainer {
   get gift(): IProfileGiftDTO | null {

@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <h1>Index</h1>
-    <p>
-      <a href="#" @click="onCreate" @click.prevent>Create New</a>
-    </p>
+  <AdminIndexWrapper v-if="isLoaded" :canCreate="true" v-on:onCreate="onCreate">
     <table class="table">
       <thead>
         <tr>
@@ -14,7 +10,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in Model" :key="item.id">
+        <tr v-for="item in model" :key="item.id">
           <td>{{item.profileId}}</td>
           <td>{{item.rankId}}</td>
           <td>{{item.deletedAt != null}}</td>
@@ -31,7 +27,7 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </AdminIndexWrapper>
 </template>
 
 <script lang="ts">
@@ -45,45 +41,22 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import { ProfileRanksApi } from "@/services/admin/ProfileRanksApi";
 
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
+import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 
 @Component({
   components: {
     IndexControls,
   },
 })
-export default class ProfileRanksIndexA extends Vue {
-  private Model: IProfileRankAdminDTO[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  onCreate() {
-    router.push({ name: "ProfileRanksCreateA" });
-  }
-
-  onHistory(id: string) {
-    ProfileRanksApi.history(id, this.jwt).then(
-      (response: IProfileRankAdminDTO[]) => {
-        this.Model = response;
-      }
-    );
-  }
-
-  onEdit(id: string) {
-    router.push({ name: "ProfileRanksEditA", params: { id } });
-  }
-
-  onDetails(id: string) {
-    router.push({ name: "ProfileRanksDetailsA", params: { id } });
-  }
-
+export default class ProfileRanksIndexA extends AdminIndex<
+  IProfileRankAdminDTO
+> {
   onDelete(id: string) {
     ProfileRanksApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         ProfileRanksApi.index(this.jwt).then(
           (response: IProfileRankAdminDTO[]) => {
-            this.Model = response;
+            this.model = response;
           }
         );
       }
@@ -95,7 +68,7 @@ export default class ProfileRanksIndexA extends Vue {
       if (!response?.errors) {
         ProfileRanksApi.index(this.jwt).then(
           (response: IProfileRankAdminDTO[]) => {
-            this.Model = response;
+            this.model = response;
           }
         );
       }
@@ -104,8 +77,12 @@ export default class ProfileRanksIndexA extends Vue {
 
   mounted() {
     ProfileRanksApi.index(this.jwt).then((response: IProfileRankAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
+  }
+
+  created() {
+    this.modelName = "ProfileRank";
   }
 }
 </script>

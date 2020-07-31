@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h1>Index</h1>
-
+  <AdminIndexWrapper v-if="isLoaded" :canCreate="true" v-on:onCreate="onCreate">
     <table class="table">
       <thead>
         <tr>
@@ -12,7 +10,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in Model" :key="item.id">
+        <tr v-for="item in model" :key="item.id">
           <td>{{item.profileId}}</td>
           <td>{{item.postId}}</td>
           <td>{{item.deletedAt != null}}</td>
@@ -27,7 +25,7 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </AdminIndexWrapper>
 </template>
 
 <script lang="ts">
@@ -41,40 +39,31 @@ import { FavoritesApi } from "@/services/admin/FavoritesApi";
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 import router from "../../../../router";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
+import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 
 @Component({
   components: {
     IndexControls,
   },
 })
-export default class FavoritesIndexA extends Vue {
-  private Model: IFavoriteAdminDTO[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  onEdit(id: string) {
-    router.push({ name: "FavoritesEditA", params: { id } });
-  }
-
-  onDetails(id: string) {
-    router.push({ name: "FavoritesDetailsA", params: { id } });
-  }
-
+export default class FavoritesIndexA extends AdminIndex<IFavoriteAdminDTO> {
   onDelete(id: string) {
     FavoritesApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         FavoritesApi.index(this.jwt).then((response: IFavoriteAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
   }
 
+  created() {
+    this.modelName = "Favorite";
+  }
+
   mounted() {
     FavoritesApi.index(this.jwt).then((response: IFavoriteAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
   }
 }

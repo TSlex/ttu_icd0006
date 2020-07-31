@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <h1>Index</h1>
-    <p>
-      <a href="#" @click="onCreate" @click.prevent>Create New</a>
-    </p>
+  <AdminIndexWrapper v-if="isLoaded" :canCreate="true" v-on:onCreate="onCreate">
     <table class="table">
       <thead>
         <tr>
@@ -16,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in Model" :key="item.id">
+        <tr v-for="item in model" :key="item.id">
           <td>{{item.id}}</td>
           <td>{{item.imageUrl}}</td>
           <td>{{item.widthPx}}x{{item.heightPx}}</td>
@@ -35,7 +31,7 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </AdminIndexWrapper>
 </template>
 
 <script lang="ts">
@@ -49,42 +45,25 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import { ImagesApi } from "@/services/admin/ImagesApi";
 
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
+import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 
 @Component({
   components: {
     IndexControls,
   },
 })
-export default class ImagesIndexA extends Vue {
-  private Model: IImageAdminDTO[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  onCreate() {
-    router.push({ name: "ImagesCreateA" });
-  }
-
+export default class ImagesIndexA extends AdminIndex<IImageAdminDTO> {
   onHistory(id: string) {
     ImagesApi.history(id, this.jwt).then((response: IImageAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
-  }
-
-  onEdit(id: string) {
-    router.push({ name: "ImagesEditA", params: { id } });
-  }
-
-  onDetails(id: string) {
-    router.push({ name: "ImagesDetailsA", params: { id } });
   }
 
   onDelete(id: string) {
     ImagesApi.delete(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         ImagesApi.index(this.jwt).then((response: IImageAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
@@ -94,15 +73,19 @@ export default class ImagesIndexA extends Vue {
     ImagesApi.restore(id, this.jwt).then((response: ResponseDTO) => {
       if (!response?.errors) {
         ImagesApi.index(this.jwt).then((response: IImageAdminDTO[]) => {
-          this.Model = response;
+          this.model = response;
         });
       }
     });
   }
 
+  created() {
+    this.modelName = "Image";
+  }
+
   mounted() {
     ImagesApi.index(this.jwt).then((response: IImageAdminDTO[]) => {
-      this.Model = response;
+      this.model = response;
     });
   }
 }
