@@ -77,6 +77,10 @@ import AdminDetails from "../../components/shared/base/AdminDetails.vue";
   },
 })
 export default class ImagesDetailsA extends AdminDetails<IImageAdminDTO> {
+  created() {
+    this.modelName = "Image";
+  }
+
   mounted() {
     ImagesApi.details(this.Id, this.jwt).then((response: IImageAdminDTO) => {
       this.model = response;

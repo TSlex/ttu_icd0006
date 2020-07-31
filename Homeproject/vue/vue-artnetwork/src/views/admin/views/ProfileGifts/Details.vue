@@ -58,6 +58,10 @@ import AdminDetails from "../../components/shared/base/AdminDetails.vue";
 export default class ProfileGiftsDetailsA extends AdminDetails<
   IProfileGiftAdminDTO
 > {
+  created() {
+    this.modelName = "ProfileGift";
+  }
+
   mounted() {
     ProfileGiftsApi.details(this.Id, this.jwt).then(
       (response: IProfileGiftAdminDTO) => {

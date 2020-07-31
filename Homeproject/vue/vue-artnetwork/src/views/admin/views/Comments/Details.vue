@@ -50,6 +50,10 @@ import AdminDetails from "../../components/shared/base/AdminDetails.vue";
 
 @Component
 export default class CommentsDetailsA extends AdminDetails<ICommentAdminDTO> {
+  created() {
+    this.modelName = "Comment";
+  }
+
   mounted() {
     CommentsApi.details(this.Id, this.jwt).then(
       (response: ICommentAdminDTO) => {

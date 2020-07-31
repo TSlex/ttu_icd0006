@@ -38,6 +38,10 @@ import AdminDetails from "../../components/shared/base/AdminDetails.vue";
 
 @Component
 export default class FollowersDetailsA extends AdminDetails<IFollowerAdminDTO> {
+  created() {
+    this.modelName = "Follower";
+  }
+
   mounted() {
     FollowersApi.details(this.Id, this.jwt).then(
       (response: IFollowerAdminDTO) => {

@@ -38,6 +38,10 @@ import AdminDetails from "../../components/shared/base/AdminDetails.vue";
 
 @Component
 export default class BPDetailsA extends AdminDetails<IBlockedProfileAdminDTO> {
+  created() {
+    this.modelName = "BlockedProfile";
+  }
+
   mounted() {
     BlockedProfilesApi.details(this.Id, this.jwt).then(
       (response: IBlockedProfileAdminDTO) => {

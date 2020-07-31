@@ -50,6 +50,10 @@ import AdminDetails from "../../components/shared/base/AdminDetails.vue";
 
 @Component
 export default class MessagesDetailsA extends AdminDetails<IMessageAdminDTO> {
+  created() {
+    this.modelName = "Message";
+  }
+
   mounted() {
     MessagesApi.details(this.Id, this.jwt).then(
       (response: IMessageAdminDTO) => {

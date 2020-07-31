@@ -47,6 +47,10 @@ import AdminDetails from "../../components/shared/base/AdminDetails.vue";
 
 @Component
 export default class FavoritesDetailsA extends AdminDetails<IFavoriteAdminDTO> {
+  created() {
+    this.modelName = "Favorite";
+  }
+
   mounted() {
     FavoritesApi.details(this.Id, this.jwt).then(
       (response: IFavoriteAdminDTO) => {

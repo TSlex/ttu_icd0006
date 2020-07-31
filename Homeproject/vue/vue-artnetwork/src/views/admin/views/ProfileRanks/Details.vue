@@ -52,6 +52,10 @@ import AdminDetails from "../../components/shared/base/AdminDetails.vue";
 export default class ProfileRanksDetailsA extends AdminDetails<
   IProfileRankAdminDTO
 > {
+  created() {
+    this.modelName = "ProfileRank";
+  }
+
   mounted() {
     ProfileRanksApi.details(this.Id, this.jwt).then(
       (response: IProfileRankAdminDTO) => {

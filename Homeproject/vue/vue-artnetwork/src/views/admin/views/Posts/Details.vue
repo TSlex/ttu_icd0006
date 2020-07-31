@@ -56,6 +56,10 @@ import AdminDetails from "../../components/shared/base/AdminDetails.vue";
   },
 })
 export default class PostsDetailsA extends AdminDetails<IPostAdminDTO> {
+  created() {
+    this.modelName = "Post";
+  }
+
   mounted() {
     PostsApi.details(this.Id, this.jwt).then((response: IPostAdminDTO) => {
       this.model = response;

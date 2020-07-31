@@ -59,6 +59,10 @@ import AdminDetails from "../../components/shared/base/AdminDetails.vue";
 
 @Component
 export default class ChatRolesDetailsA extends AdminDetails<IChatRoleAdminDTO> {
+  created() {
+    this.modelName = "ChatRole";
+  }
+
   mounted() {
     ChatRolesApi.details(this.Id, this.jwt).then(
       (response: IChatRoleAdminDTO) => {
