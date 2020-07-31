@@ -93,8 +93,8 @@ import ImageComponent from "@/components/Image.vue";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class ProfileSection extends ProfileContainer {
   get profile(): IProfileDTO | null {
@@ -111,7 +111,7 @@ export default class ProfileSection extends ProfileContainer {
 
   get isExpMax(): boolean {
     if (this.profile && this.rank) {
-      return this.profile.experience === this.rank.maxExperience;
+      return this.profile.experience >= this.rank.maxExperience;
     }
     return false;
   }
@@ -120,7 +120,7 @@ export default class ProfileSection extends ProfileContainer {
     if (store.state.profileRank?.rankIcon) {
       return store.state.profileRank.rankIcon
         .split(";")
-        .filter(value => value !== "");
+        .filter((value) => value !== "");
     }
     return [];
   }

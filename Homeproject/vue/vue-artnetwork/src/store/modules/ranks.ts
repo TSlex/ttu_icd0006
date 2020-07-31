@@ -15,14 +15,10 @@ export const RanksModule = {
       if (profile && rank && rank.maxExperience - rank.minExperience !== 0) {
         let minExperience = rank.minExperience >= 0 ? rank.minExperience : 0;
 
-        return (
-          Math.round(
-            ((profile.experience - minExperience) /
-              (rank.maxExperience - minExperience)) *
-            100 *
-            100
-          ) / 100
-        );
+        const persent = Math.round(((profile.experience - minExperience) /
+          (rank.maxExperience - minExperience)) * 100 * 100) / 100
+
+        return persent >= 100 ? 100 : persent
       }
       return 0;
     },
