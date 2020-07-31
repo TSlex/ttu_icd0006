@@ -3,10 +3,9 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Follower (ID)</th>
+          <th>{{$t('bll.followers.FollowerProfileId')}}</th>
           <th></th>
-          <th>Profile (ID)</th>
-          <th>IS DELETED?</th>
+          <th>{{$t('bll.followers.ProfileId')}}</th>
           <th></th>
         </tr>
       </thead>
@@ -15,7 +14,6 @@
           <td>{{item.followerProfileId}}</td>
           <td>-&gt;</td>
           <td>{{item.profileId}}</td>
-          <td>{{item.deletedAt != null}}</td>
           <td>
             <IndexControls
               :model="item"

@@ -1,17 +1,15 @@
 <template>
   <AdminEditWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
     <div class="form-group">
-      <label class="control-label" for="FollowerId">Follower (ID)</label>
-      <input class="form-control" type="text" required id="FollowerId" name="FollowerId" v-model="model.followerProfileId" />
-      <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
+      <label class="control-label" for="followerProfileId">{{$t('bll.followers.FollowerProfileId')}}</label>
+      <input class="form-control" type="text" id="followerProfileId" name="followerProfileId" v-model="model.followerProfileId" />
     </div>
 
     <i class="fa fa-arrow-down"></i>
 
     <div class="form-group">
-      <label class="control-label" for="ProfileId">Profile (ID)</label>
-      <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="model.profileId" />
-      <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
+      <label class="control-label" for="profileId">{{$t('bll.followers.ProfileId')}}</label>
+      <input class="form-control" type="text" id="profileId" name="profileId" v-model="model.profileId" />
     </div>
   </AdminEditWrapper>
   <LoadingOverlay v-else />
@@ -29,14 +27,6 @@ import AdminEdit from "../../components/shared/base/AdminEdit.vue";
 
 @Component
 export default class FollowersEditA extends AdminEdit<IFollowerAdminDTO> {
-  mounted() {
-    FollowersApi.details(this.Id, this.jwt).then(
-      (response: IFollowerAdminDTO) => {
-        this.model = response;
-      }
-    );
-  }
-
   onSubmit() {
     if (this.Id && this.model) {
       FollowersApi.edit(this.Id, this.model, this.jwt).then(
@@ -49,6 +39,19 @@ export default class FollowersEditA extends AdminEdit<IFollowerAdminDTO> {
         }
       );
     }
+  }
+
+  created() {
+    this.modelName = "Follower";
+  }
+
+  mounted() {
+    FollowersApi.details(this.Id, this.jwt).then(
+      (response: IFollowerAdminDTO) => {
+        this.model = response;
+        this.isLoaded = true;
+      }
+    );
   }
 }
 </script>

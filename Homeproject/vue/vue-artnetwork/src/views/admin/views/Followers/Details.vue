@@ -1,28 +1,19 @@
 <template>
-  <AdminDetailsWrapper v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
+  <AdminDetailsWrapper v-if="isLoaded" v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
     <dl class="row">
-      <dt class="col-sm-2">(ID)</dt>
+      <dt class="col-sm-2">{{$t('bll.common.Id')}}</dt>
       <dd class="col-sm-10">{{model.id}}</dd>
 
-      <dt class="col-sm-2">Profile (ID)</dt>
+      <dt class="col-sm-2">{{$t('bll.followers.ProfileId')}}</dt>
       <dd class="col-sm-10">{{model.profileId}}</dd>
 
-      <dt class="col-sm-2">Follower (ID)</dt>
+      <dt class="col-sm-2">{{$t('bll.followers.FollowerProfileId')}}</dt>
       <dd class="col-sm-10">{{model.followerProfileId}}</dd>
-
-      <dt class="col-sm-2">CreatedBy</dt>
-      <dd class="col-sm-10">{{model.createdBy}}</dd>
-
-      <dt class="col-sm-2">CreatedAt</dt>
-      <dd class="col-sm-10">{{model.createdAt}}</dd>
-
-      <dt class="col-sm-2">ChangedBy</dt>
-      <dd class="col-sm-10">{{model.changedBy}}</dd>
-
-      <dt class="col-sm-2">ChangedAt</dt>
-      <dd class="col-sm-10">{{model.changedAt}}</dd>
     </dl>
+    <hr />
+    <MetaDetailsSection :model="model" :deletable="false" />
   </AdminDetailsWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -46,6 +37,7 @@ export default class FollowersDetailsA extends AdminDetails<IFollowerAdminDTO> {
     FollowersApi.details(this.Id, this.jwt).then(
       (response: IFollowerAdminDTO) => {
         this.model = response;
+        this.isLoaded = true;
       }
     );
   }

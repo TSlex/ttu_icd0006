@@ -1,29 +1,24 @@
 <template>
   <AdminEditWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
     <div class="form-group">
-      <label class="control-label" for="ProfileId">Профиль (ID)</label>
-      <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="model.profileId" />
-      <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
+      <label class="control-label" for="profileId">{{$t('bll.favorites.ProfileId')}}</label>
+      <input class="form-control" type="text" required id="profileId" name="profileId" v-model="model.profileId" />
     </div>
     <div class="form-group">
-      <label class="control-label" for="PostId">Пост (ID)</label>
-      <input class="form-control" type="text" required id="PostId" name="PostId" v-model="model.postId" />
-      <span class="text-danger field-validation-valid" data-valmsg-for="PostId" data-valmsg-replace="true"></span>
+      <label class="control-label" for="postId">{{$t('bll.favorites.PostId')}}</label>
+      <input class="form-control" type="text" required id="postId" name="postId" v-model="model.postId" />
     </div>
     <div class="form-group">
-      <label class="control-label" for="PostTitle">Название поста</label>
-      <input class="form-control" type="text" id="PostTitle" name="PostTitle" value="1" v-model="model.postTitle" />
-      <span class="text-danger field-validation-valid" data-valmsg-for="PostTitle" data-valmsg-replace="true"></span>
+      <label class="control-label" for="postTitle">{{$t('bll.favorites.PostTitle')}}</label>
+      <input class="form-control" type="text" id="postTitle" name="postTitle" v-model="model.postTitle" />
     </div>
     <div class="form-group">
-      <label class="control-label" for="PostDescription">Описание поста</label>
-      <input class="form-control" type="text" id="PostDescription" name="PostDescription" v-model="model.postDescription" />
-      <span class="text-danger field-validation-valid" data-valmsg-for="PostDescription" data-valmsg-replace="true"></span>
+      <label class="control-label" for="postDescription">{{$t('bll.favorites.PostDescription')}}</label>
+      <input class="form-control" type="text" id="postDescription" name="postDescription" v-model="model.postDescription" />
     </div>
     <div class="form-group">
-      <label class="control-label" for="PostImageId">Картинка (ID)</label>
-      <input class="form-control" type="text" id="PostImageId" name="PostImageId" v-model="model.postImageId" />
-      <span class="text-danger field-validation-valid" data-valmsg-for="PostImageId" data-valmsg-replace="true"></span>
+      <label class="control-label" for="postImageId">{{$t('bll.favorites.PostImageId')}}</label>
+      <input class="form-control" type="text" id="postImageId" name="postImageId" v-model="model.postImageId" />
     </div>
   </AdminEditWrapper>
   <LoadingOverlay v-else />
@@ -41,14 +36,6 @@ import AdminEdit from "../../components/shared/base/AdminEdit.vue";
 
 @Component
 export default class FavoritesEditA extends AdminEdit<IFavoriteAdminDTO> {
-  mounted() {
-    FavoritesApi.details(this.Id, this.jwt).then(
-      (response: IFavoriteAdminDTO) => {
-        this.model = response;
-      }
-    );
-  }
-
   onSubmit() {
     if (this.Id && this.model) {
       FavoritesApi.edit(this.Id, this.model, this.jwt).then(
@@ -61,6 +48,19 @@ export default class FavoritesEditA extends AdminEdit<IFavoriteAdminDTO> {
         }
       );
     }
+  }
+
+  created() {
+    this.modelName = "Favorite";
+  }
+
+  mounted() {
+    FavoritesApi.details(this.Id, this.jwt).then(
+      (response: IFavoriteAdminDTO) => {
+        this.model = response;
+        this.isLoaded = true;
+      }
+    );
   }
 }
 </script>
