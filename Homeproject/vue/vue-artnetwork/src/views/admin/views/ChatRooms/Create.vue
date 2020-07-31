@@ -1,35 +1,10 @@
 <template>
-  <div>
-    <h1 class="text-center">Create</h1>
-    <hr />
-    <div class="row text-center justify-content-center">
-      <div class="col-md-4">
-        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-          <ul>
-            <li v-for="(error, index) in errors" :key="index">{{error}}</li>
-          </ul>
-        </div>
-        <div class="form-group">
-          <label class="control-label" for="RoomTitle">Title</label>
-          <input
-            class="form-control"
-            type="text"
-            required
-            id="RoomTitle"
-            maxlength="100"
-            name="RoomTitle"
-            v-model="Model.chatRoomTitle"
-          />
-          <span class="text-danger field-validation-valid"></span>
-        </div>
-
-        <div class="form-group">
-          <button class="btn btn-success mr-1" @click="submit">Submit</button>
-          <button class="btn btn-secondary" @click="$router.go(-1)">Back to List</button>
-        </div>
-      </div>
+  <AdminCreateWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
+    <div class="form-group">
+      <label class="control-label" for="RoomTitle">Title</label>
+      <input class="form-control" type="text" id="RoomTitle" maxlength="100" name="RoomTitle" v-model="Model.chatRoomTitle" />
     </div>
-  </div>
+  </AdminCreateWrapper>
 </template>
 
 <script lang="ts">

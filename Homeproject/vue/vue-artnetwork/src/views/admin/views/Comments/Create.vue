@@ -1,61 +1,31 @@
 <template>
-  <div>
-    <h1 class="text-center">Create</h1>
-    <hr />
-    <div class="row text-center justify-content-center">
-      <div class="col-md-4">
-        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-          <ul>
-            <li v-for="(error, index) in errors" :key="index">{{error}}</li>
-          </ul>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="ProfileId">Профиль (ID)</label>
-          <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="Model.profileId" />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="PostId">Пост (ID)</label>
-          <input class="form-control" type="text" required id="PostId" name="PostId" v-model="Model.postId" />
-          <span class="text-danger field-validation-valid" data-valmsg-for="PostId" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="CommentValue">Комментарий</label>
-          <textarea
-            rows="5"
-            class="form-control"
-            required
-            id="CommentValue"
-            maxlength="300"
-            name="CommentValue"
-            v-model="Model.commentValue"
-          ></textarea>
-          <span class="text-danger field-validation-valid" data-valmsg-for="CommentValue" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="CommentDateTime">Дата комментария</label>
-          <input
-            class="form-control valid"
-            type="datetime-local"
-            required
-            id="CommentDateTime"
-            name="CommentDateTime"
-            v-model="Model.commentDateTime"
-          />
-          <span class="text-danger field-validation-valid" data-valmsg-for="CommentDateTime" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <button class="btn btn-success mr-1" @click="submit">Submit</button>
-          <button class="btn btn-secondary" @click="$router.go(-1)">Back to List</button>
-        </div>
-      </div>
+  <AdminCreateWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
+    <div class="form-group">
+      <label class="control-label" for="ProfileId">Профиль (ID)</label>
+      <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="Model.profileId" />
     </div>
-  </div>
+
+    <div class="form-group">
+      <label class="control-label" for="PostId">Пост (ID)</label>
+      <input class="form-control" type="text" required id="PostId" name="PostId" v-model="Model.postId" />
+    </div>
+
+    <div class="form-group">
+      <label class="control-label" for="CommentValue">Комментарий</label>
+      <textarea rows="5" class="form-control" id="CommentValue" maxlength="300" name="CommentValue" v-model="Model.commentValue"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label" for="CommentDateTime">Дата комментария</label>
+      <input
+        class="form-control valid"
+        type="datetime-local"
+        id="CommentDateTime"
+        name="CommentDateTime"
+        v-model="Model.commentDateTime"
+      />
+    </div>
+  </AdminCreateWrapper>
 </template>
 
 <script lang="ts">

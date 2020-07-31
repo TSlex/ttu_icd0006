@@ -1,57 +1,39 @@
 <template>
-  <div>
-    <h1 class="text-center">Create</h1>
-    <hr />
-    <div class="row text-center align-items-center d-flex flex-column">
-      <div v-show="isImageLoaded" class="card" style="width: 20rem; user-select: none; position: relative;" id="image-miniature">
-        <ImageComponent height="inherit" width="inherit" :original="true" htmlId="render_image" htmlClass="card-img" />
-      </div>
-      <div class="col-md-4">
-        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-          <ul>
-            <li v-for="(error, index) in errors" :key="index">{{error}}</li>
-          </ul>
-        </div>
-
-        <div class="custom-file mt-2">
-          <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile" @change="loadFile" />
-          <label class="custom-file-label" style="overflow: hidden">{{fileName}}</label>
-        </div>
-
-        <div class="form-group mt-3">
-          <label class="control-label" for="giftCode">Code</label>
-          <input class="form-control" type="text" required id="giftCode" name="giftCode" v-model="Model.giftCode" />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="giftName">Title</label>
-          <input class="form-control" type="text" required id="giftName" name="giftName" v-model="Model.giftName" />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="price">Price</label>
-          <input class="form-control" type="text" required id="price" name="price" v-model="Model.price" />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-        </div>
-
-        <template v-if="imageModel">
-          <input type="hidden" id="HeightPx" name="HeightPx" v-model.lazy="imageModel.heightPx" />
-          <input type="hidden" id="WidthPx" name="WidthPx" v-model.lazy="imageModel.widthPx" />
-          <input type="hidden" id="PaddingTop" name="PaddingTop" v-model.lazy="imageModel.paddingTop" />
-          <input type="hidden" id="PaddingRight" name="PaddingRight" v-model.lazy="imageModel.paddingRight" />
-          <input type="hidden" id="PaddingBottom" name="PaddingBottom" v-model.lazy="imageModel.paddingBottom" />
-          <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="imageModel.paddingLeft" />
-        </template>
-
-        <div class="form-group">
-          <button class="btn btn-success mr-1" @click="submit">Submit</button>
-          <button class="btn btn-secondary" @click="$router.go(-1)">Back to List</button>
-        </div>
-      </div>
+  <AdminCreateWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
+    <div v-show="isImageLoaded" class="card" style="width: 20rem; user-select: none; position: relative;" id="image-miniature">
+      <ImageComponent height="inherit" width="inherit" :original="true" htmlId="render_image" htmlClass="card-img" />
     </div>
-  </div>
+    <div class="col-md-4">
+      <div class="custom-file mt-2">
+        <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile" @change="loadFile" />
+        <label class="custom-file-label" style="overflow: hidden">{{fileName}}</label>
+      </div>
+
+      <div class="form-group mt-3">
+        <label class="control-label" for="giftCode">Code</label>
+        <input class="form-control" type="text" required id="giftCode" name="giftCode" v-model="Model.giftCode" />
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="giftName">Title</label>
+        <input class="form-control" type="text" required id="giftName" name="giftName" v-model="Model.giftName" />
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="price">Price</label>
+        <input class="form-control" type="text" required id="price" name="price" v-model="Model.price" />
+      </div>
+
+      <template v-if="imageModel">
+        <input type="hidden" id="HeightPx" name="HeightPx" v-model.lazy="imageModel.heightPx" />
+        <input type="hidden" id="WidthPx" name="WidthPx" v-model.lazy="imageModel.widthPx" />
+        <input type="hidden" id="PaddingTop" name="PaddingTop" v-model.lazy="imageModel.paddingTop" />
+        <input type="hidden" id="PaddingRight" name="PaddingRight" v-model.lazy="imageModel.paddingRight" />
+        <input type="hidden" id="PaddingBottom" name="PaddingBottom" v-model.lazy="imageModel.paddingBottom" />
+        <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="imageModel.paddingLeft" />
+      </template>
+    </div>
+  </AdminCreateWrapper>
 </template>
 
 <script lang="ts">
