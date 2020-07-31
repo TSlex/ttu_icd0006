@@ -54,16 +54,24 @@ export default class RanksIndexA extends AdminIndex<IRankAdminDTO> {
   loadData() {
     this.isLoaded = false;
 
-    RanksApi.index(this.jwt).then((response: IRankAdminDTO[]) => {
-      this.model = response;
-      this.isLoaded = true;
-    });
+    if (this.historyId) {
+      RanksApi.history(this.historyId, this.jwt).then(
+        (response: IRankAdminDTO[]) => {
+          this.model = response;
+          this.isLoaded = true;
+        }
+      );
+    } else {
+      RanksApi.index(this.jwt).then((response: IRankAdminDTO[]) => {
+        this.model = response;
+        this.isLoaded = true;
+      });
+    }
   }
 
   onHistory(id: string) {
-    RanksApi.history(id, this.jwt).then((response: IRankAdminDTO[]) => {
-      this.model = response;
-    });
+    this.historyId = id;
+    this.loadData();
   }
 
   onDelete(id: string) {

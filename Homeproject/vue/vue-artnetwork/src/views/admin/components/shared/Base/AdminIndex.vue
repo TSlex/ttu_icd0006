@@ -14,6 +14,7 @@ import router from "@/router";
   },
 })
 export default class AdminIndex<TModel> extends IdentityStore {
+  protected historyId?: string;
   protected modelName?: string;
   protected model: TModel[] = [];
 
