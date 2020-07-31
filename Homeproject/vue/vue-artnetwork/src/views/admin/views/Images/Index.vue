@@ -3,11 +3,11 @@
     <table class="table">
       <thead>
         <tr>
-          <th>(ID)</th>
-          <th>URL</th>
-          <th>Resolution</th>
-          <th>Padding</th>
-          <th>IS DELETED?</th>
+          <th>{{$t('bll.common.Id')}}</th>
+          <th>{{$t('bll.images.ImageUrl')}}</th>
+          <th>{{$t('views.images.Preview')}}</th>
+          <th>{{$t('views.images.Resolution')}}</th>
+          <th>{{$t('views.images.Paddings')}}</th>
           <th></th>
         </tr>
       </thead>
@@ -15,9 +15,11 @@
         <tr v-for="item in model" :key="item.id">
           <td>{{item.id}}</td>
           <td>{{item.imageUrl}}</td>
+          <td>
+            <ImageComponent :id="item.id" htmlParentStyle="width: 5rem" height="unset" width="unset" htmlClass="card-img" />
+          </td>
           <td>{{item.widthPx}}x{{item.heightPx}}</td>
           <td>{{item.paddingTop}};{{item.paddingRight}};{{item.paddingBottom}};{{item.paddingLeft}}</td>
-          <td>{{item.deletedAt != null}}</td>
           <td>
             <IndexControls
               :model="item"
@@ -48,9 +50,12 @@ import { ImagesApi } from "@/services/admin/ImagesApi";
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 
+import ImageComponent from "@/components/Image.vue";
+
 @Component({
   components: {
     IndexControls,
+    ImageComponent,
   },
 })
 export default class ImagesIndexA extends AdminIndex<IImageAdminDTO> {

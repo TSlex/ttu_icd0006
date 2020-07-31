@@ -63,9 +63,21 @@ export abstract class ImagesApi extends LanguageService {
     }
   }
 
-  static async create(model: IImageAdminDTO, jwt: string | null): Promise<ResponseDTO> {
+  static async create(imageModel: IImageAdminDTO, jwt: string | null): Promise<ResponseDTO> {
+    let formData = new FormData();
+
+    formData.append('imageFor', imageModel.imageFor ?? "null")
+    formData.append('imageType', imageModel.imageType.toString())
+    formData.append('paddingTop', imageModel.paddingTop.toString())
+    formData.append('paddingRight', imageModel.paddingRight.toString())
+    formData.append('paddingBottom', imageModel.paddingBottom.toString())
+    formData.append('paddingLeft', imageModel.paddingLeft.toString())
+    formData.append('widthPx', imageModel.widthPx.toString())
+    formData.append('heightPx', imageModel.heightPx.toString())
+    formData.append('imageFile', imageModel.imageFile ? imageModel.imageFile : '')
+
     const url = "";
-    const response = await this.axios.post<ResponseDTO>(url, model, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
+    const response = await this.axios.post<ResponseDTO>(url, formData, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture }, responseType: "json" });
 
     switch (response.status) {
       case 200:

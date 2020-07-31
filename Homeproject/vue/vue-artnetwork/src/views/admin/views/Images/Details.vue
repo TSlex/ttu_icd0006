@@ -84,6 +84,7 @@ export default class ImagesDetailsA extends AdminDetails<IImageAdminDTO> {
   mounted() {
     ImagesApi.details(this.Id, this.jwt).then((response: IImageAdminDTO) => {
       this.model = response;
+      this.isLoaded = true;
     });
   }
 }

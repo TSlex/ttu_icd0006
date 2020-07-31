@@ -1,5 +1,5 @@
 <template>
-  <div v-show="isImageLoaded" :style="Style" class="card" id="image-miniature">
+  <div v-show="isImageLoaded" :style="Style" :class="htmlClass" id="image-miniature">
     <ImageComponent
       :id="initialId"
       :key="initialId"
@@ -29,6 +29,7 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 export default class ImageMiniature extends Vue {
   @Prop() initialId?: string;
   @Prop({ default: "" }) htmlStyle?: string;
+  @Prop({ default: "card" }) htmlClass?: string;
 
   private isImageLoaded: boolean = false;
 
