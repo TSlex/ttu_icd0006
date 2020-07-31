@@ -14,7 +14,7 @@ import { RanksApi } from "@/services/admin/RanksApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import { ImageType } from "@/types/Enums/ImageType";
 
-import AdminCreate from "@/views/admin/components/shared/AdminCreate.vue";
+import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
 
 import CreateEdit from "./CreateEdit.vue";
 

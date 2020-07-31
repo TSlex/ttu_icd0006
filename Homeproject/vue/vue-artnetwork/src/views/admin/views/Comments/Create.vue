@@ -67,7 +67,7 @@ import { ICommentAdminDTO } from "@/types/ICommentDTO";
 import { CommentsApi } from "@/services/admin/CommentsApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
-import AdminCreate from "@/views/admin/components/shared/AdminCreate.vue";
+import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
 
 import CreateEdit from "./CreateEdit.vue";
 
@@ -85,7 +85,7 @@ export default class CommentsCreateA extends AdminCreate {
     commentValue: "",
     commentDateTime: new Date(),
     profileId: "",
-    postId: ""
+    postId: "",
   };
 
   submit() {

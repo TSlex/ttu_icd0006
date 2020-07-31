@@ -69,14 +69,14 @@ import { ImagesApi } from "@/services/admin/ImagesApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 import { ImageType } from "@/types/Enums/ImageType";
 
-import AdminCreate from "@/views/admin/components/shared/AdminCreate.vue";
+import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
 
 import CreateEdit from "./CreateEdit.vue";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class ImagesCreateA extends AdminCreate {
   private Model: IImageAdminDTO = {
@@ -98,7 +98,7 @@ export default class ImagesCreateA extends AdminCreate {
     paddingLeft: 0,
     imageFile: null,
     imageType: ImageType.Undefined,
-    imageFor: ""
+    imageFor: "",
   };
 
   private isImageLoaded: boolean = false;
@@ -108,7 +108,7 @@ export default class ImagesCreateA extends AdminCreate {
   }
 
   get ImageType() {
-    return Object.keys(ImageType).filter(key => {
+    return Object.keys(ImageType).filter((key) => {
       return isNaN(Number(key));
     });
   }
@@ -119,13 +119,13 @@ export default class ImagesCreateA extends AdminCreate {
     if (this.Model && this.Model.imageFile) {
       let reader = new FileReader();
 
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         let image = new Image();
         image.src = e.target!.result as string;
 
         console.log("reader");
 
-        image.onload = function() {
+        image.onload = function () {
           console.log("image");
 
           let height = $("#HeightPx");

@@ -88,14 +88,14 @@ import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 import { IImageProfileGiftDTO } from "@/types/IImageDTO";
 import { ImageType } from "@/types/Enums/ImageType";
 
-import AdminCreate from "@/views/admin/components/shared/AdminCreate.vue";
+import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
 
 import CreateEdit from "./CreateEdit.vue";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class ProfileGiftsCreateA extends AdminCreate {
   private imageModel: IImageProfileGiftDTO = {
@@ -107,7 +107,7 @@ export default class ProfileGiftsCreateA extends AdminCreate {
     imageType: ImageType.ProfileGift,
     imageFor: "",
     heightPx: 0,
-    widthPx: 0
+    widthPx: 0,
   };
 
   private Model: IProfileGiftAdminDTO = {
@@ -125,7 +125,7 @@ export default class ProfileGiftsCreateA extends AdminCreate {
     postPublicationDateTime: new Date(),
     postFavoritesCount: 0,
     postCommentsCount: 0,
-    profileId: ""
+    profileId: "",
   };
 
   private isImageLoaded: boolean = false;
@@ -144,13 +144,13 @@ export default class ProfileGiftsCreateA extends AdminCreate {
     if (this.imageModel && this.imageModel.imageFile) {
       let reader = new FileReader();
 
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         let image = new Image();
         image.src = e.target!.result as string;
 
         console.log("reader");
 
-        image.onload = function() {
+        image.onload = function () {
           console.log("image");
 
           let height = $("#HeightPx");

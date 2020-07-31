@@ -43,14 +43,14 @@ import { ProfileRanksApi } from "@/services/admin/ProfileRanksApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 import { ImageType } from "@/types/Enums/ImageType";
 
-import AdminCreate from "@/views/admin/components/shared/AdminCreate.vue";
+import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
 
 import CreateEdit from "./CreateEdit.vue";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class ProfileRanksCreateA extends AdminCreate {
   private Model: IProfileRankAdminDTO = {
@@ -62,7 +62,7 @@ export default class ProfileRanksCreateA extends AdminCreate {
     deletedBy: null,
     deletedAt: null,
     profileId: "",
-    rankId: ""
+    rankId: "",
   };
 
   private isImageLoaded: boolean = false;

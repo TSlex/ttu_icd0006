@@ -64,12 +64,12 @@ import { IRankAdminDTO } from "@/types/IRankDTO";
 import { RanksApi } from "@/services/admin/RanksApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
-import AdminDetails from "@/views/admin/components/shared/AdminDetails.vue";
+import AdminDetails from "@/views/admin/components/shared/base/AdminDetails.vue";
 
 @Component({
   components: {
-    AdminDetails
-  }
+    AdminDetails,
+  },
 })
 export default class RanksDetailsA extends AdminDetails {
   @Prop() protected id!: string;

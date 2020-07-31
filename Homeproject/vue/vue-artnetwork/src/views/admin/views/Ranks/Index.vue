@@ -43,12 +43,12 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import { RanksApi } from "@/services/admin/RanksApi";
 
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
-import AdminIndex from "@/views/admin/components/shared/AdminIndex.vue";
+import AdminIndex from "@/views/admin/components/shared/base/AdminIndex.vue";
 
 @Component({
   components: {
-    IndexControls
-  }
+    IndexControls,
+  },
 })
 export default class RanksIndexA extends AdminIndex {
   private Model: IRankAdminDTO[] = [];

@@ -46,8 +46,8 @@ import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 @Component({
   components: {
-    IndexControls
-  }
+    IndexControls,
+  },
 })
 export default class FollowersIndexA extends Vue {
   private Model: IFollowerAdminDTO[] = [];

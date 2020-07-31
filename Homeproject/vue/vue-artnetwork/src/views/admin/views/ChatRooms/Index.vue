@@ -48,8 +48,8 @@ import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 @Component({
   components: {
-    IndexControls
-  }
+    IndexControls,
+  },
 })
 export default class ChatRoomsIndexA extends Vue {
   private Model: IChatRoomAdminDTO[] = [];

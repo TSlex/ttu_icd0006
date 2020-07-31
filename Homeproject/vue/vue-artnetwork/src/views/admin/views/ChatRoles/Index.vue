@@ -44,14 +44,15 @@ import { IChatRoleAdminDTO } from "@/types/IChatRoleDTO";
 
 import { ChatRolesApi } from "@/services/admin/ChatRolesApi";
 
+import router from "@/router";
+import { ResponseDTO } from "@/types/Response/ResponseDTO";
+
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
-import router from "../../../../router";
-import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 @Component({
   components: {
-    IndexControls
-  }
+    IndexControls,
+  },
 })
 export default class ChatRolesIndexA extends Vue {
   private Model: IChatRoleAdminDTO[] = [];

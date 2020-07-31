@@ -17,7 +17,7 @@ import { RanksApi } from "@/services/admin/RanksApi";
 import { ImagesApi } from "@/services/ImagesApi";
 import { ImageType } from "@/types/Enums/ImageType";
 
-import AdminEdit from "@/views/admin/components/shared/AdminEdit.vue";
+import AdminEdit from "@/views/admin/components/shared/base/AdminEdit.vue";
 import FormInput from "@/components/shared/FormInput.vue";
 
 import CreateEdit from "./CreateEdit.vue";
@@ -26,8 +26,8 @@ import CreateEdit from "./CreateEdit.vue";
   components: {
     FormInput,
     AdminEdit,
-    CreateEdit
-  }
+    CreateEdit,
+  },
 })
 export default class RanksEditA extends AdminEdit {
   @Prop() id!: string;

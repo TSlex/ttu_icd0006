@@ -52,8 +52,8 @@ import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 
 @Component({
   components: {
-    IndexControls
-  }
+    IndexControls,
+  },
 })
 export default class GiftsIndexA extends Vue {
   private Model: IGiftAdminDTO[] = [];

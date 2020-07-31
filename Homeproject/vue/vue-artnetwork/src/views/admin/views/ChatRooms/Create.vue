@@ -41,7 +41,7 @@ import { IChatRoomAdminDTO } from "@/types/IChatRoomDTO";
 import { ChatRoomsApi } from "@/services/admin/ChatRoomsApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
-import AdminCreate from "@/views/admin/components/shared/AdminCreate.vue";
+import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
 
 import CreateEdit from "./CreateEdit.vue";
 
@@ -58,7 +58,7 @@ export default class ChatRoomsCreateA extends AdminCreate {
     deletedAt: null,
     chatRoomTitle: "",
     chatRoomImageUrl: null,
-    chatRoomImageId: null
+    chatRoomImageId: null,
   };
 
   submit() {

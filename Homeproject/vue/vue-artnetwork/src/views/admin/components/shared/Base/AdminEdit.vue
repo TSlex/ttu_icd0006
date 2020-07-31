@@ -19,13 +19,13 @@ import ErrorListContainer from "@/components/shared/ErrorListContainer.vue";
 import { RanksApi } from "@/services/RanksApi";
 
 import EditControls from "@/views/admin/components/shared/EditControls.vue";
-import ErrorsList from "@/views/admin/components/shared/ErrorsList.vue";
+import ErrorsList from "@/components/shared/ErrorsList.vue";
 
 @Component({
   components: {
     EditControls,
-    ErrorsList
-  }
+    ErrorsList,
+  },
 })
 export default class AdminEdit extends ErrorListContainer {}
 </script>

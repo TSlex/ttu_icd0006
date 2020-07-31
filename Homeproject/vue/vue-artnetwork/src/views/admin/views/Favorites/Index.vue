@@ -44,8 +44,8 @@ import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 @Component({
   components: {
-    IndexControls
-  }
+    IndexControls,
+  },
 })
 export default class FavoritesIndexA extends Vue {
   private Model: IFavoriteAdminDTO[] = [];

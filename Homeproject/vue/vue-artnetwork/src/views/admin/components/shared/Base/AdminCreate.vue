@@ -20,13 +20,13 @@ import { RanksApi } from "@/services/RanksApi";
 
 import CreateControls from "@/views/admin/components/shared/CreateControls.vue";
 
-import ErrorsList from "@/views/admin/components/shared/ErrorsList.vue";
+import ErrorsList from "@/components/shared/ErrorsList.vue";
 
 @Component({
   components: {
     CreateControls,
-    ErrorsList
-  }
+    ErrorsList,
+  },
 })
 export default class AdminCreate extends ErrorListContainer {}
 </script>
