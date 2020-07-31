@@ -1,6 +1,6 @@
 <template>
   <AdminCreateWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
-    <CreateEdit :model="Model" />
+    <CreateEdit :model="model" />
   </AdminCreateWrapper>
 </template>
 
@@ -24,8 +24,8 @@ import AdminCreate from "../../components/shared/base/AdminCreate.vue";
     CreateEdit,
   },
 })
-export default class RanksCreateA extends AdminCreate<IRankAdminDTO> {
-  private Model: IRankAdminDTO = {
+export default class RanksCreateA extends AdminCreate {
+  private model: IRankAdminDTO = {
     id: createEmptyGuid(),
     masterId: null,
     createdBy: null,
@@ -49,21 +49,13 @@ export default class RanksCreateA extends AdminCreate<IRankAdminDTO> {
   };
 
   onSubmit() {
-    // if (
-    //   this.Model.rankCode.length > 0 &&
-    //   this.Model.rankTitle!.length > 0 &&
-    //   this.Model.rankColor.length > 0 &&
-    //   this.Model.rankTextColor.length > 0 &&
-    //   Number(this.Model.minExperience) < Number(this.Model.maxExperience)
-    // ) {
-    RanksApi.create(this.Model, this.jwt).then((response: ResponseDTO) => {
+    RanksApi.create(this.model, this.jwt).then((response: ResponseDTO) => {
       if (response?.errors) {
         this.errors = response.errors;
       } else {
         this.$router.go(-1);
       }
     });
-    // }
   }
 
   created() {

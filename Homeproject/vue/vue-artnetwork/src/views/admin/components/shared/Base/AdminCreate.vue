@@ -12,7 +12,7 @@ import router from "@/router";
     AdminCreateWrapper,
   },
 })
-export default class AdminCreate<TModel> extends ErrorListContainer {
+export default class AdminCreate extends ErrorListContainer {
   protected modelName?: string;
 
   onBackToList() {

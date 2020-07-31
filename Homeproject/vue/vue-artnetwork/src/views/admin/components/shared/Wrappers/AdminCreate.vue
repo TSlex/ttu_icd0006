@@ -32,6 +32,6 @@ import BaseWrapper from "./BaseWrapper.vue";
   },
 })
 export default class AdminCreateWrapper extends BaseWrapper {
-  @Prop({ default: [] }) errors!: string[];
+  @Prop({ default: () => [] }) errors!: string[];
 }
 </script>

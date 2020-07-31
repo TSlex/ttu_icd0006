@@ -18,10 +18,10 @@ export interface IProfileGiftPostDTO {
   message: string | null;
 }
 
-export interface IProfileGiftAdminDTO extends DomainEntityBaseMetaSoftDelete{
+export interface IProfileGiftAdminDTO extends DomainEntityBaseMetaSoftDelete {
   profileId: string;
   giftId: string;
-  giftDateTime: Date;
+  giftDateTime: Date | null;
   price: number;
   fromProfileId: string | null;
   message: string | null;

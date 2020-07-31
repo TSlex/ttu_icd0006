@@ -31,6 +31,7 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',
+    '@typescript-eslint/camelcase': 'off',
     '@typescript-eslint/interface-name-prefix': [
       "error",
       { "prefixWithI": "always" }

@@ -1,7 +1,16 @@
 <template>
-  <div>
+  <div :style="htmlParentStyle">
     <template v-if="imageLoaded">
-      <img :id="HtmlId" :class="HtmlClass" :src="src" alt="image component" :height="Height" :width="Width" draggable="false" />
+      <img
+        :id="HtmlId"
+        :class="HtmlClass"
+        :style="htmlStyle"
+        :src="src"
+        alt="image component"
+        :height="Height"
+        :width="Width"
+        draggable="false"
+      />
     </template>
     <template v-else>
       <LoadingOverlay :fixed="false" :modalStyle="LoadingStyle" />
@@ -30,6 +39,12 @@ export default class ImageComponent extends Vue {
   @Prop() private htmlClass!: string | null;
   @Prop() private htmlId!: string | null;
   @Prop() private original!: boolean;
+
+  @Prop() private htmlStyle!: string | null;
+  @Prop() private htmlParentStyle!: string | null;
+
+  @Prop({ default: false }) private loadGift?: boolean;
+  @Prop({ default: false }) private loadPost?: boolean;
 
   private imageLoaded: boolean = false;
   private src: string = "";
@@ -86,32 +101,61 @@ export default class ImageComponent extends Vue {
   loadImage(fetchForce?: boolean) {
     const data = this.ImageData;
 
-    if (!this.IsOriginal) {
-      if (!fetchForce && data.length > 0) {
-        this.src = data;
-        this.onImageLoaded();
-      } else {
-        ImagesApi.getImage(this.Id).then((imageData) => {
-          store.commit("setImageData", { imageData: imageData, id: this.Id });
-          this.src = imageData;
-          this.onImageLoaded();
-        });
-      }
+    if (!fetchForce && data.length > 0) {
+      this.src = data;
+      this.onImageLoaded();
     } else {
-      if (!fetchForce && data.length > 0) {
-        this.src = data;
-        this.onImageLoaded();
+      if (!this.IsOriginal && !this.loadGift && !this.loadPost) {
+        this._loadImage(fetchForce);
+      } else if (this.loadGift) {
+        this._loadGiftImage(fetchForce);
+      } else if (this.loadPost) {
+        this._loadPostImage(fetchForce);
       } else {
-        ImagesApi.getOriginalImage(this.Id).then((imageData) => {
-          store.commit("setImageData", {
-            imageData: imageData,
-            id: this.Id + ":original",
-          });
-          this.src = imageData;
-          this.onImageLoaded();
-        });
+        this._loadOriginalImage(fetchForce);
       }
     }
+  }
+
+  _loadImage(fetchForce?: boolean) {
+    ImagesApi.getImage(this.Id).then((imageData) => {
+      store.commit("setImageData", { imageData: imageData, id: this.Id });
+      this.src = imageData;
+      this.onImageLoaded();
+    });
+  }
+
+  _loadOriginalImage(fetchForce?: boolean) {
+    ImagesApi.getOriginalImage(this.Id).then((imageData) => {
+      store.commit("setImageData", {
+        imageData: imageData,
+        id: this.Id + ":original",
+      });
+      this.src = imageData;
+      this.onImageLoaded();
+    });
+  }
+
+  _loadGiftImage(fetchForce?: boolean) {
+    ImagesApi.getGiftImage(this.Id).then((imageData) => {
+      store.commit("setImageData", {
+        imageData: imageData,
+        id: this.Id + ":gift",
+      });
+      this.src = imageData;
+      this.onImageLoaded();
+    });
+  }
+
+  _loadPostImage(fetchForce?: boolean) {
+    ImagesApi.getPostImage(this.Id).then((imageData) => {
+      store.commit("setImageData", {
+        imageData: imageData,
+        id: this.Id + ":post",
+      });
+      this.src = imageData;
+      this.onImageLoaded();
+    });
   }
 
   onImageLoaded() {

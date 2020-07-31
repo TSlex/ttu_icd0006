@@ -130,10 +130,10 @@ export abstract class ImagesApi extends LanguageService {
       case 200:
       case 201:
       case 204:
-        return response.data;
+        return this._imageEncode(response.data);
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return this._imageEncode(response.data);
     }
   }
 
@@ -145,10 +145,10 @@ export abstract class ImagesApi extends LanguageService {
       case 200:
       case 201:
       case 204:
-        return response.data;
+        return this._imageEncode(response.data);
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return this._imageEncode(response.data);
     }
   }
 
@@ -160,10 +160,10 @@ export abstract class ImagesApi extends LanguageService {
       case 200:
       case 201:
       case 204:
-        return response.data;
+        return this._imageEncode(response.data);
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return this._imageEncode(response.data);
     }
   }
 }
