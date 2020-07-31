@@ -27,12 +27,11 @@ import store from "@/store";
 import { ImagesApi } from "@/services/ImagesApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
 
-import LoadingComponent from "../../components/shared/LoadingComponent.vue";
-
 import ImageForm from "@/components/image/ImageForm.vue";
 import ImageMiniature from "@/components/image/ImageMiniature.vue";
 
 import EventBus from "@/events/EventBus";
+import IdentityStore from "../../components/shared/IdentityStore.vue";
 
 @Component({
   components: {
@@ -40,7 +39,7 @@ import EventBus from "@/events/EventBus";
     ImageMiniature,
   },
 })
-export default class PostsEditImage extends LoadingComponent {
+export default class PostsEditImage extends IdentityStore {
   @Prop()
   private id!: string;
 

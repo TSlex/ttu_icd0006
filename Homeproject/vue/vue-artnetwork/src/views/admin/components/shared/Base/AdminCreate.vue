@@ -28,5 +28,5 @@ import ErrorsList from "@/components/shared/ErrorsList.vue";
     ErrorsList,
   },
 })
-export default class AdminCreate extends ErrorListContainer {}
+export default class AdminCreate<TModel> extends ErrorListContainer {}
 </script>

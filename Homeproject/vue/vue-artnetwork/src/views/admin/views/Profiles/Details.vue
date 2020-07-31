@@ -89,9 +89,7 @@ import AdminDetails from "@/views/admin/components/shared/base/AdminDetails.vue"
     ImageComponent,
   },
 })
-export default class ProfilesDetailsA extends AdminDetails {
-  private model: IProfileAdminDTO | null = null;
-
+export default class ProfilesDetailsA extends AdminDetails<IProfileAdminDTO> {
   resolveGender(gender: ProfileGender) {
     return resolveGender(gender);
   }

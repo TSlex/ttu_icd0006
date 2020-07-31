@@ -18,9 +18,11 @@ import MetaDetailsSection from "../MetaDetailsSection.vue";
     MetaDetailsSection,
   },
 })
-export default class AdminDetails extends IdentityStore {
+export default class AdminDetails<TModel> extends IdentityStore {
   @Prop() protected id!: string;
+
   protected modelName?: string;
+  protected model: TModel | null = null;
 
   onEdit() {
     if (this.modelName && this.id) {

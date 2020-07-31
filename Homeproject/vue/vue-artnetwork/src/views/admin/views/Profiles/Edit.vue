@@ -137,11 +137,10 @@ import { createEmptyGuid } from "@/helpers/guid";
     ImageMiniature,
   },
 })
-export default class ProfilesEditA extends AdminEdit {
+export default class ProfilesEditA extends AdminEdit<IProfileAdminDTO> {
   @Prop()
   private id!: string;
 
-  private model: IProfileAdminDTO | null = null;
   private imageModel: IImageDTO | null = null;
 
   get Id() {
@@ -200,8 +199,8 @@ export default class ProfilesEditA extends AdminEdit {
   }
 
   onSubmit() {
-    if (this.Id && this.model) {
-      ProfilesApi.edit(this.Id, this.model, this.jwt).then(
+    store.dispatch("putImageModel", { ...this.imageModel }).then(() => {
+      ProfilesApi.edit(this.Id, this.model!, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;
@@ -210,7 +209,7 @@ export default class ProfilesEditA extends AdminEdit {
           }
         }
       );
-    }
+    });
   }
 }
 </script>

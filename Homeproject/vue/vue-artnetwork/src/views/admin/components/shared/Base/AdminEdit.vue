@@ -12,5 +12,7 @@ import AdminEditWrapper from "../wrappers/AdminEdit.vue";
     AdminEditWrapper,
   },
 })
-export default class AdminEdit extends ErrorListContainer {}
+export default class AdminEdit<TModel> extends ErrorListContainer {
+  protected model: TModel | null = null;
+}
 </script>
