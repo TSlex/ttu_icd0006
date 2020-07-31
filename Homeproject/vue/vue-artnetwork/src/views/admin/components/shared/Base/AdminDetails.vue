@@ -1,16 +1,3 @@
-<template>
-  <div>
-    <h1>{{$t('views.common.DetailsHeader')}}</h1>
-
-    <div>
-      <h4>Rank</h4>
-      <hr />
-      <slot></slot>
-    </div>
-    <DetailsControls v-on:onEdit="$emit('onEdit')" />
-  </div>
-</template>
-
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import IdentityStore from "@/components/shared/IdentityStore.vue";
@@ -20,18 +7,30 @@ import router from "@/router";
 
 import DetailsControls from "@/views/admin/components/shared/DetailsControls.vue";
 
+import AdminDetailsWrapper from "../wrappers/AdminDetails.vue";
+
+import MetaDetailsSection from "../MetaDetailsSection.vue";
+
 @Component({
   components: {
-    DetailsControls
-  }
+    DetailsControls,
+    AdminDetailsWrapper,
+    MetaDetailsSection,
+  },
 })
 export default class AdminDetails extends IdentityStore {
-  protected id?: string;
+  @Prop() protected id!: string;
   protected modelName?: string;
 
   onEdit() {
     if (this.modelName && this.id) {
       router.push({ name: `${this.modelName}sEditA`, params: { id: this.id } });
+    }
+  }
+
+  onBackToList() {
+    if (this.modelName) {
+      router.push({ name: `${this.modelName}sIndexA` });
     }
   }
 }

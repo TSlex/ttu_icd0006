@@ -1,39 +1,28 @@
-<template>
-  <div>
-    <h1>{{$t('views.common.IndexHeader')}}</h1>
-    <p v-if="CanCreate">
-      <a href="#" @click="$emit('onCreate')" @click.prevent>Create New</a>
-    </p>
-    <slot></slot>
-  </div>
-</template>
-
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import IdentityStore from "@/components/shared/IdentityStore.vue";
+
+import AdminIndexWrapper from "../wrappers/AdminIndex.vue";
 
 import { RanksApi } from "@/services/RanksApi";
 
 import router from "@/router";
 
 @Component({
-  components: {}
+  components: {
+    AdminIndexWrapper,
+  },
 })
-export default class AdminIndex extends IdentityStore {
+export default class AdminIndex<TModel> extends IdentityStore {
   protected modelName?: string;
-
-  @Prop() protected canCreate?: boolean;
-
-  get CanCreate() {
-    return this.canCreate ?? true;
-  }
+  protected model: TModel[] = [];
 
   get ModelName() {
     return this.modelName ?? null;
   }
 
   onCreate() {
-    if (this.ModelName && this.CanCreate) {
+    if (this.ModelName) {
       router.push({ name: `${this.ModelName}sCreateA` });
     }
   }

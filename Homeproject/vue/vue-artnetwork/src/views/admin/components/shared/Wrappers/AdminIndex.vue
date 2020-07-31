@@ -1,9 +1,10 @@
 <template>
   <div>
-    <h1>{{$t('views.common.IndexHeader')}}</h1>
-    <p v-if="CanCreate">
-      <a href="#" @click="$emit('onCreate')" @click.prevent>Create New</a>
+    <h1 class="text-center">{{$t('views.common.IndexHeader')}}</h1>
+    <p class="text-center" style="font-size: 30px" v-if="canCreate">
+      <a class="far fa-plus-square" href="#" @click="$emit('onCreate')" @click.prevent></a>
     </p>
+    <br v-else />
     <slot></slot>
   </div>
 </template>

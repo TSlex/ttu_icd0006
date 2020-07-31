@@ -1,12 +1,12 @@
 <template>
   <div>
     <h1>{{$t('views.common.DetailsHeader')}}</h1>
-
+    <hr />
     <div>
-      <hr />
       <slot></slot>
     </div>
-    <DetailsControls v-on:onEdit="$emit('onEdit')" />
+    <hr />
+    <DetailsControls v-on:onEdit="$emit('onEdit')" v-on:onBackToList="$emit('onBackToList')" />
   </div>
 </template>
 
