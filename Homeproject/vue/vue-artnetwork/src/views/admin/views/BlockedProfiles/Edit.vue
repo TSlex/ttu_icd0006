@@ -1,15 +1,13 @@
 <template>
   <AdminEditWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
     <div class="form-group">
-      <label class="control-label" for="ProfileId">Профиль (ID)</label>
-      <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="model.profileId" />
-      <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
+      <label class="control-label" for="profileId">{{$t('bll.blockedprofiles.ProfileId')}}</label>
+      <input class="form-control" type="text" required id="profileId" name="profileId" v-model="model.profileId" />
     </div>
     <i class="fa fa-arrow-down"></i>
     <div class="form-group">
-      <label class="control-label" for="BProfileId">Заброкированный профиль (ID)</label>
-      <input class="form-control" type="text" required id="BProfileId" name="BProfileId" v-model="model.bProfileId" />
-      <span class="text-danger field-validation-valid" data-valmsg-for="BProfileId" data-valmsg-replace="true"></span>
+      <label class="control-label" for="bProfileId">{{$t('bll.blockedprofiles.BProfileId')}}</label>
+      <input class="form-control" type="text" required id="bProfileId" name="bProfileId" v-model="model.bProfileId" />
     </div>
   </AdminEditWrapper>
   <LoadingOverlay v-else />
@@ -31,8 +29,13 @@ export default class BPEditA extends AdminEdit<IBlockedProfileAdminDTO> {
     BlockedProfilesApi.details(this.Id, this.jwt).then(
       (response: IBlockedProfileAdminDTO) => {
         this.model = response;
+        this.isLoaded = true;
       }
     );
+  }
+
+  created() {
+    this.modelName = "BlockedProfile";
   }
 
   onSubmit() {

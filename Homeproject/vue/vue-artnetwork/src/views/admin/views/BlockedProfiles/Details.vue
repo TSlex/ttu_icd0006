@@ -1,27 +1,22 @@
 <template>
   <AdminDetailsWrapper v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
     <dl class="row">
-      <dt class="col-sm-2">(ID)</dt>
+      <dt class="col-sm-2">{{$t('bll.common.Id')}}</dt>
       <dd class="col-sm-10">{{model.id}}</dd>
 
-      <dt class="col-sm-2">Profile (ID)</dt>
+      <dt class="col-sm-2">{{$t('bll.blockedprofiles.ProfileId')}}</dt>
       <dd class="col-sm-10">{{model.profileId}}</dd>
 
-      <dt class="col-sm-2">BProfile (ID)</dt>
+      <dt class="col-sm-2">{{$t('bll.blockedprofiles.BProfileId')}}</dt>
       <dd class="col-sm-10">{{model.bProfileId}}</dd>
-
-      <dt class="col-sm-2">CreatedBy</dt>
-      <dd class="col-sm-10">{{model.createdBy}}</dd>
-
-      <dt class="col-sm-2">CreatedAt</dt>
-      <dd class="col-sm-10">{{model.createdAt}}</dd>
-
-      <dt class="col-sm-2">ChangedBy</dt>
-      <dd class="col-sm-10">{{model.changedBy}}</dd>
-
-      <dt class="col-sm-2">ChangedAt</dt>
-      <dd class="col-sm-10">{{model.changedAt}}</dd>
     </dl>
+    <hr />
+    <dl class="row">
+      <dt class="col-sm-2">{{$t('bll.blockedprofiles.Reason')}}</dt>
+      <dd class="col-sm-10"></dd>
+    </dl>
+    <hr />
+    <MetaDetailsSection :model="model" :deletable="false" />
   </AdminDetailsWrapper>
 </template>
 

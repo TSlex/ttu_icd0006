@@ -3,9 +3,9 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Профиль (ID)</th>
+          <th>{{$t('bll.blockedprofiles.ProfileId')}}</th>
           <th></th>
-          <th>Заброкированный профиль (ID)</th>
+          <th>{{$t('bll.blockedprofiles.BProfileId')}}</th>
           <th></th>
         </tr>
       </thead>

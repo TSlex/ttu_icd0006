@@ -22,6 +22,6 @@ import BaseWrapper from "./BaseWrapper.vue";
   components: {},
 })
 export default class AdminIndexWrapper extends BaseWrapper {
-  @Prop({ default: true }) canCreate?: boolean;
+  @Prop({ default: false }) canCreate?: boolean;
 }
 </script>

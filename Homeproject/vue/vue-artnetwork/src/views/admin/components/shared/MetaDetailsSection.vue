@@ -12,12 +12,13 @@
 
     <dt class="col-sm-2">{{$t('bll.common.ChangedAt')}}</dt>
     <dd class="col-sm-10">{{model.changedAt}}</dd>
+    <template v-if="deletable">
+      <dt class="col-sm-2">{{$t('bll.common.DeletedBy')}}</dt>
+      <dd class="col-sm-10">{{model.deletedBy}}</dd>
 
-    <dt class="col-sm-2">{{$t('bll.common.DeletedBy')}}</dt>
-    <dd class="col-sm-10">{{model.deletedBy}}</dd>
-
-    <dt class="col-sm-2">{{$t('bll.common.DeletedAt')}}</dt>
-    <dd class="col-sm-10">{{model.deletedAt}}</dd>
+      <dt class="col-sm-2">{{$t('bll.common.DeletedAt')}}</dt>
+      <dd class="col-sm-10">{{model.deletedAt}}</dd>
+    </template>
   </dl>
 </template>
 
@@ -29,5 +30,6 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 })
 export default class MetaDetailsSection extends Vue {
   @Prop() model!: any;
+  @Prop({ default: true }) deletable?: boolean;
 }
 </script>
