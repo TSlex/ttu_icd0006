@@ -4,54 +4,12 @@
       <ImageComponent height="inherit" width="inherit" :original="true" htmlId="render_image" htmlClass="card-img" />
     </div>
     <div class="col-md-4">
-      <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-        <ul>
-          <li v-for="(error, index) in errors" :key="index">{{error}}</li>
-        </ul>
-      </div>
-
       <div class="custom-file mt-2">
         <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile" @change="loadFile" />
         <label class="custom-file-label" style="overflow: hidden">{{fileName}}</label>
       </div>
 
-      <div class="form-group mt-3">
-        <label class="control-label" for="profileId">Profile (ID)</label>
-        <input class="form-control" type="text" required id="profileId" name="profileId" v-model="Model.profileId" />
-        <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-      </div>
-
-      <div class="form-group">
-        <label class="control-label" for="postTitle">Title</label>
-        <input class="form-control" type="text" required id="postTitle" name="postTitle" v-model="Model.postTitle" />
-        <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-      </div>
-
-      <div class="form-group">
-        <label class="control-label" for="prpostDescriptionice">Description</label>
-        <input
-          class="form-control"
-          type="text"
-          required
-          id="postDescription"
-          name="postDescription"
-          v-model="Model.postDescription"
-        />
-        <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-      </div>
-
-      <div class="form-group">
-        <label class="control-label" for="postPublicationDateTime">DateTime</label>
-        <input
-          class="form-control"
-          type="text"
-          required
-          id="postPublicationDateTime"
-          name="postPublicationDateTime"
-          v-model="Model.postPublicationDateTime"
-        />
-        <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-      </div>
+      <CreateEdit />
 
       <template v-if="imageModel">
         <input type="hidden" id="HeightPx" name="HeightPx" v-model.lazy="imageModel.heightPx" />
@@ -86,6 +44,7 @@ import CreateEdit from "./CreateEdit.vue";
 @Component({
   components: {
     ImageComponent,
+    CreateEdit,
   },
 })
 export default class PostsCreateA extends AdminCreate {

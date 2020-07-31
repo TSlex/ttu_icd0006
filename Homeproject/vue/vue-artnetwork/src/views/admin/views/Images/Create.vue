@@ -4,29 +4,19 @@
       <ImageComponent height="inherit" width="inherit" :original="true" htmlId="render_image" htmlClass="card-img" />
     </div>
     <div class="col-md-4">
-      <div class="form-group">
-        <label class="control-label" for="ImageFor">For (ID)</label>
-        <input class="form-control" type="text" id="ImageFor" maxlength="300" name="ImageFor" v-model="Model.imageFor" />
-      </div>
-
-      <div class="form-group">
-        <label class="control-label" for="ImageType">Type</label>
-        <select class="form-control" type="text" id="ImageType" maxlength="300" name="ImageType" v-model="Model.imageType">
-          <option v-for="(key, value) in ImageType" :key="key" :value="Number(value)">{{key}}</option>
-        </select>
-      </div>
+      <CreateEdit />
 
       <div class="custom-file">
         <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile" @change="loadFile" />
         <label class="custom-file-label" style="overflow: hidden">{{fileName}}</label>
       </div>
 
-      <input type="hidden" id="HeightPx" name="HeightPx" v-model.lazy="Model.heightPx" />
-      <input type="hidden" id="WidthPx" name="WidthPx" v-model.lazy="Model.widthPx" />
-      <input type="hidden" id="PaddingTop" name="PaddingTop" v-model.lazy="Model.paddingTop" />
-      <input type="hidden" id="PaddingRight" name="PaddingRight" v-model.lazy="Model.paddingRight" />
-      <input type="hidden" id="PaddingBottom" name="PaddingBottom" v-model.lazy="Model.paddingBottom" />
-      <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="Model.paddingLeft" />
+      <input type="hidden" id="HeightPx" name="HeightPx" v-model.lazy="model.heightPx" />
+      <input type="hidden" id="WidthPx" name="WidthPx" v-model.lazy="model.widthPx" />
+      <input type="hidden" id="PaddingTop" name="PaddingTop" v-model.lazy="model.paddingTop" />
+      <input type="hidden" id="PaddingRight" name="PaddingRight" v-model.lazy="model.paddingRight" />
+      <input type="hidden" id="PaddingBottom" name="PaddingBottom" v-model.lazy="model.paddingBottom" />
+      <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="model.paddingLeft" />
     </div>
   </AdminCreateWrapper>
 </template>
@@ -51,10 +41,11 @@ import CreateEdit from "./CreateEdit.vue";
 @Component({
   components: {
     ImageComponent,
+    CreateEdit,
   },
 })
 export default class ImagesCreateA extends AdminCreate {
-  private Model: IImageAdminDTO = {
+  private model: IImageAdminDTO = {
     id: "",
     masterId: null,
     createdBy: null,
@@ -79,7 +70,7 @@ export default class ImagesCreateA extends AdminCreate {
   private isImageLoaded: boolean = false;
 
   get fileName() {
-    return this.Model?.imageFile?.name;
+    return this.model?.imageFile?.name;
   }
 
   get ImageType() {
@@ -89,9 +80,9 @@ export default class ImagesCreateA extends AdminCreate {
   }
 
   loadFile(event: Event) {
-    this.Model!.imageFile = (event.target as HTMLInputElement)?.files![0];
+    this.model!.imageFile = (event.target as HTMLInputElement)?.files![0];
 
-    if (this.Model && this.Model.imageFile) {
+    if (this.model && this.model.imageFile) {
       let reader = new FileReader();
 
       reader.onload = function (e) {
@@ -116,7 +107,7 @@ export default class ImagesCreateA extends AdminCreate {
         $("#image-miniature").css("visibility", "visible");
       };
 
-      reader.readAsDataURL(this.Model.imageFile);
+      reader.readAsDataURL(this.model.imageFile);
       this.isImageLoaded = true;
     }
   }
@@ -137,11 +128,11 @@ export default class ImagesCreateA extends AdminCreate {
 
   submit() {
     if (
-      this.Model.commentValue.length > 0 &&
-      this.Model.profileId.length > 0 &&
-      this.Model.postId.length > 0
+      this.model.commentValue.length > 0 &&
+      this.model.profileId.length > 0 &&
+      this.model.postId.length > 0
     ) {
-      ImagesApi.create(this.Model, this.jwt).then((response: ResponseDTO) => {
+      ImagesApi.create(this.model, this.jwt).then((response: ResponseDTO) => {
         if (response?.errors) {
           this.errors = response.errors;
         } else {

@@ -1,14 +1,6 @@
 <template>
   <AdminCreateWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
-    <div class="form-group mt-3">
-      <label class="control-label" for="profileId">Profile (ID)</label>
-      <input class="form-control" type="text" required id="profileId" name="profileId" v-model="Model.profileId" />
-    </div>
-
-    <div class="form-group mt-3">
-      <label class="control-label" for="rankId">Rank (ID)</label>
-      <input class="form-control" type="text" required id="rankId" name="rankId" v-model="Model.rankId" />
-    </div>
+    <CreateEdit />
   </AdminCreateWrapper>
 </template>
 
@@ -31,6 +23,7 @@ import CreateEdit from "./CreateEdit.vue";
 @Component({
   components: {
     ImageComponent,
+    CreateEdit,
   },
 })
 export default class ProfileRanksCreateA extends AdminCreate {

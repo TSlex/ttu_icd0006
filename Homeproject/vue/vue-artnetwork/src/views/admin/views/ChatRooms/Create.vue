@@ -1,9 +1,6 @@
 <template>
   <AdminCreateWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
-    <div class="form-group">
-      <label class="control-label" for="RoomTitle">Title</label>
-      <input class="form-control" type="text" id="RoomTitle" maxlength="100" name="RoomTitle" v-model="Model.chatRoomTitle" />
-    </div>
+    <CreateEdit />
   </AdminCreateWrapper>
 </template>
 
@@ -20,7 +17,11 @@ import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
 
 import CreateEdit from "./CreateEdit.vue";
 
-@Component
+@Component({
+  components: {
+    CreateEdit,
+  },
+})
 export default class ChatRoomsCreateA extends AdminCreate {
   private Model: IChatRoomAdminDTO = {
     id: "",

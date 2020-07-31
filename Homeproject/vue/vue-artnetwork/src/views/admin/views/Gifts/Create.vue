@@ -9,20 +9,7 @@
         <label class="custom-file-label" style="overflow: hidden">{{fileName}}</label>
       </div>
 
-      <div class="form-group mt-3">
-        <label class="control-label" for="giftCode">Code</label>
-        <input class="form-control" type="text" required id="giftCode" name="giftCode" v-model="Model.giftCode" />
-      </div>
-
-      <div class="form-group">
-        <label class="control-label" for="giftName">Title</label>
-        <input class="form-control" type="text" required id="giftName" name="giftName" v-model="Model.giftName" />
-      </div>
-
-      <div class="form-group">
-        <label class="control-label" for="price">Price</label>
-        <input class="form-control" type="text" required id="price" name="price" v-model="Model.price" />
-      </div>
+      <CreateEdit />
 
       <template v-if="imageModel">
         <input type="hidden" id="HeightPx" name="HeightPx" v-model.lazy="imageModel.heightPx" />
@@ -57,6 +44,7 @@ import CreateEdit from "./CreateEdit.vue";
 @Component({
   components: {
     ImageComponent,
+    CreateEdit,
   },
 })
 export default class GiftsCreateA extends AdminCreate {

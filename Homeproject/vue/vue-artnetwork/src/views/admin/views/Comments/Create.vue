@@ -1,30 +1,6 @@
 <template>
   <AdminCreateWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
-    <div class="form-group">
-      <label class="control-label" for="ProfileId">Профиль (ID)</label>
-      <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="Model.profileId" />
-    </div>
-
-    <div class="form-group">
-      <label class="control-label" for="PostId">Пост (ID)</label>
-      <input class="form-control" type="text" required id="PostId" name="PostId" v-model="Model.postId" />
-    </div>
-
-    <div class="form-group">
-      <label class="control-label" for="CommentValue">Комментарий</label>
-      <textarea rows="5" class="form-control" id="CommentValue" maxlength="300" name="CommentValue" v-model="Model.commentValue"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label class="control-label" for="CommentDateTime">Дата комментария</label>
-      <input
-        class="form-control valid"
-        type="datetime-local"
-        id="CommentDateTime"
-        name="CommentDateTime"
-        v-model="Model.commentDateTime"
-      />
-    </div>
+    <CreateEdit />
   </AdminCreateWrapper>
 </template>
 
@@ -41,7 +17,11 @@ import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
 
 import CreateEdit from "./CreateEdit.vue";
 
-@Component
+@Component({
+  components: {
+    CreateEdit,
+  },
+})
 export default class CommentsCreateA extends AdminCreate {
   private Model: ICommentAdminDTO = {
     id: "",
