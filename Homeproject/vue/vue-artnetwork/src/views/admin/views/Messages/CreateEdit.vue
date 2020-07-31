@@ -1,24 +1,24 @@
 <template>
   <div>
     <div class="form-group">
-      <label class="control-label" for="ProfileId">Профиль (ID)</label>
-      <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="model.profileId" />
+      <label class="control-label" for="profileId">{{$t('bll.messages.ProfileId')}}</label>
+      <input class="form-control" type="text" id="profileId" name="profileId" v-model="model.profileId" />
     </div>
     <div class="form-group">
-      <label class="control-label" for="ChatRoomId">Комната (ID)</label>
-      <input class="form-control" type="text" required id="ChatRoomId" name="ChatRoomId" v-model="model.chatRoomId" />
+      <label class="control-label" for="chatRoomId">{{$t('bll.messages.ChatRoomId')}}</label>
+      <input class="form-control" type="text" id="chatRoomId" name="chatRoomId" v-model="model.chatRoomId" />
     </div>
     <div class="form-group">
-      <label class="control-label" for="MessageValue">Сообщение</label>
-      <input class="form-control" type="text" id="MessageValue" maxlength="3000" name="MessageValue" v-model="model.messageValue" />
+      <label class="control-label" for="messageValue">{{$t('bll.messages.MessageValue')}}</label>
+      <input class="form-control" type="text" id="messageValue" maxlength="3000" name="messageValue" v-model="model.messageValue" />
     </div>
     <div class="form-group">
-      <label class="control-label" for="MessageDateTime">Дата сообщения</label>
+      <label class="control-label" for="messageDateTime">{{$t('bll.messages.MessageDateTime')}}</label>
       <input
         class="form-control"
         type="datetime-local"
-        id="MessageDateTime"
-        name="MessageDateTime"
+        id="messageDateTime"
+        name="messageDateTime"
         v-model="model.messageDateTime"
       />
     </div>

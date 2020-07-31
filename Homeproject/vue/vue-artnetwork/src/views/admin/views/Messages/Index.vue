@@ -3,10 +3,9 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Profile (ID)</th>
-          <th>Room (ID)</th>
-          <th>Value</th>
-          <th>IS DELETED?</th>
+          <th>{{$t('bll.messages.ProfileId')}}</th>
+          <th>{{$t('bll.messages.ChatRoomId')}}</th>
+          <th>{{$t('bll.messages.MessageValue')}}</th>
           <th></th>
         </tr>
       </thead>
@@ -15,7 +14,6 @@
           <td>{{item.profileId}}</td>
           <td>{{item.chatRoomId}}</td>
           <td>{{item.messageValue}}</td>
-          <td>{{item.deletedAt != null}}</td>
           <td>
             <IndexControls
               :model="item"
