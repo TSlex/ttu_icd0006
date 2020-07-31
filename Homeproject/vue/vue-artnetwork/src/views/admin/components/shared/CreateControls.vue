@@ -1,7 +1,7 @@
 <template>
   <div class="form-group">
-    <button class="btn btn-success mr-1" @click="$emit('onSubmit')">Create</button>
-    <button class="btn btn-secondary" @click="$router.go(-1)">Back to List</button>
+    <button class="btn btn-success mr-1" @click="$emit('onSubmit')">{{$t('views.common.CreateButton')}}</button>
+    <button class="btn btn-secondary" @click="$emit('onBackToList')">{{$t('views.common.BackToListButton')}}</button>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class CreateControls extends Vue {}
 </script>

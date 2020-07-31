@@ -3,11 +3,9 @@
     <h1 class="text-center">{{$t('views.common.EditHeader')}}</h1>
     <hr />
     <div class="row text-center align-items-center d-flex flex-column">
-      <div class="col-md-4">
-        <ErrorsList :errors="errors"></ErrorsList>
-        <slot></slot>
-        <EditControls v-on:onSubmit="$emit('onSubmit')" />
-      </div>
+      <ErrorsList :errors="errors"></ErrorsList>
+      <slot></slot>
+      <EditControls v-on:onSubmit="$emit('onSubmit')" />
     </div>
   </div>
 </template>
@@ -26,6 +24,6 @@ import ErrorsList from "@/components/shared/ErrorsList.vue";
   },
 })
 export default class AdminEditWrapper extends Vue {
-  @Prop({ default: [] }) errors!: string[];
+  @Prop({ default: () => [] }) errors!: string[];
 }
 </script>

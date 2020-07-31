@@ -9,7 +9,7 @@ import IdentityStore from "./IdentityStore.vue";
     LoadingOverlay,
   },
 })
-export default class LoadingComponent extends IdentityStore {
+export default class LoadingComponent extends Vue {
   protected isLoaded = false;
 }
 </script>

@@ -13,6 +13,10 @@ export const resolveGender = (gender: ProfileGender) => {
       break;
     case ProfileGender.Own:
       tr = getOwnTranslaton()
+      break;
+    case ProfileGender.Undefined:
+      tr = getUndefinedTranslaton()
+      break;
   }
 
   return tr;
@@ -48,5 +52,16 @@ const getOwnTranslaton = () => {
       return "Oma";
     default:
       return "Own";
+  }
+}
+
+const getUndefinedTranslaton = () => {
+  switch (store.getters.getCurrentCulture) {
+    case "ru-RU":
+      return "Не определен";
+    case "et-EE":
+      return "Defineerimata";
+    default:
+      return "Undefined";
   }
 }

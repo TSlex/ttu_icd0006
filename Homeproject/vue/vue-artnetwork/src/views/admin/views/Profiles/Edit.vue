@@ -1,193 +1,185 @@
 <template>
-  <div v-if="Id && Model">
-    <h1 class="text-center">{{$t('views.common.EditHeader')}}</h1>
-    <hr />
-    <div class="row text-center align-items-center d-flex flex-column">
-      <div class="card" style="width: 20rem; user-select: none; position: relative;" id="image-miniature">
-        <ImageComponent
-          v-if="imageModel"
-          :id="imageModel.id"
-          :key="imageModel.id"
-          height="inherit"
-          width="inherit"
-          :original="true"
-          htmlId="render_image"
-          htmlClass="card-img"
-        />
+  <div v-if="isLoaded">
+    <AdminEditWrapper v-on:onSubmit="onSubmit">
+      <ImageMiniature :initialId="imageModel.id" :htmlStyle="'width: 20rem !important'" ref="miniature" />
+
+      <div class="col-md-4 mt-4">
+        <ImageForm :imageModel="imageModel" v-on:onLoadFile="loadImage" />
+
+        <div class="mt-3">
+          <div class="form-group">
+            <label class="control-label" for="userName">{{$t('bll.profiles.UserName')}}</label>
+            <input class="form-control" type="text" id="userName" name="userName" v-model="model.userName" />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="email">{{$t('bll.profiles.Email')}}</label>
+            <input class="form-control" type="text" id="email" name="email" v-model="model.email" />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="phoneNumber">{{$t('bll.profiles.PhoneNumber')}}</label>
+            <input class="form-control" type="text" id="phoneNumber" name="phoneNumber" v-model="model.phoneNumber" />
+          </div>
+          <div class="form-group">
+            <label class="control-label text-danger" for="password">{{$t('bll.profiles.Password')}}</label>
+            <input class="form-control" type="text" id="password" name="password" v-model="model.password" />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="profileFullName">{{$t('bll.profiles.ProfileFullName')}}</label>
+            <input class="form-control" type="text" id="profileFullName" name="profileFullName" v-model="model.profileFullName" />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="profileWorkPlace">{{$t('bll.profiles.ProfileWorkPlace')}}</label>
+            <input
+              class="form-control"
+              type="text"
+              id="profileWorkPlace"
+              name="profileWorkPlace"
+              v-model="model.profileWorkPlace"
+            />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="experience">{{$t('bll.profiles.Experience')}}</label>
+            <input class="form-control" type="number" id="experience" name="experience" v-model.number="model.experience" />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="profileAbout">{{$t('bll.profiles.ProfileAbout')}}</label>
+            <input class="form-control" type="text" id="profileAbout" name="profileAbout" v-model="model.profileAbout" />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="profileGender">{{$t('bll.profiles.ProfileGender')}}</label>
+            <select
+              type="number"
+              class="form-control"
+              id="profileGender"
+              name="profileGender"
+              v-model.number="model.profileGender"
+            >
+              <option value="0">{{resolveGender(ProfileGender.Male)}}</option>
+              <option value="1">{{resolveGender(ProfileGender.Female)}}</option>
+              <option value="127">{{resolveGender(ProfileGender.Own)}}</option>
+              <option value="128">{{resolveGender(ProfileGender.Undefined)}}</option>
+            </select>
+          </div>
+          <div v-if="Number(model.profileGender) === 127" class="form-group">
+            <label class="control-label" for="profileGenderOwn">{{$t('bll.profiles.ProfileGenderOwn')}}</label>
+            <input
+              class="form-control"
+              type="text"
+              id="profileGenderOwn"
+              name="profileGenderOwn"
+              v-model="model.profileGenderOwn"
+            />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="profileStatus">{{$t('bll.profiles.ProfileStatus')}}</label>
+            <input class="form-control" type="text" id="profileStatus" name="profileStatus" v-model="model.profileStatus" />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="phoneNumberConfirmed">{{$t('bll.profiles.PhoneNumberConfirmed')}}</label>
+            <input
+              type="checkbox"
+              class="form-control"
+              id="phoneNumberConfirmed"
+              name="phoneNumberConfirmed"
+              v-model="model.phoneNumberConfirmed"
+            />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="lockoutEnabled">{{$t('bll.profiles.LockoutEnabled')}}</label>
+            <input type="checkbox" class="form-control" id="emailConfirmed" name="emailConfirmed" v-model="model.lockoutEnabled" />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="emailConfirmed">{{$t('bll.profiles.EmailConfirmed')}}</label>
+            <input type="checkbox" class="form-control" id="emailConfirmed" name="emailConfirmed" v-model="model.emailConfirmed" />
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="accessFailedCount">{{$t('bll.profiles.AccessFailedCount')}}</label>
+            <input
+              class="form-control"
+              type="number"
+              id="accessFailedCount"
+              name="accessFailedCount"
+              v-model.number="model.accessFailedCount"
+            />
+          </div>
+        </div>
       </div>
-      <div class="col-md-4">
-        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-          <ul>
-            <li v-for="(error, index) in errors" :key="index">{{error}}</li>
-          </ul>
-        </div>
-
-        <div class="custom-file mt-2">
-          <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile" @change="loadFile" />
-          <label class="custom-file-label" style="overflow: hidden">{{fileName}}</label>
-        </div>
-
-        <div class="form-group mt-3">
-          <label class="control-label" for="profileId">Profile (ID)</label>
-          <input class="form-control" type="text" required id="profileId" name="profileId" v-model="Model.profileId" />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="postTitle">Title</label>
-          <input class="form-control" type="text" required id="postTitle" name="postTitle" v-model="Model.postTitle" />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="prpostDescriptionice">Description</label>
-          <input
-            class="form-control"
-            type="text"
-            required
-            id="postDescription"
-            name="postDescription"
-            v-model="Model.postDescription"
-          />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="postPublicationDateTime">DateTime</label>
-          <input
-            class="form-control"
-            type="text"
-            required
-            id="postPublicationDateTime"
-            name="postPublicationDateTime"
-            v-model="Model.postPublicationDateTime"
-          />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-        </div>
-
-        <template v-if="imageModel">
-          <input type="hidden" id="HeightPx" name="HeightPx" v-model.lazy="imageModel.heightPx" />
-          <input type="hidden" id="WidthPx" name="WidthPx" v-model.lazy="imageModel.widthPx" />
-          <input type="hidden" id="PaddingTop" name="PaddingTop" v-model.lazy="imageModel.paddingTop" />
-          <input type="hidden" id="PaddingRight" name="PaddingRight" v-model.lazy="imageModel.paddingRight" />
-          <input type="hidden" id="PaddingBottom" name="PaddingBottom" v-model.lazy="imageModel.paddingBottom" />
-          <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="imageModel.paddingLeft" />
-        </template>
-
-        <div class="form-group">
-          <button class="btn btn-success mr-1" @click="submit">Save</button>
-          <button class="btn btn-secondary" @click="$router.go(-1)">Back to List</button>
-        </div>
-      </div>
-    </div>
+    </AdminEditWrapper>
   </div>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import { ImageType } from "@/types/Enums/ImageType";
+
 import store from "@/store";
-import $ from "jquery";
 
 import { IProfileAdminDTO } from "@/types/IProfileDTO";
 import { IImageDTO } from "@/types/IImageDTO";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
-import ImageComponent from "@/components/Image.vue";
-
 import { ProfilesApi } from "@/services/admin/ProfilesApi";
 import { ImagesApi } from "@/services/ImagesApi";
-import { ImageType } from "@/types/Enums/ImageType";
+import AdminEdit from "../../components/shared/base/AdminEdit.vue";
+
+import { resolveGender } from "@/translations/gender";
+import { ProfileGender } from "@/types/Enums/ProfileGender";
+
+import ImageForm from "@/components/image/ImageForm.vue";
+import ImageMiniature from "@/components/image/ImageMiniature.vue";
+
+import { createEmptyGuid } from "@/helpers/guid";
 
 @Component({
   components: {
-    ImageComponent,
+    ImageForm,
+    ImageMiniature,
   },
 })
-export default class ProfilesEditA extends Vue {
+export default class ProfilesEditA extends AdminEdit {
   @Prop()
   private id!: string;
 
-  private Model: IProfileAdminDTO | null = null;
+  private model: IProfileAdminDTO | null = null;
   private imageModel: IImageDTO | null = null;
-
-  private errors: string[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
 
   get Id() {
     return this.id;
   }
 
-  get fileName() {
-    return this.imageModel?.imageFile?.name;
-  }
-
   get isImageExist() {
-    return this.Model?.postImageId != null;
+    return this.model?.profileAvatarId != null;
   }
 
-  loadFile(event: Event) {
-    this.imageModel!.imageFile = (event.target as HTMLInputElement)?.files![0];
-
-    if (this.imageModel && this.imageModel.imageFile) {
-      let reader = new FileReader();
-
-      reader.onload = function (e) {
-        let image = new Image();
-        image.src = e.target!.result as string;
-
-        console.log("reader");
-
-        image.onload = function () {
-          console.log("image");
-
-          let height = $("#HeightPx");
-          let width = $("#WidthPx");
-          height.attr("value", image.height);
-          width.attr("value", image.width);
-
-          height.get()[0].dispatchEvent(new Event("change"));
-          width.get()[0].dispatchEvent(new Event("change"));
-        };
-
-        $("#render_image").attr("src", image.src);
-        $("#image-miniature").css("visibility", "visible");
-      };
-
-      reader.readAsDataURL(this.imageModel.imageFile);
-    }
+  get ProfileGender() {
+    return ProfileGender;
   }
 
-  updated() {
-    let image = document.getElementById("render_image");
-    let exist = document.getElementById("image_miniature_script");
-
-    if (exist) {
-      // exist.remove();
-    } else if (image) {
-      let script = document.createElement("script");
-      script.setAttribute("id", "image_miniature_script");
-      script.setAttribute("src", "image-miniature.js");
-      script.setAttribute("defer", "defer");
-      document.body.appendChild(script);
-    }
+  loadImage(file: File) {
+    this.imageModel!.imageFile = file;
+    (this.$refs.miniature as ImageMiniature).loadImage(file);
   }
 
-  beforeMount() {
+  resolveGender(gender: ProfileGender) {
+    return resolveGender(gender);
+  }
+
+  created() {
     ProfilesApi.details(this.Id, this.jwt).then(
       (response: IProfileAdminDTO) => {
-        this.Model = response;
+        this.model = response;
+
         if (this.isImageExist) {
-          ImagesApi.getImageModel(response.postImageId!, this.jwt).then(
+          ImagesApi.getImageModel(response.profileAvatarId!, this.jwt).then(
             (response: IImageDTO) => {
               this.imageModel = response;
+              this.isLoaded = true;
             }
           );
         } else {
           this.imageModel = {
-            id: "",
+            id: createEmptyGuid(),
             imageUrl: "",
             originalImageUrl: "",
             heightPx: 0,
@@ -200,14 +192,16 @@ export default class ProfilesEditA extends Vue {
             imageType: ImageType.ProfileAvatar,
             imageFor: "",
           };
+
+          this.isLoaded = true;
         }
       }
     );
   }
 
-  submit() {
-    if (this.Id && this.Model) {
-      ProfilesApi.edit(this.Id, this.Model, this.jwt).then(
+  onSubmit() {
+    if (this.Id && this.model) {
+      ProfilesApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;
@@ -216,14 +210,6 @@ export default class ProfilesEditA extends Vue {
           }
         }
       );
-    }
-  }
-
-  beforeDestroy() {
-    let exist = document.getElementById("image_miniature_script");
-
-    if (exist) {
-      exist.remove();
     }
   }
 }

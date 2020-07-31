@@ -46,7 +46,7 @@
           </select>
         </div>
 
-        <div v-if="profileDataModel.profileGender === 127" class="form-group" id="profile-gender-own">
+        <div v-if="Number(profileDataModel.profileGender) === 127" class="form-group" id="profile-gender-own">
           <label for="Input_ProfileGenderOwn">Own variant</label>
           <input class="form-control" type="text" id="GenderOwn" v-model="profileDataModel.profileGenderOwn" />
           <span class="text-danger field-validation-valid" data-valmsg-for="Input.ProfileGenderOwn" data-valmsg-replace="true"></span>
@@ -65,11 +65,13 @@ import store from "@/store";
 import { IProfileDataDTO } from "../../../types/Identity/IProfileDataDTO";
 import { AccountApi } from "../../../services/AccountApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
+import { ProfileGender } from "@/types/Enums/ProfileGender";
+import { resolveGender } from "@/translations/gender";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class ManageProfileData extends Vue {
   private profileDataModel: IProfileDataDTO | null = null;
@@ -80,6 +82,10 @@ export default class ManageProfileData extends Vue {
 
   get jwt() {
     return store.getters.getJwt;
+  }
+
+  resolveGender(gender: ProfileGender) {
+    return resolveGender(gender);
   }
 
   beforeMount() {
