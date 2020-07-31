@@ -70,6 +70,7 @@ export default class BPIndexA extends AdminIndex<IBlockedProfileAdminDTO> {
     BlockedProfilesApi.index(this.jwt).then(
       (response: IBlockedProfileAdminDTO[]) => {
         this.model = response;
+        this.isLoaded = true;
       }
     );
   }

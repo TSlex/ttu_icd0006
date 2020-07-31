@@ -92,6 +92,7 @@ export default class CMIndexA extends AdminIndex<IChatMemberAdminDTO> {
   mounted() {
     ChatMembersApi.index(this.jwt).then((response: IChatMemberAdminDTO[]) => {
       this.model = response;
+      this.isLoaded = true;
     });
   }
 }

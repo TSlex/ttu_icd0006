@@ -86,6 +86,7 @@ export default class ChatRolesIndexA extends AdminIndex<IChatRoleAdminDTO> {
   mounted() {
     ChatRolesApi.index(this.jwt).then((response: IChatRoleAdminDTO[]) => {
       this.model = response;
+      this.isLoaded = true;
     });
   }
 }

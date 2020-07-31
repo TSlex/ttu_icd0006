@@ -65,6 +65,7 @@ export default class FavoritesIndexA extends AdminIndex<IFavoriteAdminDTO> {
   mounted() {
     FavoritesApi.index(this.jwt).then((response: IFavoriteAdminDTO[]) => {
       this.model = response;
+      this.isLoaded = true;
     });
   }
 }

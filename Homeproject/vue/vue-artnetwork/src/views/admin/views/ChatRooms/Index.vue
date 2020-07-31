@@ -83,6 +83,7 @@ export default class ChatRoomsIndexA extends AdminIndex<IChatRoomAdminDTO> {
   mounted() {
     ChatRoomsApi.index(this.jwt).then((response: IChatRoomAdminDTO[]) => {
       this.model = response;
+      this.isLoaded = true;
     });
   }
 }

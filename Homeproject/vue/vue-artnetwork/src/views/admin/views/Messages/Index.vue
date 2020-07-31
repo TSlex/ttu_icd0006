@@ -85,6 +85,7 @@ export default class MessagesIndexA extends AdminIndex<IMessageAdminDTO> {
   mounted() {
     MessagesApi.index(this.jwt).then((response: IMessageAdminDTO[]) => {
       this.model = response;
+      this.isLoaded = true;
     });
   }
 }

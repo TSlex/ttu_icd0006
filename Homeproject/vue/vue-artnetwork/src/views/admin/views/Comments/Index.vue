@@ -87,6 +87,7 @@ export default class CommentsIndexA extends AdminIndex<ICommentAdminDTO> {
   mounted() {
     CommentsApi.index(this.jwt).then((response: ICommentAdminDTO[]) => {
       this.model = response;
+      this.isLoaded = true;
     });
   }
 }

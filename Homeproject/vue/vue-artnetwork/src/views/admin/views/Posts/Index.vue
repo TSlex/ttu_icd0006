@@ -83,6 +83,7 @@ export default class PostsIndexA extends AdminIndex<IPostAdminDTO> {
   mounted() {
     PostsApi.index(this.jwt).then((response: IPostAdminDTO[]) => {
       this.model = response;
+      this.isLoaded = true;
     });
   }
 }

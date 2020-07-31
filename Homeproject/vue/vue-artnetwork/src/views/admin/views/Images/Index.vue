@@ -87,6 +87,7 @@ export default class ImagesIndexA extends AdminIndex<IImageAdminDTO> {
   mounted() {
     ImagesApi.index(this.jwt).then((response: IImageAdminDTO[]) => {
       this.model = response;
+      this.isLoaded = true;
     });
   }
 }

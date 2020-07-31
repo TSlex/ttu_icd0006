@@ -87,6 +87,7 @@ export default class GiftsIndexA extends AdminIndex<IGiftAdminDTO> {
   mounted() {
     GiftsApi.index(this.jwt).then((response: IGiftAdminDTO[]) => {
       this.model = response;
+      this.isLoaded = true;
     });
   }
 }

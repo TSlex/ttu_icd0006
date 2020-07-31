@@ -67,6 +67,7 @@ export default class FollowersIndexA extends AdminIndex<IFollowerAdminDTO> {
   mounted() {
     FollowersApi.index(this.jwt).then((response: IFollowerAdminDTO[]) => {
       this.model = response;
+      this.isLoaded = true;
     });
   }
 }

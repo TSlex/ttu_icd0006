@@ -79,6 +79,7 @@ export default class ProfileRanksIndexA extends AdminIndex<
   mounted() {
     ProfileRanksApi.index(this.jwt).then((response: IProfileRankAdminDTO[]) => {
       this.model = response;
+      this.isLoaded = true;
     });
   }
 
