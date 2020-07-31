@@ -24,6 +24,10 @@ export default class AdminDetails<TModel> extends IdentityStore {
   protected modelName?: string;
   protected model: TModel | null = null;
 
+  get Id() {
+    return this.id;
+  }
+
   onEdit() {
     if (this.modelName && this.id) {
       router.push({ name: `${this.modelName}sEditA`, params: { id: this.id } });

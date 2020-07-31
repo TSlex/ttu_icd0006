@@ -66,12 +66,6 @@ import EventBus from "@/events/EventBus";
   },
 })
 export default class RanksDetailsA extends AdminDetails<IRankAdminDTO> {
-  @Prop() protected id!: string;
-
-  get Id() {
-    return this.id;
-  }
-
   get Icons() {
     return this.model?.rankIcon?.split(";").filter((s) => s !== "") ?? [];
   }

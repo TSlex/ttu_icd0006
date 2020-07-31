@@ -1,70 +1,68 @@
 <template>
-  <div v-if="id && model">
-    <AdminDetailsWrapper v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
-      <div>
-        <dl class="row">
-          <dt class="col-sm-2">{{$t('bll.common.Id')}}</dt>
-          <dd class="col-sm-10">{{model.id}}</dd>
+  <AdminDetailsWrapper v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
+    <div>
+      <dl class="row">
+        <dt class="col-sm-2">{{$t('bll.common.Id')}}</dt>
+        <dd class="col-sm-10">{{model.id}}</dd>
 
-          <dt class="col-sm-2">{{$t('bll.profiles.UserName')}}</dt>
-          <dd class="col-sm-10">{{model.userName}}</dd>
+        <dt class="col-sm-2">{{$t('bll.profiles.UserName')}}</dt>
+        <dd class="col-sm-10">{{model.userName}}</dd>
 
-          <dt class="col-sm-2">{{$t('bll.profiles.Email')}}</dt>
-          <dd class="col-sm-10">{{model.email}}</dd>
-        </dl>
-        <hr />
-        <dl class="row">
-          <dt class="col-sm-2">{{$t('bll.profiles.PhoneNumber')}}</dt>
-          <dd class="col-sm-10">{{model.phoneNumber}}</dd>
+        <dt class="col-sm-2">{{$t('bll.profiles.Email')}}</dt>
+        <dd class="col-sm-10">{{model.email}}</dd>
+      </dl>
+      <hr />
+      <dl class="row">
+        <dt class="col-sm-2">{{$t('bll.profiles.PhoneNumber')}}</dt>
+        <dd class="col-sm-10">{{model.phoneNumber}}</dd>
 
-          <dt class="col-sm-2">{{$t('bll.profiles.ProfileFullName')}}</dt>
-          <dd class="col-sm-10">{{model.profileFullName}}</dd>
+        <dt class="col-sm-2">{{$t('bll.profiles.ProfileFullName')}}</dt>
+        <dd class="col-sm-10">{{model.profileFullName}}</dd>
 
-          <dt class="col-sm-2">{{$t('bll.profiles.ProfileAbout')}}</dt>
-          <dd class="col-sm-10">{{model.profileAbout}}</dd>
+        <dt class="col-sm-2">{{$t('bll.profiles.ProfileAbout')}}</dt>
+        <dd class="col-sm-10">{{model.profileAbout}}</dd>
 
-          <dt class="col-sm-2">{{$t('bll.profiles.ProfileWorkPlace')}}</dt>
-          <dd class="col-sm-10">{{model.profileWorkPlace}}</dd>
+        <dt class="col-sm-2">{{$t('bll.profiles.ProfileWorkPlace')}}</dt>
+        <dd class="col-sm-10">{{model.profileWorkPlace}}</dd>
 
-          <dt class="col-sm-2">{{$t('bll.profiles.ProfileGender')}}</dt>
-          <dd class="col-sm-10">{{resolveGender(model.profileGender)}}</dd>
+        <dt class="col-sm-2">{{$t('bll.profiles.ProfileGender')}}</dt>
+        <dd class="col-sm-10">{{resolveGender(model.profileGender)}}</dd>
 
-          <dt class="col-sm-2">{{$t('bll.profiles.ProfileGenderOwn')}}</dt>
-          <dd class="col-sm-10">{{model.profileGenderOwn}}</dd>
+        <dt class="col-sm-2">{{$t('bll.profiles.ProfileGenderOwn')}}</dt>
+        <dd class="col-sm-10">{{model.profileGenderOwn}}</dd>
 
-          <dt class="col-sm-2">{{$t('bll.profiles.ProfileStatus')}}</dt>
-          <dd class="col-sm-10">{{model.profileStatus}}</dd>
-        </dl>
-        <hr />
-        <dl class="row">
-          <dt class="col-sm-2">{{$t('bll.profiles.Experience')}}</dt>
-          <dd class="col-sm-10">{{model.experience}}</dd>
-        </dl>
-        <hr />
-        <dl class="row">
-          <dt class="col-sm-5">{{$t('bll.profiles.PhoneNumberConfirmed')}}</dt>
-          <dd class="col-sm-5">
-            <input class="check-box" disabled="disabled" type="checkbox" :checked="model.phoneNumberConfirmed" />
-          </dd>
+        <dt class="col-sm-2">{{$t('bll.profiles.ProfileStatus')}}</dt>
+        <dd class="col-sm-10">{{model.profileStatus}}</dd>
+      </dl>
+      <hr />
+      <dl class="row">
+        <dt class="col-sm-2">{{$t('bll.profiles.Experience')}}</dt>
+        <dd class="col-sm-10">{{model.experience}}</dd>
+      </dl>
+      <hr />
+      <dl class="row">
+        <dt class="col-sm-5">{{$t('bll.profiles.PhoneNumberConfirmed')}}</dt>
+        <dd class="col-sm-5">
+          <input class="check-box" disabled="disabled" type="checkbox" :checked="model.phoneNumberConfirmed" />
+        </dd>
 
-          <dt class="col-sm-5">{{$t('bll.profiles.LockoutEnabled')}}</dt>
-          <dd class="col-sm-5">
-            <input class="check-box" disabled="disabled" type="checkbox" :checked="model.lockoutEnabled" />
-          </dd>
+        <dt class="col-sm-5">{{$t('bll.profiles.LockoutEnabled')}}</dt>
+        <dd class="col-sm-5">
+          <input class="check-box" disabled="disabled" type="checkbox" :checked="model.lockoutEnabled" />
+        </dd>
 
-          <dt class="col-sm-5">{{$t('bll.profiles.EmailConfirmed')}}</dt>
-          <dd class="col-sm-5">
-            <input class="check-box" disabled="disabled" type="checkbox" :checked="model.emailConfirmed" />
-          </dd>
+        <dt class="col-sm-5">{{$t('bll.profiles.EmailConfirmed')}}</dt>
+        <dd class="col-sm-5">
+          <input class="check-box" disabled="disabled" type="checkbox" :checked="model.emailConfirmed" />
+        </dd>
 
-          <dt class="col-sm-5">{{$t('bll.profiles.AccessFailedCount')}}</dt>
-          <dd class="col-sm-5">{{model.accessFailedCount}}</dd>
-        </dl>
-        <hr />
-        <MetaDetailsSection :model="model" />
-      </div>
-    </AdminDetailsWrapper>
-  </div>
+        <dt class="col-sm-5">{{$t('bll.profiles.AccessFailedCount')}}</dt>
+        <dd class="col-sm-5">{{model.accessFailedCount}}</dd>
+      </dl>
+      <hr />
+      <MetaDetailsSection :model="model" />
+    </div>
+  </AdminDetailsWrapper>
 </template>
 
 <script lang="ts">

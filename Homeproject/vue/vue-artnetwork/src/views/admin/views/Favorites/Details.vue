@@ -1,47 +1,37 @@
 <template>
-  <div v-if="Id && model">
-    <h1>Details</h1>
+  <AdminDetailsWrapper v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
+    <dl class="row">
+      <dt class="col-sm-2">(ID)</dt>
+      <dd class="col-sm-10">{{model.id}}</dd>
 
-    <div>
-      <h4>Favorite</h4>
-      <hr />
-      <dl class="row">
-        <dt class="col-sm-2">(ID)</dt>
-        <dd class="col-sm-10">{{model.id}}</dd>
+      <dt class="col-sm-2">Profile (ID)</dt>
+      <dd class="col-sm-10">{{model.profileId}}</dd>
 
-        <dt class="col-sm-2">Profile (ID)</dt>
-        <dd class="col-sm-10">{{model.profileId}}</dd>
+      <dt class="col-sm-2">Post (ID)</dt>
+      <dd class="col-sm-10">{{model.postId}}</dd>
 
-        <dt class="col-sm-2">Post (ID)</dt>
-        <dd class="col-sm-10">{{model.postId}}</dd>
+      <dt class="col-sm-2">Post Title</dt>
+      <dd class="col-sm-10">{{model.postTitle}}</dd>
 
-        <dt class="col-sm-2">Post Title</dt>
-        <dd class="col-sm-10">{{model.postTitle}}</dd>
+      <dt class="col-sm-2">Post Description)</dt>
+      <dd class="col-sm-10">{{model.postDescription}}</dd>
 
-        <dt class="col-sm-2">Post Description)</dt>
-        <dd class="col-sm-10">{{model.postDescription}}</dd>
+      <dt class="col-sm-2">Post Image (ID)</dt>
+      <dd class="col-sm-10">{{model.postImageId}}</dd>
 
-        <dt class="col-sm-2">Post Image (ID)</dt>
-        <dd class="col-sm-10">{{model.postImageId}}</dd>
+      <dt class="col-sm-2">CreatedBy</dt>
+      <dd class="col-sm-10">{{model.createdBy}}</dd>
 
-        <dt class="col-sm-2">CreatedBy</dt>
-        <dd class="col-sm-10">{{model.createdBy}}</dd>
+      <dt class="col-sm-2">CreatedAt</dt>
+      <dd class="col-sm-10">{{model.createdAt}}</dd>
 
-        <dt class="col-sm-2">CreatedAt</dt>
-        <dd class="col-sm-10">{{model.createdAt}}</dd>
+      <dt class="col-sm-2">ChangedBy</dt>
+      <dd class="col-sm-10">{{model.changedBy}}</dd>
 
-        <dt class="col-sm-2">ChangedBy</dt>
-        <dd class="col-sm-10">{{model.changedBy}}</dd>
-
-        <dt class="col-sm-2">ChangedAt</dt>
-        <dd class="col-sm-10">{{model.changedAt}}</dd>
-      </dl>
-    </div>
-    <div>
-      <button class="btn btn-primary mr-1" @click="onEdit(model.id)">Edit</button>
-      <button class="btn btn-primary" @click="$router.go(-1)">Back to List</button>
-    </div>
-  </div>
+      <dt class="col-sm-2">ChangedAt</dt>
+      <dd class="col-sm-10">{{model.changedAt}}</dd>
+    </dl>
+  </AdminDetailsWrapper>
 </template>
 
 <script lang="ts">
@@ -53,28 +43,10 @@ import { IFavoriteAdminDTO } from "@/types/IFavoriteDTO";
 
 import { FavoritesApi } from "@/services/admin/FavoritesApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
+import AdminDetails from "../../components/shared/base/AdminDetails.vue";
 
 @Component
-export default class FavoritesDetailsA extends Vue {
-  @Prop()
-  private id!: string;
-
-  private model: IFavoriteAdminDTO | null = null;
-
-  private errors: string[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  get Id() {
-    return this.id;
-  }
-
-  onEdit(id: string) {
-    router.push({ name: "FavoritesEditA", params: { id } });
-  }
-
+export default class FavoritesDetailsA extends AdminDetails<IFavoriteAdminDTO> {
   mounted() {
     FavoritesApi.details(this.Id, this.jwt).then(
       (response: IFavoriteAdminDTO) => {
