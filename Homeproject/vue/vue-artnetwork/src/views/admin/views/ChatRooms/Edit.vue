@@ -1,35 +1,12 @@
 <template>
-  <div v-if="Id && model">
-    <h1 class="text-center">Edit</h1>
-    <hr />
-    <div class="row text-center justify-content-center">
-      <div class="col-md-4">
-        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-          <ul>
-            <li v-for="(error, index) in errors" :key="index">{{error}}</li>
-          </ul>
-        </div>
-        <div class="form-group">
-          <label class="control-label" for="RoomTitle">Title</label>
-          <input
-            class="form-control"
-            type="text"
-            required
-            id="RoomTitle"
-            maxlength="100"
-            name="RoomTitle"
-            v-model="model.chatRoomTitle"
-          />
-          <span class="text-danger field-validation-valid"></span>
-        </div>
-
-        <div class="form-group">
-          <button class="btn btn-success mr-1" @click="submit">Save</button>
-          <button class="btn btn-secondary" @click="$router.go(-1)">Back to List</button>
-        </div>
-      </div>
+  <AdminEditWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
+    <div class="form-group">
+      <label class="control-label" for="RoomTitle">Title</label>
+      <input class="form-control" type="text" id="RoomTitle" maxlength="100" name="RoomTitle" v-model="model.chatRoomTitle" />
+      <span class="text-danger field-validation-valid"></span>
     </div>
-  </div>
+  </AdminEditWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -40,24 +17,10 @@ import { IChatRoomAdminDTO } from "@/types/IChatRoomDTO";
 
 import { ChatRoomsApi } from "@/services/admin/ChatRoomsApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
+import AdminEdit from "../../components/shared/base/AdminEdit.vue";
 
 @Component
-export default class ChatRoomsEditA extends Vue {
-  @Prop()
-  private id!: string;
-
-  private model: IChatRoomAdminDTO | null = null;
-
-  private errors: string[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  get Id() {
-    return this.id;
-  }
-
+export default class ChatRoomsEditA extends AdminEdit<IChatRoomAdminDTO> {
   mounted() {
     ChatRoomsApi.details(this.Id, this.jwt).then(
       (response: IChatRoomAdminDTO) => {

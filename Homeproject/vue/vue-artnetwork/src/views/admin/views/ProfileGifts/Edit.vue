@@ -29,15 +29,6 @@ import CreateEdit from "./CreateEdit.vue";
   },
 })
 export default class ProfileGiftsEditA extends AdminEdit<IProfileGiftAdminDTO> {
-  @Prop()
-  private id!: string;
-
-  private imageModel: IImageDTO | null = null;
-
-  get Id() {
-    return this.id;
-  }
-
   onSubmit() {
     ProfileGiftsApi.edit(this.Id, this.model!, this.jwt).then(
       (response: ResponseDTO) => {

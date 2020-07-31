@@ -1,87 +1,79 @@
 <template>
-  <div v-if="Id && model">
-    <h1 class="text-center">Edit</h1>
-    <hr />
-    <div class="row text-center align-items-center d-flex flex-column">
-      <div class="card" style="width: 40rem; user-select: none; position: relative;" id="image-miniature">
-        <ImageComponent
-          :id="id"
-          :key="id"
-          height="inherit"
-          width="inherit"
-          :original="true"
-          htmlId="render_image"
-          htmlClass="card-img"
-        />
-      </div>
-      <div class="col-md-4">
-        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-          <ul>
-            <li v-for="(error, index) in errors" :key="index">{{error}}</li>
-          </ul>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="ImageUrl">URL</label>
-          <input class="form-control" type="text" required id="ImageUrl" maxlength="300" name="ImageUrl" v-model="model.imageUrl" />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ImageUrl" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="ImageUrlO">URL original</label>
-          <input
-            class="form-control"
-            type="text"
-            required
-            id="ImageUrlO"
-            maxlength="300"
-            name="ImageUrlO"
-            v-model="model.originalImageUrl"
-          />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ImageUrl" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="ImageFor">For (ID)</label>
-          <input class="form-control" type="text" id="ImageFor" maxlength="300" name="ImageFor" v-model="model.imageFor" />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ImageFor" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="ImageType">Type</label>
-          <select
-            class="form-control"
-            type="text"
-            required
-            id="ImageType"
-            maxlength="300"
-            name="ImageType"
-            v-model="model.imageType"
-          >
-            <option v-for="(key, value) in ImageType" :key="key" :value="Number(value)">{{key}}</option>
-          </select>
-          <span class="text-danger field-validation-valid" data-valmsg-for="ImageUrl" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="custom-file">
-          <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile" @change="loadFile" />
-          <label class="custom-file-label" style="overflow: hidden">{{fileName}}</label>
-        </div>
-
-        <input type="hidden" id="HeightPx" name="HeightPx" v-model.lazy="model.heightPx" />
-        <input type="hidden" id="WidthPx" name="WidthPx" v-model.lazy="model.widthPx" />
-        <input type="hidden" id="PaddingTop" name="PaddingTop" v-model.lazy="model.paddingTop" />
-        <input type="hidden" id="PaddingRight" name="PaddingRight" v-model.lazy="model.paddingRight" />
-        <input type="hidden" id="PaddingBottom" name="PaddingBottom" v-model.lazy="model.paddingBottom" />
-        <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="model.paddingLeft" />
-
-        <div class="form-group mt-2">
-          <button class="btn btn-success mr-1" @click="submit">Save</button>
-          <button class="btn btn-secondary" @click="$router.go(-1)">Back to List</button>
-        </div>
-      </div>
+  <AdminEditWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
+    <div class="card" style="width: 40rem; user-select: none; position: relative;" id="image-miniature">
+      <ImageComponent
+        :id="id"
+        :key="id"
+        height="inherit"
+        width="inherit"
+        :original="true"
+        htmlId="render_image"
+        htmlClass="card-img"
+      />
     </div>
-  </div>
+    <div class="col-md-4">
+      <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
+        <ul>
+          <li v-for="(error, index) in errors" :key="index">{{error}}</li>
+        </ul>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="ImageUrl">URL</label>
+        <input class="form-control" type="text" required id="ImageUrl" maxlength="300" name="ImageUrl" v-model="model.imageUrl" />
+        <span class="text-danger field-validation-valid" data-valmsg-for="ImageUrl" data-valmsg-replace="true"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="ImageUrlO">URL original</label>
+        <input
+          class="form-control"
+          type="text"
+          required
+          id="ImageUrlO"
+          maxlength="300"
+          name="ImageUrlO"
+          v-model="model.originalImageUrl"
+        />
+        <span class="text-danger field-validation-valid" data-valmsg-for="ImageUrl" data-valmsg-replace="true"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="ImageFor">For (ID)</label>
+        <input class="form-control" type="text" id="ImageFor" maxlength="300" name="ImageFor" v-model="model.imageFor" />
+        <span class="text-danger field-validation-valid" data-valmsg-for="ImageFor" data-valmsg-replace="true"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="ImageType">Type</label>
+        <select
+          class="form-control"
+          type="text"
+          required
+          id="ImageType"
+          maxlength="300"
+          name="ImageType"
+          v-model="model.imageType"
+        >
+          <option v-for="(key, value) in ImageType" :key="key" :value="Number(value)">{{key}}</option>
+        </select>
+        <span class="text-danger field-validation-valid" data-valmsg-for="ImageUrl" data-valmsg-replace="true"></span>
+      </div>
+
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile" @change="loadFile" />
+        <label class="custom-file-label" style="overflow: hidden">{{fileName}}</label>
+      </div>
+
+      <input type="hidden" id="HeightPx" name="HeightPx" v-model.lazy="model.heightPx" />
+      <input type="hidden" id="WidthPx" name="WidthPx" v-model.lazy="model.widthPx" />
+      <input type="hidden" id="PaddingTop" name="PaddingTop" v-model.lazy="model.paddingTop" />
+      <input type="hidden" id="PaddingRight" name="PaddingRight" v-model.lazy="model.paddingRight" />
+      <input type="hidden" id="PaddingBottom" name="PaddingBottom" v-model.lazy="model.paddingBottom" />
+      <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="model.paddingLeft" />
+    </div>
+  </AdminEditWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -96,28 +88,14 @@ import ImageComponent from "@/components/Image.vue";
 import { ImagesApi } from "@/services/admin/ImagesApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 import { ImageType } from "@/types/Enums/ImageType";
+import AdminEdit from "../../components/shared/base/AdminEdit.vue";
 
 @Component({
   components: {
     ImageComponent,
   },
 })
-export default class ImagesEditA extends Vue {
-  @Prop()
-  private id!: string;
-
-  private model: IImageAdminDTO | null = null;
-
-  private errors: string[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  get Id() {
-    return this.id;
-  }
-
+export default class ImagesEditA extends AdminEdit<IImageAdminDTO> {
   get ImageType() {
     return Object.keys(ImageType).filter((key) => {
       return isNaN(Number(key));

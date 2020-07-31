@@ -6,7 +6,6 @@
           <th>Профиль (ID)</th>
           <th></th>
           <th>Заброкированный профиль (ID)</th>
-          <th>IS DELETED?</th>
           <th></th>
         </tr>
       </thead>
@@ -15,7 +14,6 @@
           <td>{{item.profileId}}</td>
           <td>-&gt;</td>
           <td>{{item.bProfileId}}</td>
-          <td>{{item.deletedAt != null}}</td>
           <td>
             <IndexControls
               :model="item"

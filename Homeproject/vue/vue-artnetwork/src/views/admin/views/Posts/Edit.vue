@@ -1,86 +1,78 @@
 <template>
-  <div v-if="Id && model">
-    <h1 class="text-center">Edit</h1>
-    <hr />
-    <div class="row text-center align-items-center d-flex flex-column">
-      <div class="card" style="width: 20rem; user-select: none; position: relative;" id="image-miniature">
-        <ImageComponent
-          v-if="imageModel"
-          :id="imageModel.id"
-          :key="imageModel.id"
-          height="inherit"
-          width="inherit"
-          :original="true"
-          htmlId="render_image"
-          htmlClass="card-img"
-        />
-      </div>
-      <div class="col-md-4">
-        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-          <ul>
-            <li v-for="(error, index) in errors" :key="index">{{error}}</li>
-          </ul>
-        </div>
-
-        <div class="custom-file mt-2">
-          <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile" @change="loadFile" />
-          <label class="custom-file-label" style="overflow: hidden">{{fileName}}</label>
-        </div>
-
-        <div class="form-group mt-3">
-          <label class="control-label" for="profileId">Profile (ID)</label>
-          <input class="form-control" type="text" required id="profileId" name="profileId" v-model="model.profileId" />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="postTitle">Title</label>
-          <input class="form-control" type="text" required id="postTitle" name="postTitle" v-model="model.postTitle" />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="prpostDescriptionice">Description</label>
-          <input
-            class="form-control"
-            type="text"
-            required
-            id="postDescription"
-            name="postDescription"
-            v-model="model.postDescription"
-          />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="postPublicationDateTime">DateTime</label>
-          <input
-            class="form-control"
-            type="text"
-            required
-            id="postPublicationDateTime"
-            name="postPublicationDateTime"
-            v-model="model.postPublicationDateTime"
-          />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-        </div>
-
-        <template v-if="imageModel">
-          <input type="hidden" id="HeightPx" name="HeightPx" v-model.lazy="imageModel.heightPx" />
-          <input type="hidden" id="WidthPx" name="WidthPx" v-model.lazy="imageModel.widthPx" />
-          <input type="hidden" id="PaddingTop" name="PaddingTop" v-model.lazy="imageModel.paddingTop" />
-          <input type="hidden" id="PaddingRight" name="PaddingRight" v-model.lazy="imageModel.paddingRight" />
-          <input type="hidden" id="PaddingBottom" name="PaddingBottom" v-model.lazy="imageModel.paddingBottom" />
-          <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="imageModel.paddingLeft" />
-        </template>
-
-        <div class="form-group">
-          <button class="btn btn-success mr-1" @click="submit">Save</button>
-          <button class="btn btn-secondary" @click="$router.go(-1)">Back to List</button>
-        </div>
-      </div>
+  <AdminEditWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
+    <div class="card" style="width: 20rem; user-select: none; position: relative;" id="image-miniature">
+      <ImageComponent
+        v-if="imageModel"
+        :id="imageModel.id"
+        :key="imageModel.id"
+        height="inherit"
+        width="inherit"
+        :original="true"
+        htmlId="render_image"
+        htmlClass="card-img"
+      />
     </div>
-  </div>
+    <div class="col-md-4">
+      <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
+        <ul>
+          <li v-for="(error, index) in errors" :key="index">{{error}}</li>
+        </ul>
+      </div>
+
+      <div class="custom-file mt-2">
+        <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile" @change="loadFile" />
+        <label class="custom-file-label" style="overflow: hidden">{{fileName}}</label>
+      </div>
+
+      <div class="form-group mt-3">
+        <label class="control-label" for="profileId">Profile (ID)</label>
+        <input class="form-control" type="text" required id="profileId" name="profileId" v-model="model.profileId" />
+        <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="postTitle">Title</label>
+        <input class="form-control" type="text" required id="postTitle" name="postTitle" v-model="model.postTitle" />
+        <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="prpostDescriptionice">Description</label>
+        <input
+          class="form-control"
+          type="text"
+          required
+          id="postDescription"
+          name="postDescription"
+          v-model="model.postDescription"
+        />
+        <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="postPublicationDateTime">DateTime</label>
+        <input
+          class="form-control"
+          type="text"
+          required
+          id="postPublicationDateTime"
+          name="postPublicationDateTime"
+          v-model="model.postPublicationDateTime"
+        />
+        <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
+      </div>
+
+      <template v-if="imageModel">
+        <input type="hidden" id="HeightPx" name="HeightPx" v-model.lazy="imageModel.heightPx" />
+        <input type="hidden" id="WidthPx" name="WidthPx" v-model.lazy="imageModel.widthPx" />
+        <input type="hidden" id="PaddingTop" name="PaddingTop" v-model.lazy="imageModel.paddingTop" />
+        <input type="hidden" id="PaddingRight" name="PaddingRight" v-model.lazy="imageModel.paddingRight" />
+        <input type="hidden" id="PaddingBottom" name="PaddingBottom" v-model.lazy="imageModel.paddingBottom" />
+        <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="imageModel.paddingLeft" />
+      </template>
+    </div>
+  </AdminEditWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -97,28 +89,15 @@ import ImageComponent from "@/components/Image.vue";
 import { PostsApi } from "@/services/admin/PostsApi";
 import { ImagesApi } from "@/services/ImagesApi";
 import { ImageType } from "@/types/Enums/ImageType";
+import AdminEdit from "../../components/shared/base/AdminEdit.vue";
 
 @Component({
   components: {
     ImageComponent,
   },
 })
-export default class PostsEditA extends Vue {
-  @Prop()
-  private id!: string;
-
-  private model: IPostAdminDTO | null = null;
+export default class PostsEditA extends AdminEdit<IPostAdminDTO> {
   private imageModel: IImageDTO | null = null;
-
-  private errors: string[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  get Id() {
-    return this.id;
-  }
 
   get fileName() {
     return this.imageModel?.imageFile?.name;

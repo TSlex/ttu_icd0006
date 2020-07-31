@@ -1,58 +1,42 @@
 <template>
-  <div v-if="Id && model">
-    <h1 class="text-center">Edit</h1>
-    <hr />
-    <div class="row text-center justify-content-center">
-      <div class="col-md-4">
-        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-          <ul>
-            <li v-for="(error, index) in errors" :key="index">{{error}}</li>
-          </ul>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label" for="ProfileId">Профиль (ID)</label>
-          <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="model.profileId" />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
-        </div>
-        <div class="form-group">
-          <label class="control-label" for="ChatRoomId">Комната (ID)</label>
-          <input class="form-control" type="text" required id="ChatRoomId" name="ChatRoomId" v-model="model.chatRoomId" />
-          <span class="text-danger field-validation-valid" data-valmsg-for="ChatRoomId" data-valmsg-replace="true"></span>
-        </div>
-        <div class="form-group">
-          <label class="control-label" for="MessageValue">Сообщение</label>
-          <input
-            class="form-control"
-            type="text"
-            required
-            id="MessageValue"
-            maxlength="3000"
-            name="MessageValue"
-            v-model="model.messageValue"
-          />
-          <span class="text-danger field-validation-valid" data-valmsg-for="MessageValue" data-valmsg-replace="true"></span>
-        </div>
-        <div class="form-group">
-          <label class="control-label" for="MessageDateTime">Дата сообщения</label>
-          <input
-            class="form-control"
-            type="datetime-local"
-            required
-            id="MessageDateTime"
-            name="MessageDateTime"
-            v-model="model.messageDateTime"
-          />
-          <span class="text-danger field-validation-valid" data-valmsg-for="MessageDateTime" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-          <button class="btn btn-success mr-1" @click="submit">Save</button>
-          <button class="btn btn-secondary" @click="$router.go(-1)">Back to List</button>
-        </div>
-      </div>
+  <AdminEditWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
+    <div class="form-group">
+      <label class="control-label" for="ProfileId">Профиль (ID)</label>
+      <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="model.profileId" />
+      <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
     </div>
-  </div>
+    <div class="form-group">
+      <label class="control-label" for="ChatRoomId">Комната (ID)</label>
+      <input class="form-control" type="text" required id="ChatRoomId" name="ChatRoomId" v-model="model.chatRoomId" />
+      <span class="text-danger field-validation-valid" data-valmsg-for="ChatRoomId" data-valmsg-replace="true"></span>
+    </div>
+    <div class="form-group">
+      <label class="control-label" for="MessageValue">Сообщение</label>
+      <input
+        class="form-control"
+        type="text"
+        required
+        id="MessageValue"
+        maxlength="3000"
+        name="MessageValue"
+        v-model="model.messageValue"
+      />
+      <span class="text-danger field-validation-valid" data-valmsg-for="MessageValue" data-valmsg-replace="true"></span>
+    </div>
+    <div class="form-group">
+      <label class="control-label" for="MessageDateTime">Дата сообщения</label>
+      <input
+        class="form-control"
+        type="datetime-local"
+        required
+        id="MessageDateTime"
+        name="MessageDateTime"
+        v-model="model.messageDateTime"
+      />
+      <span class="text-danger field-validation-valid" data-valmsg-for="MessageDateTime" data-valmsg-replace="true"></span>
+    </div>
+  </AdminEditWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -63,24 +47,10 @@ import { IMessageAdminDTO } from "@/types/IMessageDTO";
 
 import { MessagesApi } from "@/services/admin/MessagesApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
+import AdminEdit from "../../components/shared/base/AdminEdit.vue";
 
 @Component
-export default class MessagesEditA extends Vue {
-  @Prop()
-  private id!: string;
-
-  private model: IMessageAdminDTO | null = null;
-
-  private errors: string[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
-  get Id() {
-    return this.id;
-  }
-
+export default class MessagesEditA extends AdminEdit<IMessageAdminDTO> {
   mounted() {
     MessagesApi.details(this.Id, this.jwt).then(
       (response: IMessageAdminDTO) => {

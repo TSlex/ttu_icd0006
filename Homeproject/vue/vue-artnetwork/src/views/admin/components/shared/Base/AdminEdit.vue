@@ -14,8 +14,14 @@ import router from "@/router";
   },
 })
 export default class AdminEdit<TModel> extends ErrorListContainer {
+  @Prop() protected id!: string;
+
   protected model: TModel | null = null;
   protected modelName?: string;
+
+  get Id() {
+    return this.id;
+  }
 
   onBackToList() {
     if (this.modelName) {

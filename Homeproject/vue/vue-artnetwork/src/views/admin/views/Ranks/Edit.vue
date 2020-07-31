@@ -1,7 +1,8 @@
 <template>
-  <AdminEditWrapper v-if="id && model" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
+  <AdminEditWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
     <CreateEdit :model="model" />
   </AdminEditWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -28,8 +29,6 @@ import CreateEdit from "./CreateEdit.vue";
   },
 })
 export default class RanksEditA extends AdminEdit<IRankAdminDTO> {
-  @Prop() id!: string;
-
   onSubmit() {
     if (this.id && this.model) {
       RanksApi.edit(this.id, this.model, this.jwt).then(

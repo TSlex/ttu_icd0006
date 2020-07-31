@@ -1,111 +1,97 @@
 <template>
-  <div v-if="isLoaded">
-    <AdminEditWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors" :ignoreTopColStyle="true">
-      <ImageMiniature :initialId="imageModel.id" :htmlStyle="'width: 20rem !important'" ref="miniature" />
+  <AdminEditWrapper
+    v-if="isLoaded"
+    v-on:onSubmit="onSubmit"
+    v-on:onBackToList="onBackToList"
+    :errors="errors"
+    :ignoreTopColStyle="true"
+  >
+    <ImageMiniature :initialId="imageModel.id" :htmlStyle="'width: 20rem !important'" ref="miniature" />
 
-      <div class="col-md-4 mt-4">
-        <ImageForm :imageModel="imageModel" v-on:onLoadFile="loadImage" />
+    <div class="col-md-4 mt-4">
+      <ImageForm :imageModel="imageModel" v-on:onLoadFile="loadImage" />
 
-        <div class="mt-3">
-          <div class="form-group">
-            <label class="control-label" for="userName">{{$t('bll.profiles.UserName')}}</label>
-            <input class="form-control" type="text" id="userName" name="userName" v-model="model.userName" />
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="email">{{$t('bll.profiles.Email')}}</label>
-            <input class="form-control" type="text" id="email" name="email" v-model="model.email" />
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="phoneNumber">{{$t('bll.profiles.PhoneNumber')}}</label>
-            <input class="form-control" type="text" id="phoneNumber" name="phoneNumber" v-model="model.phoneNumber" />
-          </div>
-          <div class="form-group">
-            <label class="control-label text-danger" for="password">{{$t('bll.profiles.Password')}}</label>
-            <input class="form-control" type="text" id="password" name="password" v-model="model.password" />
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="profileFullName">{{$t('bll.profiles.ProfileFullName')}}</label>
-            <input class="form-control" type="text" id="profileFullName" name="profileFullName" v-model="model.profileFullName" />
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="profileWorkPlace">{{$t('bll.profiles.ProfileWorkPlace')}}</label>
-            <input
-              class="form-control"
-              type="text"
-              id="profileWorkPlace"
-              name="profileWorkPlace"
-              v-model="model.profileWorkPlace"
-            />
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="experience">{{$t('bll.profiles.Experience')}}</label>
-            <input class="form-control" type="number" id="experience" name="experience" v-model.number="model.experience" />
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="profileAbout">{{$t('bll.profiles.ProfileAbout')}}</label>
-            <input class="form-control" type="text" id="profileAbout" name="profileAbout" v-model="model.profileAbout" />
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="profileGender">{{$t('bll.profiles.ProfileGender')}}</label>
-            <select
-              type="number"
-              class="form-control"
-              id="profileGender"
-              name="profileGender"
-              v-model.number="model.profileGender"
-            >
-              <option value="0">{{resolveGender(ProfileGender.Male)}}</option>
-              <option value="1">{{resolveGender(ProfileGender.Female)}}</option>
-              <option value="127">{{resolveGender(ProfileGender.Own)}}</option>
-              <option value="128">{{resolveGender(ProfileGender.Undefined)}}</option>
-            </select>
-          </div>
-          <div v-if="Number(model.profileGender) === 127" class="form-group">
-            <label class="control-label" for="profileGenderOwn">{{$t('bll.profiles.ProfileGenderOwn')}}</label>
-            <input
-              class="form-control"
-              type="text"
-              id="profileGenderOwn"
-              name="profileGenderOwn"
-              v-model="model.profileGenderOwn"
-            />
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="profileStatus">{{$t('bll.profiles.ProfileStatus')}}</label>
-            <input class="form-control" type="text" id="profileStatus" name="profileStatus" v-model="model.profileStatus" />
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="phoneNumberConfirmed">{{$t('bll.profiles.PhoneNumberConfirmed')}}</label>
-            <input
-              type="checkbox"
-              class="form-control"
-              id="phoneNumberConfirmed"
-              name="phoneNumberConfirmed"
-              v-model="model.phoneNumberConfirmed"
-            />
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="lockoutEnabled">{{$t('bll.profiles.LockoutEnabled')}}</label>
-            <input type="checkbox" class="form-control" id="emailConfirmed" name="emailConfirmed" v-model="model.lockoutEnabled" />
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="emailConfirmed">{{$t('bll.profiles.EmailConfirmed')}}</label>
-            <input type="checkbox" class="form-control" id="emailConfirmed" name="emailConfirmed" v-model="model.emailConfirmed" />
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="accessFailedCount">{{$t('bll.profiles.AccessFailedCount')}}</label>
-            <input
-              class="form-control"
-              type="number"
-              id="accessFailedCount"
-              name="accessFailedCount"
-              v-model.number="model.accessFailedCount"
-            />
-          </div>
+      <div class="mt-3">
+        <div class="form-group">
+          <label class="control-label" for="userName">{{$t('bll.profiles.UserName')}}</label>
+          <input class="form-control" type="text" id="userName" name="userName" v-model="model.userName" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="email">{{$t('bll.profiles.Email')}}</label>
+          <input class="form-control" type="text" id="email" name="email" v-model="model.email" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="phoneNumber">{{$t('bll.profiles.PhoneNumber')}}</label>
+          <input class="form-control" type="text" id="phoneNumber" name="phoneNumber" v-model="model.phoneNumber" />
+        </div>
+        <div class="form-group">
+          <label class="control-label text-danger" for="password">{{$t('bll.profiles.Password')}}</label>
+          <input class="form-control" type="text" id="password" name="password" v-model="model.password" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="profileFullName">{{$t('bll.profiles.ProfileFullName')}}</label>
+          <input class="form-control" type="text" id="profileFullName" name="profileFullName" v-model="model.profileFullName" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="profileWorkPlace">{{$t('bll.profiles.ProfileWorkPlace')}}</label>
+          <input class="form-control" type="text" id="profileWorkPlace" name="profileWorkPlace" v-model="model.profileWorkPlace" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="experience">{{$t('bll.profiles.Experience')}}</label>
+          <input class="form-control" type="number" id="experience" name="experience" v-model.number="model.experience" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="profileAbout">{{$t('bll.profiles.ProfileAbout')}}</label>
+          <input class="form-control" type="text" id="profileAbout" name="profileAbout" v-model="model.profileAbout" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="profileGender">{{$t('bll.profiles.ProfileGender')}}</label>
+          <select type="number" class="form-control" id="profileGender" name="profileGender" v-model.number="model.profileGender">
+            <option value="0">{{resolveGender(ProfileGender.Male)}}</option>
+            <option value="1">{{resolveGender(ProfileGender.Female)}}</option>
+            <option value="127">{{resolveGender(ProfileGender.Own)}}</option>
+            <option value="128">{{resolveGender(ProfileGender.Undefined)}}</option>
+          </select>
+        </div>
+        <div v-if="Number(model.profileGender) === 127" class="form-group">
+          <label class="control-label" for="profileGenderOwn">{{$t('bll.profiles.ProfileGenderOwn')}}</label>
+          <input class="form-control" type="text" id="profileGenderOwn" name="profileGenderOwn" v-model="model.profileGenderOwn" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="profileStatus">{{$t('bll.profiles.ProfileStatus')}}</label>
+          <input class="form-control" type="text" id="profileStatus" name="profileStatus" v-model="model.profileStatus" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="phoneNumberConfirmed">{{$t('bll.profiles.PhoneNumberConfirmed')}}</label>
+          <input
+            type="checkbox"
+            class="form-control"
+            id="phoneNumberConfirmed"
+            name="phoneNumberConfirmed"
+            v-model="model.phoneNumberConfirmed"
+          />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="lockoutEnabled">{{$t('bll.profiles.LockoutEnabled')}}</label>
+          <input type="checkbox" class="form-control" id="emailConfirmed" name="emailConfirmed" v-model="model.lockoutEnabled" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="emailConfirmed">{{$t('bll.profiles.EmailConfirmed')}}</label>
+          <input type="checkbox" class="form-control" id="emailConfirmed" name="emailConfirmed" v-model="model.emailConfirmed" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="accessFailedCount">{{$t('bll.profiles.AccessFailedCount')}}</label>
+          <input
+            class="form-control"
+            type="number"
+            id="accessFailedCount"
+            name="accessFailedCount"
+            v-model.number="model.accessFailedCount"
+          />
         </div>
       </div>
-    </AdminEditWrapper>
-  </div>
+    </div>
+  </AdminEditWrapper>
   <LoadingOverlay v-else />
 </template>
 
@@ -138,14 +124,7 @@ import { createEmptyGuid } from "@/helpers/guid";
   },
 })
 export default class ProfilesEditA extends AdminEdit<IProfileAdminDTO> {
-  @Prop()
-  private id!: string;
-
   private imageModel: IImageDTO | null = null;
-
-  get Id() {
-    return this.id;
-  }
 
   get isImageExist() {
     return this.model?.profileAvatarId != null;

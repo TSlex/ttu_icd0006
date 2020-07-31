@@ -114,13 +114,13 @@ const routes: Array<RouteConfig> = [
   // ======================= admin =======================
   { path: '/admin/panel', name: 'AdminPanel', component: AdminPanel },
 
-  { path: '/admin/blockedprofiles', name: 'BPIndexA', component: BPIndexA },
-  { path: '/admin/blockedprofiles/details/:id', name: 'BPDetailsA', component: BPDetailsA, props: true },
-  { path: '/admin/blockedprofiles/edit/:id', name: 'BPEditA', component: BPEditA, props: true },
+  { path: '/admin/blockedprofiles', name: 'BlockedProfilesIndexA', component: BPIndexA },
+  { path: '/admin/blockedprofiles/details/:id', name: 'BlockedProfilesDetailsA', component: BPDetailsA, props: true },
+  { path: '/admin/blockedprofiles/edit/:id', name: 'BlockedProfilesEditA', component: BPEditA, props: true },
 
-  { path: '/admin/chatmembers', name: 'CMIndexA', component: CMIndexA },
-  { path: '/admin/chatmembers/details/:id', name: 'CMDetailsA', component: CMDetailsA, props: true },
-  { path: '/admin/chatmembers/edit/:id', name: 'CMEditA', component: CMEditA, props: true },
+  { path: '/admin/chatmembers', name: 'ChatMembersIndexA', component: CMIndexA },
+  { path: '/admin/chatmembers/details/:id', name: 'ChatMembersDetailsA', component: CMDetailsA, props: true },
+  { path: '/admin/chatmembers/edit/:id', name: 'ChatMembersEditA', component: CMEditA, props: true },
 
   { path: '/admin/chatroles', name: 'ChatRolesIndexA', component: ChatRolesIndexA },
   { path: '/admin/chatroles/create', name: 'ChatRolesCreateA', component: ChatRolesCreateA },
