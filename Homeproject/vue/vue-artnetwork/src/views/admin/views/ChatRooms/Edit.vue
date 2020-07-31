@@ -1,32 +1,32 @@
 <template>
-  <div v-if="Id && Model">
+  <div v-if="Id && model">
     <h1 class="text-center">Edit</h1>
     <hr />
     <div class="row text-center justify-content-center">
       <div class="col-md-4">
-          <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-            <ul>
-              <li v-for="(error, index) in errors" :key="index">{{error}}</li>
-            </ul>
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="RoomTitle">Title</label>
-            <input
-              class="form-control"
-              type="text"
-              required
-              id="RoomTitle"
-              maxlength="100"
-              name="RoomTitle"
-              v-model="Model.chatRoomTitle"
-            />
-            <span class="text-danger field-validation-valid"></span>
-          </div>
+        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
+          <ul>
+            <li v-for="(error, index) in errors" :key="index">{{error}}</li>
+          </ul>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="RoomTitle">Title</label>
+          <input
+            class="form-control"
+            type="text"
+            required
+            id="RoomTitle"
+            maxlength="100"
+            name="RoomTitle"
+            v-model="model.chatRoomTitle"
+          />
+          <span class="text-danger field-validation-valid"></span>
+        </div>
 
-          <div class="form-group">
-            <button class="btn btn-success mr-1" @click="submit">Save</button>
-            <button class="btn btn-secondary" @click="$router.go(-1)">Back to List</button>
-          </div>
+        <div class="form-group">
+          <button class="btn btn-success mr-1" @click="submit">Save</button>
+          <button class="btn btn-secondary" @click="$router.go(-1)">Back to List</button>
+        </div>
       </div>
     </div>
   </div>
@@ -46,7 +46,7 @@ export default class ChatRoomsEditA extends Vue {
   @Prop()
   private id!: string;
 
-  private Model: IChatRoomAdminDTO | null = null;
+  private model: IChatRoomAdminDTO | null = null;
 
   private errors: string[] = [];
 
@@ -61,14 +61,14 @@ export default class ChatRoomsEditA extends Vue {
   mounted() {
     ChatRoomsApi.details(this.Id, this.jwt).then(
       (response: IChatRoomAdminDTO) => {
-        this.Model = response;
+        this.model = response;
       }
     );
   }
 
   submit() {
-    if (this.Id && this.Model) {
-      ChatRoomsApi.edit(this.Id, this.Model, this.jwt).then(
+    if (this.Id && this.model) {
+      ChatRoomsApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;

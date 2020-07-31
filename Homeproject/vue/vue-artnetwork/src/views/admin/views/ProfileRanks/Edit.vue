@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Id && Model">
+  <div v-if="Id && model">
     <h1 class="text-center">Edit</h1>
     <hr />
     <div class="row text-center align-items-center d-flex flex-column">
@@ -12,13 +12,13 @@
 
         <div class="form-group mt-3">
           <label class="control-label" for="profileId">Profile (ID)</label>
-          <input class="form-control" type="text" required id="profileId" name="profileId" v-model="Model.profileId" />
+          <input class="form-control" type="text" required id="profileId" name="profileId" v-model="model.profileId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
         </div>
 
         <div class="form-group mt-3">
           <label class="control-label" for="rankId">Rank (ID)</label>
-          <input class="form-control" type="text" required id="rankId" name="rankId" v-model="Model.rankId" />
+          <input class="form-control" type="text" required id="rankId" name="rankId" v-model="model.rankId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
         </div>
 
@@ -48,7 +48,7 @@ export default class ProfileRanksEditA extends Vue {
   @Prop()
   private id!: string;
 
-  private Model: IProfileRankAdminDTO | null = null;
+  private model: IProfileRankAdminDTO | null = null;
   private imageModel: IImageDTO | null = null;
 
   private errors: string[] = [];
@@ -62,14 +62,16 @@ export default class ProfileRanksEditA extends Vue {
   }
 
   beforeMount() {
-    ProfileRanksApi.details(this.Id, this.jwt).then((response: IProfileRankAdminDTO) => {
-      this.Model = response;
-    });
+    ProfileRanksApi.details(this.Id, this.jwt).then(
+      (response: IProfileRankAdminDTO) => {
+        this.model = response;
+      }
+    );
   }
 
   submit() {
-    if (this.Id && this.Model) {
-      ProfileRanksApi.edit(this.Id, this.Model, this.jwt).then(
+    if (this.Id && this.model) {
+      ProfileRanksApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;

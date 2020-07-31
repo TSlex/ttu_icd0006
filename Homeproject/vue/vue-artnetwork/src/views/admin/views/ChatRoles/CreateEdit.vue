@@ -9,7 +9,7 @@
         maxlength="200"
         name="RoleTitle"
         value="Member"
-        v-model="Model.roleTitle"
+        v-model="model.roleTitle"
       />
     </div>
 
@@ -21,7 +21,7 @@
         id="RoleTitleValue"
         name="RoleTitleValue"
         value="Участник"
-        v-model="Model.roleTitleValueId"
+        v-model="model.roleTitleValueId"
       />
     </div>
 
@@ -33,7 +33,7 @@
         id="CanRenameRoom"
         name="CanRenameRoom"
         value="true"
-        v-model="Model.canRenameRoom"
+        v-model="model.canRenameRoom"
       />
     </div>
 
@@ -45,7 +45,7 @@
         id="CanEditMembers"
         name="CanEditMembers"
         value="true"
-        v-model="Model.canEditMembers"
+        v-model="model.canEditMembers"
       />
     </div>
 
@@ -57,7 +57,7 @@
         id="CanWriteMessages"
         name="CanWriteMessages"
         value="true"
-        v-model="Model.canWriteMessages"
+        v-model="model.canWriteMessages"
       />
     </div>
 
@@ -69,7 +69,7 @@
         id="CanEditAllMessages"
         name="CanEditAllMessages"
         value="true"
-        v-model="Model.canEditAllMessages"
+        v-model="model.canEditAllMessages"
       />
     </div>
 
@@ -81,7 +81,7 @@
         id="CanEditMessages"
         name="CanEditMessages"
         value="true"
-        v-model="Model.canEditMessages"
+        v-model="model.canEditMessages"
       />
     </div>
   </div>

@@ -60,7 +60,7 @@ export default class GiftsCreateA extends AdminCreate {
     widthPx: 0,
   };
 
-  private Model: IGiftAdminDTO = {
+  private model: IGiftAdminDTO = {
     id: "",
     masterId: null,
     createdBy: null,
@@ -131,8 +131,8 @@ export default class GiftsCreateA extends AdminCreate {
   }
 
   submit() {
-    if (this.Model.giftCode.length > 0 && this.Model.giftName.length > 0) {
-      GiftsApi.create(this.Model, this.jwt).then((response: ResponseDTO) => {
+    if (this.model.giftCode.length > 0 && this.model.giftName.length > 0) {
+      GiftsApi.create(this.model, this.jwt).then((response: ResponseDTO) => {
         if (response?.errors) {
           this.errors = response.errors;
         } else {

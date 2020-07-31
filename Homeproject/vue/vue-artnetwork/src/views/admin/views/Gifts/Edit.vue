@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Id && Model">
+  <div v-if="Id && model">
     <h1 class="text-center">Edit</h1>
     <hr />
     <div class="row text-center align-items-center d-flex flex-column">
@@ -29,19 +29,19 @@
 
         <div class="form-group mt-3">
           <label class="control-label" for="giftCode">Code</label>
-          <input class="form-control" type="text" required id="giftCode" name="giftCode" v-model="Model.giftCode" />
+          <input class="form-control" type="text" required id="giftCode" name="giftCode" v-model="model.giftCode" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
         </div>
 
         <div class="form-group">
           <label class="control-label" for="giftName">Title</label>
-          <input class="form-control" type="text" required id="giftName" name="giftName" v-model="Model.giftName" />
+          <input class="form-control" type="text" required id="giftName" name="giftName" v-model="model.giftName" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
         </div>
 
         <div class="form-group">
           <label class="control-label" for="price">Price</label>
-          <input class="form-control" type="text" required id="price" name="price" v-model="Model.price" />
+          <input class="form-control" type="text" required id="price" name="price" v-model="model.price" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
         </div>
 
@@ -80,14 +80,14 @@ import { ImageType } from "@/types/Enums/ImageType";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class GiftsEditA extends Vue {
   @Prop()
   private id!: string;
 
-  private Model: IGiftAdminDTO | null = null;
+  private model: IGiftAdminDTO | null = null;
   private imageModel: IImageDTO | null = null;
 
   private errors: string[] = [];
@@ -105,7 +105,7 @@ export default class GiftsEditA extends Vue {
   }
 
   get isImageExist() {
-    return this.Model?.giftImageId != null;
+    return this.model?.giftImageId != null;
   }
 
   loadFile(event: Event) {
@@ -114,13 +114,13 @@ export default class GiftsEditA extends Vue {
     if (this.imageModel && this.imageModel.imageFile) {
       let reader = new FileReader();
 
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         let image = new Image();
         image.src = e.target!.result as string;
 
         console.log("reader");
 
-        image.onload = function() {
+        image.onload = function () {
           console.log("image");
 
           let height = $("#HeightPx");
@@ -157,7 +157,7 @@ export default class GiftsEditA extends Vue {
 
   beforeMount() {
     GiftsApi.details(this.Id, this.jwt).then((response: IGiftAdminDTO) => {
-      this.Model = response;
+      this.model = response;
       if (this.isImageExist) {
         ImagesApi.getImageModel(response.giftImageId!, this.jwt).then(
           (response: IImageDTO) => {
@@ -177,15 +177,15 @@ export default class GiftsEditA extends Vue {
           paddingLeft: 0,
           imageFile: null,
           imageType: ImageType.ProfileAvatar,
-          imageFor: ""
+          imageFor: "",
         };
       }
     });
   }
 
   submit() {
-    if (this.Id && this.Model) {
-      GiftsApi.edit(this.Id, this.Model, this.jwt).then(
+    if (this.Id && this.model) {
+      GiftsApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Id && Model">
+  <div v-if="Id && model">
     <h1 class="text-center">Edit</h1>
     <hr />
     <div class="row text-center justify-content-center">
@@ -12,13 +12,13 @@
 
         <div class="form-group">
           <label class="control-label" for="ProfileId">Профиль (ID)</label>
-          <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="Model.profileId" />
+          <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="model.profileId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
         </div>
 
         <div class="form-group">
           <label class="control-label" for="PostId">Пост (ID)</label>
-          <input class="form-control" type="text" required id="PostId" name="PostId" v-model="Model.postId" />
+          <input class="form-control" type="text" required id="PostId" name="PostId" v-model="model.postId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="PostId" data-valmsg-replace="true"></span>
         </div>
 
@@ -31,7 +31,7 @@
             id="CommentValue"
             maxlength="300"
             name="CommentValue"
-            v-model="Model.commentValue"
+            v-model="model.commentValue"
           ></textarea>
           <span class="text-danger field-validation-valid" data-valmsg-for="CommentValue" data-valmsg-replace="true"></span>
         </div>
@@ -44,7 +44,7 @@
             required
             id="CommentDateTime"
             name="CommentDateTime"
-            v-model="Model.commentDateTime"
+            v-model="model.commentDateTime"
           />
           <span class="text-danger field-validation-valid" data-valmsg-for="CommentDateTime" data-valmsg-replace="true"></span>
         </div>
@@ -72,7 +72,7 @@ export default class CommentsEditA extends Vue {
   @Prop()
   private id!: string;
 
-  private Model: ICommentAdminDTO | null = null;
+  private model: ICommentAdminDTO | null = null;
 
   private errors: string[] = [];
 
@@ -87,14 +87,14 @@ export default class CommentsEditA extends Vue {
   mounted() {
     CommentsApi.details(this.Id, this.jwt).then(
       (response: ICommentAdminDTO) => {
-        this.Model = response;
+        this.model = response;
       }
     );
   }
 
   submit() {
-    if (this.Id && this.Model) {
-      CommentsApi.edit(this.Id, this.Model, this.jwt).then(
+    if (this.Id && this.model) {
+      CommentsApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;

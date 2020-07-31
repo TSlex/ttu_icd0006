@@ -27,7 +27,7 @@ import CreateEdit from "./CreateEdit.vue";
   },
 })
 export default class ProfileRanksCreateA extends AdminCreate {
-  private Model: IProfileRankAdminDTO = {
+  private model: IProfileRankAdminDTO = {
     id: "",
     createdBy: null,
     createdAt: new Date(),
@@ -46,8 +46,8 @@ export default class ProfileRanksCreateA extends AdminCreate {
   }
 
   submit() {
-    if (this.Model.profileId.length > 0 && this.Model.rankId.length > 0) {
-      ProfileRanksApi.create(this.Model, this.jwt).then(
+    if (this.model.profileId.length > 0 && this.model.rankId.length > 0) {
+      ProfileRanksApi.create(this.model, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;

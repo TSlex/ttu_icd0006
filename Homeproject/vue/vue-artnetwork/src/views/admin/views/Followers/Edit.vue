@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Id && Model">
+  <div v-if="Id && model">
     <h1 class="text-center">Edit</h1>
     <hr />
     <div class="row text-center justify-content-center">
@@ -12,7 +12,7 @@
 
         <div class="form-group">
           <label class="control-label" for="FollowerId">Follower (ID)</label>
-          <input class="form-control" type="text" required id="FollowerId" name="FollowerId" v-model="Model.followerProfileId" />
+          <input class="form-control" type="text" required id="FollowerId" name="FollowerId" v-model="model.followerProfileId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
         </div>
 
@@ -20,7 +20,7 @@
 
         <div class="form-group">
           <label class="control-label" for="ProfileId">Profile (ID)</label>
-          <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="Model.profileId" />
+          <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="model.profileId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
         </div>
 
@@ -47,7 +47,7 @@ export default class FollowersEditA extends Vue {
   @Prop()
   private id!: string;
 
-  private Model: IFollowerAdminDTO | null = null;
+  private model: IFollowerAdminDTO | null = null;
 
   private errors: string[] = [];
 
@@ -62,14 +62,14 @@ export default class FollowersEditA extends Vue {
   mounted() {
     FollowersApi.details(this.Id, this.jwt).then(
       (response: IFollowerAdminDTO) => {
-        this.Model = response;
+        this.model = response;
       }
     );
   }
 
   submit() {
-    if (this.Id && this.Model) {
-      FollowersApi.edit(this.Id, this.Model, this.jwt).then(
+    if (this.Id && this.model) {
+      FollowersApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;

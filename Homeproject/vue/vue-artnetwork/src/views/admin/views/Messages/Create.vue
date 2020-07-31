@@ -23,7 +23,7 @@ import CreateEdit from "./CreateEdit.vue";
   },
 })
 export default class MessagesCreateA extends AdminCreate {
-  private Model: IMessageAdminDTO = {
+  private model: IMessageAdminDTO = {
     id: "",
     masterId: null,
     createdBy: null,
@@ -40,11 +40,11 @@ export default class MessagesCreateA extends AdminCreate {
 
   submit() {
     if (
-      this.Model.messageValue.length > 0 &&
-      this.Model.profileId.length > 0 &&
-      this.Model.chatRoomId.length > 0
+      this.model.messageValue.length > 0 &&
+      this.model.profileId.length > 0 &&
+      this.model.chatRoomId.length > 0
     ) {
-      MessagesApi.create(this.Model, this.jwt).then((response: ResponseDTO) => {
+      MessagesApi.create(this.model, this.jwt).then((response: ResponseDTO) => {
         if (response?.errors) {
           this.errors = response.errors;
         } else {

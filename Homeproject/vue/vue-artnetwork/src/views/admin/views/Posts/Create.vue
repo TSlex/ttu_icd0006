@@ -60,7 +60,7 @@ export default class PostsCreateA extends AdminCreate {
     widthPx: 0,
   };
 
-  private Model: IPostAdminDTO = {
+  private model: IPostAdminDTO = {
     id: "",
     masterId: null,
     createdBy: null,
@@ -133,8 +133,8 @@ export default class PostsCreateA extends AdminCreate {
   }
 
   submit() {
-    if (this.Model.profileId.length > 0 && this.Model.postTitle.length > 0) {
-      PostsApi.create(this.Model, this.jwt).then((response: ResponseDTO) => {
+    if (this.model.profileId.length > 0 && this.model.postTitle.length > 0) {
+      PostsApi.create(this.model, this.jwt).then((response: ResponseDTO) => {
         if (response?.errors) {
           this.errors = response.errors;
         } else {

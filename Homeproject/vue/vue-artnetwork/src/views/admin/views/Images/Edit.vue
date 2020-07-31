@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Id && Model">
+  <div v-if="Id && model">
     <h1 class="text-center">Edit</h1>
     <hr />
     <div class="row text-center align-items-center d-flex flex-column">
@@ -23,7 +23,7 @@
 
         <div class="form-group">
           <label class="control-label" for="ImageUrl">URL</label>
-          <input class="form-control" type="text" required id="ImageUrl" maxlength="300" name="ImageUrl" v-model="Model.imageUrl" />
+          <input class="form-control" type="text" required id="ImageUrl" maxlength="300" name="ImageUrl" v-model="model.imageUrl" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ImageUrl" data-valmsg-replace="true"></span>
         </div>
 
@@ -36,14 +36,14 @@
             id="ImageUrlO"
             maxlength="300"
             name="ImageUrlO"
-            v-model="Model.originalImageUrl"
+            v-model="model.originalImageUrl"
           />
           <span class="text-danger field-validation-valid" data-valmsg-for="ImageUrl" data-valmsg-replace="true"></span>
         </div>
 
         <div class="form-group">
           <label class="control-label" for="ImageFor">For (ID)</label>
-          <input class="form-control" type="text" id="ImageFor" maxlength="300" name="ImageFor" v-model="Model.imageFor" />
+          <input class="form-control" type="text" id="ImageFor" maxlength="300" name="ImageFor" v-model="model.imageFor" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ImageFor" data-valmsg-replace="true"></span>
         </div>
 
@@ -56,7 +56,7 @@
             id="ImageType"
             maxlength="300"
             name="ImageType"
-            v-model="Model.imageType"
+            v-model="model.imageType"
           >
             <option v-for="(key, value) in ImageType" :key="key" :value="Number(value)">{{key}}</option>
           </select>
@@ -68,12 +68,12 @@
           <label class="custom-file-label" style="overflow: hidden">{{fileName}}</label>
         </div>
 
-        <input type="hidden" id="HeightPx" name="HeightPx" v-model.lazy="Model.heightPx" />
-        <input type="hidden" id="WidthPx" name="WidthPx" v-model.lazy="Model.widthPx" />
-        <input type="hidden" id="PaddingTop" name="PaddingTop" v-model.lazy="Model.paddingTop" />
-        <input type="hidden" id="PaddingRight" name="PaddingRight" v-model.lazy="Model.paddingRight" />
-        <input type="hidden" id="PaddingBottom" name="PaddingBottom" v-model.lazy="Model.paddingBottom" />
-        <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="Model.paddingLeft" />
+        <input type="hidden" id="HeightPx" name="HeightPx" v-model.lazy="model.heightPx" />
+        <input type="hidden" id="WidthPx" name="WidthPx" v-model.lazy="model.widthPx" />
+        <input type="hidden" id="PaddingTop" name="PaddingTop" v-model.lazy="model.paddingTop" />
+        <input type="hidden" id="PaddingRight" name="PaddingRight" v-model.lazy="model.paddingRight" />
+        <input type="hidden" id="PaddingBottom" name="PaddingBottom" v-model.lazy="model.paddingBottom" />
+        <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="model.paddingLeft" />
 
         <div class="form-group mt-2">
           <button class="btn btn-success mr-1" @click="submit">Save</button>
@@ -99,14 +99,14 @@ import { ImageType } from "@/types/Enums/ImageType";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class ImagesEditA extends Vue {
   @Prop()
   private id!: string;
 
-  private Model: IImageAdminDTO | null = null;
+  private model: IImageAdminDTO | null = null;
 
   private errors: string[] = [];
 
@@ -119,28 +119,28 @@ export default class ImagesEditA extends Vue {
   }
 
   get ImageType() {
-    return Object.keys(ImageType).filter(key => {
+    return Object.keys(ImageType).filter((key) => {
       return isNaN(Number(key));
     });
   }
 
   get fileName() {
-    return this.Model?.imageFile?.name;
+    return this.model?.imageFile?.name;
   }
 
   loadFile(event: Event) {
-    this.Model!.imageFile = (event.target as HTMLInputElement)?.files![0];
+    this.model!.imageFile = (event.target as HTMLInputElement)?.files![0];
 
-    if (this.Model && this.Model.imageFile) {
+    if (this.model && this.model.imageFile) {
       let reader = new FileReader();
 
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         let image = new Image();
         image.src = e.target!.result as string;
 
         console.log("reader");
 
-        image.onload = function() {
+        image.onload = function () {
           console.log("image");
 
           let height = $("#HeightPx");
@@ -156,7 +156,7 @@ export default class ImagesEditA extends Vue {
         $("#image-miniature").css("visibility", "visible");
       };
 
-      reader.readAsDataURL(this.Model.imageFile);
+      reader.readAsDataURL(this.model.imageFile);
     }
   }
 
@@ -176,13 +176,13 @@ export default class ImagesEditA extends Vue {
 
   mounted() {
     ImagesApi.details(this.Id, this.jwt).then((response: IImageAdminDTO) => {
-      this.Model = response;
+      this.model = response;
     });
   }
 
   submit() {
-    if (this.Id && this.Model) {
-      ImagesApi.edit(this.Id, this.Model, this.jwt).then(
+    if (this.Id && this.model) {
+      ImagesApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;

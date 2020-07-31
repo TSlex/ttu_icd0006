@@ -23,7 +23,7 @@ import CreateEdit from "./CreateEdit.vue";
   },
 })
 export default class ChatRoomsCreateA extends AdminCreate {
-  private Model: IChatRoomAdminDTO = {
+  private model: IChatRoomAdminDTO = {
     id: "",
     masterId: null,
     createdBy: null,
@@ -38,8 +38,8 @@ export default class ChatRoomsCreateA extends AdminCreate {
   };
 
   submit() {
-    if (this.Model.chatRoomTitle.length > 0) {
-      ChatRoomsApi.create(this.Model, this.jwt).then(
+    if (this.model.chatRoomTitle.length > 0) {
+      ChatRoomsApi.create(this.model, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;

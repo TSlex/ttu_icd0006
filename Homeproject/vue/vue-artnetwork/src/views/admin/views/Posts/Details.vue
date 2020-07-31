@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Id && Model">
+  <div v-if="Id && model">
     <h1>Details</h1>
 
     <div>
@@ -7,41 +7,41 @@
       <hr />
       <dl class="row">
         <dt class="col-sm-2">(ID)</dt>
-        <dd class="col-sm-10">{{Model.id}}</dd>
+        <dd class="col-sm-10">{{model.id}}</dd>
 
         <dt class="col-sm-2">Profile (ID)</dt>
-        <dd class="col-sm-10">{{Model.profileId}}</dd>
+        <dd class="col-sm-10">{{model.profileId}}</dd>
 
         <dt class="col-sm-2">Title</dt>
-        <dd class="col-sm-10">{{Model.postTitle}}</dd>
+        <dd class="col-sm-10">{{model.postTitle}}</dd>
 
         <dt class="col-sm-2">Description</dt>
-        <dd class="col-sm-10">{{Model.postDescription}}</dd>
+        <dd class="col-sm-10">{{model.postDescription}}</dd>
 
         <dt class="col-sm-2">DateTime</dt>
-        <dd class="col-sm-10">{{Model.postPublicationDateTime}}</dd>
+        <dd class="col-sm-10">{{model.postPublicationDateTime}}</dd>
 
         <dt class="col-sm-2">CreatedBy</dt>
-        <dd class="col-sm-10">{{Model.createdBy}}</dd>
+        <dd class="col-sm-10">{{model.createdBy}}</dd>
 
         <dt class="col-sm-2">CreatedAt</dt>
-        <dd class="col-sm-10">{{Model.createdAt}}</dd>
+        <dd class="col-sm-10">{{model.createdAt}}</dd>
 
         <dt class="col-sm-2">ChangedBy</dt>
-        <dd class="col-sm-10">{{Model.changedBy}}</dd>
+        <dd class="col-sm-10">{{model.changedBy}}</dd>
 
         <dt class="col-sm-2">ChangedAt</dt>
-        <dd class="col-sm-10">{{Model.changedAt}}</dd>
+        <dd class="col-sm-10">{{model.changedAt}}</dd>
 
         <dt class="col-sm-2">DeletedBy</dt>
-        <dd class="col-sm-10">{{Model.deletedBy}}</dd>
+        <dd class="col-sm-10">{{model.deletedBy}}</dd>
 
         <dt class="col-sm-2">DeletedAt</dt>
-        <dd class="col-sm-10">{{Model.deletedAt}}</dd>
+        <dd class="col-sm-10">{{model.deletedAt}}</dd>
       </dl>
     </div>
     <div>
-      <button class="btn btn-primary mr-1" @click="onEdit(Model.id)">Edit</button>
+      <button class="btn btn-primary mr-1" @click="onEdit(model.id)">Edit</button>
       <button class="btn btn-primary" @click="$router.go(-1)">Back to List</button>
     </div>
   </div>
@@ -61,14 +61,14 @@ import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class PostsDetailsA extends Vue {
   @Prop()
   private id!: string;
 
-  private Model: IPostAdminDTO | null = null;
+  private model: IPostAdminDTO | null = null;
 
   private errors: string[] = [];
 
@@ -85,11 +85,9 @@ export default class PostsDetailsA extends Vue {
   }
 
   mounted() {
-    PostsApi.details(this.Id, this.jwt).then(
-      (response: IPostAdminDTO) => {
-        this.Model = response;
-      }
-    );
+    PostsApi.details(this.Id, this.jwt).then((response: IPostAdminDTO) => {
+      this.model = response;
+    });
   }
 }
 </script>

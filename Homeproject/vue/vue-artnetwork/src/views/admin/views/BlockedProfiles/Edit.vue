@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Id && Model">
+  <div v-if="Id && model">
     <h1 class="text-center">Edit</h1>
     <hr />
     <div class="row text-center justify-content-center">
@@ -11,13 +11,13 @@
         </div>
         <div class="form-group">
           <label class="control-label" for="ProfileId">Профиль (ID)</label>
-          <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="Model.profileId" />
+          <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="model.profileId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
         </div>
         <i class="fa fa-arrow-down"></i>
         <div class="form-group">
           <label class="control-label" for="BProfileId">Заброкированный профиль (ID)</label>
-          <input class="form-control" type="text" required id="BProfileId" name="BProfileId" v-model="Model.bProfileId" />
+          <input class="form-control" type="text" required id="BProfileId" name="BProfileId" v-model="model.bProfileId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="BProfileId" data-valmsg-replace="true"></span>
         </div>
         <div class="form-group">
@@ -43,7 +43,7 @@ export default class BPEditA extends Vue {
   @Prop()
   private id!: string;
 
-  private Model: IBlockedProfileAdminDTO | null = null;
+  private model: IBlockedProfileAdminDTO | null = null;
 
   private errors: string[] = [];
 
@@ -58,14 +58,14 @@ export default class BPEditA extends Vue {
   mounted() {
     BlockedProfilesApi.details(this.Id, this.jwt).then(
       (response: IBlockedProfileAdminDTO) => {
-        this.Model = response;
+        this.model = response;
       }
     );
   }
 
   submit() {
-    if (this.Id && this.Model) {
-      BlockedProfilesApi.edit(this.Id, this.Model, this.jwt).then(
+    if (this.Id && this.model) {
+      BlockedProfilesApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;

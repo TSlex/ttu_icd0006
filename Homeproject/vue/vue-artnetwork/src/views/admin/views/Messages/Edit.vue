@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Id && Model">
+  <div v-if="Id && model">
     <h1 class="text-center">Edit</h1>
     <hr />
     <div class="row text-center justify-content-center">
@@ -12,26 +12,12 @@
 
         <div class="form-group">
           <label class="control-label" for="ProfileId">Профиль (ID)</label>
-          <input
-            class="form-control"
-            type="text"
-            required
-            id="ProfileId"
-            name="ProfileId"
-            v-model="Model.profileId"
-          />
+          <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="model.profileId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
         </div>
         <div class="form-group">
           <label class="control-label" for="ChatRoomId">Комната (ID)</label>
-          <input
-            class="form-control"
-            type="text"
-            required
-            id="ChatRoomId"
-            name="ChatRoomId"
-            v-model="Model.chatRoomId"
-          />
+          <input class="form-control" type="text" required id="ChatRoomId" name="ChatRoomId" v-model="model.chatRoomId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ChatRoomId" data-valmsg-replace="true"></span>
         </div>
         <div class="form-group">
@@ -43,7 +29,7 @@
             id="MessageValue"
             maxlength="3000"
             name="MessageValue"
-            v-model="Model.messageValue"
+            v-model="model.messageValue"
           />
           <span class="text-danger field-validation-valid" data-valmsg-for="MessageValue" data-valmsg-replace="true"></span>
         </div>
@@ -55,7 +41,7 @@
             required
             id="MessageDateTime"
             name="MessageDateTime"
-            v-model="Model.messageDateTime"
+            v-model="model.messageDateTime"
           />
           <span class="text-danger field-validation-valid" data-valmsg-for="MessageDateTime" data-valmsg-replace="true"></span>
         </div>
@@ -83,7 +69,7 @@ export default class MessagesEditA extends Vue {
   @Prop()
   private id!: string;
 
-  private Model: IMessageAdminDTO | null = null;
+  private model: IMessageAdminDTO | null = null;
 
   private errors: string[] = [];
 
@@ -98,14 +84,14 @@ export default class MessagesEditA extends Vue {
   mounted() {
     MessagesApi.details(this.Id, this.jwt).then(
       (response: IMessageAdminDTO) => {
-        this.Model = response;
+        this.model = response;
       }
     );
   }
 
   submit() {
-    if (this.Id && this.Model) {
-      MessagesApi.edit(this.Id, this.Model, this.jwt).then(
+    if (this.Id && this.model) {
+      MessagesApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;

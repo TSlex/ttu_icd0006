@@ -23,7 +23,7 @@ import CreateEdit from "./CreateEdit.vue";
   },
 })
 export default class ChatRolesCreateA extends AdminCreate {
-  private Model: IChatRoleAdminDTO = {
+  private model: IChatRoleAdminDTO = {
     roleTitle: "",
     roleTitleValueId: "",
     canRenameRoom: false,
@@ -47,10 +47,10 @@ export default class ChatRolesCreateA extends AdminCreate {
 
   submit() {
     if (
-      this.Model.roleTitle.length > 0 &&
-      this.Model.roleTitleValueId.length > 0
+      this.model.roleTitle.length > 0 &&
+      this.model.roleTitleValueId.length > 0
     ) {
-      ChatRolesApi.create(this.Model, this.jwt).then(
+      ChatRolesApi.create(this.model, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;

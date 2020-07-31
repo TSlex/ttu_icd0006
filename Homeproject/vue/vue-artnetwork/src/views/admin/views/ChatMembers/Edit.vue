@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Id && Model">
+  <div v-if="Id && model">
     <h1 class="text-center">Edit</h1>
     <hr />
     <div class="row text-center justify-content-center">
@@ -11,17 +11,17 @@
         </div>
         <div class="form-group">
           <label class="control-label" for="ProfileId">Profile (ID)</label>
-          <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="Model.profileId" />
+          <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="model.profileId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
         </div>
         <div class="form-group">
           <label class="control-label" for="CMrofileId">Room (ID)</label>
-          <input class="form-control" type="text" required id="CMrofileId" name="CMrofileId" v-model="Model.chatRoomId" />
+          <input class="form-control" type="text" required id="CMrofileId" name="CMrofileId" v-model="model.chatRoomId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="CMrofileId" data-valmsg-replace="true"></span>
         </div>
         <div class="form-group">
           <label class="control-label" for="CMrofileId">Role (ID)</label>
-          <input class="form-control" type="text" required id="CMrofileId" name="CMrofileId" v-model="Model.chatRoleId" />
+          <input class="form-control" type="text" required id="CMrofileId" name="CMrofileId" v-model="model.chatRoleId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="CMrofileId" data-valmsg-replace="true"></span>
         </div>
         <div class="form-group">
@@ -47,7 +47,7 @@ export default class CMEditA extends Vue {
   @Prop()
   private id!: string;
 
-  private Model: IChatMemberAdminDTO | null = null;
+  private model: IChatMemberAdminDTO | null = null;
 
   private errors: string[] = [];
 
@@ -62,14 +62,14 @@ export default class CMEditA extends Vue {
   mounted() {
     ChatMembersApi.details(this.Id, this.jwt).then(
       (response: IChatMemberAdminDTO) => {
-        this.Model = response;
+        this.model = response;
       }
     );
   }
 
   submit() {
-    if (this.Id && this.Model) {
-      ChatMembersApi.edit(this.Id, this.Model, this.jwt).then(
+    if (this.Id && this.model) {
+      ChatMembersApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;

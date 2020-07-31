@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Id && Model">
+  <div v-if="Id && model">
     <h1 class="text-center">Edit</h1>
     <hr />
     <div class="row text-center justify-content-center">
@@ -11,53 +11,27 @@
         </div>
         <div class="form-group">
           <label class="control-label" for="ProfileId">Профиль (ID)</label>
-          <input
-            class="form-control"
-            type="text"
-            required
-            id="ProfileId"
-            name="ProfileId"
-            v-model="Model.profileId"
-          />
+          <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="model.profileId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
         </div>
         <div class="form-group">
           <label class="control-label" for="PostId">Пост (ID)</label>
-          <input
-            class="form-control"
-            type="text"
-            required
-            id="PostId"
-            name="PostId"
-            v-model="Model.postId"
-          />
+          <input class="form-control" type="text" required id="PostId" name="PostId" v-model="model.postId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="PostId" data-valmsg-replace="true"></span>
         </div>
         <div class="form-group">
           <label class="control-label" for="PostTitle">Название поста</label>
-          <input class="form-control" type="text" id="PostTitle" name="PostTitle" value="1" v-model="Model.postTitle" />
+          <input class="form-control" type="text" id="PostTitle" name="PostTitle" value="1" v-model="model.postTitle" />
           <span class="text-danger field-validation-valid" data-valmsg-for="PostTitle" data-valmsg-replace="true"></span>
         </div>
         <div class="form-group">
           <label class="control-label" for="PostDescription">Описание поста</label>
-          <input
-            class="form-control"
-            type="text"
-            id="PostDescription"
-            name="PostDescription"
-            v-model="Model.postDescription"
-          />
+          <input class="form-control" type="text" id="PostDescription" name="PostDescription" v-model="model.postDescription" />
           <span class="text-danger field-validation-valid" data-valmsg-for="PostDescription" data-valmsg-replace="true"></span>
         </div>
         <div class="form-group">
           <label class="control-label" for="PostImageId">Картинка (ID)</label>
-          <input
-            class="form-control"
-            type="text"
-            id="PostImageId"
-            name="PostImageId"
-            v-model="Model.postImageId"
-          />
+          <input class="form-control" type="text" id="PostImageId" name="PostImageId" v-model="model.postImageId" />
           <span class="text-danger field-validation-valid" data-valmsg-for="PostImageId" data-valmsg-replace="true"></span>
         </div>
         <div class="form-group">
@@ -83,7 +57,7 @@ export default class FavoritesEditA extends Vue {
   @Prop()
   private id!: string;
 
-  private Model: IFavoriteAdminDTO | null = null;
+  private model: IFavoriteAdminDTO | null = null;
 
   private errors: string[] = [];
 
@@ -98,14 +72,14 @@ export default class FavoritesEditA extends Vue {
   mounted() {
     FavoritesApi.details(this.Id, this.jwt).then(
       (response: IFavoriteAdminDTO) => {
-        this.Model = response;
+        this.model = response;
       }
     );
   }
 
   submit() {
-    if (this.Id && this.Model) {
-      FavoritesApi.edit(this.Id, this.Model, this.jwt).then(
+    if (this.Id && this.model) {
+      FavoritesApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {
           if (response?.errors) {
             this.errors = response.errors;

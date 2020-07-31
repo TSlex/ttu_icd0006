@@ -23,7 +23,7 @@ import CreateEdit from "./CreateEdit.vue";
   },
 })
 export default class CommentsCreateA extends AdminCreate {
-  private Model: ICommentAdminDTO = {
+  private model: ICommentAdminDTO = {
     id: "",
     masterId: null,
     createdBy: null,
@@ -40,11 +40,11 @@ export default class CommentsCreateA extends AdminCreate {
 
   submit() {
     if (
-      this.Model.commentValue.length > 0 &&
-      this.Model.profileId.length > 0 &&
-      this.Model.postId.length > 0
+      this.model.commentValue.length > 0 &&
+      this.model.profileId.length > 0 &&
+      this.model.postId.length > 0
     ) {
-      CommentsApi.create(this.Model, this.jwt).then((response: ResponseDTO) => {
+      CommentsApi.create(this.model, this.jwt).then((response: ResponseDTO) => {
         if (response?.errors) {
           this.errors = response.errors;
         } else {
