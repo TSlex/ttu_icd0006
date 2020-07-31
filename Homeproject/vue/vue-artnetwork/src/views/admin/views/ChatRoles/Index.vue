@@ -30,6 +30,7 @@
       </tbody>
     </table>
   </AdminIndexWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">

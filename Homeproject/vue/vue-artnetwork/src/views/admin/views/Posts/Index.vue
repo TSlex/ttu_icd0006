@@ -28,6 +28,7 @@
       </tbody>
     </table>
   </AdminIndexWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -75,14 +76,14 @@ export default class PostsIndexA extends AdminIndex<IPostAdminDTO> {
     });
   }
 
+  created() {
+    this.modelName = "Post";
+  }
+
   mounted() {
     PostsApi.index(this.jwt).then((response: IPostAdminDTO[]) => {
       this.model = response;
     });
-  }
-
-  created() {
-    this.modelName = "Post";
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <AdminIndexWrapper v-if="isLoaded" :canCreate="true" v-on:onCreate="onCreate">
+  <AdminIndexWrapper v-if="isLoaded">
     <table class="table">
       <thead>
         <tr>
@@ -28,6 +28,7 @@
       </tbody>
     </table>
   </AdminIndexWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
