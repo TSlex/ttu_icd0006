@@ -49,7 +49,7 @@ export default class FavoritesEditA extends AdminEdit<IFavoriteAdminDTO> {
     );
   }
 
-  submit() {
+  onSubmit() {
     if (this.Id && this.model) {
       FavoritesApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {

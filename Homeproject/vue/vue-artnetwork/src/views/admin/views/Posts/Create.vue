@@ -132,7 +132,7 @@ export default class PostsCreateA extends AdminCreate {
     }
   }
 
-  submit() {
+  onSubmit() {
     if (this.model.profileId.length > 0 && this.model.postTitle.length > 0) {
       PostsApi.create(this.model, this.jwt).then((response: ResponseDTO) => {
         if (response?.errors) {

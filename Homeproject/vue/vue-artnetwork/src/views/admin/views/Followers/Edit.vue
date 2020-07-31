@@ -37,7 +37,7 @@ export default class FollowersEditA extends AdminEdit<IFollowerAdminDTO> {
     );
   }
 
-  submit() {
+  onSubmit() {
     if (this.Id && this.model) {
       FollowersApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {

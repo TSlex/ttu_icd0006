@@ -182,7 +182,7 @@ export default class PostsEditA extends AdminEdit<IPostAdminDTO> {
     });
   }
 
-  submit() {
+  onSubmit() {
     if (this.Id && this.model) {
       PostsApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {

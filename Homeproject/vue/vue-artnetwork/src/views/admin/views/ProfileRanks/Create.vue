@@ -45,7 +45,7 @@ export default class ProfileRanksCreateA extends AdminCreate {
     return store.getters.getJwt;
   }
 
-  submit() {
+  onSubmit() {
     if (this.model.profileId.length > 0 && this.model.rankId.length > 0) {
       ProfileRanksApi.create(this.model, this.jwt).then(
         (response: ResponseDTO) => {

@@ -126,7 +126,7 @@ export default class ImagesCreateA extends AdminCreate {
     }
   }
 
-  submit() {
+  onSubmit() {
     if (
       this.model.commentValue.length > 0 &&
       this.model.profileId.length > 0 &&

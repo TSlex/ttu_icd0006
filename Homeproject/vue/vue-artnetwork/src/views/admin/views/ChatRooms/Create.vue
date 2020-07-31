@@ -37,7 +37,7 @@ export default class ChatRoomsCreateA extends AdminCreate {
     chatRoomImageId: null,
   };
 
-  submit() {
+  onSubmit() {
     if (this.model.chatRoomTitle.length > 0) {
       ChatRoomsApi.create(this.model, this.jwt).then(
         (response: ResponseDTO) => {

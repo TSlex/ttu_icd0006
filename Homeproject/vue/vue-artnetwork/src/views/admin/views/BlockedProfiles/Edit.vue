@@ -35,7 +35,7 @@ export default class BPEditA extends AdminEdit<IBlockedProfileAdminDTO> {
     );
   }
 
-  submit() {
+  onSubmit() {
     if (this.Id && this.model) {
       BlockedProfilesApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {

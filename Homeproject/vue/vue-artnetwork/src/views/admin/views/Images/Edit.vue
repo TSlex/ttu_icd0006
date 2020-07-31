@@ -158,7 +158,7 @@ export default class ImagesEditA extends AdminEdit<IImageAdminDTO> {
     });
   }
 
-  submit() {
+  onSubmit() {
     if (this.Id && this.model) {
       ImagesApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {

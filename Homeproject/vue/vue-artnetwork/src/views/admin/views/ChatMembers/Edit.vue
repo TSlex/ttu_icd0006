@@ -39,7 +39,7 @@ export default class CMEditA extends AdminEdit<IChatMemberAdminDTO> {
     );
   }
 
-  submit() {
+  onSubmit() {
     if (this.Id && this.model) {
       ChatMembersApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {

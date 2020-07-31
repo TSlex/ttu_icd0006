@@ -121,7 +121,7 @@ export default class ChatRolesEditA extends AdminEdit<IChatRoleAdminDTO> {
     );
   }
 
-  submit() {
+  onSubmit() {
     if (this.Id && this.model) {
       ChatRolesApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {

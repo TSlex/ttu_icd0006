@@ -162,7 +162,7 @@ export default class GiftsEditA extends AdminEdit<IGiftAdminDTO> {
     });
   }
 
-  submit() {
+  onSubmit() {
     if (this.Id && this.model) {
       GiftsApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {

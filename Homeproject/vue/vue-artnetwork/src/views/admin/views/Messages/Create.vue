@@ -38,7 +38,7 @@ export default class MessagesCreateA extends AdminCreate {
     messageDateTime: new Date(),
   };
 
-  submit() {
+  onSubmit() {
     if (
       this.model.messageValue.length > 0 &&
       this.model.profileId.length > 0 &&

@@ -29,7 +29,7 @@ export default class ChatRoomsEditA extends AdminEdit<IChatRoomAdminDTO> {
     );
   }
 
-  submit() {
+  onSubmit() {
     if (this.Id && this.model) {
       ChatRoomsApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {

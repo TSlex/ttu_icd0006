@@ -130,7 +130,7 @@ export default class GiftsCreateA extends AdminCreate {
     }
   }
 
-  submit() {
+  onSubmit() {
     if (this.model.giftCode.length > 0 && this.model.giftName.length > 0) {
       GiftsApi.create(this.model, this.jwt).then((response: ResponseDTO) => {
         if (response?.errors) {

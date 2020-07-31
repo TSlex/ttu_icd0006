@@ -33,7 +33,7 @@ export default class ProfileRanksEditA extends AdminEdit<IProfileRankAdminDTO> {
     );
   }
 
-  submit() {
+  onSubmit() {
     if (this.Id && this.model) {
       ProfileRanksApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {

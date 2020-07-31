@@ -59,7 +59,7 @@ export default class MessagesEditA extends AdminEdit<IMessageAdminDTO> {
     );
   }
 
-  submit() {
+  onSubmit() {
     if (this.Id && this.model) {
       MessagesApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {

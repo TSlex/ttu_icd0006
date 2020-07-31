@@ -62,7 +62,7 @@ export default class CommentsEditA extends AdminEdit<ICommentAdminDTO> {
     );
   }
 
-  submit() {
+  onSubmit() {
     if (this.Id && this.model) {
       CommentsApi.edit(this.Id, this.model, this.jwt).then(
         (response: ResponseDTO) => {

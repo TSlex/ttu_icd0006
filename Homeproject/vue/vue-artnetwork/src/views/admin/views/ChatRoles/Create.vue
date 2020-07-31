@@ -45,7 +45,7 @@ export default class ChatRolesCreateA extends AdminCreate {
     return store.getters.getJwt;
   }
 
-  submit() {
+  onSubmit() {
     if (
       this.model.roleTitle.length > 0 &&
       this.model.roleTitleValueId.length > 0
