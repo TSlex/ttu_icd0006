@@ -1,5 +1,5 @@
 <template>
-  <AdminDetailsWrapper v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
+  <AdminDetailsWrapper v-if="isLoaded" v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
     <dl class="row">
       <dt class="col-sm-2">{{$t('bll.common.Id')}}</dt>
       <dd class="col-sm-10">{{model.id}}</dd>
@@ -18,6 +18,7 @@
     <hr />
     <MetaDetailsSection :model="model" :deletable="false" />
   </AdminDetailsWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -41,6 +42,7 @@ export default class BPDetailsA extends AdminDetails<IBlockedProfileAdminDTO> {
     BlockedProfilesApi.details(this.Id, this.jwt).then(
       (response: IBlockedProfileAdminDTO) => {
         this.model = response;
+        this.isLoaded = true;
       }
     );
   }

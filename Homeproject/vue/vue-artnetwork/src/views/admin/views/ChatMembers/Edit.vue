@@ -1,19 +1,16 @@
 <template>
   <AdminEditWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
     <div class="form-group">
-      <label class="control-label" for="ProfileId">Profile (ID)</label>
-      <input class="form-control" type="text" required id="ProfileId" name="ProfileId" v-model="model.profileId" />
-      <span class="text-danger field-validation-valid" data-valmsg-for="ProfileId" data-valmsg-replace="true"></span>
+      <label class="control-label" for="profileId">{{$t('bll.chatmembers.ProfileId')}}</label>
+      <input class="form-control" type="text" id="profileId" name="profileId" v-model="model.profileId" />
     </div>
     <div class="form-group">
-      <label class="control-label" for="CMrofileId">Room (ID)</label>
-      <input class="form-control" type="text" required id="CMrofileId" name="CMrofileId" v-model="model.chatRoomId" />
-      <span class="text-danger field-validation-valid" data-valmsg-for="CMrofileId" data-valmsg-replace="true"></span>
+      <label class="control-label" for="chatRoomId">{{$t('bll.chatmembers.ChatRoomId')}}</label>
+      <input class="form-control" type="text" id="chatRoomId" name="chatRoomId" v-model="model.chatRoomId" />
     </div>
     <div class="form-group">
-      <label class="control-label" for="CMrofileId">Role (ID)</label>
-      <input class="form-control" type="text" required id="CMrofileId" name="CMrofileId" v-model="model.chatRoleId" />
-      <span class="text-danger field-validation-valid" data-valmsg-for="CMrofileId" data-valmsg-replace="true"></span>
+      <label class="control-label" for="chatRoleId">{{$t('bll.chatmembers.ChatRoleId')}}</label>
+      <input class="form-control" type="text" id="chatRoleId" name="chatRoleId" v-model="model.chatRoleId" />
     </div>
   </AdminEditWrapper>
   <LoadingOverlay v-else />
@@ -31,14 +28,6 @@ import AdminEdit from "../../components/shared/base/AdminEdit.vue";
 
 @Component
 export default class CMEditA extends AdminEdit<IChatMemberAdminDTO> {
-  mounted() {
-    ChatMembersApi.details(this.Id, this.jwt).then(
-      (response: IChatMemberAdminDTO) => {
-        this.model = response;
-      }
-    );
-  }
-
   onSubmit() {
     if (this.Id && this.model) {
       ChatMembersApi.edit(this.Id, this.model, this.jwt).then(
@@ -51,6 +40,19 @@ export default class CMEditA extends AdminEdit<IChatMemberAdminDTO> {
         }
       );
     }
+  }
+
+  created() {
+    this.modelName = "ChatMember";
+  }
+
+  mounted() {
+    ChatMembersApi.details(this.Id, this.jwt).then(
+      (response: IChatMemberAdminDTO) => {
+        this.model = response;
+        this.isLoaded = true;
+      }
+    );
   }
 }
 </script>
