@@ -9,7 +9,7 @@
     <ImageMiniature :htmlClass="'card mb-4'" :htmlStyle="'width: 20rem !important'" ref="miniature" />
     <div class="col-md-4 mb-3">
       <CreateEdit :model="model" />
-      <ImageForm :imageModel="model" v-on:onLoadFile="loadImage" />
+      <ImageForm :imageModel="imageModel" v-on:onLoadFile="loadImage" />
     </div>
   </AdminCreateWrapper>
   <LoadingOverlay v-else />

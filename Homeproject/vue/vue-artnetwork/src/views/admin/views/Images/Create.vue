@@ -72,7 +72,7 @@ export default class ImagesCreateA extends AdminCreate {
   }
 
   onSubmit() {
-    ImagesApi.create(this.model, this.jwt).then((response: ResponseDTO) => {
+    ImagesApi.create(this.model, this.jwt).then((response: any) => {
       if (response?.errors) {
         this.errors = response.errors;
       } else {

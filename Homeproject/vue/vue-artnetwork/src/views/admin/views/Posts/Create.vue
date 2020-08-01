@@ -8,7 +8,7 @@
   >
     <ImageMiniature :htmlClass="'card mb-4'" :htmlStyle="'width: 20rem !important'" ref="miniature" />
     <div class="col-md-4">
-      <ImageForm :imageModel="model" v-on:onLoadFile="loadImage" />
+      <ImageForm :imageModel="imageModel" v-on:onLoadFile="loadImage" />
       <CreateEdit :model="model" />
     </div>
   </AdminCreateWrapper>

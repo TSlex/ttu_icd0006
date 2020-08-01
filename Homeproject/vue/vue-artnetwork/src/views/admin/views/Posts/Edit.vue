@@ -8,7 +8,7 @@
   >
     <ImageMiniature :htmlClass="'card mb-4'" :htmlStyle="'width: 20rem !important'" ref="miniature" />
     <div class="col-md-4">
-      <ImageForm :imageModel="model" v-on:onLoadFile="loadImage" />
+      <ImageForm :imageModel="imageModel" v-on:onLoadFile="loadImage" />
       <CreateEdit :model="model" />
     </div>
   </AdminEditWrapper>
@@ -51,6 +51,25 @@ export default class PostsEditA extends AdminEdit<IPostAdminDTO> {
     return this.model?.postImageId != null;
   }
 
+  loadImage(file: File) {
+    this.imageModel!.imageFile = file;
+    (this.$refs.miniature as ImageMiniature).loadImage(file);
+  }
+
+  onSubmit() {
+    if (this.Id && this.model) {
+      PostsApi.edit(this.Id, this.model, this.jwt).then(
+        (response: ResponseDTO) => {
+          if (response?.errors) {
+            this.errors = response.errors;
+          } else {
+            this.$router.go(-1);
+          }
+        }
+      );
+    }
+  }
+
   beforeMount() {
     PostsApi.details(this.Id, this.jwt).then((response: IPostAdminDTO) => {
       this.model = response;
@@ -80,25 +99,6 @@ export default class PostsEditA extends AdminEdit<IPostAdminDTO> {
         this.isLoaded = true;
       }
     });
-  }
-
-  loadImage(file: File) {
-    this.imageModel!.imageFile = file;
-    (this.$refs.miniature as ImageMiniature).loadImage(file);
-  }
-
-  onSubmit() {
-    if (this.Id && this.model) {
-      PostsApi.edit(this.Id, this.model, this.jwt).then(
-        (response: ResponseDTO) => {
-          if (response?.errors) {
-            this.errors = response.errors;
-          } else {
-            this.$router.go(-1);
-          }
-        }
-      );
-    }
   }
 
   created() {
