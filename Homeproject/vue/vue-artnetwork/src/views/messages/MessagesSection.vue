@@ -144,7 +144,7 @@ export default class MessagesSection extends IdentityStore {
 
   onSendMessage(e: Event) {
     if (this.messagePostModel.messageValue !== "") {
-      store.dispatch("sendMessage", this.messagePostModel).then(() => {
+      store.dispatch("postMessage", this.messagePostModel).then(() => {
         this.messagePostModel.messageValue = "";
         store.dispatch("getChatRooms");
       });

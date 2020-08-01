@@ -116,7 +116,17 @@ export const MessagesModule = {
       context.commit('setMessages', response)
       return response;
     },
-    async sendMessage(context: any, message: IMessagePostDTO): Promise<ResponseDTO> {
+    async setMessages(context: any, message: IMessagePostDTO): Promise<ResponseDTO> {
+      const response = await MessagesApi.postMessage(message, context.state.jwt);
+      context.dispatch('getMessages', { chatRoomId: message.chatRoomId, pageNumber: 1 });
+      return response;
+    },
+    async postMessage(context: any, message: IMessagePostDTO): Promise<ResponseDTO> {
+      const response = await MessagesApi.postMessage(message, context.state.jwt);
+      context.dispatch('getMessages', { chatRoomId: message.chatRoomId, pageNumber: 1 });
+      return response;
+    },
+    async putMessage(context: any, message: IMessagePostDTO): Promise<ResponseDTO> {
       const response = await MessagesApi.postMessage(message, context.state.jwt);
       context.dispatch('getMessages', { chatRoomId: message.chatRoomId, pageNumber: 1 });
       return response;

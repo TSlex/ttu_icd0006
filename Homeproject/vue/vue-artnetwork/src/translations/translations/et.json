@@ -379,7 +379,8 @@
       "PasswordMatchError": "Parool ja kinnitusparool ei kattu.",
       "InvalidEmail": "Väli {0} pole kehtiv e-posti aadress.",
       "InvalidPhone": "Väli {0} pole kehtiv telefoninumber.",
-      "EmailUpdateStatusSuccess": "E-posti aadressi värskendamine õnnestus.."
+      "EmailUpdateStatusSuccess": "E-posti aadressi värskendamine õnnestus.",
+      "AuthFailed": "Autoriseerimine ebaõnnestub."
     },
     "images": {
       "Preview": "Eelvaade",

@@ -379,7 +379,8 @@
       "PasswordMatchError": "Пароль и его подтверждение должны совпадать.",
       "InvalidEmail": "Поле {0} не является верным э-адресом.",
       "InvalidPhone": "Поле {0} не является верным номером телефона.",
-      "EmailUpdateStatusSuccess": "Э-адрес был успешно обновлен."
+      "EmailUpdateStatusSuccess": "Э-адрес был успешно обновлен.",
+      "AuthFailed": "Ошибка авторизации."
     },
     "images": {
       "Preview": "Миниатюра",

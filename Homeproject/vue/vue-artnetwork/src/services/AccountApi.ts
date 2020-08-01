@@ -1,3 +1,4 @@
+import { i18n } from './../translations/i18n';
 import { LanguageService } from './shared/LanguageService';
 import Axios from 'axios';
 import { ILoginDTO } from '../types/Identity/ILoginDTO';
@@ -7,6 +8,7 @@ import { ResponseDTO } from '@/types/Response/ResponseDTO';
 import { IProfilePasswordDTO } from '@/types/Identity/IProfilePasswordDTO';
 import { IProfileEmailDTO } from '@/types/Identity/IProfileEmailDTO';
 import { IProfileDataDTO } from '@/types/Identity/IProfileDataDTO';
+import { parseResponse } from '@/helpers/responseParcer';
 
 
 export abstract class AccountApi extends LanguageService {
@@ -29,11 +31,13 @@ export abstract class AccountApi extends LanguageService {
 
     switch (response.status) {
       case 200:
+      case 201:
+      case 204:
       case 404:
         return response.data as JwtResponseDTO
       default:
         return {
-          errors: ["Authorisation fails"]
+          errors: [i18n.t('views.identity.AuthFailed')]
         } as JwtResponseDTO
     }
   }
@@ -44,13 +48,12 @@ export abstract class AccountApi extends LanguageService {
 
     switch (response.status) {
       case 200:
-      case 404:
-      case 400:
+      case 201:
+      case 204:
         return response.data as ResponseDTO
       default:
-        return {
-          errors: ["Authorisation fails"]
-        } as ResponseDTO
+        console.log(response.status + ":" + response.statusText)
+        return parseResponse(response.data)
     }
   }
 
@@ -60,8 +63,8 @@ export abstract class AccountApi extends LanguageService {
 
     switch (response.status) {
       case 200:
-      case 404:
-      case 400:
+      case 201:
+      case 204:
         return response.data as string
       default:
         return "";
@@ -74,8 +77,8 @@ export abstract class AccountApi extends LanguageService {
 
     switch (response.status) {
       case 200:
-      case 404:
-      case 400:
+      case 201:
+      case 204:
         return response.data as IProfileDataDTO
       default:
         return null;
@@ -88,13 +91,12 @@ export abstract class AccountApi extends LanguageService {
 
     switch (response.status) {
       case 200:
-      case 404:
-      case 400:
+      case 201:
+      case 204:
         return response.data as ResponseDTO
       default:
-        return {
-          errors: ["Authorisation fails"]
-        } as ResponseDTO
+        console.log(response.status + ":" + response.statusText)
+        return parseResponse(response.data)
     }
   }
 
@@ -104,13 +106,12 @@ export abstract class AccountApi extends LanguageService {
 
     switch (response.status) {
       case 200:
-      case 404:
-      case 400:
+      case 201:
+      case 204:
         return response.data as ResponseDTO
       default:
-        return {
-          errors: ["Authorisation fails"]
-        } as ResponseDTO
+        console.log(response.status + ":" + response.statusText)
+        return parseResponse(response.data)
     }
   }
 
@@ -120,13 +121,12 @@ export abstract class AccountApi extends LanguageService {
 
     switch (response.status) {
       case 200:
-      case 404:
-      case 400:
+      case 201:
+      case 204:
         return response.data as ResponseDTO
       default:
-        return {
-          errors: ["Authorisation fails"]
-        } as ResponseDTO
+        console.log(response.status + ":" + response.statusText)
+        return parseResponse(response.data)
     }
   }
 }

@@ -379,7 +379,8 @@
       "PasswordMatchError": "The password and confirmation password do not match.",
       "InvalidEmail": "The {0} field is not a valid e-mail address.",
       "InvalidPhone": "The {0} field is not a valid phone number.",
-      "EmailUpdateStatusSuccess": "Email was updated successfully."
+      "EmailUpdateStatusSuccess": "Email was updated successfully.",
+      "AuthFailed": "Authorisation fails."
     },
     "images": {
       "Preview": "Preview",

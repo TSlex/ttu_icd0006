@@ -1,4 +1,4 @@
-import { ICommentDTO, ICommentPostDTO } from '@/types/ICommentDTO';
+import { ICommentDTO, ICommentPostDTO, ICommentPutDTO } from '@/types/ICommentDTO';
 import { distinctIdArray } from '@/helpers/distinctArray';
 import { CommentsApi } from '@/services/CommentsApi';
 import { ResponseDTO } from '@/types/Response/ResponseDTO';
@@ -51,7 +51,13 @@ export const CommentsModule = {
       const response = await CommentsApi.postComment(comment, context.state.jwt);
       await context.dispatch('getComments', { postId: comment.postId, pageNumber: 1 });
 
+      //remove comment duplicate after fetching
       context.commit('deleteComment', comment)
+
+      return response;
+    },
+    async putComment(context: any, comment: ICommentPutDTO): Promise<ResponseDTO> {
+      const response = await CommentsApi.putComment(comment.id, comment, context.state.jwt);
 
       return response;
     },

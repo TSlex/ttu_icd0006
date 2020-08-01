@@ -8,13 +8,15 @@
           <span class="comment_value">&nbsp;{{comment.commentValue}}</span>
           <div v-if="!commentEditing
             || commentEditing && editedComment.id === comment.id" class="comment_controls">
-            <template v-if="!commentEditing && userName === comment.userName">
+            <template v-if="!commentEditing && userName === comment.userName && hasId(comment)">
               <a class="fa fa-edit btn-link mr-2" href="#" @click="onEditComment(comment)"></a>
               <a class="fa fa-times-circle btn-link" href="#" @click="onDeleteComment(comment)"></a>
             </template>
+
             <template v-else-if="!commentEditing && userName === post.profileUsername">
               <a class="fa fa-times-circle btn-link" href="#" @click="onDeleteComment(comment)"></a>
             </template>
+
             <template v-if="commentEditing">
               <a class="fa fa-times btn-link" href="#" @click="onSetCommentEditing(false)"></a>
             </template>
@@ -28,7 +30,7 @@
       <form v-if="isAuthenticated" class="chat_input">
         <template v-if="!commentEditing">
           <textarea rows="2" type="text" id="messageValue" v-model="commentPostModel.commentValue" />
-          <button type="submit" class="far fa-paper-plane" @click="onSendComment"></button>
+          <button type="submit" class="far fa-paper-plane" @click="onPostComment"></button>
         </template>
         <template v-else>
           <textarea rows="2" type="text" id="messageValue" v-model="commentPutModel.commentValue" />
@@ -89,6 +91,10 @@ export default class CommentsSection extends IdentityStore {
     return this.comment;
   }
 
+  hasId(comment: ICommentDTO) {
+    return comment.id?.length > 0;
+  }
+
   onSetCommentEditing(mode: boolean) {
     this.commentEditing = mode;
   }
@@ -100,33 +106,12 @@ export default class CommentsSection extends IdentityStore {
     this.commentPutModel.commentValue = comment.commentValue;
   }
 
-  onPutComment(e: Event) {
-    if (
-      this.comment &&
-      this.commentPutModel.id.length > 0 &&
-      this.commentPutModel.commentValue.length > 0
-    ) {
-      CommentsApi.putComment(
-        this.commentPutModel.id,
-        this.commentPutModel,
-        this.jwt
-      ).then((response: ResponseDTO) => {
-        if (!response.errors) {
-          this.comment!.commentValue = this.commentPutModel.commentValue;
-        }
-        this.onSetCommentEditing(false);
-      });
-    }
-
-    e.preventDefault();
-  }
-
   onDeleteComment(comment: ICommentDTO) {
     store.dispatch("deleteComment", comment);
     this.post!.postCommentsCount -= 1;
   }
 
-  onSendComment(e: Event) {
+  onPostComment(e: Event) {
     if (this.commentPostModel.commentValue !== "") {
       store.dispatch("postComment", {
         ...this.commentPostModel,
@@ -141,6 +126,32 @@ export default class CommentsSection extends IdentityStore {
       ]);
       this.post!.postCommentsCount += 1;
       this.commentPostModel.commentValue = "";
+    }
+
+    e.preventDefault();
+  }
+
+  onPutComment(e: Event) {
+    if (
+      this.comment &&
+      this.commentPutModel.id.length > 0 &&
+      this.commentPutModel.commentValue.length > 0
+    ) {
+      const oldValue = this.comment!.commentValue;
+
+      this.comment!.commentValue = this.commentPutModel.commentValue;
+      this.onSetCommentEditing(false);
+
+      store
+        .dispatch("putComment", {
+          ...this.commentPutModel,
+        })
+        .then((response: ResponseDTO) => {
+          if (response.errors?.length > 0) {
+            this.comment!.commentValue = oldValue;
+            this.onSetCommentEditing(true);
+          }
+        });
     }
 
     e.preventDefault();

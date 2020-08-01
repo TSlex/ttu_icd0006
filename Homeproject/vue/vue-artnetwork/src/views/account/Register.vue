@@ -55,7 +55,7 @@ export default class AccountRegister extends Vue {
   private registerModel: IRegisterDTO = {
     username: "",
     email: "",
-    password: ""
+    password: "",
   };
 
   private errors: string[] = [];
@@ -79,7 +79,7 @@ export default class AccountRegister extends Vue {
           }
         });
     } else {
-      this.errors.push("Passwords do not match!");
+      this.errors.push(this.$t("views.identity.PasswordMatchError").toString());
     }
 
     e.preventDefault();
