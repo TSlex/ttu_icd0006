@@ -21,6 +21,7 @@
     "jquery": "^3.5.1",
     "jwt-decode": "^2.2.0",
     "moment": "^2.25.3",
+    "moment-timezone": "^0.5.31",
     "popper.js": "^1.16.1",
     "slick-carousel": "^1.8.1",
     "vue": "^2.6.11",

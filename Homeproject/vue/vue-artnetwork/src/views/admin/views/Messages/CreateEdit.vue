@@ -14,13 +14,7 @@
     </div>
     <div class="form-group">
       <label class="control-label" for="messageDateTime">{{$t('bll.messages.MessageDateTime')}}</label>
-      <input
-        class="form-control"
-        type="datetime-local"
-        id="messageDateTime"
-        name="messageDateTime"
-        v-model="model.messageDateTime"
-      />
+      <FlatpickrInput :value="model.messageDateTime" :onChange="(value) => model.messageDateTime = value" />
     </div>
   </div>
 </template>
@@ -30,8 +24,10 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 import { IMessageAdminDTO } from "@/types/IMessageDTO";
 
+import FlatpickrInput from "@/components/shared/FlatpickrInput.vue";
+
 @Component({
-  components: {},
+  components: { FlatpickrInput },
 })
 export default class CreateEdit extends Vue {
   @Prop() model!: IMessageAdminDTO;

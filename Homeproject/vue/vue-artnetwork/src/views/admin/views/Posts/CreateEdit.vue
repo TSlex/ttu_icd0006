@@ -24,14 +24,7 @@
 
     <div class="form-group">
       <label class="control-label" for="postPublicationDateTime">DateTime</label>
-      <input
-        class="form-control"
-        type="text"
-        required
-        id="postPublicationDateTime"
-        name="postPublicationDateTime"
-        v-model="model.postPublicationDateTime"
-      />
+      <FlatpickrInput :value="model.postPublicationDateTime" :onChange="(value) => model.postPublicationDateTime = value" />
     </div>
   </div>
 </template>
@@ -41,8 +34,12 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 import { IPostAdminDTO } from "@/types/IPostDTO";
 
+import FlatpickrInput from "@/components/shared/FlatpickrInput.vue";
+
 @Component({
-  components: {},
+  components: {
+    FlatpickrInput,
+  },
 })
 export default class CreateEdit extends Vue {
   @Prop() model!: IPostAdminDTO;

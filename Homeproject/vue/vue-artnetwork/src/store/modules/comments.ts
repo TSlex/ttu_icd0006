@@ -17,7 +17,7 @@ export const CommentsModule = {
   getters: {
     getComments(state: IState) {
       return state.comments.sort((comment1, comment2) => {
-        return comment1.commentDateTime < comment2.commentDateTime ? 1 : -1
+        return new Date(comment1.commentDateTime) < new Date(comment2.commentDateTime) ? 1 : -1
       })
     }
   },

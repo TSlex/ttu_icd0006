@@ -17,13 +17,7 @@
 
     <div class="form-group">
       <label class="control-label" for="commentDateTime">{{$t('bll.comments.CommentDateTime')}}</label>
-      <input
-        class="form-control valid"
-        type="datetime-local"
-        id="commentDateTime"
-        name="commentDateTime"
-        v-model="model.commentDateTime"
-      />
+      <FlatpickrInput :value="model.commentDateTime" :onChange="(value) => model.commentDateTime = value" />
     </div>
   </div>
 </template>
@@ -33,8 +27,12 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 import { IRankAdminDTO } from "@/types/IRankDTO";
 
+import FlatpickrInput from "@/components/shared/FlatpickrInput.vue";
+
 @Component({
-  components: {},
+  components: {
+    FlatpickrInput,
+  },
 })
 export default class CreateEdit extends Vue {
   @Prop() model!: IRankAdminDTO;
