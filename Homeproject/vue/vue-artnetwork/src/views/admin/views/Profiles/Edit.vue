@@ -102,11 +102,10 @@ import { ImageType } from "@/types/Enums/ImageType";
 import store from "@/store";
 
 import { IProfileAdminDTO } from "@/types/IProfileDTO";
-import { IImageDTO } from "@/types/IImageDTO";
+import { IImageDTO, IImagePostDTO, IImageAdminDTO } from "@/types/IImageDTO";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 import { ProfilesApi } from "@/services/admin/ProfilesApi";
-import { ImagesApi } from "@/services/ImagesApi";
 import AdminEdit from "../../components/shared/base/AdminEdit.vue";
 
 import { resolveGender } from "@/translations/gender";
@@ -116,6 +115,7 @@ import ImageForm from "@/components/image/ImageForm.vue";
 import ImageMiniature from "@/components/image/ImageMiniature.vue";
 
 import { createEmptyGuid } from "@/helpers/guid";
+import { ImagesApi } from "@/services/admin/ImagesApi";
 
 @Component({
   components: {
@@ -124,7 +124,7 @@ import { createEmptyGuid } from "@/helpers/guid";
   },
 })
 export default class ProfilesEditA extends AdminEdit<IProfileAdminDTO> {
-  private imageModel: IImageDTO | null = null;
+  private imageModel: IImageAdminDTO | null = null;
 
   get isImageExist() {
     return this.model?.profileAvatarId != null;
@@ -151,8 +151,8 @@ export default class ProfilesEditA extends AdminEdit<IProfileAdminDTO> {
         this.model = response;
 
         if (this.isImageExist) {
-          ImagesApi.getImageModel(response.profileAvatarId!, this.jwt).then(
-            (response: IImageDTO) => {
+          ImagesApi.details(response.profileAvatarId!, this.jwt).then(
+            (response: IImageAdminDTO) => {
               this.imageModel = response;
               this.isLoaded = true;
             }
@@ -170,7 +170,14 @@ export default class ProfilesEditA extends AdminEdit<IProfileAdminDTO> {
             paddingLeft: 0,
             imageFile: null,
             imageType: ImageType.ProfileAvatar,
-            imageFor: "",
+            imageFor: this.model.id,
+            masterId: null,
+            createdBy: null,
+            createdAt: new Date(),
+            changedBy: null,
+            changedAt: new Date(),
+            deletedBy: null,
+            deletedAt: null,
           };
 
           this.isLoaded = true;
@@ -180,17 +187,36 @@ export default class ProfilesEditA extends AdminEdit<IProfileAdminDTO> {
   }
 
   onSubmit() {
-    store.dispatch("putImageModel", { ...this.imageModel }).then(() => {
-      ProfilesApi.edit(this.Id, this.model!, this.jwt).then(
-        (response: ResponseDTO) => {
-          if (response?.errors) {
-            this.errors = response.errors;
-          } else {
-            this.$router.go(-1);
-          }
+    if (this.isImageExist) {
+      ImagesApi.edit(this.imageModel!.id, this.imageModel!, this.jwt).then(
+        () => {
+          ProfilesApi.edit(this.Id, this.model!, this.jwt).then(
+            (response: ResponseDTO) => {
+              if (response?.errors) {
+                this.errors = response.errors;
+              } else {
+                this.$router.go(-1);
+              }
+            }
+          );
         }
       );
-    });
+    } else {
+      ImagesApi.create(this.imageModel!, this.jwt).then(
+        (response: IImageAdminDTO) => {
+          this.model!.profileAvatarId = response.id;
+          ProfilesApi.edit(this.Id, this.model!, this.jwt).then(
+            (response: ResponseDTO) => {
+              if (response?.errors) {
+                this.errors = response.errors;
+              } else {
+                this.$router.go(-1);
+              }
+            }
+          );
+        }
+      );
+    }
   }
 }
 </script>

@@ -1,61 +1,49 @@
 <template>
-  <AdminDetailsWrapper v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
-    <div class="card" style="width: 40rem; user-select: none;" draggable="false" id="image-miniature">
+  <AdminDetailsWrapper v-if="isLoaded" v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
+    <div class="card" style="width: 20rem;">
       <ImageComponent :id="model.id" :key="model.id" htmlClass="card-img" height="inherit" width="inherit" />
     </div>
+    <hr />
     <dl class="row">
-      <dt class="col-sm-2">(ID)</dt>
+      <dt class="col-sm-2">{{$t('bll.common.Id')}}</dt>
       <dd class="col-sm-10">{{model.id}}</dd>
 
-      <dt class="col-sm-2">URL</dt>
+      <dt class="col-sm-2">{{$t('bll.images.ImageUrl')}}</dt>
       <dd class="col-sm-10">{{model.imageUrl}}</dd>
 
-      <dt class="col-sm-2">URL original</dt>
+      <dt class="col-sm-2">{{$t('bll.images.OriginalImageUrl')}}</dt>
       <dd class="col-sm-10">{{model.originalImageUrl}}</dd>
 
-      <dt class="col-sm-2">Height (PX)</dt>
+      <dt class="col-sm-2">{{$t('bll.images.HeightPx')}}</dt>
       <dd class="col-sm-10">{{model.heightPx}}</dd>
 
-      <dt class="col-sm-2">Width (PX)</dt>
+      <dt class="col-sm-2">{{$t('bll.images.WidthPx')}}</dt>
       <dd class="col-sm-10">{{model.widthPx}}</dd>
 
-      <dt class="col-sm-2">Padding top (PX)</dt>
+      <dt class="col-sm-2">{{$t('bll.images.PaddingTop')}}</dt>
       <dd class="col-sm-10">{{model.paddingTop}}</dd>
 
-      <dt class="col-sm-2">Padding right (PX)</dt>
+      <dt class="col-sm-2">{{$t('bll.images.PaddingRight')}}</dt>
       <dd class="col-sm-10">{{model.paddingRight}}</dd>
 
-      <dt class="col-sm-2">Padding bottom (PX)</dt>
+      <dt class="col-sm-2">{{$t('bll.images.PaddingBottom')}}</dt>
       <dd class="col-sm-10">{{model.paddingBottom}}</dd>
 
-      <dt class="col-sm-2">Padding left (PX)</dt>
+      <dt class="col-sm-2">{{$t('bll.images.PaddingLeft')}}</dt>
       <dd class="col-sm-10">{{model.paddingLeft}}</dd>
-
-      <dt class="col-sm-2">For (ID)</dt>
+    </dl>
+    <hr />
+    <dl class="row">
+      <dt class="col-sm-2">{{$t('bll.images.ImageFor')}}</dt>
       <dd class="col-sm-10">{{model.imageFor}}</dd>
 
-      <dt class="col-sm-2">Type</dt>
-      <dd class="col-sm-10">{{model.imageType}}</dd>
-
-      <dt class="col-sm-2">CreatedBy</dt>
-      <dd class="col-sm-10">{{model.createdBy}}</dd>
-
-      <dt class="col-sm-2">CreatedAt</dt>
-      <dd class="col-sm-10">{{model.createdAt}}</dd>
-
-      <dt class="col-sm-2">ChangedBy</dt>
-      <dd class="col-sm-10">{{model.changedBy}}</dd>
-
-      <dt class="col-sm-2">ChangedAt</dt>
-      <dd class="col-sm-10">{{model.changedAt}}</dd>
-
-      <dt class="col-sm-2">DeletedBy</dt>
-      <dd class="col-sm-10">{{model.deletedBy}}</dd>
-
-      <dt class="col-sm-2">DeletedAt</dt>
-      <dd class="col-sm-10">{{model.deletedAt}}</dd>
+      <dt class="col-sm-2">{{$t('bll.images.ImageType')}}</dt>
+      <dd class="col-sm-10">{{resolveType(model.imageType)}}</dd>
     </dl>
+    <hr />
+    <MetaDetailsSection :model="model" />
   </AdminDetailsWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -71,12 +59,19 @@ import { ImagesApi } from "@/services/admin/ImagesApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 import AdminDetails from "../../components/shared/base/AdminDetails.vue";
 
+import { resolveType } from "@/translations/imageType";
+import { ImageType } from "@/types/Enums/ImageType";
+
 @Component({
   components: {
     ImageComponent,
   },
 })
 export default class ImagesDetailsA extends AdminDetails<IImageAdminDTO> {
+  resolveType(type: ImageType) {
+    return resolveType(type);
+  }
+
   created() {
     this.modelName = "Image";
   }

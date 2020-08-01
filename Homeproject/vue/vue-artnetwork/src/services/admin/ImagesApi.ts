@@ -12,15 +12,16 @@ export abstract class ImagesApi extends LanguageService {
       baseURL: "https://localhost:5001/api/v1/admin/adminimages/",
       headers: {
         common: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'image/jpeg'
         }
-      }
+      },
+      responseType: 'arraybuffer'
     }
   )
 
   static async index(jwt: string | null): Promise<IImageAdminDTO[]> {
     const url = "";
-    const response = await this.axios.get<IImageAdminDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
+    const response = await this.axios.get<IImageAdminDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture }, responseType: "json" });
 
     switch (response.status) {
       case 200:
@@ -35,7 +36,7 @@ export abstract class ImagesApi extends LanguageService {
 
   static async history(id: string, jwt: string | null): Promise<IImageAdminDTO[]> {
     const url = "history/" + id;
-    const response = await this.axios.get<IImageAdminDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
+    const response = await this.axios.get<IImageAdminDTO[]>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture }, responseType: "json" });
 
     switch (response.status) {
       case 200:
@@ -50,7 +51,7 @@ export abstract class ImagesApi extends LanguageService {
 
   static async details(id: string, jwt: string | null): Promise<IImageAdminDTO> {
     const url = id;
-    const response = await this.axios.get<IImageAdminDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
+    const response = await this.axios.get<IImageAdminDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture }, responseType: "json" });
 
     switch (response.status) {
       case 200:
@@ -63,7 +64,7 @@ export abstract class ImagesApi extends LanguageService {
     }
   }
 
-  static async create(imageModel: IImageAdminDTO, jwt: string | null): Promise<ResponseDTO> {
+  static async create(imageModel: IImageAdminDTO, jwt: string | null): Promise<IImageAdminDTO> {
     let formData = new FormData();
 
     formData.append('imageFor', imageModel.imageFor ?? "null")
@@ -77,7 +78,7 @@ export abstract class ImagesApi extends LanguageService {
     formData.append('imageFile', imageModel.imageFile ? imageModel.imageFile : '')
 
     const url = "";
-    const response = await this.axios.post<ResponseDTO>(url, formData, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture }, responseType: "json" });
+    const response = await this.axios.post<IImageAdminDTO>(url, formData, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture }, responseType: "json" });
 
     switch (response.status) {
       case 200:
@@ -90,9 +91,24 @@ export abstract class ImagesApi extends LanguageService {
     }
   }
 
-  static async edit(id: string, model: IImageAdminDTO, jwt: string | null): Promise<ResponseDTO> {
+  static async edit(id: string, imageModel: IImageAdminDTO, jwt: string | null): Promise<IImageAdminDTO> {
+    let formData = new FormData();
+
+    formData.append('id', imageModel.id.toString())
+    formData.append('imageUrl', imageModel.imageUrl!.toString())
+    formData.append('originalImageUrl', imageModel.originalImageUrl!.toString())
+    formData.append('imageFor', imageModel.imageFor ?? "null")
+    formData.append('imageType', imageModel.imageType.toString())
+    formData.append('paddingTop', imageModel.paddingTop.toString())
+    formData.append('paddingRight', imageModel.paddingRight.toString())
+    formData.append('paddingBottom', imageModel.paddingBottom.toString())
+    formData.append('paddingLeft', imageModel.paddingLeft.toString())
+    formData.append('widthPx', imageModel.widthPx.toString())
+    formData.append('heightPx', imageModel.heightPx.toString())
+    formData.append('imageFile', imageModel.imageFile ? imageModel.imageFile : '')
+
     const url = id;
-    const response = await this.axios.put<ResponseDTO>(url, model, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
+    const response = await this.axios.put<IImageAdminDTO>(url, formData, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture }, responseType: "json" });
 
     switch (response.status) {
       case 200:
@@ -107,7 +123,7 @@ export abstract class ImagesApi extends LanguageService {
 
   static async delete(id: string, jwt: string | null): Promise<ResponseDTO> {
     const url = id;
-    const response = await this.axios.delete<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
+    const response = await this.axios.delete<ResponseDTO>(url, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture }, responseType: "json" });
 
     switch (response.status) {
       case 200:
@@ -122,7 +138,7 @@ export abstract class ImagesApi extends LanguageService {
 
   static async restore(id: string, jwt: string | null): Promise<ResponseDTO> {
     const url = "restore/" + id;
-    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
+    const response = await this.axios.post<ResponseDTO>(url, {}, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture }, responseType: "json" });
 
     switch (response.status) {
       case 200:

@@ -7,8 +7,26 @@
     :ignoreTopColStyle="true"
   >
     <ImageMiniature :initialId="model.id" :htmlClass="'card mb-4'" :htmlStyle="'width: 30rem !important'" ref="miniature" />
-    <div class="col-md-4">
+    <div class="col-md-6">
       <ImageForm :imageModel="model" v-on:onLoadFile="loadImage" />
+
+      <div class="form-group">
+        <label class="control-label" for="imageUrl">{{$t('bll.images.ImageUrl')}}</label>
+        <input class="form-control" type="text" id="imageUrl" maxlength="300" name="imageUrl" v-model="model.imageUrl" />
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="originalImageUrl">{{$t('bll.images.OriginalImageUrl')}}</label>
+        <input
+          class="form-control"
+          type="text"
+          id="originalImageUrl"
+          maxlength="300"
+          name="originalImageUrl"
+          v-model="model.originalImageUrl"
+        />
+      </div>
+
       <CreateEdit :model="model" />
     </div>
   </AdminEditWrapper>
