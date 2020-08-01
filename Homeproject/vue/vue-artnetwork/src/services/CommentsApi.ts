@@ -4,6 +4,7 @@ import { IProfileDTO } from './../types/IProfileDTO';
 import Axios from 'axios';
 import store from "../store";
 import { LanguageService } from './shared/LanguageService';
+import { parseResponse } from '@/helpers/responseParcer';
 
 
 
@@ -46,7 +47,7 @@ export abstract class CommentsApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 
@@ -61,7 +62,7 @@ export abstract class CommentsApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 
@@ -76,7 +77,7 @@ export abstract class CommentsApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 }

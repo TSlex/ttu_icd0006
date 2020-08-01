@@ -2,6 +2,7 @@ import { ResponseDTO } from '@/types/Response/ResponseDTO';
 import { IFavoriteAdminDTO } from '@/types/IFavoriteDTO';
 import Axios from 'axios';
 import { LanguageService } from '../shared/LanguageService';
+import { parseResponse } from '@/helpers/responseParcer';
 
 
 
@@ -44,7 +45,7 @@ export abstract class FavoritesApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 
@@ -59,7 +60,7 @@ export abstract class FavoritesApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 
@@ -74,7 +75,7 @@ export abstract class FavoritesApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 }

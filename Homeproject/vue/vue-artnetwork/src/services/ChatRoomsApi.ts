@@ -6,6 +6,7 @@ import Axios from 'axios';
 import store from "../store";
 import { IMessageDTO } from '@/types/IMessageDTO';
 import { LanguageService } from './shared/LanguageService';
+import { parseResponse } from '@/helpers/responseParcer';
 
 
 
@@ -48,7 +49,7 @@ export abstract class ChatRoomsApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 
@@ -108,7 +109,7 @@ export abstract class ChatRoomsApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 
@@ -123,7 +124,7 @@ export abstract class ChatRoomsApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 }

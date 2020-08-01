@@ -3,6 +3,7 @@ import { CountResponseDTO } from '@/types/Response/CountResponseDTO';
 import { ResponseDTO } from './../types/Response/ResponseDTO';
 import Axios from 'axios';
 import { LanguageService } from './shared/LanguageService';
+import { parseResponse } from '@/helpers/responseParcer';
 
 
 
@@ -90,7 +91,7 @@ export abstract class PostsApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 
@@ -105,7 +106,7 @@ export abstract class PostsApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 
@@ -120,7 +121,7 @@ export abstract class PostsApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 
@@ -135,7 +136,7 @@ export abstract class PostsApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 
@@ -150,7 +151,7 @@ export abstract class PostsApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 
@@ -165,7 +166,7 @@ export abstract class PostsApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 }

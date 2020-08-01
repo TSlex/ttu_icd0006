@@ -6,6 +6,7 @@ import Axios from 'axios';
 import store from "../store";
 import { CountResponseDTO } from '@/types/Response/CountResponseDTO';
 import { IProfileGiftDTO, IProfileGiftPostDTO } from '@/types/IProfileGiftDTO';
+import { parseResponse } from '@/helpers/responseParcer';
 
 
 
@@ -97,7 +98,7 @@ export abstract class GiftsApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 
@@ -112,7 +113,7 @@ export abstract class GiftsApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 }

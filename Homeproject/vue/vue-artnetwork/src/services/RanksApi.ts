@@ -5,6 +5,7 @@ import store from "../store";
 import { IRankDTO } from '@/types/IRankDTO';
 
 import { LanguageService } from './shared/LanguageService';
+import { parseResponse } from '@/helpers/responseParcer';
 
 export abstract class RanksApi extends LanguageService {
   private static axios = Axios.create(
@@ -45,7 +46,7 @@ export abstract class RanksApi extends LanguageService {
         return response.data;
       default:
         console.log(response.status + ":" + response.statusText)
-        return response.data;
+        return parseResponse(response.data)
     }
   }
 }
