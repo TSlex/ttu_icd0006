@@ -16,7 +16,7 @@
       <dd class="col-sm-10">{{model.lastMessageValue}}</dd>
 
       <dt class="col-sm-2">{{$t('bll.chatrooms.LastMessageDateTime')}}</dt>
-      <dd class="col-sm-10">{{model.lastMessageDateTime}}</dd>
+      <dd class="col-sm-10">{{model.lastMessageDateTime | formatDate}}</dd>
     </dl>
     <hr />
     <MetaDetailsSection :model="model" />

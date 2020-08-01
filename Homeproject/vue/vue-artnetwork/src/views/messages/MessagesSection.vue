@@ -66,7 +66,7 @@
       <template v-if="!messageEditing">
         <form v-if="currentMember && currentMember.canWriteMessages" class="chat_input">
           <textarea rows="2" type="text" id="messageValue" v-model="messagePostModel.messageValue" />
-          <button type="submit" class="far fa-paper-plane" @click="onSendMessage"></button>
+          <button type="submit" class="far fa-paper-plane" @click="onPostMessage"></button>
         </form>
         <span v-else class="text-center p-3 text-danger" style="border-top: solid 1px gray;">{{$t('views.chatrooms.CannotWrite')}}</span>
       </template>
@@ -142,22 +142,36 @@ export default class MessagesSection extends IdentityStore {
     this.messageEditing = mode;
   }
 
-  onSendMessage(e: Event) {
+  onPostMessage(e: Event) {
     if (this.messagePostModel.messageValue !== "") {
-      store.dispatch("postMessage", this.messagePostModel).then(() => {
-        this.messagePostModel.messageValue = "";
-        store.dispatch("getChatRooms");
-      });
+      const newMessageDate = new Date().toISOString();
+
+      store
+        .dispatch("postMessage", {
+          ...this.messagePostModel,
+        })
+        .then(() => {
+          store.dispatch("getChatRooms");
+        });
+
+      store.commit("setMessages", [
+        {
+          ...this.messagePostModel,
+          userName: this.userName,
+          messageDateTime: newMessageDate,
+          profileAvatarId: this.currentMember!.profileAvatarId,
+        },
+        ...this.messages,
+      ]);
+
+      this.selectedChatRoom!.lastMessageValue = this.messagePostModel.messageValue;
+      (this.selectedChatRoom!.lastMessageDateTime as unknown) = newMessageDate;
+      this.selectedChatRoom!.lastMessageProfileAvatarId = this.currentMember!.profileAvatarId;
+
+      this.messagePostModel.messageValue = "";
     }
 
     e.preventDefault();
-  }
-
-  onEditMessage(message: IMessageDTO) {
-    this.selectedMessage = message;
-    this.messageEditing = true;
-    this.messagePutModel.id = message.id;
-    this.messagePutModel.messageValue = message.messageValue;
   }
 
   onPutMessage(e: Event) {
@@ -166,18 +180,31 @@ export default class MessagesSection extends IdentityStore {
       this.messagePutModel.id.length > 0 &&
       this.messagePutModel.messageValue.length > 0
     ) {
+      const oldValue = this.selectedMessage!.messageValue;
+
       this.messageEditing = false;
       this.selectedMessage!.messageValue = this.messagePutModel.messageValue;
 
-      MessagesApi.putMessage(
-        this.messagePutModel.id,
-        this.messagePutModel,
-        this.jwt
-      );
+      store
+        .dispatch("putMessage", {
+          ...this.messagePutModel,
+        })
+        .then((response: ResponseDTO) => {
+          if (response.errors?.length > 0) {
+            this.selectedMessage!.messageValue = oldValue;
+          }
+        });
     }
 
     e.preventDefault();
     store.dispatch("getChatRooms");
+  }
+
+  onEditMessage(message: IMessageDTO) {
+    this.selectedMessage = message;
+    this.messageEditing = true;
+    this.messagePutModel.id = message.id;
+    this.messagePutModel.messageValue = message.messageValue;
   }
 
   onDeleteMessage(message: IMessageDTO) {

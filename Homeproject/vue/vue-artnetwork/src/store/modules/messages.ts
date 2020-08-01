@@ -66,6 +66,7 @@ export const MessagesModule = {
     setChatRooms(state: IState, chatRooms: IChatRoomDTO[]) {
       state.chatRooms = chatRooms;
     },
+
     setMessages(state: IState, messages: IMessageDTO[]) {
       state.messages = messages;
     },
@@ -76,6 +77,7 @@ export const MessagesModule = {
         }
       });
     },
+
     setMembers(state: IState, members: IChatMemberDTO[]) {
       state.members = members;
     },
@@ -129,6 +131,10 @@ export const MessagesModule = {
     async putMessage(context: any, message: IMessagePostDTO): Promise<ResponseDTO> {
       const response = await MessagesApi.postMessage(message, context.state.jwt);
       context.dispatch('getMessages', { chatRoomId: message.chatRoomId, pageNumber: 1 });
+
+      //remove comment duplicate after fetching
+      context.commit('deleteMessage', message)
+
       return response;
     },
     async deleteMessage(context: any, message: IMessageDTO): Promise<ResponseDTO> {

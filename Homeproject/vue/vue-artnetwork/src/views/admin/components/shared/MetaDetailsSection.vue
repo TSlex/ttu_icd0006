@@ -5,19 +5,19 @@
     <dd class="col-sm-10">{{model.createdBy}}</dd>
 
     <dt class="col-sm-2">{{$t('bll.common.CreatedAt')}}</dt>
-    <dd class="col-sm-10">{{model.createdAt}}</dd>
+    <dd class="col-sm-10">{{model.createdAt | formatDate}}</dd>
 
     <dt class="col-sm-2">{{$t('bll.common.ChangedBy')}}</dt>
     <dd class="col-sm-10">{{model.changedBy}}</dd>
 
     <dt class="col-sm-2">{{$t('bll.common.ChangedAt')}}</dt>
-    <dd class="col-sm-10">{{model.changedAt}}</dd>
+    <dd class="col-sm-10">{{model.changedAt | formatDate}}</dd>
     <template v-if="deletable">
       <dt class="col-sm-2">{{$t('bll.common.DeletedBy')}}</dt>
       <dd class="col-sm-10">{{model.deletedBy}}</dd>
 
       <dt class="col-sm-2">{{$t('bll.common.DeletedAt')}}</dt>
-      <dd class="col-sm-10">{{model.deletedAt}}</dd>
+      <dd class="col-sm-10">{{model.deletedAt | formatDate}}</dd>
     </template>
   </dl>
 </template>

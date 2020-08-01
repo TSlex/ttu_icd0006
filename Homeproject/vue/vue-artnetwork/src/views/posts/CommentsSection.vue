@@ -149,7 +149,6 @@ export default class CommentsSection extends IdentityStore {
         .then((response: ResponseDTO) => {
           if (response.errors?.length > 0) {
             this.comment!.commentValue = oldValue;
-            this.onSetCommentEditing(true);
           }
         });
     }

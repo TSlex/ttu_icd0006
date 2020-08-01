@@ -20,7 +20,7 @@
       <dd class="col-sm-10">{{model.postDescription}}</dd>
 
       <dt class="col-sm-2">{{$t('bll.posts.PostPublicationDateTime')}}</dt>
-      <dd class="col-sm-10">{{model.postPublicationDateTime}}</dd>
+      <dd class="col-sm-10">{{model.postPublicationDateTime | formatDate}}</dd>
 
       <dt class="col-sm-2">{{$t('bll.posts.PostFavoritesCount')}}</dt>
       <dd class="col-sm-10">{{model.postFavoritesCount}}</dd>

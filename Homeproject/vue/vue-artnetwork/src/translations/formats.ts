@@ -4,22 +4,22 @@ import moment from 'moment';
 export const resolveTimeFormat = () => {
   switch (store.getters.getCurrentCulture) {
     case "ru-RU":
-      return "hh:mm";
+      return "HH:mm";
     case "et-EE":
-      return "hh:mm";
+      return "HH:mm";
     default:
-      return "hh:mm";
+      return "HH:mm";
   }
 }
 
 export const resolveDateFormat = () => {
   switch (store.getters.getCurrentCulture) {
     case "ru-RU":
-      return "MM.DD.YYYY hh:mm";
+      return "DD.MM.YYYY HH:mm";
     case "et-EE":
-      return "MM.DD.YYYY hh:mm";
+      return "DD.MM.YYYY HH:mm";
     default:
-      return "MM/DD/YYYY hh:mm";
+      return "DD/MM/YYYY HH:mm";
   }
 }
 
