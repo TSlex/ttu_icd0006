@@ -1,7 +1,8 @@
 <template>
   <AdminEditWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
-    <CreateEdit />
+    <CreateEdit :model="model" />
   </AdminEditWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -29,6 +30,7 @@ export default class ProfileRanksEditA extends AdminEdit<IProfileRankAdminDTO> {
     ProfileRanksApi.details(this.Id, this.jwt).then(
       (response: IProfileRankAdminDTO) => {
         this.model = response;
+        this.isLoaded = true;
       }
     );
   }
@@ -45,6 +47,10 @@ export default class ProfileRanksEditA extends AdminEdit<IProfileRankAdminDTO> {
         }
       );
     }
+  }
+
+  created() {
+    this.modelName = "ProfileRank";
   }
 }
 </script>

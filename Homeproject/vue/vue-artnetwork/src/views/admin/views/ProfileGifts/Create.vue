@@ -1,7 +1,8 @@
 <template>
-  <AdminCreateWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
+  <AdminCreateWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
     <CreateEdit :model="model" />
   </AdminCreateWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -57,16 +58,12 @@ export default class ProfileGiftsCreateA extends AdminCreate {
     );
   }
 
-  beforeDestroy() {
-    let exist = document.getElementById("image_miniature_script");
-
-    if (exist) {
-      exist.remove();
-    }
-  }
-
   created() {
     this.modelName = "ProfileGift";
+  }
+
+  mounted() {
+    this.isLoaded = true;
   }
 }
 </script>

@@ -1,7 +1,8 @@
 <template>
-  <AdminCreateWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
-    <CreateEdit />
+  <AdminCreateWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
+    <CreateEdit :model="model" />
   </AdminCreateWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -19,6 +20,7 @@ import { ImageType } from "@/types/Enums/ImageType";
 import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
 
 import CreateEdit from "./CreateEdit.vue";
+import { createEmptyGuid } from "../../../../helpers/guid";
 
 @Component({
   components: {
@@ -28,7 +30,7 @@ import CreateEdit from "./CreateEdit.vue";
 })
 export default class ProfileRanksCreateA extends AdminCreate {
   private model: IProfileRankAdminDTO = {
-    id: "",
+    id: createEmptyGuid(),
     createdBy: null,
     createdAt: new Date(),
     changedBy: null,
@@ -38,12 +40,6 @@ export default class ProfileRanksCreateA extends AdminCreate {
     profileId: "",
     rankId: "",
   };
-
-  private isImageLoaded: boolean = false;
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
 
   onSubmit() {
     if (this.model.profileId.length > 0 && this.model.rankId.length > 0) {
@@ -57,6 +53,14 @@ export default class ProfileRanksCreateA extends AdminCreate {
         }
       );
     }
+  }
+
+  created() {
+    this.modelName = "ProfileRank";
+  }
+
+  mounted() {
+    this.isLoaded = true;
   }
 }
 </script>

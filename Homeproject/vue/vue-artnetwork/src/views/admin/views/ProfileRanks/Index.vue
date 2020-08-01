@@ -3,9 +3,8 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Profile (ID)</th>
-          <th>Rank (ID)</th>
-          <th>IS DELETED?</th>
+          <th>{{$t('bll.profileranks.ProfileId')}}</th>
+          <th>{{$t('bll.profileranks.RankId')}}</th>
           <th></th>
         </tr>
       </thead>
@@ -13,7 +12,6 @@
         <tr v-for="item in model" :key="item.id">
           <td>{{item.profileId}}</td>
           <td>{{item.rankId}}</td>
-          <td>{{item.deletedAt != null}}</td>
           <td>
             <IndexControls
               :model="item"

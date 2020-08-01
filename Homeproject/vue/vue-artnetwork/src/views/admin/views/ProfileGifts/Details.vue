@@ -1,40 +1,44 @@
 <template>
-  <AdminDetailsWrapper v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
+  <AdminDetailsWrapper v-if="isLoaded" v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
     <dl class="row">
-      <dt class="col-sm-2">(ID)</dt>
+      <dt class="col-sm-2">{{$t('bll.common.Id')}}</dt>
       <dd class="col-sm-10">{{model.id}}</dd>
 
-      <dt class="col-sm-2">Profile (ID)</dt>
+      <dt class="col-sm-2">{{$t('bll.profilegifts.ProfileId')}}</dt>
       <dd class="col-sm-10">{{model.profileId}}</dd>
 
-      <dt class="col-sm-2">Title</dt>
-      <dd class="col-sm-10">{{model.postTitle}}</dd>
-
-      <dt class="col-sm-2">Description</dt>
-      <dd class="col-sm-10">{{model.postDescription}}</dd>
-
-      <dt class="col-sm-2">DateTime</dt>
-      <dd class="col-sm-10">{{model.postPublicationDateTime}}</dd>
-
-      <dt class="col-sm-2">CreatedBy</dt>
-      <dd class="col-sm-10">{{model.createdBy}}</dd>
-
-      <dt class="col-sm-2">CreatedAt</dt>
-      <dd class="col-sm-10">{{model.createdAt}}</dd>
-
-      <dt class="col-sm-2">ChangedBy</dt>
-      <dd class="col-sm-10">{{model.changedBy}}</dd>
-
-      <dt class="col-sm-2">ChangedAt</dt>
-      <dd class="col-sm-10">{{model.changedAt}}</dd>
-
-      <dt class="col-sm-2">DeletedBy</dt>
-      <dd class="col-sm-10">{{model.deletedBy}}</dd>
-
-      <dt class="col-sm-2">DeletedAt</dt>
-      <dd class="col-sm-10">{{model.deletedAt}}</dd>
+      <dt class="col-sm-2">{{$t('bll.profilegifts.GiftId')}}</dt>
+      <dd class="col-sm-10">{{model.giftId}}</dd>
     </dl>
+    <hr />
+    <div style="width: 20rem;">
+      <ImageComponent
+        :id="model.giftId"
+        :loadGift="true"
+        :key="model.giftImageId"
+        htmlClass="card-img"
+        height="inherit"
+        width="inherit"
+      />
+    </div>
+    <hr />
+    <dl class="row">
+      <dt class="col-sm-2">{{$t('bll.profilegifts.GiftDateTime')}}</dt>
+      <dd class="col-sm-10">{{model.giftDateTime}}</dd>
+
+      <dt class="col-sm-2">{{$t('bll.profilegifts.Price')}}</dt>
+      <dd class="col-sm-10">{{model.price}}</dd>
+
+      <dt class="col-sm-2">{{$t('bll.profilegifts.FromProfileId')}}</dt>
+      <dd class="col-sm-10">{{model.fromProfileId}}</dd>
+
+      <dt class="col-sm-2">{{$t('bll.profilegifts.Message')}}</dt>
+      <dd class="col-sm-10">{{model.message}}</dd>
+    </dl>
+    <hr />
+    <MetaDetailsSection :model="model" />
   </AdminDetailsWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -66,6 +70,7 @@ export default class ProfileGiftsDetailsA extends AdminDetails<
     ProfileGiftsApi.details(this.Id, this.jwt).then(
       (response: IProfileGiftAdminDTO) => {
         this.model = response;
+        this.isLoaded = true;
       }
     );
   }
