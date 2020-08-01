@@ -105,7 +105,7 @@ import EventBus from "../../events/EventBus";
     ImageComponent,
   },
 })
-export default class MessagesSection extends LoadingComponent {
+export default class MessagesSection extends IdentityStore {
   private messageEditing: boolean = false;
   private selectedMessage: IMessageDTO | null = null;
 

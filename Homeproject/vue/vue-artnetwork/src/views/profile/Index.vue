@@ -59,6 +59,7 @@ import { IRankDTO } from "@/types/IRankDTO";
 import { ChatRoomsApi } from "@/services/ChatRoomsApi";
 import { IFollowerDTO } from "@/types/IFollowerDTO";
 import EventBus from "../../events/EventBus";
+import IdentityStore from "../../components/shared/IdentityStore.vue";
 
 @Component({
   components: {
@@ -74,7 +75,7 @@ import EventBus from "../../events/EventBus";
     PostsSection,
   },
 })
-export default class ProfileIndex extends LoadingComponent {
+export default class ProfileIndex extends IdentityStore {
   private pageToLoad = 2;
   private isFetching = false;
 

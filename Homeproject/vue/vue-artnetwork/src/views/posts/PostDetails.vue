@@ -40,6 +40,7 @@ import LoadingComponent from "../../components/shared/LoadingComponent.vue";
 
 import PostSection from "./PostSection.vue";
 import CommentsSection from "./CommentsSection.vue";
+import IdentityStore from "../../components/shared/IdentityStore.vue";
 
 @Component({
   components: {
@@ -51,7 +52,7 @@ import CommentsSection from "./CommentsSection.vue";
     CommentsSection,
   },
 })
-export default class PostDetails extends LoadingComponent {
+export default class PostDetails extends IdentityStore {
   private comment: ICommentDTO | null = null;
 
   private postPutModel: IPostPutDTO = {

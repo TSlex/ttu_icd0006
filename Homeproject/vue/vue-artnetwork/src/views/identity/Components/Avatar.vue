@@ -1,5 +1,5 @@
 <template>
-  <div v-if="imageModel">
+  <div v-if="isLoaded">
     <h4 class>{{$t('views.identity.AvatarHeader')}}</h4>
 
     <div class="row d-flex flex-column align-items-center text-center mt-2">
@@ -16,11 +16,7 @@
       </div>
 
       <div class="col-md-8">
-        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-          <ul>
-            <li style="display:none"></li>
-          </ul>
-        </div>
+        <ErrorsList :errors="errors" />
 
         <div class="custom-file">
           <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile" @change="loadFile" />
@@ -40,6 +36,7 @@
       </div>
     </div>
   </div>
+  <LoadingOverlay v-else :fixed="false" />
 </template>
 
 <script lang="ts">
@@ -59,13 +56,15 @@ import $ from "jquery";
 import { PostsApi } from "../../../services/PostsApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import IdentityStore from "../../../components/shared/IdentityStore.vue";
+import ErrorListContainer from "../../../components/shared/ErrorListContainer.vue";
+import { createEmptyGuid } from "../../../helpers/guid";
 
 @Component({
   components: {
     ImageComponent,
   },
 })
-export default class Avatar extends IdentityStore {
+export default class Avatar extends ErrorListContainer {
   private imageModel: IImageDTO | null = null;
 
   get isAvatarExist() {
@@ -86,11 +85,12 @@ export default class Avatar extends IdentityStore {
           ImagesApi.getImageModel(this.profile!.profileAvatarId, this.jwt).then(
             (response: IImageDTO) => {
               this.imageModel = response;
+              this.isLoaded = true;
             }
           );
         } else {
           this.imageModel = {
-            id: "",
+            id: createEmptyGuid(),
             imageUrl: "",
             originalImageUrl: "",
             heightPx: 0,
@@ -103,6 +103,8 @@ export default class Avatar extends IdentityStore {
             imageType: ImageType.ProfileAvatar,
             imageFor: "",
           };
+
+          this.isLoaded = true;
         }
       }
     );

@@ -50,7 +50,7 @@ import EventBus from "@/events/EventBus";
     MessagesSection,
   },
 })
-export default class ChatRoom extends LoadingComponent {
+export default class ChatRoom extends IdentityStore {
   @Prop()
   chatRoomId: string | undefined;
 

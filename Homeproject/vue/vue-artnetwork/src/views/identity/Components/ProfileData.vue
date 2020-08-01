@@ -1,11 +1,11 @@
 <template>
-  <div v-if="profileDataModel">
+  <div v-if="isLoaded">
     <h4 class>{{$t('views.identity.ProfileHeader')}}</h4>
 
     <div class="row">
       <div class="col-md-6">
         <div v-if="successMsg" class="alert alert-success" role="alert">{{successMsg}}</div>
-        <ErrorsList />
+        <ErrorsList :errors="errors" />
 
         <div class="form-group">
           <label class="control-label">{{$t('bll.profiles.ProfileFullName')}}</label>
@@ -51,6 +51,7 @@
       </div>
     </div>
   </div>
+  <LoadingOverlay v-else :fixed="false" />
 </template>
 
 <script lang="ts">
@@ -88,6 +89,7 @@ export default class ManageProfileData extends ErrorListContainer {
     AccountApi.getProfileData(this.jwt).then(
       (response: IProfileDataDTO | null) => {
         this.profileDataModel = response;
+        this.isLoaded = true;
       }
     );
   }

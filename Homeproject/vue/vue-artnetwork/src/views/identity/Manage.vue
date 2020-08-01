@@ -1,5 +1,5 @@
 <template>
-  <div class="preferences_section">
+  <div class="preferences_section" style="position: relative; min-height: 550px;">
     <Modal v-if="isBlacklistModal" v-on:closeModal="closeBlacklist">
       <router-link
         v-for="profile in blacklist"
@@ -15,7 +15,7 @@
         <span class="item_name">{{profile.userName}}</span>
       </router-link>
     </Modal>
-    <div class="row">
+    <div class="row" v-if="isLoaded">
       <div class="col-md-4">
         <ul class="nav nav-pills flex-column">
           <li class="nav-item">
@@ -46,7 +46,7 @@
           </li>
         </ul>
       </div>
-      <div class="col-md-8">
+      <div class="col-md-8" style="min-height: 400px;">
         <ManageAvatar v-if="currentPage === ManageNavs.Avatar" />
         <ManageEmail v-else-if="currentPage === ManageNavs.Email" />
         <ManagePassword v-else-if="currentPage === ManageNavs.Password" />
@@ -54,6 +54,7 @@
         <ManageProfileData v-else />
       </div>
     </div>
+    <LoadingOverlay v-else :fixed="false" />
   </div>
 </template>
 
@@ -71,6 +72,7 @@ import { IBlockedProfileDTO } from "../../types/IBlockedProfileDTO";
 import { BlockedProfilesApi } from "../../services/BlockedProfilesApi";
 import store from "@/store";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
+import IdentityStore from "../../components/shared/IdentityStore.vue";
 
 @Component({
   components: {
@@ -83,7 +85,7 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
     ManageSecurity,
   },
 })
-export default class IdentityManage extends Vue {
+export default class IdentityManage extends IdentityStore {
   @Prop()
   private startup!: string | null;
 
@@ -92,10 +94,6 @@ export default class IdentityManage extends Vue {
   private isBlacklistModal: boolean = false;
 
   private blacklist: IBlockedProfileDTO[] = [];
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
 
   get ManageNavs() {
     return ManageNav;
@@ -143,6 +141,10 @@ export default class IdentityManage extends Vue {
 
   setPage(page: ManageNav) {
     this.currentPage = page;
+  }
+
+  mounted() {
+    this.isLoaded = true;
   }
 }
 </script>

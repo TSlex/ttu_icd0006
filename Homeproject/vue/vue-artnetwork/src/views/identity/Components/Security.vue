@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isLoaded">
     <h4>{{$t('views.identity.PrivacyHeader')}}</h4>
     <hr />
 
@@ -17,17 +17,15 @@
       <p>
         <strong class="alert-danger">{{$t('views.identity.PersonalDataWarning3')}}</strong>
       </p>
-      <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-        <ul>
-          <li style="display:none"></li>
-        </ul>
-      </div>
+      <ErrorsList :errors="errors" />
+
       <form class="form-inline d-inline">
         <input type="password" :placeholder="$t('bll.profiles.Password')" class="form-control mt-2 mr-1" />
         <button class="btn btn-danger" type="button">{{$t('views.common.DeleteButton')}}</button>
       </form>
     </div>
   </div>
+  <LoadingOverlay v-else :fixed="false" />
 </template>
 
 <script lang="ts">
@@ -36,31 +34,35 @@ import ImageComponent from "../../../components/Image.vue";
 import store from "@/store";
 import { AccountApi } from "@/services/AccountApi";
 import { IProfileDataDTO } from "@/types/Identity/IProfileDataDTO";
+import IdentityStore from "../../../components/shared/IdentityStore.vue";
+import ErrorListContainer from "../../../components/shared/ErrorListContainer.vue";
 
 @Component({
   components: {
     ImageComponent,
   },
 })
-export default class ManageSecurity extends Vue {
-  get jwt() {
-    return store.getters.getJwt;
-  }
-
+export default class ManageSecurity extends ErrorListContainer {
   downloadData() {
     AccountApi.getProfileData(this.jwt).then(
       (response: IProfileDataDTO | null) => {
         let dataStr =
           "data:text/json;charset=utf-8," +
           encodeURIComponent(JSON.stringify(response, null, " "));
+
         let downloadAnchorNode = document.createElement("a");
+
         downloadAnchorNode.setAttribute("href", dataStr);
         downloadAnchorNode.setAttribute("download", "personal.json");
-        document.body.appendChild(downloadAnchorNode); // required for firefox
+        // document.body.appendChild(downloadAnchorNode); // required for firefox
         downloadAnchorNode.click();
         downloadAnchorNode.remove();
       }
     );
+  }
+
+  mounted() {
+    this.isLoaded = true;
   }
 }
 </script>

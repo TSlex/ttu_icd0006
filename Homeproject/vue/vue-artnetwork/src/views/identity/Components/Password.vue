@@ -1,15 +1,12 @@
 <template>
-  <div>
+  <div v-if="isLoaded">
     <h4>{{$t('views.identity.PasswordHeader')}}</h4>
 
     <div class="row">
       <div class="col-md-6">
         <div v-if="successMsg" class="alert alert-success" role="alert">{{successMsg}}</div>
-        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-          <ul>
-            <li v-for="(error, index) in errors" :key="index">{{error}}</li>
-          </ul>
-        </div>
+        <ErrorsList :errors="errors" />
+
         <div class="form-group">
           <label for="Input_OldPassword">{{$t('views.identity.CurrentPassword')}}</label>
           <input class="form-control" type="password" required v-model="passwordModel.currentPassword" />
@@ -26,6 +23,7 @@
       </div>
     </div>
   </div>
+  <LoadingOverlay v-else :fixed="false" />
 </template>
 
 <script lang="ts">
@@ -35,14 +33,14 @@ import { IProfilePasswordDTO } from "../../../types/Identity/IProfilePasswordDTO
 import store from "@/store";
 import { AccountApi } from "../../../services/AccountApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
+import ErrorListContainer from "../../../components/shared/ErrorListContainer.vue";
 
 @Component({
   components: {
     ImageComponent,
   },
 })
-export default class ManagePassword extends Vue {
-  private errors: string[] = [];
+export default class ManagePassword extends ErrorListContainer {
   private successMsg: string | null = null;
 
   private passwordModel: IProfilePasswordDTO = {
@@ -51,10 +49,6 @@ export default class ManagePassword extends Vue {
   };
 
   private passwordConfirmation: string = "";
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
 
   saveChanges() {
     if (
@@ -77,6 +71,10 @@ export default class ManagePassword extends Vue {
         }
       );
     }
+  }
+
+  mounted() {
+    this.isLoaded = true;
   }
 }
 </script>

@@ -49,6 +49,7 @@ import router from "@/router";
 import { IPostDTO } from "../types/IPostDTO";
 
 import LoadingComponent from "@/components/shared/LoadingComponent.vue";
+import IdentityStore from "../components/shared/IdentityStore.vue";
 
 @Component({
   components: {
@@ -56,7 +57,7 @@ import LoadingComponent from "@/components/shared/LoadingComponent.vue";
     PostDetails,
   },
 })
-export default class Home extends LoadingComponent {
+export default class Home extends IdentityStore {
   private pageToLoad = 2;
   private isFetching = false;
 

@@ -1,15 +1,12 @@
 <template>
-  <div v-if="emailModel">
+  <div v-if="isLoaded">
     <h4>{{$t('views.identity.EmailHeader')}}</h4>
 
     <div class="row">
       <div class="col-md-6">
         <div v-if="successMsg" class="alert alert-success" role="alert">{{successMsg}}</div>
-        <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-          <ul>
-            <li v-for="(error, index) in errors" :key="index">{{error}}</li>
-          </ul>
-        </div>
+        <ErrorsList :errors="errors" />
+
         <div class="form-group">
           <label for="Email">{{$t('views.identity.CurrentEmail')}}</label>
           <div class="input-group">
@@ -28,6 +25,7 @@
       </div>
     </div>
   </div>
+  <LoadingOverlay v-else :fixed="false" />
 </template>
 
 <script lang="ts">
@@ -37,21 +35,17 @@ import store from "@/store";
 import { IProfileEmailDTO } from "../../../types/Identity/IProfileEmailDTO";
 import { AccountApi } from "@/services/AccountApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
+import ErrorListContainer from "../../../components/shared/ErrorListContainer.vue";
 
 @Component({
   components: {
     ImageComponent,
   },
 })
-export default class ManageEmail extends Vue {
+export default class ManageEmail extends ErrorListContainer {
   private emailModel: IProfileEmailDTO | null = null;
 
-  private errors: string[] = [];
   private successMsg: string | null = null;
-
-  get jwt() {
-    return store.getters.getJwt;
-  }
 
   beforeMount() {
     AccountApi.getEmail(this.jwt).then((response: string) => {
@@ -59,6 +53,7 @@ export default class ManageEmail extends Vue {
         currentEmail: response,
         newEmail: response,
       };
+      this.isLoaded = true;
     });
   }
 
