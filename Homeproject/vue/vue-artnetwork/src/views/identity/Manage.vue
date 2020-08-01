@@ -19,22 +19,30 @@
       <div class="col-md-4">
         <ul class="nav nav-pills flex-column">
           <li class="nav-item">
-            <a class="nav-link" href="#/account/manage" @click="setPage(ManageNavs.Avatar)">Change avatar</a>
+            <a class="nav-link" href="#/account/manage" @click="setPage(ManageNavs.Avatar)">{{$t("views.identity.AvatarEditNav")}}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#/account/manage" @click="setPage(ManageNavs.ProfileData)">Edit profile</a>
+            <a
+              class="nav-link"
+              href="#/account/manage"
+              @click="setPage(ManageNavs.ProfileData)"
+            >{{$t("views.identity.ProfileEditNav")}}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#/account/manage" @click="setPage(ManageNavs.Email)">Change email</a>
+            <a class="nav-link" href="#/account/manage" @click="setPage(ManageNavs.Email)">{{$t("views.identity.EmailEditNav")}}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#/account/manage" @click="setPage(ManageNavs.Password)">Change password</a>
+            <a
+              class="nav-link"
+              href="#/account/manage"
+              @click="setPage(ManageNavs.Password)"
+            >{{$t("views.identity.PasswordEditNav")}}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#/account/manage" @click="setPage(ManageNavs.Privacy)">Privacy and security</a>
+            <a class="nav-link" href="#/account/manage" @click="setPage(ManageNavs.Privacy)">{{$t("views.identity.PrivacyNav")}}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#/account/manage" @click="openBlacklist">Blacklist</a>
+            <a class="nav-link" href="#/account/manage" @click="openBlacklist">{{$t("views.identity.BlackListNav")}}</a>
           </li>
         </ul>
       </div>
@@ -72,8 +80,8 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
     ManageProfileData,
     ManageEmail,
     ManagePassword,
-    ManageSecurity
-  }
+    ManageSecurity,
+  },
 })
 export default class IdentityManage extends Vue {
   @Prop()
@@ -94,7 +102,7 @@ export default class IdentityManage extends Vue {
   }
 
   get resolveStartup(): ManageNav {
-    let result: ManageNav = ManageNav.ProfileData
+    let result: ManageNav = ManageNav.ProfileData;
 
     for (let key in ManageNav) {
       let value: string = ManageNav[key as keyof typeof ManageNav];

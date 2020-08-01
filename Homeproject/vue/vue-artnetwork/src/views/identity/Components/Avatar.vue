@@ -1,6 +1,6 @@
 <template>
   <div v-if="imageModel">
-    <h4 class>Avatar</h4>
+    <h4 class>{{$t('views.identity.AvatarHeader')}}</h4>
 
     <div class="row d-flex flex-column align-items-center text-center mt-2">
       <div class="card" style="width: 20rem; user-select: none; position: relative;" id="image-miniature">
@@ -35,7 +35,7 @@
         <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="imageModel.paddingLeft" />
 
         <div class="form-group mt-2">
-          <button type="submit" class="btn btn-success mt-2" @click="submit">Save</button>
+          <button type="submit" class="btn btn-success mt-2" @click="submit">{{$t('views.common.SaveButton')}}</button>
         </div>
       </div>
     </div>

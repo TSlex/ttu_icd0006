@@ -1,6 +1,6 @@
 <template>
   <div v-if="emailModel">
-    <h4>Change email</h4>
+    <h4>{{$t('views.identity.EmailHeader')}}</h4>
 
     <div class="row">
       <div class="col-md-6">
@@ -11,7 +11,7 @@
           </ul>
         </div>
         <div class="form-group">
-          <label for="Email">Current email</label>
+          <label for="Email">{{$t('views.identity.CurrentEmail')}}</label>
           <div class="input-group">
             <input class="form-control" disabled type="text" v-model="emailModel.currentEmail" />
             <div class="input-group-append">
@@ -20,11 +20,11 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="Input_NewEmail">New email</label>
+          <label for="Input_NewEmail">{{$t('bll.profiles.Email')}}</label>
           <input class="form-control" type="email" v-model="emailModel.newEmail" />
           <span class="text-danger field-validation-valid" data-valmsg-for="Input.NewEmail" data-valmsg-replace="true"></span>
         </div>
-        <button class="btn btn-warning" @click="saveChanges">Save</button>
+        <button class="btn btn-warning mt-2" @click="saveChanges">{{$t('views.common.SaveButton')}}</button>
       </div>
     </div>
   </div>
@@ -40,8 +40,8 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class ManageEmail extends Vue {
   private emailModel: IProfileEmailDTO | null = null;
@@ -57,7 +57,7 @@ export default class ManageEmail extends Vue {
     AccountApi.getEmail(this.jwt).then((response: string) => {
       this.emailModel = {
         currentEmail: response,
-        newEmail: response
+        newEmail: response,
       };
     });
   }

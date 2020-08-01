@@ -22,16 +22,24 @@ import moment from 'moment'
 
 import { i18n } from "@/translations/i18n"
 
+import { resolveTimeFormat, resolveDateFormat, formatShortTime } from './translations/formats'
+
 // date and time formating for display
 Vue.filter('formatDate', function (value: any) {
   if (value) {
-    return moment(String(value)).format('MM/DD/YYYY hh:mm')
+    return moment(String(value)).format(resolveDateFormat())
   }
 })
 
 Vue.filter('formatTime', function (value: any) {
   if (value) {
-    return moment(String(value)).format('hh:mm')
+    return moment(String(value)).format(resolveTimeFormat())
+  }
+})
+
+Vue.filter('formatShortDate', function (value: any) {
+  if (value) {
+    return formatShortTime(value)
   }
 })
 

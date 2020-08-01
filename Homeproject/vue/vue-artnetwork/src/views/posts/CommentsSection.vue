@@ -3,7 +3,7 @@
     <div class="post_comments_section" style="position: relative;">
       <template v-if="isLoaded">
         <a class="post_comment" v-for="(comment, index) in comments" :key="index">
-          <span class="comment_datetime">[{{comment.commentDateTime | formatTime}}]</span>
+          <span class="comment_datetime">[{{comment.commentDateTime | formatShortDate}}]</span>
           <span class="comment_username">@{{comment.userName}}:</span>
           <span class="comment_value">&nbsp;{{comment.commentValue}}</span>
           <div v-if="!commentEditing
@@ -60,7 +60,7 @@ import moment from "moment";
 @Component({
   components: {},
 })
-export default class CommentsSection extends LoadingComponent {
+export default class CommentsSection extends IdentityStore {
   private commentPutModel: ICommentPutDTO = {
     id: "",
     commentValue: "",

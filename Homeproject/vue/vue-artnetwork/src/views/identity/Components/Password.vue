@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4>Change password</h4>
+    <h4>{{$t('views.identity.PasswordHeader')}}</h4>
 
     <div class="row">
       <div class="col-md-6">
@@ -11,19 +11,18 @@
           </ul>
         </div>
         <div class="form-group">
-          <label for="Input_OldPassword">Current password</label>
+          <label for="Input_OldPassword">{{$t('views.identity.CurrentPassword')}}</label>
           <input class="form-control" type="password" required v-model="passwordModel.currentPassword" />
         </div>
         <div class="form-group">
-          <label for="Input_NewPassword">New password</label>
+          <label for="Input_NewPassword">{{$t('views.identity.NewPassword')}}</label>
           <input class="form-control" type="password" maxlength="100" required v-model="passwordModel.newPassword" />
-          <span class="text-danger field-validation-valid" data-valmsg-for="Input.NewPassword" data-valmsg-replace="true"></span>
         </div>
         <div class="form-group">
-          <label for="Input_ConfirmPassword">New password confirmation</label>
+          <label for="Input_ConfirmPassword">{{$t('views.identity.NewPasswordConfirm')}}</label>
           <input class="form-control" type="password" required v-model="passwordConfirmation" />
         </div>
-        <button type="submit" class="btn btn-warning" @click="saveChanges">Save</button>
+        <button type="submit" class="btn btn-warning mt-2" @click="saveChanges">{{$t('views.common.SaveButton')}}</button>
       </div>
     </div>
   </div>
@@ -35,12 +34,12 @@ import ImageComponent from "../../../components/Image.vue";
 import { IProfilePasswordDTO } from "../../../types/Identity/IProfilePasswordDTO";
 import store from "@/store";
 import { AccountApi } from "../../../services/AccountApi";
-import { ResponseDTO } from '@/types/Response/ResponseDTO';
+import { ResponseDTO } from "@/types/Response/ResponseDTO";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class ManagePassword extends Vue {
   private errors: string[] = [];
@@ -48,7 +47,7 @@ export default class ManagePassword extends Vue {
 
   private passwordModel: IProfilePasswordDTO = {
     currentPassword: "",
-    newPassword: ""
+    newPassword: "",
   };
 
   private passwordConfirmation: string = "";
