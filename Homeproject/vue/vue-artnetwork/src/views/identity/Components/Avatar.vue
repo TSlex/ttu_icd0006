@@ -3,35 +3,15 @@
     <h4 class>{{$t('views.identity.AvatarHeader')}}</h4>
 
     <div class="row d-flex flex-column align-items-center text-center mt-2">
-      <div class="card" style="width: 20rem; user-select: none; position: relative;" id="image-miniature">
-        <ImageComponent
-          :id="profile.profileAvatarId"
-          :key="profile.profileAvatarId"
-          height="inherit"
-          width="inherit"
-          :original="true"
-          htmlId="render_image"
-          htmlClass="card-img"
-        />
-      </div>
+      <ImageMiniature :initialId="imageModel.id" :htmlStyle="'width: 20rem !important'" ref="miniature" />
 
       <div class="col-md-8">
         <ErrorsList :errors="errors" />
 
-        <div class="custom-file">
-          <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile" @change="loadFile" />
-          <label class="custom-file-label" style="overflow: hidden">{{fileName}}</label>
-        </div>
-
-        <input type="hidden" id="HeightPx" name="HeightPx" v-model.lazy="imageModel.heightPx" />
-        <input type="hidden" id="WidthPx" name="WidthPx" v-model.lazy="imageModel.widthPx" />
-        <input type="hidden" id="PaddingTop" name="PaddingTop" v-model.lazy="imageModel.paddingTop" />
-        <input type="hidden" id="PaddingRight" name="PaddingRight" v-model.lazy="imageModel.paddingRight" />
-        <input type="hidden" id="PaddingBottom" name="PaddingBottom" v-model.lazy="imageModel.paddingBottom" />
-        <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="imageModel.paddingLeft" />
+        <ImageForm :imageModel="imageModel" v-on:onLoadFile="loadImage" />
 
         <div class="form-group mt-2">
-          <button type="submit" class="btn btn-success mt-2" @click="submit">{{$t('views.common.SaveButton')}}</button>
+          <button type="onSubmit" class="btn btn-success mt-2" @click="onSubmit">{{$t('views.common.SaveButton')}}</button>
         </div>
       </div>
     </div>
@@ -59,23 +39,27 @@ import IdentityStore from "../../../components/shared/IdentityStore.vue";
 import ErrorListContainer from "../../../components/shared/ErrorListContainer.vue";
 import { createEmptyGuid } from "../../../helpers/guid";
 
+import ImageForm from "@/components/image/ImageForm.vue";
+import ImageMiniature from "@/components/image/ImageMiniature.vue";
+
 @Component({
   components: {
-    ImageComponent,
+    ImageForm,
+    ImageMiniature,
   },
 })
 export default class Avatar extends ErrorListContainer {
   private imageModel: IImageDTO | null = null;
+  private profile: IProfileDTO | null = null;
 
   get isAvatarExist() {
     return this.profile?.profileAvatarId != null;
   }
 
-  get fileName() {
-    return this.imageModel?.imageFile?.name;
+  loadImage(file: File) {
+    this.imageModel!.imageFile = file;
+    (this.$refs.miniature as ImageMiniature).loadImage(file);
   }
-
-  private profile: IProfileDTO | null = null;
 
   beforeMount() {
     ProfilesApi.getProfile(this.userName, this.jwt).then(
@@ -110,51 +94,7 @@ export default class Avatar extends ErrorListContainer {
     );
   }
 
-  loadFile(event: Event) {
-    this.imageModel!.imageFile = (event.target as HTMLInputElement)?.files![0];
-
-    if (this.imageModel && this.imageModel.imageFile) {
-      let reader = new FileReader();
-
-      reader.onload = function (e) {
-        let image = new Image();
-        image.src = e.target!.result as string;
-
-        image.onload = function () {
-          let height = $("#HeightPx");
-          let width = $("#WidthPx");
-          height.attr("value", image.height);
-          width.attr("value", image.width);
-
-          height.get()[0].dispatchEvent(new Event("change"));
-          width.get()[0].dispatchEvent(new Event("change"));
-        };
-
-        $("#render_image").attr("src", image.src);
-        $("#image-miniature").css("visibility", "visible");
-      };
-
-      reader.readAsDataURL(this.imageModel.imageFile);
-    }
-  }
-
-  updated() {
-    let exist = document.getElementById("image_miniature_script");
-
-    if (exist) {
-      // exist.remove();
-    } else {
-      let script = document.createElement("script");
-      script.setAttribute("id", "image_miniature_script");
-      script.setAttribute("src", "image-miniature.js");
-      script.setAttribute("defer", "defer");
-      document.body.appendChild(script);
-    }
-  }
-
-  submit() {
-    console.log(this.imageModel);
-
+  onSubmit() {
     if (!this.isAvatarExist && this.imageModel) {
       let postModel: IImagePostDTO = {
         heightPx: this.imageModel.heightPx,
@@ -168,11 +108,10 @@ export default class Avatar extends ErrorListContainer {
         imageFor: "",
       };
 
-      ImagesApi.postImageModel(postModel, this.jwt).then(
-        (response: IImageDTO) => {
-          console.log(response);
-        }
-      );
+      ImagesApi.postImageModel(
+        postModel,
+        this.jwt
+      ).then((response: IImageDTO) => {});
     } else if (this.isAvatarExist && this.imageModel) {
       let putModel: IImagePutDTO = {
         id: this.imageModel.id,
@@ -187,23 +126,15 @@ export default class Avatar extends ErrorListContainer {
 
       ImagesApi.putImageModel(this.imageModel.id, putModel, this.jwt).then(
         (response: ResponseDTO) => {
-          if (!response.errors) {
+          if (!response?.errors) {
             this.$swal({
               icon: "success",
-              title: "Avatar was updated!",
+              title: this.$t("views.identity.AvatarUpdateStatusSuccess"),
               showConfirmButton: true,
             });
           }
         }
       );
-    }
-  }
-
-  beforeDestroy() {
-    let exist = document.getElementById("image_miniature_script");
-
-    if (exist) {
-      exist.remove();
     }
   }
 }
