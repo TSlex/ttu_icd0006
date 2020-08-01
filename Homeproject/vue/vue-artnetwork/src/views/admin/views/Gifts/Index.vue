@@ -3,21 +3,29 @@
     <table class="table">
       <thead>
         <tr>
-          <th>(ID)</th>
-          <th>Code</th>
-          <th>Title</th>
-          <th>Price</th>
-          <th>IS DELETED?</th>
+          <th>{{$t('bll.common.Id')}}</th>
+          <th>{{$t('views.images.Preview')}}</th>
+          <th>{{$t('bll.gifts.GiftName')}}</th>
+          <th>{{$t('bll.gifts.GiftCode')}}</th>
+          <th>{{$t('bll.gifts.Price')}}</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in model" :key="item.id">
           <td>{{item.id}}</td>
+          <td>
+            <ImageComponent
+              :id="item.giftImageId"
+              htmlParentStyle="width: 5rem"
+              height="unset"
+              width="unset"
+              htmlClass="card-img"
+            />
+          </td>
           <td>{{item.giftCode}}</td>
           <td>{{item.giftName}}</td>
           <td>{{item.price}}</td>
-          <td>{{item.deletedAt != null}}</td>
           <td>
             <IndexControls
               :model="item"
@@ -48,9 +56,12 @@ import { GiftsApi } from "@/services/admin/GiftsApi";
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 
+import ImageComponent from "@/components/Image.vue";
+
 @Component({
   components: {
     IndexControls,
+    ImageComponent,
   },
 })
 export default class GiftsIndexA extends AdminIndex<IGiftAdminDTO> {

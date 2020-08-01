@@ -1,26 +1,18 @@
 <template>
-  <AdminCreateWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
-    <div v-show="isImageLoaded" class="card" style="width: 20rem; user-select: none; position: relative;" id="image-miniature">
-      <ImageComponent height="inherit" width="inherit" :original="true" htmlId="render_image" htmlClass="card-img" />
-    </div>
+  <AdminCreateWrapper
+    v-if="isLoaded"
+    v-on:onSubmit="onSubmit"
+    v-on:onBackToList="onBackToList"
+    :errors="errors"
+    :ignoreTopColStyle="true"
+  >
+    <ImageMiniature :htmlClass="'card mb-4'" :htmlStyle="'width: 20rem !important'" ref="miniature" />
     <div class="col-md-4">
-      <div class="custom-file mt-2">
-        <input type="file" class="custom-file-input" lang="ru-RU" id="ImageFile" name="ImageFile" @change="loadFile" />
-        <label class="custom-file-label" style="overflow: hidden">{{fileName}}</label>
-      </div>
-
-      <CreateEdit />
-
-      <template v-if="imageModel">
-        <input type="hidden" id="HeightPx" name="HeightPx" v-model.lazy="imageModel.heightPx" />
-        <input type="hidden" id="WidthPx" name="WidthPx" v-model.lazy="imageModel.widthPx" />
-        <input type="hidden" id="PaddingTop" name="PaddingTop" v-model.lazy="imageModel.paddingTop" />
-        <input type="hidden" id="PaddingRight" name="PaddingRight" v-model.lazy="imageModel.paddingRight" />
-        <input type="hidden" id="PaddingBottom" name="PaddingBottom" v-model.lazy="imageModel.paddingBottom" />
-        <input type="hidden" id="PaddingLeft" name="PaddingLeft" v-model.lazy="imageModel.paddingLeft" />
-      </template>
+      <ImageForm :imageModel="model" v-on:onLoadFile="loadImage" />
+      <CreateEdit :model="model" />
     </div>
   </AdminCreateWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -34,17 +26,23 @@ import ImageComponent from "@/components/Image.vue";
 
 import { PostsApi } from "@/services/admin/PostsApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
-import { IImagePostDTO } from "@/types/IImageDTO";
+import { IImagePostDTO, IImageAdminDTO } from "@/types/IImageDTO";
 import { ImageType } from "@/types/Enums/ImageType";
 
 import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
 
 import CreateEdit from "./CreateEdit.vue";
+import { createEmptyGuid } from "@/helpers/guid";
+import { ImagesApi } from "@/services/admin/ImagesApi";
+
+import ImageForm from "@/components/image/ImageForm.vue";
+import ImageMiniature from "@/components/image/ImageMiniature.vue";
 
 @Component({
   components: {
-    ImageComponent,
     CreateEdit,
+    ImageForm,
+    ImageMiniature,
   },
 })
 export default class PostsCreateA extends AdminCreate {
@@ -55,13 +53,13 @@ export default class PostsCreateA extends AdminCreate {
     paddingLeft: 0,
     imageFile: null,
     imageType: ImageType.Post,
-    imageFor: "",
+    imageFor: createEmptyGuid(),
     heightPx: 0,
     widthPx: 0,
   };
 
   private model: IPostAdminDTO = {
-    id: "",
+    id: createEmptyGuid(),
     masterId: null,
     createdBy: null,
     createdAt: new Date(),
@@ -78,78 +76,34 @@ export default class PostsCreateA extends AdminCreate {
     profileId: "",
   };
 
-  private isImageLoaded: boolean = false;
-
-  get fileName() {
-    return this.imageModel?.imageFile?.name;
-  }
-
-  loadFile(event: Event) {
-    this.imageModel!.imageFile = (event.target as HTMLInputElement)?.files![0];
-
-    if (this.imageModel && this.imageModel.imageFile) {
-      let reader = new FileReader();
-
-      reader.onload = function (e) {
-        let image = new Image();
-        image.src = e.target!.result as string;
-
-        console.log("reader");
-
-        image.onload = function () {
-          console.log("image");
-
-          let height = $("#HeightPx");
-          let width = $("#WidthPx");
-          height.attr("value", image.height);
-          width.attr("value", image.width);
-
-          height.get()[0].dispatchEvent(new Event("change"));
-          width.get()[0].dispatchEvent(new Event("change"));
-        };
-
-        $("#render_image").attr("src", image.src);
-        $("#image-miniature").css("visibility", "visible");
-      };
-
-      reader.readAsDataURL(this.imageModel.imageFile);
-      this.isImageLoaded = true;
-    }
-  }
-
-  updated() {
-    let image = document.getElementById("render_image");
-    let exist = document.getElementById("image_miniature_script");
-
-    if (exist) {
-      // exist.remove();
-    } else if (image) {
-      let script = document.createElement("script");
-      script.setAttribute("id", "image_miniature_script");
-      script.setAttribute("src", "image-miniature.js");
-      script.setAttribute("defer", "defer");
-      document.body.appendChild(script);
-    }
+  loadImage(file: File) {
+    this.imageModel.imageFile = file;
+    (this.$refs.miniature as ImageMiniature).loadImage(file);
   }
 
   onSubmit() {
-    if (this.model.profileId.length > 0 && this.model.postTitle.length > 0) {
-      PostsApi.create(this.model, this.jwt).then((response: ResponseDTO) => {
-        if (response?.errors) {
-          this.errors = response.errors;
-        } else {
-          this.$router.go(-1);
-        }
-      });
-    }
+    ImagesApi.create(this.imageModel! as IImageAdminDTO, this.jwt).then(
+      (response: IImageAdminDTO) => {
+        this.model.id = response.imageFor!;
+        this.model.postImageId = response.id!;
+
+        PostsApi.create(this.model, this.jwt).then((response: ResponseDTO) => {
+          if (response?.errors) {
+            this.errors = response.errors;
+          } else {
+            this.$router.go(-1);
+          }
+        });
+      }
+    );
   }
 
-  beforeDestroy() {
-    let exist = document.getElementById("image_miniature_script");
+  created() {
+    this.modelName = "Post";
+  }
 
-    if (exist) {
-      exist.remove();
-    }
+  mounted() {
+    this.isLoaded = true;
   }
 }
 </script>

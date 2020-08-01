@@ -1,40 +1,28 @@
 <template>
-  <AdminDetailsWrapper v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
+  <AdminDetailsWrapper v-if="isLoaded" v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
     <dl class="row">
-      <dt class="col-sm-2">(ID)</dt>
+      <dt class="col-sm-2">{{$t('bll.common.Id')}}</dt>
       <dd class="col-sm-10">{{model.id}}</dd>
-
-      <dt class="col-sm-2">Profile (ID)</dt>
-      <dd class="col-sm-10">{{model.profileId}}</dd>
-
-      <dt class="col-sm-2">Room (ID)</dt>
-      <dd class="col-sm-10">{{model.chatRoomId}}</dd>
-
-      <dt class="col-sm-2">Value</dt>
-      <dd class="col-sm-10">{{model.messageValue}}</dd>
-
-      <dt class="col-sm-2">DateTime</dt>
-      <dd class="col-sm-10">{{model.messageDateTime}}</dd>
-
-      <dt class="col-sm-2">CreatedBy</dt>
-      <dd class="col-sm-10">{{model.createdBy}}</dd>
-
-      <dt class="col-sm-2">CreatedAt</dt>
-      <dd class="col-sm-10">{{model.createdAt}}</dd>
-
-      <dt class="col-sm-2">ChangedBy</dt>
-      <dd class="col-sm-10">{{model.changedBy}}</dd>
-
-      <dt class="col-sm-2">ChangedAt</dt>
-      <dd class="col-sm-10">{{model.changedAt}}</dd>
-
-      <dt class="col-sm-2">DeletedBy</dt>
-      <dd class="col-sm-10">{{model.deletedBy}}</dd>
-
-      <dt class="col-sm-2">DeletedAt</dt>
-      <dd class="col-sm-10">{{model.deletedAt}}</dd>
+      <dt class="col-sm-2">{{$t('bll.gifts.GiftNameId')}}</dt>
+      <dd class="col-sm-10">{{model.giftNameId}}</dd>
     </dl>
+    <hr />
+    <div style="width: 20rem;">
+      <ImageComponent :id="model.giftImageId" :key="model.giftImageId" htmlClass="card-img" height="inherit" width="inherit" />
+    </div>
+    <hr />
+    <dl class="row">
+      <dt class="col-sm-2">{{$t('bll.gifts.GiftName')}}</dt>
+      <dd class="col-sm-10">{{model.giftName}}</dd>
+      <dt class="col-sm-2">{{$t('bll.gifts.GiftCode')}}</dt>
+      <dd class="col-sm-10">{{model.giftCode}}</dd>
+      <dt class="col-sm-2">{{$t('bll.gifts.Price')}}</dt>
+      <dd class="col-sm-10">{{model.price}}</dd>
+    </dl>
+    <hr />
+    <MetaDetailsSection :model="model" />
   </AdminDetailsWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -63,6 +51,7 @@ export default class GiftsDetailsA extends AdminDetails<IGiftAdminDTO> {
   mounted() {
     GiftsApi.details(this.Id, this.jwt).then((response: IGiftAdminDTO) => {
       this.model = response;
+      this.isLoaded = true;
     });
   }
 }

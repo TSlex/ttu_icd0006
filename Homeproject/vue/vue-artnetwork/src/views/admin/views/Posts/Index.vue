@@ -3,17 +3,25 @@
     <table class="table">
       <thead>
         <tr>
-          <th>(ID)</th>
-          <th>Title</th>
-          <th>IS DELETED?</th>
+          <th>{{$t('bll.common.Id')}}</th>
+          <th>{{$t('views.images.Preview')}}</th>
+          <th>{{$t('bll.posts.PostTitle')}}</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in model" :key="item.id">
           <td>{{item.id}}</td>
+          <td>
+            <ImageComponent
+              :id="item.postImageId"
+              htmlParentStyle="width: 5rem"
+              height="unset"
+              width="unset"
+              htmlClass="card-img"
+            />
+          </td>
           <td>{{item.postTitle}}</td>
-          <td>{{item.deletedAt != null}}</td>
           <td>
             <IndexControls
               :model="item"
@@ -44,9 +52,12 @@ import { PostsApi } from "@/services/admin/PostsApi";
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 
+import ImageComponent from "@/components/Image.vue";
+
 @Component({
   components: {
     IndexControls,
+    ImageComponent,
   },
 })
 export default class PostsIndexA extends AdminIndex<IPostAdminDTO> {
