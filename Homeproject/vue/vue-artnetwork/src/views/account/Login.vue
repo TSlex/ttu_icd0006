@@ -6,18 +6,14 @@
         <section>
           <form>
             <hr />
-            <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-              <ul>
-                <li v-for="(error, index) in errors" :key="index">{{error}}</li>
-              </ul>
-            </div>
+            <ErrorsList :errors="errors" />
             <div class="form-group">
-              <label for="Input_Email">{{$t('bll.profiles.Email')}}</label>
+              <label for="Input_Email">{{$t('bll.profiles.Email')}}*</label>
               <input class="form-control" type="email" v-model="loginModel.email" />
               <span class="text-danger field-validation-valid"></span>
             </div>
             <div class="form-group">
-              <label for="Input_Password">{{$t('bll.profiles.Password')}}</label>
+              <label for="Input_Password">{{$t('bll.profiles.Password')}}*</label>
               <input class="form-control" type="password" v-model="loginModel.password" />
               <span class="text-danger field-validation-valid" data-valmsg-for="Input.Password" data-valmsg-replace="true"></span>
             </div>
@@ -47,35 +43,44 @@ import { ILoginDTO } from "@/types/Identity/ILoginDTO";
 import store from "../../store";
 import router from "../../router";
 import { JwtResponseDTO } from "@/types/Response/JwtResponseDTO";
+import ErrorListContainer from "@/components/shared/ErrorListContainer.vue";
+
+import { requireError } from "@/translations/validation.ts";
 
 @Component
-export default class AccountLogin extends Vue {
+export default class AccountLogin extends ErrorListContainer {
   private loginModel: ILoginDTO = {
     email: "",
-    password: ""
+    password: "",
   };
-
-  private errors: string[] = [];
 
   onSubmit(e: Event): void {
     this.errors = [];
-
-    if (
-      this.loginModel.email.length > 0 &&
-      this.loginModel.password.length > 0
-    ) {
-      store
-        .dispatch("loginUser", this.loginModel)
-        .then((response: JwtResponseDTO) => {
-          if (response.errors) {
-            this.errors = response.errors;
-            console.log(response.errors);
-          } else {
-            router.push("/");
-          }
-        });
-    }
     e.preventDefault();
+
+    if (!(this.loginModel.email.length > 0)) {
+      this.errors.push(requireError("bll.profiles.Email"));
+    }
+    if (!(this.loginModel.password.length > 0)) {
+      this.errors.push(requireError("bll.profiles.Password"));
+    }
+    if (this.errors.length > 0) return;
+    store
+      .dispatch("loginUser", this.loginModel)
+      .then((response: JwtResponseDTO) => {
+        if (response.errors) {
+          this.errors = response.errors;
+          console.log(response.errors);
+        } else {
+          router.push("/");
+        }
+      });
   }
+
+  // if (!(this.loginModel.email.length > 0)) {
+  //   }
+  //   if (!(this.loginModel.password.length > 0)) {
+  //   }
+  //   if (this.errors.length > 0) return;
 }
 </script>

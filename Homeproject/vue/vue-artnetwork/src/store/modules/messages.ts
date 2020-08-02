@@ -67,6 +67,14 @@ export const MessagesModule = {
       state.chatRooms = chatRooms;
     },
 
+    leaveRoom(state: IState, chatRoom: IChatRoomDTO) {
+      state.chatRooms.forEach((element: IChatRoomDTO, index: number) => {
+        if (element.id === chatRoom.id) {
+          state.chatRooms.splice(index, 1)
+        }
+      });
+    },
+
     setMessages(state: IState, messages: IMessageDTO[]) {
       state.messages = messages;
     },
@@ -110,6 +118,12 @@ export const MessagesModule = {
       const response = await ChatRoomsApi.getChatRooms(context.state.jwt);
       context.commit('setChatRooms', response)
       return response;
+    },
+
+    async leaveRoom(context: any, params: { room: IChatRoomDTO; member: IChatMemberDTO }) {
+      await context.dispatch("selectChatRoom", null);
+      await context.commit('leaveRoom', params.room)
+      await context.dispatch("deleteChatMember", params.member);
     },
 
     // Messages

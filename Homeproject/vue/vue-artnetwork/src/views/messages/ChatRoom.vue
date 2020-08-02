@@ -83,11 +83,11 @@ export default class ChatRoom extends IdentityStore {
 
   leaveRoom() {
     if (this.currentMember && this.currentMember.canEditMembers) {
-      store.dispatch("deleteChatMember", this.currentMember);
+      store.dispatch("leaveRoom", {
+        room: { ...this.selectedChatRoom },
+        member: { ...this.currentMember },
+      });
     }
-
-    store.dispatch("selectChatRoom", null);
-    store.dispatch("getChatRooms");
   }
 
   renameRoom() {
