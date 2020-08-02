@@ -42,6 +42,19 @@ export const MessagesModule = {
 
       return current;
     },
+    getChatRoomById(context: any): (id: string) => IChatRoomDTO | null {
+      return (id: string) => {
+        let chatRoom: IChatRoomDTO | null = null;
+
+        (context.chatRooms as IChatRoomDTO[]).forEach((room: IChatRoomDTO) => {
+          if (room.id === id) {
+            chatRoom = room;
+          }
+        })
+
+        return chatRoom
+      }
+    }
   },
   mutations: {
     setChatRoomTitle(state: IState, title: string) {

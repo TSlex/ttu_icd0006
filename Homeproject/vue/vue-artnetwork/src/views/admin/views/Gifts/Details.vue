@@ -37,6 +37,7 @@ import { IGiftAdminDTO } from "@/types/IGiftDTO";
 import { GiftsApi } from "@/services/admin/GiftsApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 import AdminDetails from "../../components/shared/base/AdminDetails.vue";
+import EventBus from "@/events/EventBus";
 
 @Component({
   components: {
@@ -44,15 +45,25 @@ import AdminDetails from "../../components/shared/base/AdminDetails.vue";
   },
 })
 export default class GiftsDetailsA extends AdminDetails<IGiftAdminDTO> {
-  created() {
-    this.modelName = "Gift";
-  }
+  loadData() {
+    this.isLoaded = false;
 
-  mounted() {
     GiftsApi.details(this.Id, this.jwt).then((response: IGiftAdminDTO) => {
       this.model = response;
       this.isLoaded = true;
     });
+  }
+
+  created() {
+    this.modelName = "Gift";
+
+    EventBus.$on("cultureUpdate", (culture: string) => {
+      this.loadData();
+    });
+  }
+
+  mounted() {
+    this.loadData();
   }
 }
 </script>

@@ -23,8 +23,8 @@
               htmlClass="card-img"
             />
           </td>
-          <td>{{item.giftCode}}</td>
           <td>{{item.giftName}}</td>
+          <td>{{item.giftCode}}</td>
           <td>{{item.price}}</td>
           <td>
             <IndexControls
@@ -57,6 +57,7 @@ import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 
 import ImageComponent from "@/components/Image.vue";
+import EventBus from "@/events/EventBus";
 
 @Component({
   components: {
@@ -65,6 +66,15 @@ import ImageComponent from "@/components/Image.vue";
   },
 })
 export default class GiftsIndexA extends AdminIndex<IGiftAdminDTO> {
+  loadData() {
+    this.isLoaded = false;
+
+    GiftsApi.index(this.jwt).then((response: IGiftAdminDTO[]) => {
+      this.model = response;
+      this.isLoaded = true;
+    });
+  }
+
   onHistory(id: string) {
     GiftsApi.history(id, this.jwt).then((response: IGiftAdminDTO[]) => {
       this.model = response;
@@ -93,13 +103,14 @@ export default class GiftsIndexA extends AdminIndex<IGiftAdminDTO> {
 
   created() {
     this.modelName = "Gift";
+
+    EventBus.$on("cultureUpdate", (culture: string) => {
+      this.loadData();
+    });
   }
 
   mounted() {
-    GiftsApi.index(this.jwt).then((response: IGiftAdminDTO[]) => {
-      this.model = response;
-      this.isLoaded = true;
-    });
+    this.loadData();
   }
 }
 </script>

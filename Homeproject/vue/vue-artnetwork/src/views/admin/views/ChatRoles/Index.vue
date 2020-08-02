@@ -6,7 +6,6 @@
           <th>(ID)</th>
           <th>Title</th>
           <th>Title [{{CurrentCulture}}]</th>
-          <th>IS DELETED?</th>
           <th></th>
         </tr>
       </thead>
@@ -15,7 +14,6 @@
           <td>{{item.id}}</td>
           <td>{{item.roleTitle}}</td>
           <td>{{item.roleTitleValue}}</td>
-          <td>{{item.deletedAt != null}}</td>
           <td>
             <IndexControls
               :model="item"
@@ -46,6 +44,7 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 
 import IndexControls from "@/views/admin/components/shared/IndexControls.vue";
 import AdminIndex from "../../components/shared/base/AdminIndex.vue";
+import EventBus from "@/events/EventBus";
 
 @Component({
   components: {
@@ -55,6 +54,15 @@ import AdminIndex from "../../components/shared/base/AdminIndex.vue";
 export default class ChatRolesIndexA extends AdminIndex<IChatRoleAdminDTO> {
   get CurrentCulture() {
     return store.getters.getCurrentCulture;
+  }
+
+  loadData() {
+    this.isLoaded = false;
+
+    ChatRolesApi.index(this.jwt).then((response: IChatRoleAdminDTO[]) => {
+      this.model = response;
+      this.isLoaded = true;
+    });
   }
 
   onHistory(id: string) {
@@ -85,13 +93,14 @@ export default class ChatRolesIndexA extends AdminIndex<IChatRoleAdminDTO> {
 
   created() {
     this.modelName = "ChatRole";
+
+    EventBus.$on("cultureUpdate", (culture: string) => {
+      this.loadData();
+    });
   }
 
   mounted() {
-    ChatRolesApi.index(this.jwt).then((response: IChatRoleAdminDTO[]) => {
-      this.model = response;
-      this.isLoaded = true;
-    });
+    this.loadData();
   }
 }
 </script>

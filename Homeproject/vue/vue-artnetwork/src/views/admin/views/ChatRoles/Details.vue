@@ -16,15 +16,29 @@
     <hr />
     <dl class="row">
       <dt class="col-sm-2">{{$t('bll.chatroles.CanRenameRoom')}}</dt>
-      <dd class="col-sm-10">{{model.canRenameRoom}}</dd>
+      <dd class="col-sm-10">
+        <input class="check-box" disabled="disabled" type="checkbox" :checked="model.canRenameRoom" />
+      </dd>
+
       <dt class="col-sm-2">{{$t('bll.chatroles.CanEditMembers')}}</dt>
-      <dd class="col-sm-10">{{model.canEditMembers}}</dd>
+      <dd class="col-sm-10">
+        <input class="check-box" disabled="disabled" type="checkbox" :checked="model.canEditMembers" />
+      </dd>
+
       <dt class="col-sm-2">{{$t('bll.chatroles.CanWriteMessages')}}</dt>
-      <dd class="col-sm-10">{{model.canWriteMessages}}</dd>
+      <dd class="col-sm-10">
+        <input class="check-box" disabled="disabled" type="checkbox" :checked="model.canWriteMessages" />
+      </dd>
+
       <dt class="col-sm-2">{{$t('bll.chatroles.CanEditAllMessages')}}</dt>
-      <dd class="col-sm-10">{{model.canEditAllMessages}}</dd>
+      <dd class="col-sm-10">
+        <input class="check-box" disabled="disabled" type="checkbox" :checked="model.canEditAllMessages" />
+      </dd>
+
       <dt class="col-sm-2">{{$t('bll.chatroles.CanEditMessages')}}</dt>
-      <dd class="col-sm-10">{{model.canEditMessages}}</dd>
+      <dd class="col-sm-10">
+        <input class="check-box" disabled="disabled" type="checkbox" :checked="model.canEditMessages" />
+      </dd>
     </dl>
     <hr />
     <MetaDetailsSection :model="model" />
@@ -42,6 +56,7 @@ import { IChatRoleAdminDTO } from "@/types/IChatRoleDTO";
 import { ChatRolesApi } from "@/services/admin/ChatRolesApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 import AdminDetails from "../../components/shared/base/AdminDetails.vue";
+import EventBus from "@/events/EventBus";
 
 @Component
 export default class ChatRolesDetailsA extends AdminDetails<IChatRoleAdminDTO> {
@@ -49,17 +64,27 @@ export default class ChatRolesDetailsA extends AdminDetails<IChatRoleAdminDTO> {
     return store.getters.getCurrentCulture;
   }
 
-  created() {
-    this.modelName = "ChatRole";
-  }
+  loadData() {
+    this.isLoaded = false;
 
-  mounted() {
     ChatRolesApi.details(this.Id, this.jwt).then(
       (response: IChatRoleAdminDTO) => {
         this.model = response;
         this.isLoaded = true;
       }
     );
+  }
+
+  created() {
+    this.modelName = "ChatRole";
+
+    EventBus.$on("cultureUpdate", (culture: string) => {
+      this.loadData();
+    });
+  }
+
+  mounted() {
+    this.loadData();
   }
 }
 </script>

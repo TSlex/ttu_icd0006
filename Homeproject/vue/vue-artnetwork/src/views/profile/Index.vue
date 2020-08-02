@@ -231,6 +231,7 @@ export default class ProfileIndex extends IdentityStore {
 
   openChatWithUser() {
     if (!this.isCurrentUser) {
+      this.isLoaded = false;
       ChatRoomsApi.getChatRoomWithUsername(this.username, this.jwt).then(
         (result: string | null) => {
           if (result) {

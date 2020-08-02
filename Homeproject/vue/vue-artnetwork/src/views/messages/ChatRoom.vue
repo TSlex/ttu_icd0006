@@ -51,8 +51,7 @@ import EventBus from "@/events/EventBus";
   },
 })
 export default class ChatRoom extends IdentityStore {
-  @Prop()
-  chatRoomId: string | undefined;
+  @Prop() chatRoomId: string | undefined;
 
   private pageToLoad = 2;
   private isFetching = false;
@@ -150,6 +149,13 @@ export default class ChatRoom extends IdentityStore {
   loadData() {
     store.dispatch("getChatRooms").then(() => {
       this.isChatRoomsLoaded = true;
+
+      if (this.chatRoomId) {
+        store.dispatch(
+          "selectChatRoom",
+          store.getters.getChatRoomById(this.chatRoomId)
+        );
+      }
     });
     store.dispatch("getChatRoles").then(() => {
       this.isChatRolesLoaded = true;
