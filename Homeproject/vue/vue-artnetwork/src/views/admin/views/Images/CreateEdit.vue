@@ -8,7 +8,7 @@
     <div class="form-group">
       <label class="control-label" for="imageType">{{$t('bll.images.ImageType')}}</label>
       <select class="form-control" type="text" id="imageType" maxlength="300" name="imageType" v-model="model.imageType">
-        <option v-for="(key, value) in ImageType" :key="key" :value="Number(value)">{{key}}</option>
+        <option v-for="(key, value) in ImageType" :key="key" :value="Number(value)">{{resolveType(Number(value))}}</option>
       </select>
     </div>
   </div>
@@ -19,6 +19,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 import { IRankAdminDTO } from "@/types/IRankDTO";
 import { ImageType } from "@/types/Enums/ImageType";
+import { resolveType } from "@/translations/imageType";
 
 @Component({
   components: {},
@@ -30,6 +31,10 @@ export default class CreateEdit extends Vue {
     return Object.keys(ImageType).filter((key) => {
       return isNaN(Number(key));
     });
+  }
+
+  resolveType(type: ImageType) {
+    return resolveType(type);
   }
 }
 </script>
