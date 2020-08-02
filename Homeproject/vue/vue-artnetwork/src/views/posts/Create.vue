@@ -8,7 +8,7 @@
         <div class="col-md-6">
           <ErrorsList :errors="errors" />
           <div class="form-group">
-            <label class="control-label" for="postTitle">{{$t('bll.posts.PostTitle')}}</label>
+            <label class="control-label" for="postTitle">{{$t('bll.posts.PostTitle')}}*</label>
             <input class="form-control" id="postTitle" v-model="postModel.postTitle" />
           </div>
           <div class="form-group">
@@ -45,6 +45,7 @@ import ErrorListContainer from "../../components/shared/ErrorListContainer.vue";
 
 import ImageForm from "@/components/image/ImageForm.vue";
 import ImageMiniature from "@/components/image/ImageMiniature.vue";
+import { requireError } from "@/translations/validation";
 
 @Component({
   components: {
@@ -86,30 +87,30 @@ export default class PostsCreate extends ErrorListContainer {
   submit() {
     this.errors = [];
 
-    if (
-      this.imageModel.imageFile &&
-      this.postModel.postTitle.length > 0 &&
-      this.postModel.postDescription!.length > 0
-    ) {
-      ImagesApi.postImageModel(this.imageModel, this.jwt).then(
-        (response: IImageDTO) => {
-          this.postModel.id = response.imageFor;
-          this.postModel.postImageId = response.id;
-
-          store
-            .dispatch("postPost", this.postModel)
-            .then((response: ResponseDTO) => {
-              if (response.errors) {
-                this.errors = response.errors;
-              } else {
-                router.push(`/profiles/${store.getters.getUserName}`);
-              }
-            });
-        }
-      );
-    } else {
-      this.errors.push("Ensure that all forms is filled!");
+    if (!(this.postModel.postTitle.length > 0)) {
+      this.errors.push(requireError("bll.posts.PostTitle"));
     }
+    if (this.imageModel.imageFile === null) {
+      this.errors.push(this.$t("bll.images.ImageRequired").toString());
+    }
+    if (this.errors.length > 0) return;
+
+    ImagesApi.postImageModel(this.imageModel, this.jwt).then(
+      (response: IImageDTO) => {
+        this.postModel.id = response.imageFor;
+        this.postModel.postImageId = response.id;
+
+        store
+          .dispatch("postPost", this.postModel)
+          .then((response: ResponseDTO) => {
+            if (response.errors) {
+              this.errors = response.errors;
+            } else {
+              router.push(`/profiles/${store.getters.getUserName}`);
+            }
+          });
+      }
+    );
   }
 }
 </script>

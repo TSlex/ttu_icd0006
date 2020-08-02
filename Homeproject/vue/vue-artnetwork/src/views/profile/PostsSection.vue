@@ -22,12 +22,12 @@ import ImageComponent from "@/components/Image.vue";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class PostsSection extends Vue {
   get posts(): IPostDTO[] {
-    return store.state.posts;
+    return store.getters.getPosts;
   }
 }
 </script>

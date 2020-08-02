@@ -56,7 +56,7 @@
             </div>
             <span class="profile_name" style="color: black !important;">{{message.userName}}</span>
           </a>
-          <a v-if="checkURL(message.messageValue)" :href="message.messageValue">
+          <a v-if="isImageUrl(message.messageValue)" :href="message.messageValue">
             <img :src="message.messageValue" alt="profile" height="auto" width="200px" style="border-radius: 5px" />
           </a>
           <span v-else class="message_value">{{message.messageValue}}</span>
@@ -99,6 +99,7 @@ import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import { IChatMemberDTO } from "@/types/IChatMemberDTO";
 import LoadingComponent from "../../components/shared/LoadingComponent.vue";
 import EventBus from "../../events/EventBus";
+import Axios from "axios";
 
 @Component({
   components: {
@@ -213,6 +214,27 @@ export default class MessagesSection extends IdentityStore {
 
   checkURL(url: string) {
     return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+  }
+
+  async isImageUrl(url: string) {
+    try {
+      const axios = Axios.create({ validateStatus: () => true });
+
+      const response = await axios.get(url);
+
+      switch (response.status) {
+        case 200:
+          return (
+            (response.headers["content-type"] as string)
+              .toLowerCase()
+              .indexOf("image/") === 0
+          );
+        default:
+          return false;
+      }
+    } catch (e) {
+      return false;
+    }
   }
 
   loadComponent() {

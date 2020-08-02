@@ -17,7 +17,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="Input_NewEmail">{{$t('bll.profiles.Email')}}</label>
+          <label for="Input_NewEmail">{{$t('bll.profiles.Email')}}*</label>
           <input class="form-control" type="email" v-model="emailModel.newEmail" />
           <span class="text-danger field-validation-valid" data-valmsg-for="Input.NewEmail" data-valmsg-replace="true"></span>
         </div>
@@ -36,6 +36,7 @@ import { IProfileEmailDTO } from "../../../types/Identity/IProfileEmailDTO";
 import { AccountApi } from "@/services/AccountApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import ErrorListContainer from "../../../components/shared/ErrorListContainer.vue";
+import { requireError } from "@/translations/validation";
 
 @Component({
   components: {
@@ -58,20 +59,24 @@ export default class ManageEmail extends ErrorListContainer {
   }
 
   saveChanges() {
-    if (this.emailModel) {
-      this.errors = [];
-      this.successMsg = null;
-      AccountApi.putEmail(this.emailModel, this.jwt).then(
-        (response: ResponseDTO) => {
-          if (response.errors) {
-            this.errors = response.errors;
-          } else {
-            this.successMsg = response.status;
-            this.emailModel!.currentEmail = this.emailModel!.newEmail;
-          }
-        }
-      );
+    this.errors = [];
+
+    if (!((this.emailModel?.newEmail?.length ?? -1) > 0)) {
+      this.errors.push(requireError("bll.profiles.Email"));
     }
+    if (this.errors.length > 0) return;
+    this.errors = [];
+    this.successMsg = null;
+    AccountApi.putEmail(this.emailModel!, this.jwt).then(
+      (response: ResponseDTO) => {
+        if (response.errors) {
+          this.errors = response.errors;
+        } else {
+          this.successMsg = response.status;
+          this.emailModel!.currentEmail = this.emailModel!.newEmail;
+        }
+      }
+    );
   }
 }
 </script>

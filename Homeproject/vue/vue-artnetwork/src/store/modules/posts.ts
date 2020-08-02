@@ -16,7 +16,13 @@ export const PostsModule = {
     posts: [] as IPostDTO[],
     postsLoadedCount: -1,
   },
-  getters: {},
+  getters: {
+    getPosts(state: IState) {
+      return state.posts.sort((post1, post2) => {
+        return new Date(post1.postPublicationDateTime) < new Date(post2.postPublicationDateTime) ? 1 : -1
+      })
+    }
+  },
   mutations: {
     setPost(state: IState, post: IPostDTO | null) {
       state.selectedPost = post

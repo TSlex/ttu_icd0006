@@ -8,15 +8,15 @@
         <ErrorsList :errors="errors" />
 
         <div class="form-group">
-          <label for="Input_OldPassword">{{$t('views.identity.CurrentPassword')}}</label>
+          <label for="Input_OldPassword">{{$t('views.identity.CurrentPassword')}}*</label>
           <input class="form-control" type="password" required v-model="passwordModel.currentPassword" />
         </div>
         <div class="form-group">
-          <label for="Input_NewPassword">{{$t('views.identity.NewPassword')}}</label>
+          <label for="Input_NewPassword">{{$t('views.identity.NewPassword')}}*</label>
           <input class="form-control" type="password" maxlength="100" required v-model="passwordModel.newPassword" />
         </div>
         <div class="form-group">
-          <label for="Input_ConfirmPassword">{{$t('views.identity.NewPasswordConfirm')}}</label>
+          <label for="Input_ConfirmPassword">{{$t('views.identity.NewPasswordConfirm')}}*</label>
           <input class="form-control" type="password" required v-model="passwordConfirmation" />
         </div>
         <button type="submit" class="btn btn-warning mt-2" @click="saveChanges">{{$t('views.common.SaveButton')}}</button>
@@ -34,6 +34,7 @@ import store from "@/store";
 import { AccountApi } from "../../../services/AccountApi";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import ErrorListContainer from "../../../components/shared/ErrorListContainer.vue";
+import { requireError } from "@/translations/validation";
 
 @Component({
   components: {
@@ -51,26 +52,30 @@ export default class ManagePassword extends ErrorListContainer {
   private passwordConfirmation: string = "";
 
   saveChanges() {
-    if (
-      this.passwordModel.currentPassword.length <= 0 ||
-      this.passwordModel.newPassword.length <= 0
-    ) {
-      this.errors.push("Fields is required!");
-    } else if (this.passwordModel.newPassword !== this.passwordConfirmation) {
-      this.errors.push("Passwords should match!");
-    } else {
-      AccountApi.putPassword(this.passwordModel, this.jwt).then(
-        (response: ResponseDTO) => {
-          if (response.errors) {
-            this.errors = response.errors;
-          } else {
-            this.successMsg = response.status;
-            this.passwordModel!.currentPassword = "";
-            this.passwordModel!.newPassword = "";
-          }
-        }
-      );
+    this.errors = [];
+
+    if (!(this.passwordModel.currentPassword.length > 0)) {
+      this.errors.push(requireError("views.identity.CurrentPassword"));
     }
+    if (!(this.passwordModel.newPassword.length > 0)) {
+      this.errors.push(requireError("views.identity.NewPassword"));
+    }
+    if (!(this.passwordModel.newPassword === this.passwordConfirmation)) {
+      this.errors.push(this.$t("views.identity.PasswordMatchError").toString());
+    }
+    if (this.errors.length > 0) return;
+
+    AccountApi.putPassword(this.passwordModel, this.jwt).then(
+      (response: ResponseDTO) => {
+        if (response.errors) {
+          this.errors = response.errors;
+        } else {
+          this.successMsg = response.status;
+          this.passwordModel!.currentPassword = "";
+          this.passwordModel!.newPassword = "";
+        }
+      }
+    );
   }
 
   mounted() {

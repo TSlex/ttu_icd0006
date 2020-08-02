@@ -3,11 +3,12 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import store from "@/store";
 import { IProfileDTO } from "@/types/IProfileDTO";
+import IdentityStore from "./IdentityStore.vue";
 
 @Component({
-  components: {}
+  components: {},
 })
-export default class ProfileContainer extends Vue {
+export default class ProfileContainer extends IdentityStore {
   get profile(): IProfileDTO | null {
     return store.state.profile!;
   }

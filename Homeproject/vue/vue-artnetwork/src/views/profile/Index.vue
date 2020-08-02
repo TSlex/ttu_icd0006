@@ -101,7 +101,8 @@ export default class ProfileIndex extends IdentityStore {
       this.isProfileLoaded &&
       this.isProfileRankLoaded &&
       this.isPostsLoaded &&
-      this.isGiftsLoaded
+      this.isGiftsLoaded &&
+      this.isLoaded
     );
   }
 
@@ -176,18 +177,22 @@ export default class ProfileIndex extends IdentityStore {
 
   // Followers list
   openFollowers() {
+    this.isLoaded = false;
     store
       .dispatch("getFollowers", { userName: this.username, pageNumber: 1 })
       .then((response: IFollowerDTO[]) => {
+        this.isLoaded = true;
         this.isFollowedOpen = false;
         this.isFollowersDetails = true;
       });
   }
 
   openFollowed() {
+    this.isLoaded = false;
     store
       .dispatch("getFollowed", { userName: this.username, pageNumber: 1 })
       .then((response: IFollowerDTO[]) => {
+        this.isLoaded = true;
         this.isFollowedOpen = true;
         this.isFollowersDetails = true;
       });
@@ -262,6 +267,7 @@ export default class ProfileIndex extends IdentityStore {
 
   created(): void {
     this.loadedCulture = store.state.culture!;
+    this.isLoaded = true;
 
     EventBus.$on("cultureUpdate", (culture: string) => {
       if (this.loadedCulture !== culture) {

@@ -34,8 +34,8 @@ import ProfileContainer from "@/components/shared/ProfileContainer.vue";
 @Component({
   components: {
     Modal,
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class FollowersDetails extends ProfileContainer {
   @Prop({ default: false }) private isFollowedOpen!: boolean;
@@ -48,6 +48,10 @@ export default class FollowersDetails extends ProfileContainer {
     if (this.isCurrentUser) {
       store.dispatch("profileUnfollow", followed.userName);
     }
+  }
+
+  mounted() {
+    this.isLoaded = true;
   }
 }
 </script>

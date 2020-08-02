@@ -70,7 +70,6 @@ export default class AccountLogin extends ErrorListContainer {
       .then((response: JwtResponseDTO) => {
         if (response.errors) {
           this.errors = response.errors;
-          console.log(response.errors);
         } else {
           router.push("/");
         }

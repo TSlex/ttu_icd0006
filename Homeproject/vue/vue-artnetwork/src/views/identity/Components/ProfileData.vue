@@ -12,7 +12,7 @@
           <input class="form-control" type="text" maxlength="100" v-model="profileDataModel.profileFullName" />
         </div>
         <div class="form-group">
-          <label class="control-label">{{$t('bll.profiles.UserName')}}</label>
+          <label class="control-label">{{$t('bll.profiles.UserName')}}*</label>
           <input class="form-control" type="text" maxlength="300" v-model="profileDataModel.username" />
         </div>
         <div class="form-group">
@@ -39,7 +39,7 @@
         </div>
 
         <div v-if="Number(profileDataModel.profileGender) === 127" class="form-group" id="profile-gender-own">
-          <label for="Input_ProfileGenderOwn">{{$t('bll.profiles.ProfileGenderOwn')}}</label>
+          <label for="Input_ProfileGenderOwn">{{$t('bll.profiles.ProfileGenderOwn')}}*</label>
           <input class="form-control" type="text" id="GenderOwn" v-model="profileDataModel.profileGenderOwn" />
         </div>
 
@@ -65,6 +65,7 @@ import { ProfileGender } from "@/types/Enums/ProfileGender";
 import { resolveGender } from "@/translations/gender";
 import IdentityStore from "../../../components/shared/IdentityStore.vue";
 import ErrorListContainer from "../../../components/shared/ErrorListContainer.vue";
+import { requireError } from "@/translations/validation";
 
 @Component({
   components: {
@@ -95,19 +96,29 @@ export default class ManageProfileData extends ErrorListContainer {
   }
 
   saveChanges() {
-    if (this.profileDataModel) {
-      this.errors = [];
-      this.successMsg = null;
-      AccountApi.putProfileData(this.profileDataModel, this.jwt).then(
-        (response: ResponseDTO) => {
-          if (response.errors) {
-            this.errors = response.errors;
-          } else {
-            this.successMsg = response.status;
-          }
-        }
-      );
+    this.errors = [];
+    this.successMsg = null;
+
+    if (!(this.profileDataModel!.username.length > 0)) {
+      this.errors.push(requireError("bll.profiles.UserName"));
     }
+    if (
+      !(this.profileDataModel!.profileGenderOwn.length > 0) &&
+      Number(this.profileDataModel!.profileGender) === 127
+    ) {
+      this.errors.push(requireError("bll.profiles.ProfileGenderOwn"));
+    }
+    if (this.errors.length > 0) return;
+
+    AccountApi.putProfileData(this.profileDataModel!, this.jwt).then(
+      (response: ResponseDTO) => {
+        if (response.errors) {
+          this.errors = response.errors;
+        } else {
+          this.successMsg = response.status;
+        }
+      }
+    );
   }
 }
 </script>
