@@ -18,6 +18,7 @@ import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
 
 import CreateEdit from "./CreateEdit.vue";
 import { createEmptyGuid } from "@/helpers/guid";
+import { isGuid, requireError } from "@/translations/validation";
 
 @Component({
   components: {
@@ -27,6 +28,7 @@ import { createEmptyGuid } from "@/helpers/guid";
 export default class ChatRolesCreateA extends AdminCreate {
   private model: IChatRoleAdminDTO = {
     roleTitle: "",
+    roleTitleValue: "",
     roleTitleValueId: createEmptyGuid(),
     canRenameRoom: false,
     canEditMembers: false,
@@ -44,20 +46,27 @@ export default class ChatRolesCreateA extends AdminCreate {
   };
 
   onSubmit() {
-    if (
-      this.model.roleTitle.length > 0 &&
-      this.model.roleTitleValueId.length > 0
-    ) {
-      ChatRolesApi.create(this.model, this.jwt).then(
-        (response: ResponseDTO) => {
-          if (response?.errors) {
-            this.errors = response.errors;
-          } else {
-            this.$router.go(-1);
-          }
-        }
-      );
+    this.errors = [];
+
+    if (!(this.model.roleTitle.length > 0)) {
+      this.errors.push(requireError("bll.chatroles.RoleTitle"));
     }
+    if (!(this.model.roleTitleValue.length > 0)) {
+      this.errors.push(requireError("bll.chatroles.RoleTitleValue"));
+    }
+
+    if (this.errors.length > 0) return;
+    ChatRolesApi.create(this.model, this.jwt).then((response: ResponseDTO) => {
+      if (response?.errors) {
+        this.errors = response.errors;
+      } else {
+        this.$router.go(-1);
+      }
+    });
+  }
+
+  created() {
+    this.modelName = "ChatRole";
   }
 
   mounted() {

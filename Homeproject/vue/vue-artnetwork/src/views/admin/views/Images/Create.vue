@@ -35,6 +35,7 @@ import { createEmptyGuid } from "../../../../helpers/guid";
 
 import ImageForm from "@/components/image/ImageForm.vue";
 import ImageMiniature from "@/components/image/ImageMiniature.vue";
+import { requireError, isGuid } from "@/translations/validation";
 
 @Component({
   components: {
@@ -72,6 +73,19 @@ export default class ImagesCreateA extends AdminCreate {
   }
 
   onSubmit() {
+    this.errors = [];
+
+    if (
+      Number(this.model.imageType) !== ImageType.Undefined &&
+      !isGuid(this.model.imageFor!)
+    ) {
+      this.errors.push(requireError("bll.images.ImageFor"));
+    }
+    if (this.model.imageFile === null) {
+      this.errors.push(this.$t("bll.images.ImageRequired").toString());
+    }
+    if (this.errors.length > 0) return;
+
     ImagesApi.create(this.model, this.jwt).then((response: any) => {
       if (response?.errors) {
         this.errors = response.errors;

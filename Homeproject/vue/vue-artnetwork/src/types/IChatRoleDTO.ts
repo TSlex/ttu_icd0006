@@ -1,4 +1,4 @@
-import { DomainEntityBaseMetaSoftUpdateDelete} from '@/types/Domain/DomainEntityBaseMetaSoftUpdateDelete'
+import { DomainEntityBaseMetaSoftUpdateDelete } from '@/types/Domain/DomainEntityBaseMetaSoftUpdateDelete'
 
 export interface IChatRoleDTO {
   roleTitle: string;
@@ -10,8 +10,9 @@ export interface IChatRoleDTO {
   canEditMessages: boolean;
 }
 
-export interface IChatRoleAdminDTO extends DomainEntityBaseMetaSoftUpdateDelete{
+export interface IChatRoleAdminDTO extends DomainEntityBaseMetaSoftUpdateDelete {
   roleTitle: string;
+  roleTitleValue: string;
   roleTitleValueId: string;
   canRenameRoom: boolean;
   canEditMembers: boolean;

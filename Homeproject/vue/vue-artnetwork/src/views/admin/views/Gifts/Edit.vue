@@ -41,6 +41,7 @@ import ImageForm from "@/components/image/ImageForm.vue";
 import ImageMiniature from "@/components/image/ImageMiniature.vue";
 
 import CreateEdit from "./CreateEdit.vue";
+import { requireError } from "@/translations/validation";
 
 @Component({
   components: {
@@ -62,17 +63,28 @@ export default class GiftsEditA extends AdminEdit<IGiftAdminDTO> {
   }
 
   onSubmit() {
-    if (this.Id && this.model) {
-      GiftsApi.edit(this.Id, this.model, this.jwt).then(
-        (response: ResponseDTO) => {
-          if (response?.errors) {
-            this.errors = response.errors;
-          } else {
-            this.$router.go(-1);
-          }
-        }
-      );
+    this.errors = [];
+
+    if (!(this.model!.giftCode.length > 0)) {
+      this.errors.push(requireError("bll.gifts.GiftCode"));
     }
+    if (!(this.model!.giftName.length > 0)) {
+      this.errors.push(requireError("bll.gifts.GiftName"));
+    }
+    if (this.model!.price < 0) {
+      this.errors.push(requireError("bll.gifts.Price"));
+    }
+    if (this.errors.length > 0) return;
+
+    GiftsApi.edit(this.Id, this.model!, this.jwt).then(
+      (response: ResponseDTO) => {
+        if (response?.errors) {
+          this.errors = response.errors;
+        } else {
+          this.$router.go(-1);
+        }
+      }
+    );
   }
 
   created() {

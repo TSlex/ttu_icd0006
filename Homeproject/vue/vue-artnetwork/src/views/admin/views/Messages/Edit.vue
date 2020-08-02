@@ -16,6 +16,7 @@ import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 import AdminEdit from "../../components/shared/base/AdminEdit.vue";
 
 import CreateEdit from "./CreateEdit.vue";
+import { requireError, isGuid } from "@/translations/validation";
 
 @Component({
   components: {
@@ -24,17 +25,31 @@ import CreateEdit from "./CreateEdit.vue";
 })
 export default class MessagesEditA extends AdminEdit<IMessageAdminDTO> {
   onSubmit() {
-    if (this.Id && this.model) {
-      MessagesApi.edit(this.Id, this.model, this.jwt).then(
-        (response: ResponseDTO) => {
-          if (response?.errors) {
-            this.errors = response.errors;
-          } else {
-            this.$router.go(-1);
-          }
-        }
-      );
+    this.errors = [];
+
+    if (!isGuid(this.model!.profileId)) {
+      this.errors.push(requireError("bll.messages.ProfileId"));
     }
+    if (!isGuid(this.model!.chatRoomId)) {
+      this.errors.push(requireError("bll.messages.ChatRoomId"));
+    }
+    if (!(this.model!.messageValue.length > 0)) {
+      this.errors.push(requireError("bll.messages.MessageValue"));
+    }
+    if (!this.model!.messageDateTime) {
+      this.errors.push(requireError("bll.messages.MessageDateTime"));
+    }
+    if (this.errors.length > 0) return;
+
+    MessagesApi.edit(this.Id, this.model!, this.jwt).then(
+      (response: ResponseDTO) => {
+        if (response?.errors) {
+          this.errors = response.errors;
+        } else {
+          this.$router.go(-1);
+        }
+      }
+    );
   }
 
   created() {

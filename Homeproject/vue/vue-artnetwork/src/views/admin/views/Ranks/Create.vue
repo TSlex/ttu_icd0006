@@ -1,7 +1,8 @@
 <template>
-  <AdminCreateWrapper v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
+  <AdminCreateWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
     <CreateEdit :model="model" />
   </AdminCreateWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -18,6 +19,7 @@ import CreateEdit from "./CreateEdit.vue";
 import { createEmptyGuid } from "@/helpers/guid";
 
 import AdminCreate from "../../components/shared/base/AdminCreate.vue";
+import { isGuid, requireError, isHex } from "@/translations/validation";
 
 @Component({
   components: {
@@ -49,6 +51,28 @@ export default class RanksCreateA extends AdminCreate {
   };
 
   onSubmit() {
+    this.errors = [];
+
+    if (!this.model!.rankCode) {
+      this.errors.push(requireError("bll.ranks.RankCode"));
+    }
+    if (!this.model!.rankTitle) {
+      this.errors.push(requireError("bll.ranks.RankTitle"));
+    }
+    if (!this.model!.rankDescription) {
+      this.errors.push(requireError("bll.ranks.RankDescription"));
+    }
+    if (!isHex(this.model!.rankColor)) {
+      this.errors.push(requireError("bll.ranks.RankColor"));
+    }
+    if (!isHex(this.model!.rankTextColor)) {
+      this.errors.push(requireError("bll.ranks.RankTextColor"));
+    }
+    if (this.model!.maxExperience <= this.model!.minExperience) {
+      this.errors.push(requireError("bll.ranks.MaxExperience"));
+    }
+    if (this.errors.length > 0) return;
+
     RanksApi.create(this.model, this.jwt).then((response: ResponseDTO) => {
       if (response?.errors) {
         this.errors = response.errors;
@@ -60,6 +84,10 @@ export default class RanksCreateA extends AdminCreate {
 
   created() {
     this.modelName = "Rank";
+  }
+
+  mounted() {
+    this.isLoaded = true;
   }
 }
 </script>

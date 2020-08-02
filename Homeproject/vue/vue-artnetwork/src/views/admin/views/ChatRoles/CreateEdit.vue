@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="form-group">
-      <label class="control-label" for="roleTitle">{{$t('bll.chatroles.RoleTitle')}}</label>
+      <label class="control-label" for="roleTitle">{{$t('bll.chatroles.RoleTitle')}}*</label>
       <input class="form-control" type="text" id="roleTitle" maxlength="200" name="roleTitle" v-model="model.roleTitle" />
     </div>
 
     <div class="form-group">
-      <label class="control-label" for="RoleTitleValue">{{$t('bll.chatroles.RoleTitleValue')}} [{{CurrentCulture}}]</label>
+      <label class="control-label" for="RoleTitleValue">{{$t('bll.chatroles.RoleTitleValue')}} [{{CurrentCulture}}]*</label>
       <input class="form-control" type="text" id="RoleTitleValue" name="RoleTitleValue" v-model="model.roleTitleValue" />
     </div>
 

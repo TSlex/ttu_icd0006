@@ -18,6 +18,7 @@ import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
 
 import CreateEdit from "./CreateEdit.vue";
 import { createEmptyGuid } from "../../../../helpers/guid";
+import { isGuid, requireError } from "@/translations/validation";
 
 @Component({
   components: {
@@ -41,19 +42,33 @@ export default class CommentsCreateA extends AdminCreate {
   };
 
   onSubmit() {
-    if (
-      this.model.commentValue.length > 0 &&
-      this.model.profileId.length > 0 &&
-      this.model.postId.length > 0
-    ) {
-      CommentsApi.create(this.model, this.jwt).then((response: ResponseDTO) => {
-        if (response?.errors) {
-          this.errors = response.errors;
-        } else {
-          this.$router.go(-1);
-        }
-      });
+    this.errors = [];
+
+    if (!isGuid(this.model!.profileId)) {
+      this.errors.push(requireError("bll.comments.ProfileId"));
     }
+    if (!isGuid(this.model!.postId)) {
+      this.errors.push(requireError("bll.comments.PostId"));
+    }
+    if (!(this.model!.commentValue.length > 0)) {
+      this.errors.push(requireError("bll.comments.CommentValue"));
+    }
+    if (!this.model!.commentDateTime) {
+      this.errors.push(requireError("bll.comments.CommentDateTime"));
+    }
+    if (this.errors.length > 0) return;
+
+    CommentsApi.create(this.model, this.jwt).then((response: ResponseDTO) => {
+      if (response?.errors) {
+        this.errors = response.errors;
+      } else {
+        this.$router.go(-1);
+      }
+    });
+  }
+
+  created() {
+    this.modelName = "Comment";
   }
 
   mounted() {

@@ -1,17 +1,17 @@
 <template>
   <div>
     <div class="form-group mt-3">
-      <label class="control-label" for="giftCode">{{$t("bll.gifts.GiftCode")}}</label>
+      <label class="control-label" for="giftCode">{{$t("bll.gifts.GiftCode")}}*</label>
       <input class="form-control" type="text" required id="giftCode" name="giftCode" v-model="model.giftCode" />
     </div>
 
     <div class="form-group">
-      <label class="control-label" for="giftName">{{$t("bll.gifts.GiftName")}} [{{CurrentCulture}}]</label>
+      <label class="control-label" for="giftName">{{$t("bll.gifts.GiftName")}} [{{CurrentCulture}}]*</label>
       <input class="form-control" type="text" required id="giftName" name="giftName" v-model="model.giftName" />
     </div>
 
     <div class="form-group">
-      <label class="control-label" for="price">{{$t("bll.gifts.Price")}}</label>
+      <label class="control-label" for="price">{{$t("bll.gifts.Price")}}*</label>
       <input class="form-control" type="text" required id="price" name="price" v-model.number="model.price" />
     </div>
   </div>

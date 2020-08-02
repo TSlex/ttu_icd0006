@@ -36,6 +36,7 @@ import { createEmptyGuid } from "@/helpers/guid";
 
 import ImageForm from "@/components/image/ImageForm.vue";
 import ImageMiniature from "@/components/image/ImageMiniature.vue";
+import { isGuid, requireError } from "@/translations/validation";
 
 @Component({
   components: {
@@ -57,17 +58,32 @@ export default class PostsEditA extends AdminEdit<IPostAdminDTO> {
   }
 
   onSubmit() {
-    if (this.Id && this.model) {
-      PostsApi.edit(this.Id, this.model, this.jwt).then(
-        (response: ResponseDTO) => {
-          if (response?.errors) {
-            this.errors = response.errors;
-          } else {
-            this.$router.go(-1);
-          }
-        }
-      );
+    this.errors = [];
+
+    if (!isGuid(this.model!.profileId)) {
+      this.errors.push(requireError("bll.posts.ProfileId"));
     }
+    if (!this.model!.postTitle) {
+      this.errors.push(requireError("bll.posts.PostTitle"));
+    }
+    if (!this.model!.postPublicationDateTime) {
+      this.errors.push(requireError("bll.posts.PostPublicationDateTime"));
+    }
+
+    if (this.errors.length > 0) return;
+    PostsApi.edit(this.Id, this.model!, this.jwt).then(
+      (response: ResponseDTO) => {
+        if (response?.errors) {
+          this.errors = response.errors;
+        } else {
+          this.$router.go(-1);
+        }
+      }
+    );
+  }
+
+  created() {
+    this.modelName = "Post";
   }
 
   beforeMount() {
@@ -99,10 +115,6 @@ export default class PostsEditA extends AdminEdit<IPostAdminDTO> {
         this.isLoaded = true;
       }
     });
-  }
-
-  created() {
-    this.modelName = "Post";
   }
 }
 </script>

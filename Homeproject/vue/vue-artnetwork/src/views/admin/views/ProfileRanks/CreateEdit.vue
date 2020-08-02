@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="form-group mt-3">
-      <label class="control-label" for="profileId">{{$t('bll.profileranks.ProfileId')}}</label>
+      <label class="control-label" for="profileId">{{$t('bll.profileranks.ProfileId')}}*</label>
       <input class="form-control" type="text" required id="profileId" name="profileId" v-model="model.profileId" />
     </div>
 
     <div class="form-group mt-3">
-      <label class="control-label" for="rankId">{{$t('bll.profileranks.RankId')}}</label>
+      <label class="control-label" for="rankId">{{$t('bll.profileranks.RankId')}}*</label>
       <input class="form-control" type="text" required id="rankId" name="rankId" v-model="model.rankId" />
     </div>
   </div>

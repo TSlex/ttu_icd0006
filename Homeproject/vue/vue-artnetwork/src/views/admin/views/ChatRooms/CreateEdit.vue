@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="form-group">
-      <label class="control-label" for="chatRoomTitle">{{$t("bll.chatrooms.ChatRoomTitle")}}</label>
+      <label class="control-label" for="chatRoomTitle">{{$t("bll.chatrooms.ChatRoomTitle")}}*</label>
       <input
         class="form-control"
         type="text"

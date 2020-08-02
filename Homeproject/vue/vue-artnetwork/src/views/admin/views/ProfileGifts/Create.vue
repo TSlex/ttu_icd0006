@@ -22,6 +22,7 @@ import AdminCreate from "@/views/admin/components/shared/base/AdminCreate.vue";
 
 import CreateEdit from "./CreateEdit.vue";
 import { createEmptyGuid } from "@/helpers/guid";
+import { isGuid, requireError } from "@/translations/validation";
 
 @Component({
   components: {
@@ -47,6 +48,19 @@ export default class ProfileGiftsCreateA extends AdminCreate {
   };
 
   onSubmit() {
+    this.errors = [];
+
+    if (!isGuid(this.model!.profileId)) {
+      this.errors.push(requireError("bll.profilegifts.ProfileId"));
+    }
+    if (!isGuid(this.model!.giftId)) {
+      this.errors.push(requireError("bll.profilegifts.GiftId"));
+    }
+    if (!this.model!.giftDateTime) {
+      this.errors.push(requireError("bll.profilegifts.GiftDateTime"));
+    }
+    if (this.errors.length > 0) return;
+
     ProfileGiftsApi.create(this.model, this.jwt).then(
       (response: ResponseDTO) => {
         if (response?.errors) {

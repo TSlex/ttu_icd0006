@@ -37,6 +37,7 @@ import { ImagesApi } from "@/services/admin/ImagesApi";
 
 import ImageForm from "@/components/image/ImageForm.vue";
 import ImageMiniature from "@/components/image/ImageMiniature.vue";
+import { isGuid, requireError } from "@/translations/validation";
 
 @Component({
   components: {
@@ -82,6 +83,22 @@ export default class PostsCreateA extends AdminCreate {
   }
 
   onSubmit() {
+    this.errors = [];
+
+    if (!isGuid(this.model!.profileId)) {
+      this.errors.push(requireError("bll.posts.ProfileId"));
+    }
+    if (!this.model!.postTitle) {
+      this.errors.push(requireError("bll.posts.PostTitle"));
+    }
+    if (!this.model!.postPublicationDateTime) {
+      this.errors.push(requireError("bll.posts.PostPublicationDateTime"));
+    }
+    if (this.imageModel.imageFile === null) {
+      this.errors.push(this.$t("bll.images.ImageRequired").toString());
+    }
+    if (this.errors.length > 0) return;
+
     ImagesApi.create(this.imageModel! as IImageAdminDTO, this.jwt).then(
       (response: IImageAdminDTO) => {
         this.model.id = response.imageFor!;

@@ -11,12 +11,12 @@
       <ImageForm :imageModel="model" v-on:onLoadFile="loadImage" />
 
       <div class="form-group">
-        <label class="control-label" for="imageUrl">{{$t('bll.images.ImageUrl')}}</label>
+        <label class="control-label" for="imageUrl">{{$t('bll.images.ImageUrl')}}*</label>
         <input class="form-control" type="text" id="imageUrl" maxlength="300" name="imageUrl" v-model="model.imageUrl" />
       </div>
 
       <div class="form-group">
-        <label class="control-label" for="originalImageUrl">{{$t('bll.images.OriginalImageUrl')}}</label>
+        <label class="control-label" for="originalImageUrl">{{$t('bll.images.OriginalImageUrl')}}*</label>
         <input
           class="form-control"
           type="text"
@@ -51,6 +51,7 @@ import CreateEdit from "./CreateEdit.vue";
 
 import ImageForm from "@/components/image/ImageForm.vue";
 import ImageMiniature from "@/components/image/ImageMiniature.vue";
+import { requireError, isGuid } from "@/translations/validation";
 
 @Component({
   components: {
@@ -66,15 +67,29 @@ export default class ImagesEditA extends AdminEdit<IImageAdminDTO> {
   }
 
   onSubmit() {
-    if (this.Id && this.model) {
-      ImagesApi.edit(this.Id, this.model, this.jwt).then((response: any) => {
-        if (response?.errors) {
-          this.errors = response.errors;
-        } else {
-          this.$router.go(-1);
-        }
-      });
+    this.errors = [];
+
+    if (!(this.model!.imageUrl!.length > 0)) {
+      this.errors.push(requireError("bll.images.ImageUrl"));
     }
+    if (!(this.model!.originalImageUrl!.length > 0)) {
+      this.errors.push(requireError("bll.images.OriginalImageUrl"));
+    }
+    if (
+      Number(this.model!.imageType) !== ImageType.Undefined &&
+      !isGuid(this.model!.imageFor!)
+    ) {
+      this.errors.push(requireError("bll.images.ImageFor"));
+    }
+    if (this.errors.length > 0) return;
+
+    ImagesApi.edit(this.Id, this.model!, this.jwt).then((response: any) => {
+      if (response?.errors) {
+        this.errors = response.errors;
+      } else {
+        this.$router.go(-1);
+      }
+    });
   }
 
   created() {

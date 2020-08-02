@@ -16,6 +16,7 @@ import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 import AdminEdit from "../../components/shared/base/AdminEdit.vue";
 
 import CreateEdit from "./CreateEdit.vue";
+import { isGuid, requireError } from "@/translations/validation";
 
 @Component({
   components: {
@@ -23,6 +24,32 @@ import CreateEdit from "./CreateEdit.vue";
   },
 })
 export default class ChatRolesEditA extends AdminEdit<IChatRoleAdminDTO> {
+  onSubmit() {
+    this.errors = [];
+
+    if (!(this.model!.roleTitle.length > 0)) {
+      this.errors.push(requireError("bll.chatroles.RoleTitle"));
+    }
+    if (!(this.model!.roleTitleValue.length > 0)) {
+      this.errors.push(requireError("bll.chatroles.RoleTitleValue"));
+    }
+    if (this.errors.length > 0) return;
+
+    ChatRolesApi.edit(this.Id, this.model!, this.jwt).then(
+      (response: ResponseDTO) => {
+        if (response?.errors) {
+          this.errors = response.errors;
+        } else {
+          this.$router.go(-1);
+        }
+      }
+    );
+  }
+
+  created() {
+    this.modelName = "ChatRole";
+  }
+
   mounted() {
     ChatRolesApi.details(this.Id, this.jwt).then(
       (response: IChatRoleAdminDTO) => {
@@ -30,20 +57,6 @@ export default class ChatRolesEditA extends AdminEdit<IChatRoleAdminDTO> {
         this.isLoaded = true;
       }
     );
-  }
-
-  onSubmit() {
-    if (this.Id && this.model) {
-      ChatRolesApi.edit(this.Id, this.model, this.jwt).then(
-        (response: ResponseDTO) => {
-          if (response?.errors) {
-            this.errors = response.errors;
-          } else {
-            this.$router.go(-1);
-          }
-        }
-      );
-    }
   }
 }
 </script>

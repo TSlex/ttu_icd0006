@@ -1,17 +1,17 @@
 <template>
   <div>
     <div class="form-group mt-3">
-      <label class="control-label" for="rankCode">{{$t('bll.ranks.RankCode')}}</label>
+      <label class="control-label" for="rankCode">{{$t('bll.ranks.RankCode')}}*</label>
       <input class="form-control" type="text" required id="rankCode" name="rankCode" v-model="model.rankCode" />
     </div>
 
     <div class="form-group mt-3">
-      <label class="control-label" for="rankTitle">{{$t('bll.ranks.RankTitle')}}</label>
+      <label class="control-label" for="rankTitle">{{$t('bll.ranks.RankTitle')}}*</label>
       <input class="form-control" type="text" required id="rankTitle" name="rankTitle" v-model="model.rankTitle" />
     </div>
 
     <div class="form-group mt-3">
-      <label class="control-label" for="rankDescription">{{$t('bll.ranks.RankDescription')}}</label>
+      <label class="control-label" for="rankDescription">{{$t('bll.ranks.RankDescription')}}*</label>
       <input class="form-control" type="text" required id="profileId" name="rankDescription" v-model="model.rankDescription" />
     </div>
 
@@ -21,22 +21,22 @@
     </div>
 
     <div class="form-group mt-3">
-      <label class="control-label" for="rankColor">{{$t('bll.ranks.RankColor')}}</label>
+      <label class="control-label" for="rankColor">{{$t('bll.ranks.RankColor')}} [#000, #000000]*</label>
       <input class="form-control" type="text" required id="rankColor" name="rankColor" v-model="model.rankColor" />
     </div>
 
     <div class="form-group mt-3">
-      <label class="control-label" for="rankTextColor">{{$t('bll.ranks.RankTextColor')}}</label>
+      <label class="control-label" for="rankTextColor">{{$t('bll.ranks.RankTextColor')}} [#000, #000000]*</label>
       <input class="form-control" type="text" required id="rankTextColor" name="rankTextColor" v-model="model.rankTextColor" />
     </div>
 
     <div class="form-group mt-3">
-      <label class="control-label" for="minExperience">{{$t('bll.ranks.MinExperience')}}</label>
+      <label class="control-label" for="minExperience">{{$t('bll.ranks.MinExperience')}}*</label>
       <input class="form-control" type="number" id="minExperience" name="minExperience" v-model.number="model.minExperience" />
     </div>
 
     <div class="form-group mt-3">
-      <label class="control-label" for="maxExperience">{{$t('bll.ranks.MaxExperience')}}</label>
+      <label class="control-label" for="maxExperience">{{$t('bll.ranks.MaxExperience')}}*</label>
       <input class="form-control" type="number" id="maxExperience" name="maxExperience" v-model.number="model.maxExperience" />
     </div>
 

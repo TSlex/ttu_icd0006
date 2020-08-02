@@ -19,6 +19,7 @@ import { ImageType } from "@/types/Enums/ImageType";
 
 import CreateEdit from "./CreateEdit.vue";
 import AdminEdit from "../../components/shared/base/AdminEdit.vue";
+import { requireError, isGuid } from "@/translations/validation";
 
 @Component({
   components: {
@@ -36,17 +37,25 @@ export default class ProfileRanksEditA extends AdminEdit<IProfileRankAdminDTO> {
   }
 
   onSubmit() {
-    if (this.Id && this.model) {
-      ProfileRanksApi.edit(this.Id, this.model, this.jwt).then(
-        (response: ResponseDTO) => {
-          if (response?.errors) {
-            this.errors = response.errors;
-          } else {
-            this.$router.go(-1);
-          }
-        }
-      );
+    this.errors = [];
+
+    if (!isGuid(this.model!.profileId)) {
+      this.errors.push(requireError("bll.profileranks.ProfileId"));
     }
+    if (!isGuid(this.model!.rankId)) {
+      this.errors.push(requireError("bll.profileranks.RankId"));
+    }
+    if (this.errors.length > 0) return;
+
+    ProfileRanksApi.edit(this.Id, this.model!, this.jwt).then(
+      (response: ResponseDTO) => {
+        if (response?.errors) {
+          this.errors = response.errors;
+        } else {
+          this.$router.go(-1);
+        }
+      }
+    );
   }
 
   created() {

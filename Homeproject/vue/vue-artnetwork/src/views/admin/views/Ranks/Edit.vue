@@ -21,6 +21,7 @@ import AdminEdit from "@/views/admin/components/shared/base/AdminEdit.vue";
 import FormInput from "@/components/shared/FormInput.vue";
 
 import CreateEdit from "./CreateEdit.vue";
+import { requireError, isHex } from "@/translations/validation";
 
 @Component({
   components: {
@@ -30,22 +31,42 @@ import CreateEdit from "./CreateEdit.vue";
 })
 export default class RanksEditA extends AdminEdit<IRankAdminDTO> {
   onSubmit() {
-    if (this.id && this.model) {
-      RanksApi.edit(this.id, this.model, this.jwt).then(
-        (response: ResponseDTO) => {
-          if (response?.errors) {
-            this.errors = response.errors;
-          } else {
-            this.$router.go(-1);
-          }
-        }
-      );
+    this.errors = [];
+
+    if (!this.model!.rankCode) {
+      this.errors.push(requireError("bll.ranks.RankCode"));
     }
+    if (!this.model!.rankTitle) {
+      this.errors.push(requireError("bll.ranks.RankTitle"));
+    }
+    if (!this.model!.rankDescription) {
+      this.errors.push(requireError("bll.ranks.RankDescription"));
+    }
+    if (!isHex(this.model!.rankColor)) {
+      this.errors.push(requireError("bll.ranks.RankColor"));
+    }
+    if (!isHex(this.model!.rankTextColor)) {
+      this.errors.push(requireError("bll.ranks.RankTextColor"));
+    }
+    if (this.model!.maxExperience <= this.model!.minExperience) {
+      this.errors.push(requireError("bll.ranks.MaxExperience"));
+    }
+    if (this.errors.length > 0) return;
+    RanksApi.edit(this.id, this.model!, this.jwt).then(
+      (response: ResponseDTO) => {
+        if (response?.errors) {
+          this.errors = response.errors;
+        } else {
+          this.$router.go(-1);
+        }
+      }
+    );
   }
 
   beforeMount() {
     RanksApi.details(this.id, this.jwt).then((response: IRankAdminDTO) => {
       this.model = response;
+      this.isLoaded = true;
     });
   }
 

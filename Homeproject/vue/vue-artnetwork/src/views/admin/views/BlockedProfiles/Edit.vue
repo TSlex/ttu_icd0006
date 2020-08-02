@@ -1,12 +1,12 @@
 <template>
   <AdminEditWrapper v-if="isLoaded" v-on:onSubmit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
     <div class="form-group">
-      <label class="control-label" for="profileId">{{$t('bll.blockedprofiles.ProfileId')}}</label>
+      <label class="control-label" for="profileId">{{$t('bll.blockedprofiles.ProfileId')}}*</label>
       <input class="form-control" type="text" required id="profileId" name="profileId" v-model="model.profileId" />
     </div>
     <i class="fa fa-arrow-down"></i>
     <div class="form-group">
-      <label class="control-label" for="bProfileId">{{$t('bll.blockedprofiles.BProfileId')}}</label>
+      <label class="control-label" for="bProfileId">{{$t('bll.blockedprofiles.BProfileId')}}*</label>
       <input class="form-control" type="text" required id="bProfileId" name="bProfileId" v-model="model.bProfileId" />
     </div>
   </AdminEditWrapper>
@@ -22,6 +22,7 @@ import { IBlockedProfileAdminDTO } from "@/types/IBlockedProfileDTO";
 import { BlockedProfilesApi } from "@/services/admin/BlockedProfilesApi";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 import AdminEdit from "../../components/shared/base/AdminEdit.vue";
+import { requireError, isGuid } from "@/translations/validation";
 
 @Component
 export default class BPEditA extends AdminEdit<IBlockedProfileAdminDTO> {
@@ -39,17 +40,25 @@ export default class BPEditA extends AdminEdit<IBlockedProfileAdminDTO> {
   }
 
   onSubmit() {
-    if (this.Id && this.model) {
-      BlockedProfilesApi.edit(this.Id, this.model, this.jwt).then(
-        (response: ResponseDTO) => {
-          if (response?.errors) {
-            this.errors = response.errors;
-          } else {
-            this.$router.go(-1);
-          }
-        }
-      );
+    this.errors = [];
+
+    if (!isGuid(this.model!.profileId)) {
+      this.errors.push(requireError("bll.blockedprofiles.ProfileId"));
     }
+    if (!isGuid(this.model!.bProfileId)) {
+      this.errors.push(requireError("bll.blockedprofiles.BProfileId"));
+    }
+    if (this.errors.length > 0) return;
+
+    BlockedProfilesApi.edit(this.Id, this.model!, this.jwt).then(
+      (response: ResponseDTO) => {
+        if (response?.errors) {
+          this.errors = response.errors;
+        } else {
+          this.$router.go(-1);
+        }
+      }
+    );
   }
 }
 </script>

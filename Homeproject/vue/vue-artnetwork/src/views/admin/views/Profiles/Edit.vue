@@ -13,11 +13,11 @@
 
       <div class="mt-3">
         <div class="form-group">
-          <label class="control-label" for="userName">{{$t('bll.profiles.UserName')}}</label>
+          <label class="control-label" for="userName">{{$t('bll.profiles.UserName')}}*</label>
           <input class="form-control" type="text" id="userName" name="userName" v-model="model.userName" />
         </div>
         <div class="form-group">
-          <label class="control-label" for="email">{{$t('bll.profiles.Email')}}</label>
+          <label class="control-label" for="email">{{$t('bll.profiles.Email')}}*</label>
           <input class="form-control" type="text" id="email" name="email" v-model="model.email" />
         </div>
         <div class="form-group">
@@ -37,7 +37,7 @@
           <input class="form-control" type="text" id="profileWorkPlace" name="profileWorkPlace" v-model="model.profileWorkPlace" />
         </div>
         <div class="form-group">
-          <label class="control-label" for="experience">{{$t('bll.profiles.Experience')}}</label>
+          <label class="control-label" for="experience">{{$t('bll.profiles.Experience')}}*</label>
           <input class="form-control" type="number" id="experience" name="experience" v-model.number="model.experience" />
         </div>
         <div class="form-group">
@@ -45,7 +45,7 @@
           <input class="form-control" type="text" id="profileAbout" name="profileAbout" v-model="model.profileAbout" />
         </div>
         <div class="form-group">
-          <label class="control-label" for="profileGender">{{$t('bll.profiles.ProfileGender')}}</label>
+          <label class="control-label" for="profileGender">{{$t('bll.profiles.ProfileGender')}}*</label>
           <select type="number" class="form-control" id="profileGender" name="profileGender" v-model.number="model.profileGender">
             <option value="0">{{resolveGender(ProfileGender.Male)}}</option>
             <option value="1">{{resolveGender(ProfileGender.Female)}}</option>
@@ -54,7 +54,7 @@
           </select>
         </div>
         <div v-if="Number(model.profileGender) === 127" class="form-group">
-          <label class="control-label" for="profileGenderOwn">{{$t('bll.profiles.ProfileGenderOwn')}}</label>
+          <label class="control-label" for="profileGenderOwn">{{$t('bll.profiles.ProfileGenderOwn')}}*</label>
           <input class="form-control" type="text" id="profileGenderOwn" name="profileGenderOwn" v-model="model.profileGenderOwn" />
         </div>
         <div class="form-group">
@@ -116,6 +116,7 @@ import ImageMiniature from "@/components/image/ImageMiniature.vue";
 
 import { createEmptyGuid } from "@/helpers/guid";
 import { ImagesApi } from "@/services/admin/ImagesApi";
+import { requireError } from "@/translations/validation";
 
 @Component({
   components: {
@@ -187,6 +188,22 @@ export default class ProfilesEditA extends AdminEdit<IProfileAdminDTO> {
   }
 
   onSubmit() {
+    this.errors = [];
+
+    if (!this.model!.userName) {
+      this.errors.push(requireError("bll.profiles.UserName"));
+    }
+    if (!this.model!.email) {
+      this.errors.push(requireError("bll.profiles.Email"));
+    }
+    if (
+      Number(this.model!.profileGender) === 127 &&
+      !this.model!.profileGenderOwn
+    ) {
+      this.errors.push(requireError("bll.profiles.ProfileGenderOwn"));
+    }
+    if (this.errors.length > 0) return;
+
     if (this.isImageExist) {
       ImagesApi.edit(this.imageModel!.id, this.imageModel!, this.jwt).then(
         () => {
@@ -201,7 +218,7 @@ export default class ProfilesEditA extends AdminEdit<IProfileAdminDTO> {
           );
         }
       );
-    } else {
+    } else if (this.imageModel!.imageFile) {
       ImagesApi.create(this.imageModel!, this.jwt).then(
         (response: IImageAdminDTO) => {
           this.model!.profileAvatarId = response.id;

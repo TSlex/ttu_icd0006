@@ -21,6 +21,7 @@ import { ImagesApi } from "@/services/ImagesApi";
 import { ImageType } from "@/types/Enums/ImageType";
 import AdminEdit from "../../components/shared/base/AdminEdit.vue";
 import CreateEdit from "./CreateEdit.vue";
+import { isGuid, requireError } from "@/translations/validation";
 
 @Component({
   components: {
@@ -30,6 +31,19 @@ import CreateEdit from "./CreateEdit.vue";
 })
 export default class ProfileGiftsEditA extends AdminEdit<IProfileGiftAdminDTO> {
   onSubmit() {
+    this.errors = [];
+
+    if (!isGuid(this.model!.profileId)) {
+      this.errors.push(requireError("bll.profilegifts.ProfileId"));
+    }
+    if (!isGuid(this.model!.giftId)) {
+      this.errors.push(requireError("bll.profilegifts.GiftId"));
+    }
+    if (!this.model!.giftDateTime) {
+      this.errors.push(requireError("bll.profilegifts.GiftDateTime"));
+    }
+    if (this.errors.length > 0) return;
+
     ProfileGiftsApi.edit(this.Id, this.model!, this.jwt).then(
       (response: ResponseDTO) => {
         if (response?.errors) {

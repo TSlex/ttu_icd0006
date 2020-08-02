@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="form-group mt-3">
-      <label class="control-label" for="profileId">{{$t('bll.profilegifts.ProfileId')}}</label>
+      <label class="control-label" for="profileId">{{$t('bll.profilegifts.ProfileId')}}*</label>
       <input class="form-control" type="text" required id="profileId" name="profileId" v-model="model.profileId" />
     </div>
 
     <div class="form-group">
-      <label class="control-label" for="giftId">{{$t('bll.profilegifts.GiftId')}}</label>
+      <label class="control-label" for="giftId">{{$t('bll.profilegifts.GiftId')}}*</label>
       <input class="form-control" type="text" required id="giftId" name="giftId" v-model="model.giftId" />
     </div>
 
@@ -26,7 +26,7 @@
     </div>
 
     <div class="form-group">
-      <label class="control-label" for="giftDateTime">{{$t('bll.profilegifts.GiftDateTime')}}</label>
+      <label class="control-label" for="giftDateTime">{{$t('bll.profilegifts.GiftDateTime')}}*</label>
       <FlatpickrInput :value="model.giftDateTime" :onChange="(value) => model.giftDateTime = value" />
     </div>
   </div>

@@ -36,6 +36,7 @@ import ImageMiniature from "@/components/image/ImageMiniature.vue";
 
 import { createEmptyGuid } from "../../../../helpers/guid";
 import { ImagesApi } from "@/services/admin/ImagesApi";
+import { requireError } from "@/translations/validation";
 
 @Component({
   components: {
@@ -79,6 +80,22 @@ export default class GiftsCreateA extends AdminCreate {
   }
 
   onSubmit() {
+    this.errors = [];
+
+    if (!(this.model!.giftCode.length > 0)) {
+      this.errors.push(requireError("bll.gifts.GiftCode"));
+    }
+    if (!(this.model!.giftName.length > 0)) {
+      this.errors.push(requireError("bll.gifts.GiftName"));
+    }
+    if (this.model!.price < 0) {
+      this.errors.push(requireError("bll.gifts.Price"));
+    }
+    if (this.imageModel.imageFile === null) {
+      this.errors.push(this.$t("bll.images.ImageRequired").toString());
+    }
+    if (this.errors.length > 0) return;
+
     ImagesApi.create(this.imageModel! as IImageAdminDTO, this.jwt).then(
       (response: IImageAdminDTO) => {
         this.model.id = response.imageFor!;

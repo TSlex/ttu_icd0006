@@ -6,3 +6,11 @@ export const requireError = (key: string) => {
 
   return translation.toString()
 }
+
+export const isGuid = (key: string) => {
+  return key.match('^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$')
+}
+
+export const isHex = (key: string) => {
+  return key.match('^#[0-9A-f]{6}$|^#[0-9A-f]{3}$')
+}

@@ -1,17 +1,17 @@
 <template>
   <div>
     <div class="form-group mt-3">
-      <label class="control-label" for="profileId">Profile (ID)</label>
+      <label class="control-label" for="profileId">{{$t('bll.posts.ProfileId')}}*</label>
       <input class="form-control" type="text" required id="profileId" name="profileId" v-model="model.profileId" />
     </div>
 
     <div class="form-group">
-      <label class="control-label" for="postTitle">Title</label>
+      <label class="control-label" for="postTitle">{{$t('bll.posts.PostTitle')}}*</label>
       <input class="form-control" type="text" required id="postTitle" name="postTitle" v-model="model.postTitle" />
     </div>
 
     <div class="form-group">
-      <label class="control-label" for="prpostDescriptionice">Description</label>
+      <label class="control-label" for="prpostDescriptionice">{{$t('bll.posts.PostDescription')}}</label>
       <input
         class="form-control"
         type="text"
@@ -23,7 +23,7 @@
     </div>
 
     <div class="form-group">
-      <label class="control-label" for="postPublicationDateTime">DateTime</label>
+      <label class="control-label" for="postPublicationDateTime">{{$t('bll.posts.PostPublicationDateTime')}}*</label>
       <FlatpickrInput :value="model.postPublicationDateTime" :onChange="(value) => model.postPublicationDateTime = value" />
     </div>
   </div>
