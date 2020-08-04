@@ -4,6 +4,7 @@ import { JwtResponseDTO } from '@/types/Response/JwtResponseDTO';
 import { AccountApi } from '@/services/AccountApi';
 import { IRegisterDTO } from '@/types/Identity/IRegisterDTO';
 import { ResponseDTO } from '@/types/Response/ResponseDTO';
+import { IDeleteDTO } from '@/types/Identity/IDeleteDTO';
 
 interface IState {
   jwt: string | null;
@@ -100,5 +101,15 @@ export const IdentityModule = {
       const response = await AccountApi.userRegister(registerDTO);
       return response;
     },
+
+    async deleteProfile(context: any, model: IDeleteDTO) {
+      const response = await AccountApi.deleteProfile(context.getters.getUserId, model, context.getters.getJwt);
+
+      if (!(response.errors?.length > 0)) {
+        context.commit('setJwt', null);
+      }
+
+      return response;
+    }
   }
 }

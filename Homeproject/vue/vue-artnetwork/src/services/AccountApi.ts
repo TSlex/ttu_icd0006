@@ -9,6 +9,7 @@ import { IProfilePasswordDTO } from '@/types/Identity/IProfilePasswordDTO';
 import { IProfileEmailDTO } from '@/types/Identity/IProfileEmailDTO';
 import { IProfileDataDTO } from '@/types/Identity/IProfileDataDTO';
 import { parseResponse } from '@/helpers/responseParcer';
+import { IDeleteDTO } from '@/types/Identity/IDeleteDTO';
 
 
 export abstract class AccountApi extends LanguageService {
@@ -118,6 +119,21 @@ export abstract class AccountApi extends LanguageService {
   static async putProfileData(dataModel: IProfileDataDTO, jwt: string | null): Promise<ResponseDTO> {
     const url = "updateprofiledata"
     const response = await this.axios.put(url, dataModel, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
+
+    switch (response.status) {
+      case 200:
+      case 201:
+      case 204:
+        return response.data as ResponseDTO
+      default:
+        console.log(response.status + ":" + response.statusText)
+        return parseResponse(response.data)
+    }
+  }
+
+  static async deleteProfile(id: string, model: IDeleteDTO, jwt: string | null): Promise<ResponseDTO> {
+    const url = `deleteprofile/${id}`
+    const response = await this.axios.post(url, model, { headers: { Authorization: 'Bearer ' + jwt, 'accept-language': this.culture } });
 
     switch (response.status) {
       case 200:

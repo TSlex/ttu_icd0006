@@ -18,7 +18,10 @@ export default class ProfileContainer extends IdentityStore {
   }
 
   get isCurrentUser(): boolean {
-    return store.getters.getUserName === store.state.profile?.userName;
+    return (
+      store.getters.isAuthenticated &&
+      store.getters.getUserName === store.state.profile?.userName
+    );
   }
 }
 </script>

@@ -278,7 +278,11 @@ export default class ProfileIndex extends IdentityStore {
       }
     });
 
-    store.dispatch("getProfile", this.username).then(() => {
+    store.dispatch("getProfile", this.username).then((response: any) => {
+      if ((response.errors as string[])?.length > 0) {
+        this.$router.replace("/404");
+      }
+
       this.isProfileLoaded = true;
     });
     store.dispatch("getProfileRank", this.username).then(() => {

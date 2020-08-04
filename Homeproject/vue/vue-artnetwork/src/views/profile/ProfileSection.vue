@@ -13,7 +13,7 @@
     <div class="profile_description col-9">
       <ul class="profile_meta_section">
         <li class="profile_name">{{ profile.userName }}</li>
-        <li v-if="!isCurrentUser" class="profile_controls dropdown">
+        <li v-if="isAuthenticated && !isCurrentUser" class="profile_controls dropdown">
           <a class="btn fa fa-bars" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
           <div
             class="dropdown-menu"

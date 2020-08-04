@@ -47,6 +47,24 @@ Vue.config.productionTip = false;
 
 Vue.use(VueSweetalert2);
 
+//logged and admin routes fallback
+router.beforeEach((to, from, next) => {
+  const loginOnly = to.matched.some(record => record.meta.loginOnly);
+  const adminOnly = to.matched.some(record => record.meta.adminOnly);
+
+  if (loginOnly && !store.getters.isAuthenticated) {
+    next({ path: '/account/login' })
+    return
+  }
+
+  if (adminOnly && !store.getters.isAdmin) {
+    next({ path: '/404' })
+    return
+  }
+
+  next()
+})
+
 new Vue({
   i18n,
   router,

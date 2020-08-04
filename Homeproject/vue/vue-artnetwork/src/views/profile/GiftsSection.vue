@@ -11,7 +11,7 @@
     <span v-if="profileGifts.length <= 0">{{$t('views.profiles.NoPresents')}}</span>
 
     <a
-      v-if="!isCurrentUser"
+      v-if="isAuthenticated && !isCurrentUser"
       class="fa fa-gift btn btn-primary profile_gift_controls"
       @click="$emit('onOpenGiftsSelector')"
       href="#"
@@ -28,8 +28,8 @@ import ProfileContainer from "@/components/shared/ProfileContainer.vue";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class GiftSection extends ProfileContainer {
   get profileGifts(): IProfileGiftDTO[] {
