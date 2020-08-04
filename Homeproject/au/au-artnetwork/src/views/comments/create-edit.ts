@@ -83,6 +83,9 @@ export class CommentsCreateEdit extends FormComponentBase {
                         if (!(response?.errors?.length > 0)) {
 
                             let newRecord = response.data
+
+                            newRecord.userName = this.appState.userName;
+
                             let postComment = this.appState.postComments[this.postId]
 
                             if (postComment.comments) {

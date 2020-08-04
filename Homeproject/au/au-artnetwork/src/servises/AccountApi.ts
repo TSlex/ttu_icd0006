@@ -14,6 +14,7 @@ import { IResponseDTO } from 'types/Response/IResponseDTO';
 import { IProfileDataDTO } from 'types/Identity/IProfileDataDTO';
 import { IProfilePasswordDTO } from 'types/Identity/IProfilePasswordDTO';
 import { IProfileDTO } from 'types/IProfileDTO';
+import { IDeleteDTO } from 'types/Identity/IDeleteDTO';
 
 
 @autoinject
@@ -209,6 +210,27 @@ export class AccountApi extends BaseApi {
 
         try {
             const response = await this.httpClient.put(url, JSON.stringify(passwordModel), { headers: this.headers });
+
+            switch (response.status) {
+                case 200:
+                case 201:
+                case 204:
+                    return parseResponse(response)
+                default:
+                    return parseResponse(response)
+            }
+        } catch (reason) {
+            return {
+                status: "-1",
+                errors: [reason],
+            }
+        }
+    }
+
+    async deleteProfile(model: IDeleteDTO): Promise<IResponseDTO> {
+        const url = `${this.fetchUrl}/deleteprofile/${this.appState.userId}`;
+        try {
+            const response = await this.httpClient.post(url, JSON.stringify(model), { headers: this.headers });
 
             switch (response.status) {
                 case 200:
