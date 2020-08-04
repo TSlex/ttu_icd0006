@@ -202,6 +202,11 @@ export default class ProfilesEditA extends AdminEdit<IProfileAdminDTO> {
     ) {
       this.errors.push(requireError("bll.profiles.ProfileGenderOwn"));
     }
+
+    if (!this.isImageExist && this.imageModel!.imageFile === null) {
+      this.errors.push(this.$t("bll.images.ImageRequired").toString());
+    }
+
     if (this.errors.length > 0) return;
 
     if (this.isImageExist) {
