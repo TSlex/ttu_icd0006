@@ -52,6 +52,7 @@ export class AppState {
         } else {
             localStorage.removeItem('jwt');
         }
+        this.resetState()
     }
 
     get isAuthenticated() {
@@ -95,5 +96,18 @@ export class AppState {
             return decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"].toString().split(',') as string[]
         }
         return [];
+    }
+
+    resetState() {
+        this.roomMessages = {}
+        this.selectedMessage = null
+
+        this.posts = []
+        this.selectedPost = null
+
+        this.postComments = {}
+        this.selectedComment = null
+
+        this.profileImageId = null;
     }
 }

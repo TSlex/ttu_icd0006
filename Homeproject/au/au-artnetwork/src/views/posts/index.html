@@ -31,12 +31,10 @@
                         </span>
                         <span class="mt-2">
                             <template if.bind="canEditThis(post)">
-                                <button class="btn btn-primary index_controls mr-1"
-                                    click.delegate="onEdit(post)">
+                                <button class="btn btn-primary index_controls mr-1" click.delegate="onEdit(post)">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger index_controls      "
-                                    click.delegate="onDelete(post)">
+                                <button class="btn btn-danger index_controls      " click.delegate="onDelete(post)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </template>

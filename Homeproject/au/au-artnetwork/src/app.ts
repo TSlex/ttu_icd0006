@@ -1,16 +1,16 @@
 import { AppState } from './state/state';
 import { autoinject, PLATFORM } from 'aurelia-framework';
-import { RouterConfiguration, Router } from 'aurelia-router';
+import { RouterConfiguration, Router, Redirect } from 'aurelia-router';
 
 @autoinject
 export class App {
     router?: Router;
 
-    get isLoading(){
+    get isLoading() {
         return this.appState.isComponentLoading;
     }
 
-    get userName(){
+    get userName() {
         return this.appState.userName;
     }
 
@@ -21,31 +21,35 @@ export class App {
 
         config.title = "Default";
 
+        config.addAuthorizeStep(new AuthorizeStep())
+
         config.map([
-            { route: ['', 'home', 'home/index'], name: 'home', moduleId: PLATFORM.moduleName('views/home/index'), nav: false, title: 'Home' },
+            { route: ['', 'home', 'home/index'], name: 'home', moduleId: PLATFORM.moduleName('views/home/index'), nav: false, title: 'Home', settings: { auth: true } },
 
             { route: ['account/login'], name: 'account-login', moduleId: PLATFORM.moduleName('views/account/login'), nav: false, title: 'Login' },
             { route: ['account/register'], name: 'account-register', moduleId: PLATFORM.moduleName('views/account/register'), nav: false, title: 'Register' },
 
             // Manage
-            { route: ['account/manage/:page?'], name: 'account-manage', moduleId: PLATFORM.moduleName('views/identity/manage'), nav: false, title: 'Manage' },
+            { route: ['account/manage/:page?'], name: 'account-manage', moduleId: PLATFORM.moduleName('views/identity/manage'), nav: false, title: 'Manage', settings: { auth: true } },
 
             // posts
-            { route: ['posts', 'posts/index'], name: 'posts', moduleId: PLATFORM.moduleName('views/posts/index'), nav: true, title: 'Posts' },
-            { route: ['posts/create'], name: 'posts-create', moduleId: PLATFORM.moduleName('views/posts/create-edit') },
-            { route: ['posts/edit/:id'], name: 'posts-edit', moduleId: PLATFORM.moduleName('views/posts/create-edit') },
+            { route: ['posts', 'posts/index'], name: 'posts', moduleId: PLATFORM.moduleName('views/posts/index'), nav: true, title: 'Posts', settings: { auth: true } },
+            { route: ['posts/create'], name: 'posts-create', moduleId: PLATFORM.moduleName('views/posts/create-edit'), settings: { auth: true } },
+            { route: ['posts/edit/:id'], name: 'posts-edit', moduleId: PLATFORM.moduleName('views/posts/create-edit'), settings: { auth: true } },
 
             // comments
-            { route: ['comments', 'comments/index'], name: 'comments', moduleId: PLATFORM.moduleName('views/comments/index'), nav: true, title: 'Comments' },
-            { route: ['comments/create/:postId'], name: 'comments-create', moduleId: PLATFORM.moduleName('views/comments/create-edit') },
-            { route: ['comments/edit/:id'], name: 'comments-edit', moduleId: PLATFORM.moduleName('views/comments/create-edit') },
+            { route: ['comments', 'comments/index'], name: 'comments', moduleId: PLATFORM.moduleName('views/comments/index'), nav: true, title: 'Comments', settings: { auth: true } },
+            { route: ['comments/create/:postId'], name: 'comments-create', moduleId: PLATFORM.moduleName('views/comments/create-edit'), settings: { auth: true } },
+            { route: ['comments/edit/:id'], name: 'comments-edit', moduleId: PLATFORM.moduleName('views/comments/create-edit'), settings: { auth: true } },
 
             // messages
-            { route: ['messages', 'messages/index'], name: 'messages', moduleId: PLATFORM.moduleName('views/messages/index'), nav: true, title: 'Messages' },
-            { route: ['messages/create/:chatRoomId'], name: 'messages-create', moduleId: PLATFORM.moduleName('views/messages/create-edit') },
-            { route: ['messages/edit/:id'], name: 'messages-edit', moduleId: PLATFORM.moduleName('views/messages/create-edit') },
+            { route: ['messages', 'messages/index'], name: 'messages', moduleId: PLATFORM.moduleName('views/messages/index'), nav: true, title: 'Messages', settings: { auth: true } },
+            { route: ['messages/create/:chatRoomId'], name: 'messages-create', moduleId: PLATFORM.moduleName('views/messages/create-edit'), settings: { auth: true } },
+            { route: ['messages/edit/:id'], name: 'messages-edit', moduleId: PLATFORM.moduleName('views/messages/create-edit'), settings: { auth: true } },
 
         ]);
+
+        config.addAuthorizeStep
 
         config.mapUnknownRoutes('views/home/index');
     }
@@ -53,5 +57,17 @@ export class App {
     logout() {
         this.appState.jwt = null;
         this.router.navigateToRoute('account-login');
+    }
+}
+
+class AuthorizeStep {
+    run(navigationInstruction: any, next: any) {
+        if (navigationInstruction.getAllInstructions().some((i: any) => i.config.settings?.auth ?? false)) {
+            if (localStorage.getItem('jwt') === null) {
+                return next.cancel(new Redirect('account/login'));
+            }
+        }
+
+        return next();
     }
 }

@@ -16,7 +16,7 @@ export class PostsApi extends BaseApi {
     async Index(): Promise<IFetchResponse<IPostGetDTO[]>> {
         const url = `${this.appState.baseUrl}/feed/1`;
 
-        return await this._index<IPostGetDTO>(url, { headers: this.headers })
+        return await this._index<IPostGetDTO>(url);
     }
 
     async Details(id: string): Promise<IFetchResponse<IPostGetDTO>> {

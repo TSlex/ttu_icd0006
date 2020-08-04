@@ -19,7 +19,7 @@ export class PostsIndex extends ViewBase {
     get posts() {
         return this.appState.posts.sort(
             (one, two) => {
-                return new Date(one.postPublicationDateTime).getTime() < new Date(two.postPublicationDateTime).getTime() ? 1 : -1
+                return new Date(one.postPublicationDateTime).getTime() <= new Date(two.postPublicationDateTime).getTime() ? 1 : -1
             });
     }
 
