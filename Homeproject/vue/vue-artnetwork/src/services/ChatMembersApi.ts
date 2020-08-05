@@ -5,6 +5,7 @@ import Axios from 'axios';
 import store from "../store";
 import { LanguageService } from './shared/LanguageService';
 import { parseResponse } from '@/helpers/responseParcer';
+import { apiHost } from './_config';
 
 
 
@@ -12,7 +13,7 @@ export abstract class ChatMembersApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
-      baseURL: "https://localhost:5001/api/v1/chatmembers/",
+      baseURL: apiHost + "/api/v1/chatmembers/",
       headers: {
         common: {
           'Content-Type': 'application/json'

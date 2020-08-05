@@ -10,13 +10,14 @@ import { IProfileEmailDTO } from '@/types/Identity/IProfileEmailDTO';
 import { IProfileDataDTO } from '@/types/Identity/IProfileDataDTO';
 import { parseResponse } from '@/helpers/responseParcer';
 import { IDeleteDTO } from '@/types/Identity/IDeleteDTO';
+import { apiHost } from './_config';
 
 
 export abstract class AccountApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
-      baseURL: "https://localhost:5001/api/v1/identity/",
+      baseURL: apiHost + "/api/v1/identity/",
       headers: {
         common: {
           'Content-Type': 'application/json'

@@ -1,6 +1,7 @@
 import { LanguageService } from './shared/LanguageService';
 import { IChatRoleDTO } from '../types/IChatRoleDTO';
 import Axios from 'axios';
+import { apiHost } from './_config';
 
 
 
@@ -8,7 +9,7 @@ export abstract class ChatRolesApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
-      baseURL: "https://localhost:5001/api/v1/chatroles/",
+      baseURL: apiHost + "/api/v1/chatroles/",
       headers: {
         common: {
           'Content-Type': 'application/json'

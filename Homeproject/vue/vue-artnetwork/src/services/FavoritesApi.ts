@@ -5,6 +5,7 @@ import Axios from 'axios';
 import store from "../store";
 import { CountResponseDTO } from '@/types/Response/CountResponseDTO';
 import { LanguageService } from './shared/LanguageService';
+import { apiHost } from './_config';
 
 
 
@@ -12,7 +13,7 @@ export abstract class FavoritesApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
-      baseURL: "https://localhost:5001/api/v1/favorites/",
+      baseURL: apiHost + "/api/v1/favorites/",
       headers: {
         common: {
           'Content-Type': 'application/json'

@@ -4,12 +4,13 @@ import store from "../store";
 import { IPostDTO } from '@/types/IPostDTO';
 import { CountResponseDTO } from './../types/Response/CountResponseDTO';
 import { LanguageService } from './shared/LanguageService';
+import { apiHost } from './_config';
 
 export abstract class FeedApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
-      baseURL: "https://localhost:5001/api/v1/feed/",
+      baseURL: apiHost + "/api/v1/feed/",
       headers: {
         common: {
           'Content-Type': 'application/json'

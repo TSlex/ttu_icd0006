@@ -5,6 +5,7 @@ import Axios from 'axios';
 import store from "../store";
 import { LanguageService } from './shared/LanguageService';
 import { parseResponse } from '@/helpers/responseParcer';
+import { apiHost } from './_config';
 
 
 
@@ -12,7 +13,7 @@ export abstract class CommentsApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
-      baseURL: "https://localhost:5001/api/v1/comments/",
+      baseURL: apiHost + "/api/v1/comments/",
       headers: {
         common: {
           'Content-Type': 'application/json'

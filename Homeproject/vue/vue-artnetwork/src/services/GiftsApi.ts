@@ -7,6 +7,7 @@ import store from "../store";
 import { CountResponseDTO } from '@/types/Response/CountResponseDTO';
 import { IProfileGiftDTO, IProfileGiftPostDTO } from '@/types/IProfileGiftDTO';
 import { parseResponse } from '@/helpers/responseParcer';
+import { apiHost } from './_config';
 
 
 
@@ -14,7 +15,7 @@ export abstract class GiftsApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
-      baseURL: "https://localhost:5001/api/v1/gifts/",
+      baseURL: apiHost + "/api/v1/gifts/",
       headers: {
         common: {
           'Content-Type': 'application/json'

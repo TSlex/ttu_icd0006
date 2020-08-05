@@ -6,6 +6,7 @@ import store from "../store";
 import { CountResponseDTO } from '@/types/Response/CountResponseDTO';
 import { IFavoriteDTO } from '@/types/IFavoriteDTO';
 import { LanguageService } from './shared/LanguageService';
+import { apiHost } from './_config';
 
 
 
@@ -13,7 +14,7 @@ export abstract class FollowersApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
-      baseURL: "https://localhost:5001/api/v1/followers/",
+      baseURL: apiHost + "/api/v1/followers/",
       headers: {
         common: {
           'Content-Type': 'application/json'

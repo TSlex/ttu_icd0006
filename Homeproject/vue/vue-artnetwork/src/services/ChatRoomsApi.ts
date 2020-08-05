@@ -7,6 +7,7 @@ import store from "../store";
 import { IMessageDTO } from '@/types/IMessageDTO';
 import { LanguageService } from './shared/LanguageService';
 import { parseResponse } from '@/helpers/responseParcer';
+import { apiHost } from './_config';
 
 
 
@@ -14,7 +15,7 @@ export abstract class ChatRoomsApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
-      baseURL: "https://localhost:5001/api/v1/chatrooms/",
+      baseURL: apiHost + "/api/v1/chatrooms/",
       headers: {
         common: {
           'Content-Type': 'application/json'

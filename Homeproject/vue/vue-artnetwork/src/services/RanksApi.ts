@@ -6,12 +6,13 @@ import { IRankDTO } from '@/types/IRankDTO';
 
 import { LanguageService } from './shared/LanguageService';
 import { parseResponse } from '@/helpers/responseParcer';
+import { apiHost } from './_config';
 
 export abstract class RanksApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
-      baseURL: "https://localhost:5001/api/v1/ranks/",
+      baseURL: apiHost + "/api/v1/ranks/",
       headers: {
         common: {
           'Content-Type': 'application/json'

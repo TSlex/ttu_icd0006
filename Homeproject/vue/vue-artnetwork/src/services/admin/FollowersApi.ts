@@ -3,6 +3,7 @@ import { IFollowerAdminDTO } from '@/types/IFollowerDTO';
 import Axios from 'axios';
 import { LanguageService } from '../shared/LanguageService';
 import { parseResponse } from '@/helpers/responseParcer';
+import { apiHost } from '../_config';
 
 
 
@@ -10,7 +11,7 @@ export abstract class FollowersApi extends LanguageService {
   private static axios = Axios.create(
     {
       validateStatus: () => true,
-      baseURL: "https://localhost:5001/api/v1/admin/adminfollowers",
+      baseURL: apiHost + "/api/v1/admin/adminfollowers",
       headers: {
         common: {
           'Content-Type': 'application/json'
