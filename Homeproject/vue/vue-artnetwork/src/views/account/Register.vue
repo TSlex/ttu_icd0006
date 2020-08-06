@@ -79,7 +79,7 @@ export default class AccountRegister extends ErrorListContainer {
         if (response.errors) {
           this.errors = response.errors;
         } else {
-          router.push("/account/login");
+          router.replace("/account/login");
         }
       });
   }

@@ -25,7 +25,7 @@ export default class AdminEdit<TModel> extends ErrorListContainer {
 
   onBackToList() {
     if (this.modelName) {
-      router.push({ name: `${this.modelName}sIndexA` });
+      router.replace({ name: `${this.modelName}sIndexA` });
     }
   }
 }

@@ -10,7 +10,8 @@ export class AppState {
     constructor() {
     }
 
-    public readonly baseUrl = 'https://localhost:5001/api/v1';
+    // public readonly baseUrl = 'https://localhost:5001/api/v1';
+    public readonly baseUrl = 'https://localhost:8000/api/v1';
 
     // messages
     public roomMessages: Record<string, IRoomMessages> = {}

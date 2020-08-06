@@ -7,7 +7,7 @@
     <div class="post_details" @click.stop>
       <PostSection
         v-on:image-edit-open="openImageEdit"
-        v-on:openFavorites="openFavorites"
+        v-on:favorites-open="openFavorites"
         :imageEditing="imageEditing"
         v-on:post-close="closePost"
       />

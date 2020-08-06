@@ -31,13 +31,13 @@ import router from "@/router";
 
 @Component({
   components: {
-    LanguageSelection
-  }
+    LanguageSelection,
+  },
 })
 export default class Identity extends IdentityStore {
   logoutOnClick(): void {
     store.dispatch("clearJwt");
-    router.push("/account/login");
+    router.replace("/account/login");
   }
 }
 </script>

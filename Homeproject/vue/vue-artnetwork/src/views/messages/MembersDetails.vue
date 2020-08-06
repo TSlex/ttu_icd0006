@@ -66,7 +66,7 @@ export default class MembersDetails extends IdentityStore {
 
     EventBus.$on("culture-update", (culture: string) => {
       if (this.loadedCulture !== culture) {
-        this.$emit("onCloseModal");
+        this.$emit("modal-close");
       }
     });
   }

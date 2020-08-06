@@ -106,7 +106,7 @@ export default class PostsCreate extends ErrorListContainer {
             if (response.errors) {
               this.errors = response.errors;
             } else {
-              router.push(`/profiles/${store.getters.getUserName}`);
+              router.replace(`/profiles/${store.getters.getUserName}`);
             }
           });
       }

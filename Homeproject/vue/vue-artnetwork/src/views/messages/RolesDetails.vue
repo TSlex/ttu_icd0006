@@ -73,7 +73,7 @@ export default class RolesDetails extends IdentityStore {
   }
 
   closeRoles() {
-    this.$emit("onCloseModal");
+    this.$emit("modal-close");
   }
 
   created() {

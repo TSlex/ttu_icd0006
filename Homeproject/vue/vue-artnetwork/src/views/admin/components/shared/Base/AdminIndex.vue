@@ -24,19 +24,19 @@ export default class AdminIndex<TModel> extends IdentityStore {
 
   onCreate() {
     if (this.ModelName) {
-      router.push({ name: `${this.ModelName}sCreateA` });
+      router.replace({ name: `${this.ModelName}sCreateA` });
     }
   }
 
   onEdit(id: string) {
     if (this.ModelName) {
-      router.push({ name: `${this.ModelName}sEditA`, params: { id } });
+      router.replace({ name: `${this.ModelName}sEditA`, params: { id } });
     }
   }
 
   onDetails(id: string) {
     if (this.ModelName) {
-      router.push({ name: `${this.ModelName}sDetailsA`, params: { id } });
+      router.replace({ name: `${this.ModelName}sDetailsA`, params: { id } });
     }
   }
 }

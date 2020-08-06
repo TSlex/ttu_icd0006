@@ -71,7 +71,7 @@ export default class AccountLogin extends ErrorListContainer {
         if (response.errors) {
           this.errors = response.errors;
         } else {
-          router.push("/");
+          router.replace("/");
         }
       });
   }

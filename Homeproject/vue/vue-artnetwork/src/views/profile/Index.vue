@@ -19,12 +19,18 @@
           v-on:followed-open="openFollowed"
         />
 
-        <template v-if="!(isCurrentUser && profileGifts.length <= 0)">
+        <template v-if="!profile.isUserBlocked">
+          <template v-if="!(isCurrentUser && profileGifts.length <= 0)">
+            <hr />
+            <GiftsSection v-on:gift-details-open="openGiftDetails" v-on:gifts-selector-open="openGiftsSelector" />
+          </template>
           <hr />
-          <GiftsSection v-on:gift-details-open="openGiftDetails" v-on:gifts-selector-open="openGiftsSelector" />
+          <PostsSection v-on:post-select="selectPost" v-on:load-more="loadMore" />
         </template>
-        <hr />
-        <PostsSection v-on:post-select="selectPost" v-on:load-more="loadMore" />
+        <template v-else>
+          <hr />
+          <div class="text-danger font-weight-bold text-center">{{$t('views.profiles.Blocked')}}</div>
+        </template>
       </div>
     </template>
     <LoadingOverlay v-else />
@@ -235,7 +241,7 @@ export default class ProfileIndex extends IdentityStore {
       ChatRoomsApi.getChatRoomWithUsername(this.username, this.jwt).then(
         (result: string | null) => {
           if (result) {
-            router.push(`/messages/${result}`);
+            router.replace(`/messages/${result}`);
           }
         }
       );

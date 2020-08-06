@@ -103,7 +103,7 @@ export default class ManageProfileData extends ErrorListContainer {
       this.errors.push(requireError("bll.profiles.UserName"));
     }
     if (
-      !(this.profileDataModel!.profileGenderOwn.length > 0) &&
+      !(this.profileDataModel!.profileGenderOwn?.length > 0) &&
       Number(this.profileDataModel!.profileGender) === 127
     ) {
       this.errors.push(requireError("bll.profiles.ProfileGenderOwn"));

@@ -30,13 +30,16 @@ export default class AdminDetails<TModel> extends IdentityStore {
 
   onEdit() {
     if (this.modelName && this.id) {
-      router.push({ name: `${this.modelName}sEditA`, params: { id: this.id } });
+      router.replace({
+        name: `${this.modelName}sEditA`,
+        params: { id: this.id },
+      });
     }
   }
 
   onBackToList() {
     if (this.modelName) {
-      router.push({ name: `${this.modelName}sIndexA` });
+      router.replace({ name: `${this.modelName}sIndexA` });
     }
   }
 }

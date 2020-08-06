@@ -28,10 +28,10 @@ export default class NavbarSearch extends Vue {
     if (this.userName.length > 0) {
       ProfilesApi.exists(this.userName).then((response: boolean) => {
         if (response) {
-          // router.push("/profiles/" + this.userName).catch((err) => {});
+          // router.replace("/profiles/" + this.userName).catch((err) => {});
           routeIfCan("/profiles/" + this.userName);
         } else {
-          // router.push("/404").catch((err) => {});
+          // router.replace("/404").catch((err) => {});
           routeIfCan("/404");
         }
 

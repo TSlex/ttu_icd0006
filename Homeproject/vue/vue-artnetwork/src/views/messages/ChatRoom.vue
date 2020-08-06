@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="IsAllLoaded" class="chat_section mt-5">
-      <MembersDetails v-if="isMembersModal" v-on:modal-close="closeMembers" v-on:model-changeRole="changeRole" />
+      <MembersDetails v-if="isMembersModal" v-on:modal-close="closeMembers" v-on:role-change="changeRole" />
       <RolesDetails v-if="isRolesModal" v-on:modal-close="closeRoles" />
 
       <div class="col-md-4" style="padding: unset; overflow: hidden;">
@@ -81,7 +81,7 @@ export default class ChatRoom extends IdentityStore {
   }
 
   leaveRoom() {
-    if (this.currentMember && this.currentMember.canEditMembers) {
+    if (this.currentMember) {
       store.dispatch("leaveRoom", {
         room: { ...this.selectedChatRoom },
         member: { ...this.currentMember },
