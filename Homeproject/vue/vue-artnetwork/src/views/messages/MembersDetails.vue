@@ -1,5 +1,5 @@
 <template>
-  <Modal v-on:modal-close="$emit('onCloseModal')">
+  <Modal v-on:modal-close="$emit('modal-close')">
     <router-link
       class="gallery_item"
       style="width: 150px !important; height: 150px !important"

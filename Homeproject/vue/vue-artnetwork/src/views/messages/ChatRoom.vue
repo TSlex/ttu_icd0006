@@ -1,8 +1,8 @@
 <template>
   <div>
     <div v-if="IsAllLoaded" class="chat_section mt-5">
-      <MembersDetails v-if="isMembersModal" v-on:onCloseModal="closeMembers" v-on:model-changeRole="changeRole" />
-      <RolesDetails v-if="isRolesModal" v-on:onCloseModal="closeRoles" />
+      <MembersDetails v-if="isMembersModal" v-on:modal-close="closeMembers" v-on:model-changeRole="changeRole" />
+      <RolesDetails v-if="isRolesModal" v-on:modal-close="closeRoles" />
 
       <div class="col-md-4" style="padding: unset; overflow: hidden;">
         <ChatRoomsSection />
@@ -13,7 +13,7 @@
           :key="selectedChatRoom.id"
           v-if="selectedChatRoom"
           v-on:members-open="openMembers"
-          v-on:onRenameRoom="renameRoom"
+          v-on:chatroom-rename="renameRoom"
           v-on:chatroom-leave="leaveRoom"
         />
         <div v-else class="chat_wall" style="position: relative;"></div>

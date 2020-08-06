@@ -27,7 +27,7 @@
               <a
                 v-if="currentMember.canRenameRoom"
                 class="btn-link"
-                @click="$emit('onRenameRoom')"
+                @click="$emit('chatroom-rename')"
               >{{$t('views.chatrooms.RenameNav')}}</a>
               <a class="btn-link" @click="$emit('chatroom-leave')">{{$t('views.chatrooms.LeaveNav')}}</a>
             </div>
