@@ -6,7 +6,7 @@
       <slot></slot>
     </div>
     <hr />
-    <DetailsControls v-on:onEdit="$emit('onEdit')" v-on:onBackToList="$emit('onBackToList')" />
+    <DetailsControls v-on:view-edit="$emit('view-edit')" v-on:back-to-list="$emit('back-to-list')" />
   </div>
 </template>
 

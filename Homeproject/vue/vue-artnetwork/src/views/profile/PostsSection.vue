@@ -1,14 +1,14 @@
 <template>
   <div class="posts_section align-content-center d-flex flex-column">
     <div v-if="posts.length > 0" class="post_row card-columns">
-      <a v-for="post in posts" :key="post.id" @click="$emit('onSelectPost', post)">
+      <a v-for="post in posts" :key="post.id" @click="$emit('post-select', post)">
         <div class="post_item card mb-3">
           <ImageComponent :id="post.postImageId" :key="post.postImageId" height="unset" width="unset" htmlClass="card-img" />
         </div>
       </a>
     </div>
     <div class="text-center" v-if="posts.length > 0">
-      <button @click="$emit('onLoadMore')" class="btn_circle fa fa-download"></button>
+      <button @click="$emit('load-more')" class="btn_circle fa fa-download"></button>
     </div>
     <span v-else class="text-center">{{$t('views.profiles.NoPosts')}}</span>
   </div>

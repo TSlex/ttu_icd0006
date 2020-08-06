@@ -1,13 +1,13 @@
 <template>
   <div class="d-flex justify-content-end" v-if="Model">
-    <button class="btn btn-info fa fa-history index_controls" v-if="IsMasterRecord" @click="$emit('onHistory')"></button>
-    <button class="btn btn-primary fa fa-edit index_controls" v-if="!IsHistoryRecord" @click="$emit('onEdit')"></button>
-    <button class="btn btn-primary fa fa-eye index_controls" @click="$emit('onDetails')"></button>
-    <button class="btn btn-danger fa fa-trash index_controls" v-if="!IsHistoryRecord && !IsDeleted" @click="$emit('onDelete')"></button>
+    <button class="btn btn-info fa fa-history index_controls" v-if="IsMasterRecord" @click="$emit('view-history')"></button>
+    <button class="btn btn-primary fa fa-edit index_controls" v-if="!IsHistoryRecord" @click="$emit('view-edit')"></button>
+    <button class="btn btn-primary fa fa-eye index_controls" @click="$emit('view-details')"></button>
+    <button class="btn btn-danger fa fa-trash index_controls" v-if="!IsHistoryRecord && !IsDeleted" @click="$emit('view-delete')"></button>
     <button
       class="btn btn-success fa fa-trash-restore index_controls"
       v-if="!IsHistoryRecord && IsDeleted"
-      @click="$emit('onRestore')"
+      @click="$emit('view-restore')"
     ></button>
   </div>
 </template>

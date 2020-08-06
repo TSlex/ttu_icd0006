@@ -13,12 +13,7 @@
           <i class="fas fa-times-circle"></i>
         </button>
 
-        <button
-          class="item_controls btn-link"
-          style="right: 0; left: unset"
-          @click="$emit('onChangeRole', member)"
-          @click.prevent
-        >
+        <button class="item_controls btn-link" style="right: 0; left: unset" @click="$emit('role-change', member)" @click.prevent>
           <i class="fas fa-edit"></i>
         </button>
       </template>
@@ -69,7 +64,7 @@ export default class MembersDetails extends IdentityStore {
   created() {
     this.loadedCulture = store.state.culture!;
 
-    EventBus.$on("cultureUpdate", (culture: string) => {
+    EventBus.$on("culture-update", (culture: string) => {
       if (this.loadedCulture !== culture) {
         this.$emit("onCloseModal");
       }

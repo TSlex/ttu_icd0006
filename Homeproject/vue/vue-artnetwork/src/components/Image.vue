@@ -164,7 +164,7 @@ export default class ImageComponent extends Vue {
   }
 
   beforeCreate() {
-    EventBus.$on("updateImage", (id: string) => {
+    EventBus.$on("image-update", (id: string) => {
       const FullId = this.IsOriginal ? `${this.id}:original` : this.id;
 
       if (FullId === id) {

@@ -1,5 +1,5 @@
 <template>
-  <AdminIndexWrapper v-if="isLoaded" :canCreate="true" v-on:onCreate="onCreate">
+  <AdminIndexWrapper v-if="isLoaded" :canCreate="true" v-on:view-create="onCreate">
     <table class="table">
       <thead>
         <tr>
@@ -17,11 +17,11 @@
           <td>
             <IndexControls
               :model="item"
-              v-on:onEdit="onEdit(item.id)"
-              v-on:onDetails="onDetails(item.id)"
-              v-on:onDelete="onDelete(item.id)"
-              v-on:onRestore="onRestore(item.id)"
-              v-on:onHistory="onHistory(item.id)"
+              v-on:view-edit="onEdit(item.id)"
+              v-on:view-details="onDetails(item.id)"
+              v-on:view-delete="onDelete(item.id)"
+              v-on:view-restore="onRestore(item.id)"
+              v-on:view-history="onHistory(item.id)"
             />
           </td>
         </tr>
@@ -94,7 +94,7 @@ export default class ChatRolesIndexA extends AdminIndex<IChatRoleAdminDTO> {
   created() {
     this.modelName = "ChatRole";
 
-    EventBus.$on("cultureUpdate", (culture: string) => {
+    EventBus.$on("culture-update", (culture: string) => {
       this.loadData();
     });
   }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="IsAllLoaded" class="chat_section mt-5">
-      <MembersDetails v-if="isMembersModal" v-on:onCloseModal="closeMembers" v-on:onChangeRole="changeRole" />
+      <MembersDetails v-if="isMembersModal" v-on:onCloseModal="closeMembers" v-on:model-changeRole="changeRole" />
       <RolesDetails v-if="isRolesModal" v-on:onCloseModal="closeRoles" />
 
       <div class="col-md-4" style="padding: unset; overflow: hidden;">
@@ -12,9 +12,9 @@
         <MessagesSection
           :key="selectedChatRoom.id"
           v-if="selectedChatRoom"
-          v-on:onOpenMembers="openMembers"
+          v-on:members-open="openMembers"
           v-on:onRenameRoom="renameRoom"
-          v-on:onLeaveRoom="leaveRoom"
+          v-on:chatroom-leave="leaveRoom"
         />
         <div v-else class="chat_wall" style="position: relative;"></div>
       </div>
@@ -165,7 +165,7 @@ export default class ChatRoom extends IdentityStore {
   created(): void {
     this.loadedCulture = store.state.culture!;
 
-    EventBus.$on("cultureUpdate", (culture: string) => {
+    EventBus.$on("culture-update", (culture: string) => {
       if (this.loadedCulture !== culture) {
         this.loadedCulture = culture;
         this.updateRoles();

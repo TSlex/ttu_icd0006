@@ -1,7 +1,7 @@
 <template>
   <div>
-    <button class="btn btn-primary mr-1" @click="$emit('onEdit')">{{$t('views.common.EditButton')}}</button>
-    <button class="btn btn-primary" @click="$emit('onBackToList')">{{$t('views.common.BackToListButton')}}</button>
+    <button class="btn btn-primary mr-1" @click="$emit('view-edit')">{{$t('views.common.EditButton')}}</button>
+    <button class="btn btn-primary" @click="$emit('back-to-list')">{{$t('views.common.BackToListButton')}}</button>
   </div>
 </template>
 

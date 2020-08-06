@@ -17,11 +17,11 @@
           <td>
             <IndexControls
               :model="item"
-              v-on:onEdit="onEdit(item.id)"
-              v-on:onDetails="onDetails(item.id)"
-              v-on:onDelete="onDelete(item.id)"
-              v-on:onRestore="onRestore(item.id)"
-              v-on:onHistory="onHistory(item.id)"
+              v-on:view-edit="onEdit(item.id)"
+              v-on:view-details="onDetails(item.id)"
+              v-on:view-delete="onDelete(item.id)"
+              v-on:view-restore="onRestore(item.id)"
+              v-on:view-history="onHistory(item.id)"
             />
           </td>
         </tr>

@@ -2,7 +2,7 @@
   <div>
     <h1 class="text-center">{{$t('views.common.IndexHeader')}}</h1>
     <p class="text-center" style="font-size: 30px" v-if="canCreate">
-      <a class="far fa-plus-square" href="#" @click="$emit('onCreate')" @click.prevent></a>
+      <a class="far fa-plus-square" href="#" @click="$emit('view-create')" @click.prevent></a>
     </p>
     <br v-else />
     <slot></slot>

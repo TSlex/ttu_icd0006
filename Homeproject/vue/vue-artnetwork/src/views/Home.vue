@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <template v-if="isLoaded">
-      <PostDetails v-if="post" v-on:closePost="closePost" />
+      <PostDetails v-if="post" v-on:post-close="closePost" />
       <h3 class="text-center">{{$t('views.home.FeedHeader')}}</h3>
       <hr />
       <a class="float_control feed_controls far fa-caret-square-up" id="toUpButton" v-on:click="scrollTop"></a>

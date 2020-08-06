@@ -1,5 +1,5 @@
 <template>
-  <AdminDetailsWrapper v-if="isLoaded" v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
+  <AdminDetailsWrapper v-if="isLoaded" v-on:view-edit="onEdit" v-on:back-to-list="onBackToList">
     <dl class="row">
       <dt class="col-sm-2">{{$t('bll.common.Id')}}</dt>
       <dd class="col-sm-10">{{model.id}}</dd>
@@ -57,7 +57,7 @@ export default class GiftsDetailsA extends AdminDetails<IGiftAdminDTO> {
   created() {
     this.modelName = "Gift";
 
-    EventBus.$on("cultureUpdate", (culture: string) => {
+    EventBus.$on("culture-update", (culture: string) => {
       this.loadData();
     });
   }

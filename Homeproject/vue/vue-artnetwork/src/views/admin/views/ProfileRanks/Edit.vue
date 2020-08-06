@@ -1,5 +1,5 @@
 <template>
-  <AdminEditWrapper v-if="isLoaded" v-on:model-submit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
+  <AdminEditWrapper v-if="isLoaded" v-on:model-submit="onSubmit" v-on:back-to-list="onBackToList" :errors="errors">
     <CreateEdit :model="model" />
   </AdminEditWrapper>
   <LoadingOverlay v-else />

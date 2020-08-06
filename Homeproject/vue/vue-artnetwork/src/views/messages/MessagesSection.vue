@@ -23,13 +23,13 @@
 
           <div class="dropdown-menu" aria-labelledby="profile_more">
             <div class="text-center d-flex flex-column">
-              <a class="btn-link" @click="$emit('onOpenMembers')">{{$t('views.chatrooms.MembersNav')}}</a>
+              <a class="btn-link" @click="$emit('members-open')">{{$t('views.chatrooms.MembersNav')}}</a>
               <a
                 v-if="currentMember.canRenameRoom"
                 class="btn-link"
                 @click="$emit('onRenameRoom')"
               >{{$t('views.chatrooms.RenameNav')}}</a>
-              <a class="btn-link" @click="$emit('onLeaveRoom')">{{$t('views.chatrooms.LeaveNav')}}</a>
+              <a class="btn-link" @click="$emit('chatroom-leave')">{{$t('views.chatrooms.LeaveNav')}}</a>
             </div>
           </div>
         </div>

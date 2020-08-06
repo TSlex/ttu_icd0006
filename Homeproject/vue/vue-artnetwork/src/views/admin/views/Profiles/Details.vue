@@ -1,5 +1,5 @@
 <template>
-  <AdminDetailsWrapper v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
+  <AdminDetailsWrapper v-on:view-edit="onEdit" v-on:back-to-list="onBackToList">
     <div>
       <dl class="row">
         <dt class="col-sm-2">{{$t('bll.common.Id')}}</dt>

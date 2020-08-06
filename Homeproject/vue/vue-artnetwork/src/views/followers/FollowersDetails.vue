@@ -1,5 +1,5 @@
 <template>
-  <Modal v-on:modal-close="$emit('onCloseFollowers')">
+  <Modal v-on:modal-close="$emit('followers-close')">
     <router-link
       v-for="follower in followers"
       :key="follower.userName"

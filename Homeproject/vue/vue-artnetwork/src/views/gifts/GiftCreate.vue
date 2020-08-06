@@ -111,7 +111,7 @@ export default class GiftCreate extends IdentityStore {
           showConfirmButton: true,
         }).then(() => {
           this.$emit("modal-close");
-          this.$emit("closeGifts");
+          this.$emit("gifts-close");
           store.dispatch("getProfileGifts", {
             userName: this.username,
             pageNumber: 1,

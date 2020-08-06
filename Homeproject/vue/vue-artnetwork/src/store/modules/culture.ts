@@ -35,7 +35,7 @@ export const CultureModule = {
       localStorage.setItem('culture', culture)
       state.culture = culture;
 
-      EventBus.$emit('cultureUpdate', culture)
+      EventBus.$emit('culture-update', culture)
     },
   },
   actions: {}

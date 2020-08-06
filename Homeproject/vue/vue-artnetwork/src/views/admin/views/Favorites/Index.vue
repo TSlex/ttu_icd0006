@@ -15,9 +15,9 @@
           <td>
             <IndexControls
               :model="item"
-              v-on:onEdit="onEdit(item.id)"
-              v-on:onDetails="onDetails(item.id)"
-              v-on:onDelete="onDelete(item.id)"
+              v-on:view-edit="onEdit(item.id)"
+              v-on:view-details="onDetails(item.id)"
+              v-on:view-delete="onDelete(item.id)"
             />
           </td>
         </tr>

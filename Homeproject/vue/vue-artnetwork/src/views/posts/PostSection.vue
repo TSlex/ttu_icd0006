@@ -13,7 +13,7 @@
       </div>
       <template v-if="isAuthenticated && userName == post.profileUsername">
         <div class="post_controls" style="position: absolute; top: 0; left: 0; width: fit-content">
-          <a class="fa fa-paint-brush btn-link" @click="$emit('onOpenImageEdit')"></a>
+          <a class="fa fa-paint-brush btn-link" @click="$emit('image-edit-open')"></a>
         </div>
       </template>
       <ImageComponent v-if="!imageEditing" :id="post.postImageId" :key="post.postImageId" height="unset" width="unset" />
@@ -36,7 +36,7 @@
         <li class="post_meta">
           <span class="meta_title">{{post.postPublicationDateTime | formatDate}}</span>
         </li>
-        <li class="post_meta btn-link" @click="$emit('onOpenFavorites')">
+        <li class="post_meta btn-link" @click="$emit('favorites-open')">
           <span class="meta_counter">{{post.postFavoritesCount}}&nbsp;</span>
           <span class="meta_title">{{$t('views.posts.OfFavorites')}}</span>
         </li>
@@ -116,7 +116,7 @@ export default class PostSection extends IdentityStore {
     }).then((result: any) => {
       if (result.value) {
         store.dispatch("deletePost", { ...this.post });
-        this.$emit("closePost");
+        this.$emit("post-close");
       }
     });
   }

@@ -2,7 +2,7 @@
   <AdminCreateWrapper
     v-if="isLoaded"
     v-on:model-submit="onSubmit"
-    v-on:onBackToList="onBackToList"
+    v-on:back-to-list="onBackToList"
     :errors="errors"
     :ignoreTopColStyle="true"
   >

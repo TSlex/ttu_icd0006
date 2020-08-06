@@ -1,5 +1,5 @@
 <template>
-  <div class="modal_back" @click="$emit('closeGifts')">
+  <div class="modal_back" @click="$emit('gifts-close')">
     <Modal v-if="isGiftSendModal && gift" v-on:modal-close="closeGiftSend">
       <GiftCreate :gift="gift" :username="username" v-on:modal-close="closeGiftSend" />
     </Modal>

@@ -22,27 +22,27 @@
             style="position: absolute; will-change: transform; top: 0px; left:
               20px; transform: translate3d(0px, 38px, 0px); text-align: center;"
           >
-            <button class="dropdown-item text-center" @click="$emit('onOpenChatWithUser')">{{$t('views.profiles.WriteMessage')}}</button>
-            <button v-if="!profile.isUserFollows" type="submit" class="dropdown-item" @click="$emit('onFollowProfile')">
+            <button class="dropdown-item text-center" @click="$emit('chat-with-user-open')">{{$t('views.profiles.WriteMessage')}}</button>
+            <button v-if="!profile.isUserFollows" type="submit" class="dropdown-item" @click="$emit('profile-follow')">
               <i class="far fa-bell"></i>
               {{$t('views.profiles.Follow')}}
             </button>
-            <button v-else type="submit" class="dropdown-item" @click="$emit('onUnfollowProfile')">
+            <button v-else type="submit" class="dropdown-item" @click="$emit('profile-unfollow')">
               <i class="fas fa-bell"></i>
               {{$t('views.profiles.Unfollow')}}
             </button>
-            <button v-if="!profile.isUserBlocks" type="submit" class="dropdown-item" @click="$emit('onBlockProfile')">
+            <button v-if="!profile.isUserBlocks" type="submit" class="dropdown-item" @click="$emit('profile-block')">
               <i class="far fa-user"></i>
               {{$t('views.profiles.Block')}}
             </button>
-            <button v-else type="submit" class="dropdown-item" @click="$emit('onUnblockProfile')">
+            <button v-else type="submit" class="dropdown-item" @click="$emit('profile-unblock')">
               <i class="fas fa-user"></i>
               {{$t('views.profiles.Unblock')}}
             </button>
           </div>
         </li>
       </ul>
-      <div v-if="rank" class="profile_rank" @click="$emit('onOpenRankDetails')" style="cursor: pointer;">
+      <div v-if="rank" class="profile_rank" @click="$emit('rank-details-open')" style="cursor: pointer;">
         <span class="rank_title" :style="`color: ${rank.textColor}`">{{rank.rankTitle}}</span>
         <div class="rank_bar_back"></div>
         <div class="rank_bar" :style="`width: ${rankPercent}%; background-color: ${rank.rankColor}`"></div>
@@ -58,13 +58,13 @@
           <span class="meta_counter">{{ profile.postsCount }}</span>&nbsp;
           <span class="meta_title">{{$t('views.profiles.OfPosts')}}</span>
         </li>
-        <li class="profile_meta" @click="$emit('onOpenFollowers')">
+        <li class="profile_meta" @click="$emit('followers-open')">
           <a class="btn-link">
             <span class="meta_counter">{{ profile.followersCount }}</span>&nbsp;
             <span class="meta_title">{{$t('views.profiles.OfFollowers')}}</span>
           </a>
         </li>
-        <li class="profile_meta" @click="$emit('onOpenFollowed')">
+        <li class="profile_meta" @click="$emit('followed-open')">
           <a class="btn-link">
             <span class="meta_counter">{{ profile.followedCount }}</span>&nbsp;
             <span class="meta_title">{{$t('views.profiles.OfFollowed')}}</span>

@@ -4,7 +4,7 @@
       v-for="(gift, index) in profileGifts"
       :key="index"
       class="profile_gift btn-link"
-      @click="$emit('onOpenGiftDetails', gift)"
+      @click="$emit('gift-details-open', gift)"
     >
       <ImageComponent :id="gift.imageId" :key="gift.imageId" />
     </div>
@@ -13,7 +13,7 @@
     <a
       v-if="isAuthenticated && !isCurrentUser"
       class="fa fa-gift btn btn-primary profile_gift_controls"
-      @click="$emit('onOpenGiftsSelector')"
+      @click="$emit('gifts-selector-open')"
       href="#"
     ></a>
   </div>

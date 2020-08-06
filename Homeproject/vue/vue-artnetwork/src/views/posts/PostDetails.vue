@@ -6,10 +6,10 @@
     </Modal>
     <div class="post_details" @click.stop>
       <PostSection
-        v-on:onOpenImageEdit="openImageEdit"
+        v-on:image-edit-open="openImageEdit"
         v-on:openFavorites="openFavorites"
         :imageEditing="imageEditing"
-        v-on:closePost="closePost"
+        v-on:post-close="closePost"
       />
       <CommentsSection />
     </div>
@@ -93,7 +93,7 @@ export default class PostDetails extends IdentityStore {
 
   closePost() {
     if (!this.postEditing) {
-      this.$emit("closePost");
+      this.$emit("post-close");
     }
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <Modal v-on:modal-close="$emit('onCloseGiftDetails')">
+  <Modal v-on:modal-close="$emit('gift-details-close')">
     <div class="d-flex flex-column align-items-center" style="position: relative">
       <button
         v-if="isCurrentUser"
@@ -51,7 +51,7 @@ export default class GiftDetails extends ProfileContainer {
   deleteProfileGift() {
     if (this.isCurrentUser) {
       store.dispatch("deleteProfileGift", this.gift).then(() => {
-        this.$emit("onCloseGiftDetails");
+        this.$emit("gift-details-close");
       });
     }
   }

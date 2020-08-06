@@ -1,5 +1,5 @@
 <template>
-  <Modal v-on:modal-close="$emit('onCloseRankDetails')">
+  <Modal v-on:modal-close="$emit('rank-details-close')">
     <div class="d-flex flex-column align-items-center text-center" style="position: relative; padding: 20px">
       <div
         class="progress_container"

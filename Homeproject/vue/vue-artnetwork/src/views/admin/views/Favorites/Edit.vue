@@ -1,5 +1,5 @@
 <template>
-  <AdminEditWrapper v-if="isLoaded" v-on:model-submit="onSubmit" v-on:onBackToList="onBackToList" :errors="errors">
+  <AdminEditWrapper v-if="isLoaded" v-on:model-submit="onSubmit" v-on:back-to-list="onBackToList" :errors="errors">
     <div class="form-group">
       <label class="control-label" for="profileId">{{$t('bll.favorites.ProfileId')}}*</label>
       <input class="form-control" type="text" required id="profileId" name="profileId" v-model="model.profileId" />

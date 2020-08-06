@@ -67,7 +67,7 @@ export default class FormInput extends Vue {
   }
 
   onInput(event: Event) {
-    this.$emit("onChange", [(event.target as HTMLInputElement).value]);
+    this.$emit("model-change", [(event.target as HTMLInputElement).value]);
   }
 }
 </script>

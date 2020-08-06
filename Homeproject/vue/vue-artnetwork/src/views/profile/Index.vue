@@ -1,30 +1,30 @@
 <template>
   <div id="profileIndex">
     <template v-if="isAllLoaded">
-      <FollowersDetails v-if="isFollowersDetails" v-on:onCloseFollowers="closeFollowers" :isFollowedOpen="isFollowedOpen" />
-      <PostDetails v-if="post" v-on:closePost="closePost" />
-      <RanksDetails v-if="isRankDetails" v-on:onCloseRankDetails="closeRankDetails" />
-      <GiftSelection v-if="isGiftSelection" v-on:closeGifts="closeGiftsSelector" />
-      <GiftDetails v-if="isGiftDetails" v-on:onCloseGiftDetails="closeGiftDetails" />
+      <FollowersDetails v-if="isFollowersDetails" v-on:followers-close="closeFollowers" :isFollowedOpen="isFollowedOpen" />
+      <PostDetails v-if="post" v-on:post-close="closePost" />
+      <RanksDetails v-if="isRankDetails" v-on:rank-details-close="closeRankDetails" />
+      <GiftSelection v-if="isGiftSelection" v-on:gifts-close="closeGiftsSelector" />
+      <GiftDetails v-if="isGiftDetails" v-on:gift-details-close="closeGiftDetails" />
 
       <div v-if="profile && rank" class="profile_container">
         <ProfileSection
-          v-on:onOpenChatWithUser="openChatWithUser"
-          v-on:onFollowProfile="followProfile"
-          v-on:onUnfollowProfile="unfollowProfile"
-          v-on:onBlockProfile="blockProfile"
-          v-on:onUnblockProfile="unblockProfile"
-          v-on:onOpenRankDetails="openRankDetails"
-          v-on:onOpenFollowers="openFollowers"
-          v-on:onOpenFollowed="openFollowed"
+          v-on:chat-with-user-open="openChatWithUser"
+          v-on:profile-follow="followProfile"
+          v-on:profile-unfollow="unfollowProfile"
+          v-on:profile-block="blockProfile"
+          v-on:profile-unblock="unblockProfile"
+          v-on:rank-details-open="openRankDetails"
+          v-on:followers-open="openFollowers"
+          v-on:followed-open="openFollowed"
         />
 
         <template v-if="!(isCurrentUser && profileGifts.length <= 0)">
           <hr />
-          <GiftsSection v-on:onOpenGiftDetails="openGiftDetails" v-on:onOpenGiftsSelector="openGiftsSelector" />
+          <GiftsSection v-on:gift-details-open="openGiftDetails" v-on:gifts-selector-open="openGiftsSelector" />
         </template>
         <hr />
-        <PostsSection v-on:onSelectPost="selectPost" v-on:onLoadMore="loadMore" />
+        <PostsSection v-on:post-select="selectPost" v-on:load-more="loadMore" />
       </div>
     </template>
     <LoadingOverlay v-else />
@@ -270,7 +270,7 @@ export default class ProfileIndex extends IdentityStore {
     this.loadedCulture = store.state.culture!;
     this.isLoaded = true;
 
-    EventBus.$on("cultureUpdate", (culture: string) => {
+    EventBus.$on("culture-update", (culture: string) => {
       if (this.loadedCulture !== culture) {
         this.loadedCulture = culture;
         this.updateRank();

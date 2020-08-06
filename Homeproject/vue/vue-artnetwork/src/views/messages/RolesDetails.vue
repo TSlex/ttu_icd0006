@@ -81,7 +81,7 @@ export default class RolesDetails extends IdentityStore {
 
     this.loadedCulture = store.state.culture!;
 
-    EventBus.$on("cultureUpdate", (culture: string) => {
+    EventBus.$on("culture-update", (culture: string) => {
       if (this.loadedCulture !== culture) {
         this.closeRoles();
       }

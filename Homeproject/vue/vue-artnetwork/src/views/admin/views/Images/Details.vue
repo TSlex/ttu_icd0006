@@ -1,5 +1,5 @@
 <template>
-  <AdminDetailsWrapper v-if="isLoaded" v-on:onEdit="onEdit" v-on:onBackToList="onBackToList">
+  <AdminDetailsWrapper v-if="isLoaded" v-on:view-edit="onEdit" v-on:back-to-list="onBackToList">
     <div class="card" style="width: 20rem;">
       <ImageComponent :id="model.id" :key="model.id" htmlClass="card-img" height="inherit" width="inherit" />
     </div>
