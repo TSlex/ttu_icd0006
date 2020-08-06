@@ -75,8 +75,7 @@ export class ChatRoomsCreateEdit extends ImageFormComponent {
         this.clearNotifier()
 
         if ((this.imageModel.imageFile || this.id) &&
-            this.postModel.postTitle.length > 0 &&
-            this.postModel.postDescription.length > 0
+            this.postModel.postTitle.length > 0
         ) {
             this.lockBottons()
 
