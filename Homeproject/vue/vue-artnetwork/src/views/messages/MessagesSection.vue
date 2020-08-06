@@ -164,9 +164,12 @@ export default class MessagesSection extends IdentityStore {
         ...this.messages,
       ]);
 
-      this.selectedChatRoom!.lastMessageValue = this.messagePostModel.messageValue;
-      (this.selectedChatRoom!.lastMessageDateTime as unknown) = newMessageDate;
-      this.selectedChatRoom!.lastMessageProfileAvatarId = this.currentMember!.profileAvatarId;
+      store.commit("updateChatRoom", {
+        ...this.selectedChatRoom,
+        lastMessageDateTime: newMessageDate,
+        lastMessageValue: this.messagePostModel.messageValue,
+        lastMessageProfileAvatarId: this.currentMember!.profileAvatarId,
+      });
 
       this.messagePostModel.messageValue = "";
     }

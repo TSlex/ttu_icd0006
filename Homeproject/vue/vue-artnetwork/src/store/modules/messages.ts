@@ -7,6 +7,7 @@ import { MessagesApi } from '@/services/MessagesApi';
 import { ResponseDTO } from '@/types/Response/ResponseDTO';
 import { ChatMembersApi } from '@/services/ChatMembersApi';
 import { ChatRolesApi } from '@/services/ChatRolesApi';
+import moment from 'moment';
 
 interface IState {
   selectedMemberRole: IChatRoleDTO | null;
@@ -31,10 +32,10 @@ export const MessagesModule = {
     chatRoles: [] as IChatRoleDTO[],
   },
   getters: {
-    getCurrentChatMember(context: any, getters: any): IChatMemberDTO | null {
+    getCurrentChatMember(state: IState, getters: any): IChatMemberDTO | null {
       let current: IChatMemberDTO | null = null;
 
-      context.members.forEach((member: IChatMemberDTO) => {
+      state.members.forEach((member: IChatMemberDTO) => {
         if (member.userName === getters.getUserName) {
           current = member;
         }
@@ -42,11 +43,11 @@ export const MessagesModule = {
 
       return current;
     },
-    getChatRoomById(context: any): (id: string) => IChatRoomDTO | null {
+    getChatRoomById(state: IState): (id: string) => IChatRoomDTO | null {
       return (id: string) => {
         let chatRoom: IChatRoomDTO | null = null;
 
-        (context.chatRooms as IChatRoomDTO[]).forEach((room: IChatRoomDTO) => {
+        (state.chatRooms as IChatRoomDTO[]).forEach((room: IChatRoomDTO) => {
           if (room.id === id) {
             chatRoom = room;
           }
@@ -54,6 +55,11 @@ export const MessagesModule = {
 
         return chatRoom
       }
+    },
+    getChatRooms(state: IState) {
+      return state.chatRooms.sort((room1, room2) => {
+        return (room1.lastMessageDateTime ?? "") < (room2.lastMessageDateTime ?? "") ? 1 : -1
+      })
     }
   },
   mutations: {
@@ -113,6 +119,14 @@ export const MessagesModule = {
       state.chatRoles = roles;
     },
 
+    updateChatRoom(state: IState, chatroom: IChatRoomDTO) {
+      state.chatRooms.forEach((room: IChatRoomDTO, index) => {
+        if (room.id === chatroom.id) {
+          state.chatRooms = [...state.chatRooms.slice(0, index), chatroom, ...state.chatRooms.slice(index + 1)]
+        }
+      })
+    }
+
   },
   actions: {
     // ChatRoom
@@ -165,8 +179,8 @@ export const MessagesModule = {
       return response;
     },
     async deleteMessage(context: any, message: IMessageDTO): Promise<ResponseDTO> {
-      const response = await MessagesApi.deleteMessage(message.id, context.state.jwt);
       context.commit('deleteMessage', message);
+      const response = await MessagesApi.deleteMessage(message.id, context.state.jwt);
       return response;
     },
 

@@ -22,6 +22,8 @@ export default class Message extends IdentityStore {
   private isImage = false;
 
   async isImageUrl(url: string): Promise<boolean> {
+    if (!url.startsWith("http")) return false;
+
     let result = false;
     const axios = Axios.create({ validateStatus: () => true });
 

@@ -1,5 +1,5 @@
 <template>
-  <AdminDetailsWrapper v-on:view-edit="onEdit" v-on:back-to-list="onBackToList">
+  <AdminDetailsWrapper v-if="isLoaded" v-on:view-edit="onEdit" v-on:back-to-list="onBackToList">
     <div>
       <dl class="row">
         <dt class="col-sm-2">{{$t('bll.common.Id')}}</dt>
@@ -63,6 +63,7 @@
       <MetaDetailsSection :model="model" />
     </div>
   </AdminDetailsWrapper>
+  <LoadingOverlay v-else />
 </template>
 
 <script lang="ts">
@@ -100,6 +101,7 @@ export default class ProfilesDetailsA extends AdminDetails<IProfileAdminDTO> {
     ProfilesApi.details(this.id, this.jwt).then(
       (response: IProfileAdminDTO) => {
         this.model = response;
+        this.isLoaded = true;
       }
     );
   }
