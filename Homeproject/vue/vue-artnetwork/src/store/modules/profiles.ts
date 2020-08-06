@@ -23,7 +23,7 @@ export const ProfilesModule = {
       });
 
       if (state.profile) {
-        state.profile.followedCount -= 1;
+        state.profile.followersCount -= 1;
       }
     },
   },
@@ -46,11 +46,21 @@ export const ProfilesModule = {
 
     async profileUnfollow(context: any, username: string): Promise<ResponseDTO> {
       const response = await ProfilesApi.unfollow(username, context.state.jwt);
-
       context.commit('profileUnfollow', username)
 
       if (!response.errors && context.state.profile) {
         context.dispatch("getProfile", username);
+      }
+
+      return response;
+    },
+
+    async followedDelete(context: any, username: string): Promise<ResponseDTO> {
+      const response = await ProfilesApi.unfollow(username, context.state.jwt);
+      context.commit('profileUnfollow', username)
+
+      if (!response.errors && context.state.profile) {
+        context.dispatch("getProfile", context.getters.getUserName);
       }
 
       return response;

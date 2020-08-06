@@ -30,7 +30,7 @@ export default class AdminDetails<TModel> extends IdentityStore {
 
   onEdit() {
     if (this.modelName && this.id) {
-      router.replace({
+      router.push({
         name: `${this.modelName}sEditA`,
         params: { id: this.id },
       });
@@ -39,7 +39,7 @@ export default class AdminDetails<TModel> extends IdentityStore {
 
   onBackToList() {
     if (this.modelName) {
-      router.replace({ name: `${this.modelName}sIndexA` });
+      router.push({ name: `${this.modelName}sIndexA` });
     }
   }
 }

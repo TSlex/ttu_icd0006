@@ -6,12 +6,7 @@
       :to="`/profiles/${follower.userName}`"
       class="gallery_item"
     >
-      <button
-        v-if="isCurrentUser && isFollowedOpen"
-        class="item_controls btn-link"
-        @click="deleteFollowed(follower)"
-        @click.prevent
-      >
+      <button v-if="isCurrentUser && isFollowedOpen" class="item_controls btn-link" @click.prevent="deleteFollowed(follower)">
         <i class="fas fa-times-circle"></i>
       </button>
       <ImageComponent :id="follower.profileAvatarId" :key="follower.profileAvatarId" height="100px" width="100px" />
@@ -30,6 +25,7 @@ import { IRankDTO } from "../../types/IRankDTO";
 import { IFollowerDTO } from "@/types/IFollowerDTO";
 import { ResponseDTO } from "@/types/Response/ResponseDTO";
 import ProfileContainer from "@/components/shared/ProfileContainer.vue";
+import { ProfilesApi } from "@/services/ProfilesApi";
 
 @Component({
   components: {
@@ -46,7 +42,7 @@ export default class FollowersDetails extends ProfileContainer {
 
   deleteFollowed(followed: IFollowerDTO) {
     if (this.isCurrentUser) {
-      store.dispatch("profileUnfollow", followed.userName);
+      store.dispatch("followedDelete", followed.userName);
     }
   }
 

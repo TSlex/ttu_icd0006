@@ -17,7 +17,7 @@ export default class AdminCreate extends ErrorListContainer {
 
   onBackToList() {
     if (this.modelName) {
-      router.replace({ name: `${this.modelName}sIndexA` });
+      router.push({ name: `${this.modelName}sIndexA` });
     }
   }
 }

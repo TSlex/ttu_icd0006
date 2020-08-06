@@ -6,7 +6,12 @@
     :errors="errors"
     :ignoreTopColStyle="true"
   >
-    <ImageMiniature :htmlClass="'card mb-4'" :htmlStyle="'width: 20rem !important'" ref="miniature" />
+    <ImageMiniature
+      :initialId="model.postImageId"
+      :htmlClass="'card mb-4'"
+      :htmlStyle="'width: 20rem !important'"
+      ref="miniature"
+    />
     <div class="col-md-4">
       <ImageForm :imageModel="imageModel" v-on:file-load="loadImage" />
       <CreateEdit :model="model" />
@@ -21,13 +26,12 @@ import store from "@/store";
 import $ from "jquery";
 
 import { IPostAdminDTO } from "@/types/IPostDTO";
-import { IImageDTO } from "@/types/IImageDTO";
+import { IImageDTO, IImageAdminDTO } from "@/types/IImageDTO";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 import ImageComponent from "@/components/Image.vue";
 
 import { PostsApi } from "@/services/admin/PostsApi";
-import { ImagesApi } from "@/services/ImagesApi";
 import { ImageType } from "@/types/Enums/ImageType";
 import AdminEdit from "../../components/shared/base/AdminEdit.vue";
 
@@ -37,6 +41,7 @@ import { createEmptyGuid } from "@/helpers/guid";
 import ImageForm from "@/components/image/ImageForm.vue";
 import ImageMiniature from "@/components/image/ImageMiniature.vue";
 import { isGuid, requireError } from "@/translations/validation";
+import { ImagesApi } from "@/services/admin/ImagesApi";
 
 @Component({
   components: {
@@ -46,11 +51,7 @@ import { isGuid, requireError } from "@/translations/validation";
   },
 })
 export default class PostsEditA extends AdminEdit<IPostAdminDTO> {
-  private imageModel: IImageDTO | null = null;
-
-  get isImageExist() {
-    return this.model?.postImageId != null;
-  }
+  private imageModel: IImageAdminDTO | null = null;
 
   loadImage(file: File) {
     this.imageModel!.imageFile = file;
@@ -71,15 +72,17 @@ export default class PostsEditA extends AdminEdit<IPostAdminDTO> {
     }
 
     if (this.errors.length > 0) return;
-    PostsApi.edit(this.Id, this.model!, this.jwt).then(
-      (response: ResponseDTO) => {
-        if (response?.errors) {
-          this.errors = response.errors;
-        } else {
-          this.$router.go(-1);
+    ImagesApi.edit(this.imageModel!.id, this.imageModel!, this.jwt).then(() => {
+      PostsApi.edit(this.Id, this.model!, this.jwt).then(
+        (response: ResponseDTO) => {
+          if (response?.errors) {
+            this.errors = response.errors;
+          } else {
+            this.$router.go(-1);
+          }
         }
-      }
-    );
+      );
+    });
   }
 
   created() {
@@ -89,31 +92,12 @@ export default class PostsEditA extends AdminEdit<IPostAdminDTO> {
   beforeMount() {
     PostsApi.details(this.Id, this.jwt).then((response: IPostAdminDTO) => {
       this.model = response;
-      if (this.isImageExist) {
-        ImagesApi.getImageModel(response.postImageId!, this.jwt).then(
-          (response: IImageDTO) => {
-            this.imageModel = response;
-            this.isLoaded = true;
-          }
-        );
-      } else {
-        this.imageModel = {
-          id: createEmptyGuid(),
-          imageUrl: "",
-          originalImageUrl: "",
-          heightPx: 0,
-          widthPx: 0,
-          paddingTop: 0,
-          paddingRight: 0,
-          paddingBottom: 0,
-          paddingLeft: 0,
-          imageFile: null,
-          imageType: ImageType.ProfileAvatar,
-          imageFor: "",
-        };
-
-        this.isLoaded = true;
-      }
+      ImagesApi.details(response.postImageId!, this.jwt).then(
+        (response: IImageAdminDTO) => {
+          this.imageModel = response;
+          this.isLoaded = true;
+        }
+      );
     });
   }
 }

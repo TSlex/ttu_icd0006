@@ -115,6 +115,10 @@ export default class ManageProfileData extends ErrorListContainer {
         if (response.errors) {
           this.errors = response.errors;
         } else {
+          if (this.userName !== this.profileDataModel!.username) {
+            store.dispatch("clearJwt");
+            this.$router.replace("/account/login");
+          }
           this.successMsg = response.status;
         }
       }

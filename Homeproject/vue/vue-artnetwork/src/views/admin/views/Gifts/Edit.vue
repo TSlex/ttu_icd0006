@@ -26,13 +26,12 @@ import store from "@/store";
 import $ from "jquery";
 
 import { IGiftAdminDTO } from "@/types/IGiftDTO";
-import { IImageDTO } from "@/types/IImageDTO";
+import { IImageDTO, IImageAdminDTO } from "@/types/IImageDTO";
 import { ResponseDTO } from "../../../../types/Response/ResponseDTO";
 
 import ImageComponent from "@/components/Image.vue";
 
 import { GiftsApi } from "@/services/admin/GiftsApi";
-import { ImagesApi } from "@/services/ImagesApi";
 import { ImageType } from "@/types/Enums/ImageType";
 import AdminEdit from "../../components/shared/base/AdminEdit.vue";
 import { createEmptyGuid } from "../../../../helpers/guid";
@@ -42,6 +41,7 @@ import ImageMiniature from "@/components/image/ImageMiniature.vue";
 
 import CreateEdit from "./CreateEdit.vue";
 import { requireError } from "@/translations/validation";
+import { ImagesApi } from "@/services/admin/ImagesApi";
 
 @Component({
   components: {
@@ -51,7 +51,7 @@ import { requireError } from "@/translations/validation";
   },
 })
 export default class GiftsEditA extends AdminEdit<IGiftAdminDTO> {
-  private imageModel: IImageDTO | null = null;
+  private imageModel: IImageAdminDTO | null = null;
 
   get isImageExist() {
     return this.model?.giftImageId != null;
@@ -76,15 +76,17 @@ export default class GiftsEditA extends AdminEdit<IGiftAdminDTO> {
     }
     if (this.errors.length > 0) return;
 
-    GiftsApi.edit(this.Id, this.model!, this.jwt).then(
-      (response: ResponseDTO) => {
-        if (response?.errors) {
-          this.errors = response.errors;
-        } else {
-          this.$router.go(-1);
+    ImagesApi.edit(this.imageModel!.id, this.imageModel!, this.jwt).then(() => {
+      GiftsApi.edit(this.Id, this.model!, this.jwt).then(
+        (response: ResponseDTO) => {
+          if (response?.errors) {
+            this.errors = response.errors;
+          } else {
+            this.$router.go(-1);
+          }
         }
-      }
-    );
+      );
+    });
   }
 
   created() {
@@ -95,8 +97,8 @@ export default class GiftsEditA extends AdminEdit<IGiftAdminDTO> {
     GiftsApi.details(this.Id, this.jwt).then((response: IGiftAdminDTO) => {
       this.model = response;
       if (this.isImageExist) {
-        ImagesApi.getImageModel(response.giftImageId!, this.jwt).then(
-          (response: IImageDTO) => {
+        ImagesApi.details(response.giftImageId!, this.jwt).then(
+          (response: IImageAdminDTO) => {
             this.imageModel = response;
             this.isLoaded = true;
           }
@@ -115,6 +117,13 @@ export default class GiftsEditA extends AdminEdit<IGiftAdminDTO> {
           imageFile: null,
           imageType: ImageType.ProfileAvatar,
           imageFor: "",
+          masterId: null,
+          createdBy: "",
+          createdAt: new Date(),
+          changedBy: "",
+          changedAt: new Date(),
+          deletedBy: null,
+          deletedAt: null,
         };
 
         this.isLoaded = true;
