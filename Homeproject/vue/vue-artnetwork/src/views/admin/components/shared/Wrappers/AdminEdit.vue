@@ -6,12 +6,12 @@
       <div v-if="!ignoreTopColStyle" class="col-md-4">
         <ErrorsList :errors="errors"></ErrorsList>
         <slot></slot>
-        <EditControls v-on:onSubmit="$emit('onSubmit')" v-on:onBackToList="$emit('onBackToList')" />
+        <EditControls v-on:model-submit="$emit('model-submit')" v-on:onBackToList="$emit('onBackToList')" />
       </div>
       <template v-else>
         <ErrorsList :errors="errors"></ErrorsList>
         <slot></slot>
-        <EditControls v-on:onSubmit="$emit('onSubmit')" v-on:onBackToList="$emit('onBackToList')" />
+        <EditControls v-on:model-submit="$emit('model-submit')" v-on:onBackToList="$emit('onBackToList')" />
       </template>
     </div>
   </div>

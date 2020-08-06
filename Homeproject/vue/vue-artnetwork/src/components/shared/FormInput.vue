@@ -9,7 +9,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class FormInput extends Vue {
   @Prop() className?: string;

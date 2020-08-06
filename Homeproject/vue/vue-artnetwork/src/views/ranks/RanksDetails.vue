@@ -1,5 +1,5 @@
 <template>
-  <Modal v-on:closeModal="$emit('onCloseRankDetails')">
+  <Modal v-on:modal-close="$emit('onCloseRankDetails')">
     <div class="d-flex flex-column align-items-center text-center" style="position: relative; padding: 20px">
       <div
         class="progress_container"
@@ -26,8 +26,8 @@ import { IRankDTO } from "../../types/IRankDTO";
 
 @Component({
   components: {
-    Modal
-  }
+    Modal,
+  },
 })
 export default class RanksDetails extends Vue {
   get rankPercent(): number {

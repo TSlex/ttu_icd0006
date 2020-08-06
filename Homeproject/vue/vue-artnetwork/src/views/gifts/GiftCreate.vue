@@ -44,7 +44,7 @@
         </div>
         <div class="form-group">
           <button class="btn btn-success mr-1" @click="submit">{{$t('views.common.SendButton')}}</button>
-          <button class="btn btn-secondary" @click="$emit('closeModal')">{{$t('views.common.CancelButton')}}</button>
+          <button class="btn btn-secondary" @click="$emit('modal-close')">{{$t('views.common.CancelButton')}}</button>
         </div>
       </div>
     </div>
@@ -67,8 +67,8 @@ import IdentityStore from "../../components/shared/IdentityStore.vue";
 
 @Component({
   components: {
-    ImageComponent
-  }
+    ImageComponent,
+  },
 })
 export default class GiftCreate extends IdentityStore {
   @Prop()
@@ -83,7 +83,7 @@ export default class GiftCreate extends IdentityStore {
     username: this.username,
     fromUsername: null,
     giftCode: this.gift.giftCode,
-    message: ""
+    message: "",
   };
 
   get fromUsername() {
@@ -108,13 +108,13 @@ export default class GiftCreate extends IdentityStore {
         this.$swal({
           icon: "success",
           title: this.$t("views.gifts.GiftSended"),
-          showConfirmButton: true
+          showConfirmButton: true,
         }).then(() => {
-          this.$emit("closeModal");
+          this.$emit("modal-close");
           this.$emit("closeGifts");
           store.dispatch("getProfileGifts", {
             userName: this.username,
-            pageNumber: 1
+            pageNumber: 1,
           });
         });
       }

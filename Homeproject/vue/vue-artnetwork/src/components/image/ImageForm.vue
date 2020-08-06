@@ -29,7 +29,7 @@ export default class ImageForm extends Vue {
   }
 
   onLoadFile(event: Event) {
-    this.$emit("onLoadFile", (event.target as HTMLInputElement)?.files![0]);
+    this.$emit("file-load", (event.target as HTMLInputElement)?.files![0]);
   }
 }
 </script>

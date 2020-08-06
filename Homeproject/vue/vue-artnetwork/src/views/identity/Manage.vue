@@ -1,6 +1,6 @@
 <template>
   <div class="preferences_section" style="position: relative; min-height: 550px;">
-    <Modal v-if="isBlacklistModal" v-on:closeModal="closeBlacklist">
+    <Modal v-if="isBlacklistModal" v-on:modal-close="closeBlacklist">
       <router-link
         v-for="profile in blacklist"
         :key="profile.userName"

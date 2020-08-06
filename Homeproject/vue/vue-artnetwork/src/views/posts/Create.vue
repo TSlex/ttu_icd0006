@@ -15,7 +15,7 @@
             <label class="control-label" for="postDescription">{{$t('bll.posts.PostDescription')}}</label>
             <textarea class="form-control" id="postDescription" v-model="postModel.postDescription" />
           </div>
-          <ImageForm :imageModel="imageModel" v-on:onLoadFile="loadImage" />
+          <ImageForm :imageModel="imageModel" v-on:file-load="loadImage" />
 
           <div class="form-group mt-4">
             <button type="submit" class="btn btn-success mr-1" @click="submit">{{$t('views.common.CreateButton')}}</button>

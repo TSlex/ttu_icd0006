@@ -160,7 +160,7 @@ export default class ImageComponent extends Vue {
 
   onImageLoaded() {
     this.imageLoaded = true;
-    this.$emit("imageLoaded");
+    this.$emit("image-loaded");
   }
 
   beforeCreate() {

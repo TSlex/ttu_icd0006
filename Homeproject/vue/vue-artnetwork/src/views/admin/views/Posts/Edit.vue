@@ -1,14 +1,14 @@
 <template>
   <AdminEditWrapper
     v-if="isLoaded"
-    v-on:onSubmit="onSubmit"
+    v-on:model-submit="onSubmit"
     v-on:onBackToList="onBackToList"
     :errors="errors"
     :ignoreTopColStyle="true"
   >
     <ImageMiniature :htmlClass="'card mb-4'" :htmlStyle="'width: 20rem !important'" ref="miniature" />
     <div class="col-md-4">
-      <ImageForm :imageModel="imageModel" v-on:onLoadFile="loadImage" />
+      <ImageForm :imageModel="imageModel" v-on:file-load="loadImage" />
       <CreateEdit :model="model" />
     </div>
   </AdminEditWrapper>

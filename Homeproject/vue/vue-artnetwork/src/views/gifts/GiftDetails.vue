@@ -1,5 +1,5 @@
 <template>
-  <Modal v-on:closeModal="$emit('onCloseGiftDetails')">
+  <Modal v-on:modal-close="$emit('onCloseGiftDetails')">
     <div class="d-flex flex-column align-items-center" style="position: relative">
       <button
         v-if="isCurrentUser"

@@ -8,7 +8,7 @@
       <div class="col-md-8">
         <ErrorsList :errors="errors" />
 
-        <ImageForm :imageModel="imageModel" v-on:onLoadFile="loadImage" />
+        <ImageForm :imageModel="imageModel" v-on:file-load="loadImage" />
 
         <div class="form-group mt-2">
           <button type="onSubmit" class="btn btn-success mt-2" @click="onSubmit">{{$t('views.common.SaveButton')}}</button>

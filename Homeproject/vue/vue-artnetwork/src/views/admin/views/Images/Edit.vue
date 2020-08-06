@@ -1,14 +1,14 @@
 <template>
   <AdminEditWrapper
     v-if="isLoaded"
-    v-on:onSubmit="onSubmit"
+    v-on:model-submit="onSubmit"
     v-on:onBackToList="onBackToList"
     :errors="errors"
     :ignoreTopColStyle="true"
   >
     <ImageMiniature :initialId="model.id" :htmlClass="'card mb-4'" :htmlStyle="'width: 30rem !important'" ref="miniature" />
     <div class="col-md-6">
-      <ImageForm :imageModel="model" v-on:onLoadFile="loadImage" />
+      <ImageForm :imageModel="model" v-on:file-load="loadImage" />
 
       <div class="form-group">
         <label class="control-label" for="imageUrl">{{$t('bll.images.ImageUrl')}}*</label>

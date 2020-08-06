@@ -8,7 +8,7 @@
       :original="true"
       htmlId="render_image"
       htmlClass="card-img"
-      v-on:imageLoaded="loadMiniatureControl()"
+      v-on:image-loaded="loadMiniatureControl()"
     />
   </div>
 </template>
@@ -73,7 +73,7 @@ export default class ImageMiniature extends Vue {
   }
 
   onSubmit() {
-    this.$emit("onSubmit");
+    this.$emit("model-submit");
   }
 
   created() {

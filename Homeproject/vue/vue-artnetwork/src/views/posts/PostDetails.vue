@@ -1,8 +1,8 @@
 <template>
   <div class="modal_back" @click="closePost">
-    <ProfilesModal v-if="favorites" :profilesData="favorites" v-on:closeProfiles="closeFavorites" />
-    <Modal v-if="imageEditing" v-on:closeModal="closeImageEdit">
-      <PostsEditImage :id="post.postImageId" v-on:closeModal="closeImageEdit" />
+    <ProfilesModal v-if="favorites" :profilesData="favorites" v-on:profiles-close="closeFavorites" />
+    <Modal v-if="imageEditing" v-on:modal-close="closeImageEdit">
+      <PostsEditImage :id="post.postImageId" v-on:modal-close="closeImageEdit" />
     </Modal>
     <div class="post_details" @click.stop>
       <PostSection

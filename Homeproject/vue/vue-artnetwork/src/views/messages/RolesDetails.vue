@@ -1,5 +1,5 @@
 <template>
-  <Modal v-on:closeModal="closeRoles">
+  <Modal v-on:modal-close="closeRoles">
     <div class="col-md-5 text-center" style="padding: 50px;">
       <div class="form-group d-flex flex-column">
         <label class="control-label" for="ChatMember_ChatRoleId">{{$t("bll.chatroles.RoleTitle")}}</label>

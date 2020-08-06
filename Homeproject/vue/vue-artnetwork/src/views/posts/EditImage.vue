@@ -4,7 +4,7 @@
       <ImageMiniature :initialId="Id" :htmlStyle="'width: 20rem !important'" ref="miniature" />
 
       <div class="col mt-2">
-        <ImageForm :imageModel="imageModel" v-on:onLoadFile="loadImage" />
+        <ImageForm :imageModel="imageModel" v-on:file-load="loadImage" />
 
         <div class="form-group mt-2">
           <button type="submit" class="btn btn-success mt-2" @click="submit">{{$t('views.common.SaveButton')}}</button>
@@ -82,7 +82,7 @@ export default class PostsEditImage extends IdentityStore {
             title: this.$t("views.common.Success"),
             showConfirmButton: true,
           }).then(() => {
-            this.$emit("closeModal");
+            this.$emit("modal-close");
           });
         }
       });

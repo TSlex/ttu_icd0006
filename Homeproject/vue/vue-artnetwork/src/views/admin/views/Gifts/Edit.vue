@@ -1,7 +1,7 @@
 <template>
   <AdminEditWrapper
     v-if="isLoaded"
-    v-on:onSubmit="onSubmit"
+    v-on:model-submit="onSubmit"
     v-on:onBackToList="onBackToList"
     :errors="errors"
     :ignoreTopColStyle="true"
@@ -13,7 +13,7 @@
       ref="miniature"
     />
     <div class="col-md-4">
-      <ImageForm :imageModel="imageModel" v-on:onLoadFile="loadImage" />
+      <ImageForm :imageModel="imageModel" v-on:file-load="loadImage" />
       <CreateEdit :model="model" />
     </div>
   </AdminEditWrapper>
