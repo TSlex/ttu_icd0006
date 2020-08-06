@@ -56,10 +56,7 @@
             </div>
             <span class="profile_name" style="color: black !important;">{{message.userName}}</span>
           </a>
-          <a v-if="isImageUrl(message.messageValue)" :href="message.messageValue">
-            <img :src="message.messageValue" alt="profile" height="auto" width="200px" style="border-radius: 5px" />
-          </a>
-          <span v-else class="message_value">{{message.messageValue}}</span>
+          <Message :messageValue="message.messageValue" />
           <span class="message_datetime">{{message.messageDateTime | formatDate}}</span>
         </div>
       </div>
@@ -100,10 +97,12 @@ import { IChatMemberDTO } from "@/types/IChatMemberDTO";
 import LoadingComponent from "../../components/shared/LoadingComponent.vue";
 import EventBus from "../../events/EventBus";
 import Axios from "axios";
+import Message from "./Message.vue";
 
 @Component({
   components: {
     ImageComponent,
+    Message,
   },
 })
 export default class MessagesSection extends IdentityStore {
@@ -210,31 +209,6 @@ export default class MessagesSection extends IdentityStore {
 
   onDeleteMessage(message: IMessageDTO) {
     store.dispatch("deleteMessage", message);
-  }
-
-  checkURL(url: string) {
-    return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
-  }
-
-  async isImageUrl(url: string) {
-    try {
-      const axios = Axios.create({ validateStatus: () => true });
-
-      const response = await axios.get(url);
-
-      switch (response.status) {
-        case 200:
-          return (
-            (response.headers["content-type"] as string)
-              .toLowerCase()
-              .indexOf("image/") === 0
-          );
-        default:
-          return false;
-      }
-    } catch (e) {
-      return false;
-    }
   }
 
   loadComponent() {
