@@ -26,20 +26,30 @@ import { resolveTimeFormat, resolveDateFormat, formatShortTime } from './transla
 
 // date and time formating for display
 Vue.filter('formatDate', function (value: any) {
+  if (typeof value !== "string") return value;
   if (value) {
-    return moment(String(value)).format(resolveDateFormat())
+    return moment(String(value) + "Z").format(resolveDateFormat())
   }
 })
 
 Vue.filter('formatTime', function (value: any) {
+  if (typeof value !== "string") return value;
   if (value) {
-    return moment(String(value)).format(resolveTimeFormat())
+    return moment(String(value) + "Z").format(resolveTimeFormat())
   }
 })
 
 Vue.filter('formatShortDate', function (value: any) {
+  if (typeof value !== "string") return value;
   if (value) {
-    return formatShortTime(value)
+    return formatShortTime(value + "Z")
+  }
+})
+
+Vue.filter('formatDateUTC', function (value: any) {
+  if (typeof value !== "string") return value;
+  if (value) {
+    return moment(String(value)).format(resolveDateFormat())
   }
 })
 

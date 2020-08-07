@@ -25,7 +25,7 @@
       <dd class="col-sm-10">{{model.commentValue}}</dd>
 
       <dt class="col-sm-2">{{$t('bll.comments.CommentDateTime')}}</dt>
-      <dd class="col-sm-10">{{model.commentDateTime | formatDate}}</dd>
+      <dd class="col-sm-10">{{model.commentDateTime | formatDateUTC}}</dd>
     </dl>
     <hr />
     <MetaDetailsSection :model="model" />

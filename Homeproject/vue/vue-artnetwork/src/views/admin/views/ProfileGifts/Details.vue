@@ -24,7 +24,7 @@
     <hr />
     <dl class="row">
       <dt class="col-sm-2">{{$t('bll.profilegifts.GiftDateTime')}}</dt>
-      <dd class="col-sm-10">{{model.giftDateTime | formatDate}}</dd>
+      <dd class="col-sm-10">{{model.giftDateTime | formatDateUTC}}</dd>
 
       <dt class="col-sm-2">{{$t('bll.profilegifts.Price')}}</dt>
       <dd class="col-sm-10">{{model.price}}</dd>

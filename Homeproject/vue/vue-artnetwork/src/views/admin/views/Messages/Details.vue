@@ -16,7 +16,7 @@
       <dd class="col-sm-10">{{model.messageValue}}</dd>
 
       <dt class="col-sm-2">{{$t('bll.messages.MessageDateTime')}}</dt>
-      <dd class="col-sm-10">{{model.messageDateTime | formatDate}}</dd>
+      <dd class="col-sm-10">{{model.messageDateTime | formatDateUTC}}</dd>
     </dl>
     <hr />
     <MetaDetailsSection :model="model" />
