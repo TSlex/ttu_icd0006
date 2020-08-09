@@ -17,7 +17,7 @@ import IdentityStore from "@/components/shared/IdentityStore.vue";
   components: {},
 })
 export default class Message extends IdentityStore {
-  @Prop() messageValue!: string;
+  @Prop({ default: "" }) messageValue!: string;
 
   private isImage = false;
 
