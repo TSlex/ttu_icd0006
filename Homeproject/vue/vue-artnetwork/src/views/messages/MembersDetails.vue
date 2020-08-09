@@ -3,7 +3,7 @@
     <router-link
       class="gallery_item"
       style="width: 150px !important; height: 150px !important"
-      :to="'profiles/' + member.userName"
+      :to="'/profiles/' + member.userName"
       v-for="(member, index) in members"
       :key="index"
       @click.stop

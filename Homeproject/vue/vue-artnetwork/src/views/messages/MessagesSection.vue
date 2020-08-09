@@ -50,12 +50,12 @@
             <button class="btn-link fa fa-times-circle" @click="onDeleteMessage(message)"></button>
           </div>
 
-          <a class="message_profile" asp-controller="Profiles" asp-action="Index" asp-route-username="@item.Profile.UserName">
+          <router-link class="message_profile" :to="`/profiles/${message.userName}`">
             <div class="message_avatar">
               <ImageComponent :id="message.profileAvatarId" :key="message.profileAvatarId" height="50px" width="50px" />
             </div>
             <span class="profile_name" style="color: black !important;">{{message.userName}}</span>
-          </a>
+          </router-link>
           <Message :messageValue="message.messageValue" />
           <span class="message_datetime">{{message.messageDateTime | formatDate}}</span>
         </div>
@@ -144,7 +144,7 @@ export default class MessagesSection extends IdentityStore {
 
   onPostMessage(e: Event) {
     if (this.messagePostModel.messageValue !== "") {
-      const newMessageDate = new Date().toISOString();
+      const newMessageDate = new Date().toString();
 
       store
         .dispatch("postMessage", {
