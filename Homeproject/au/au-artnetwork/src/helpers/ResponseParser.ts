@@ -5,7 +5,7 @@ export async function parseResponse(response: Response): Promise<IResponseDTO> {
 
     try {
         obj = (await response.json()) as IResponseDTO;
-    } catch (e){
+    } catch (e) {
         obj = {} as IResponseDTO;
     }
 
